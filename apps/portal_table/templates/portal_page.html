@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="RegTech Portal" name="description" />
+    <meta content="RegTech Portal" name="admin" />
+    <title>RegTech Portal</title>
+
+    {% set load_css = load_css() %}
+    {% if load_css %}
+    {{ load_css | safe }}
+    {% endif %}
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Top Bar -->
+        {% set topbars = load_topbar(username) %}
+        {% if topbars %}
+        {{ topbars | safe }}
+        {% endif %}
+
+        <!-- Routes -->
+        {% set pagelinks = navigation_urls(manage_role) %}
+        {% if pagelinks %}
+        {{ pagelinks | safe }}
+        {% endif %}
+
+
+        <div class="content-page">
+            <div class="content">
+                <!-- Start Content-->
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box">
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item"><a href="/poratl-page">Portal</a></li>
+                                        <li class="breadcrumb-item active">List</li>
+                                    </ol>
+                                </div>
+                                <h4 class="page-title">Portal List</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+
+                                    <div class="table-responsive">
+                                        <table id="basic-datatable"
+                                            class="table table-bordered dataTable no-footer dtr-inline">
+                                            <thead>
+                                                <tr style="text-align: center;">
+                                                    <th style="white-space: nowrap;">
+                                                        Company Name</th>
+                                                    <th style="white-space: nowrap;">
+                                                        Service Name</th>
+                                                    <th style="white-space: nowrap;">Date</th>
+                                                    <!-- <th style="white-space: nowrap;">Month</th>
+                                                    <th style="white-space: nowrap;">Date</th> -->
+                                                    <th style="white-space: nowrap;">Log File View</th>
+                                                    <!-- <th style="white-space: nowrap;">Created At<br><span
+                                                            style="font-size:smaller;">(DD-MM-YYYY)</span></th>
+                                                    <th style="white-space: nowrap;">Updated At<br><span
+                                                            style="font-size:smaller;">(DD-MM-YYYY)</span></th> -->
+                                                </tr>
+                                            </thead>
+                                            <!-- <thead class="filters display">
+                                                <tr>
+                                                    <th style="white-space: nowrap;" id="permission_action_filter">
+                                                        &nbsp;
+                                                    </th>
+                                                    <th style="white-space: nowrap;">
+                                                        <input class="form-control" type="text"
+                                                            placeholder="Plan Name" />
+                                                    </th>
+                                                    <th style="white-space: nowrap;">
+                                                        <select class="form-select select2" data-toggle="select2"
+                                                            id="plan_list">
+                                                            <option value="">-</option>
+                                                            <option value='Percentage'>Percentage</option>
+                                                            <option value='Fix'>Fix</option>
+                                                        </select>
+                                                    </th>
+                                                    <th style="white-space: nowrap;">
+                                                        <input class="form-control" type="text"
+                                                            placeholder="Interest" />
+                                                    </th>
+                                                    <th style="white-space: nowrap;">
+                                                        <input class="form-control" type="text"
+                                                            placeholder="Fix Months" />
+                                                    </th>
+
+                                                    <th style="white-space: nowrap;">
+                                                        &nbsp;
+                                                    </th>
+                                                    <th style="white-space: nowrap;">
+                                                        <input type="text" class="form-control "
+                                                            name="create_date_range" value="" autocomplete="off"
+                                                            readonly />
+                                                    </th>
+                                                    <th style="white-space: nowrap;">
+                                                        <input type="text" class="form-control "
+                                                            name="update_date_range" value="" autocomplete="off"
+                                                            readonly />
+                                                    </th>
+
+                                                </tr>
+                                            </thead> -->
+
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div> <!-- end card body-->
+                            </div> <!-- end card -->
+                        </div> <!-- end .board-->
+                    </div> <!-- end col -->
+                </div>
+                <!-- end row-->
+
+            </div> <!-- container -->
+        </div> <!-- content -->
+
+        <!-- Footer -->
+        {% set footers = load_footer() %}
+        {% if footers %}
+        {{ footers | safe }}
+        {% endif %}
+
+        <!-- Layout Wrapper end -->
+    </div>
+
+
+    <div class="modal fade" id="log_file_modal" tabindex="-1" aria-labelledby="vieweModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="vieweModalLabel">Log Files</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table id="log-datatable" class="table table-bordered dataTable no-footer dtr-inline">
+                            <thead>
+                                <tr style="text-align: center;">
+                                    <th style="white-space: nowrap;">
+                                        Log File Name</th>
+                                    <th style="white-space: nowrap;">
+                                        Log File Download</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Plan Model -->
+    <div class="modal fade" id="add_plan_form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center w-100">Add New Plan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="#">
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label class="form-label d-flex">Plan Name <div class="text-muted">(*Required)</div>
+                                </label>
+                                <input type="text" class="form-control" name="plan_name"
+                                    onkeyup="check_planname_velidity(this)" placeholder="Enter Plan Name"
+                                    autocomplete="off" required>
+                                <span class="text-danger" id="velidity_error" style="display: none;"></span>
+                            </div>
+                            <div class="col">
+                                <label class="form-label d-flex">Plan Type <div class="text-muted">(*Required)</div>
+                                </label>
+                                <select class="form-select modal-select2 auto-width-select2" name="plan_type"
+                                    onchange="add_type_change(this)" required>
+                                    <option value="">-</option>
+                                    <option value="Percentage">Percentage</option>
+                                    <option value="Fix">Fix Month</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label class="form-label d-flex">Interest <div class="text-muted">(*Required)</div>
+                                </label>
+                                <input type="number" class="form-control" min="1" step="0.01" name="intrest"
+                                    placeholder="Enter Interest" max="100" required>
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Notes</label>
+                                <textarea type="number" class="form-control " name="notes"
+                                    placeholder="Notes"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-3" id="inpufix" style="display: none;">
+                            <div class="col-6">
+                                <label class="form-label d-flex">Fix Months <div class="text-muted">(*Required)</div>
+                                </label>
+                                <input type="number" class="form-control " name="fix_month"
+                                    placeholder="How Many Months Invest">
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" id="add_plan" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Plan Model -->
+    <!-- Modal -->
+    <div class="modal fade" id="edit_plan_form" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center w-100" id="editModalLabel">Edit Plan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="#" id="update_action">
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label class="form-label d-flex">Plan Name <div class="text-muted">(*Required)</div>
+                                </label>
+                                <input type="text" class="form-control" name="plan_name" id="edit_plan_name"
+                                    onkeyup="check_planname_velidity_update(this)" placeholder="Enter Plan Name"
+                                    required>
+                                <span class="text-danger" id="velidity_error_update" style="display: none;"></span>
+                            </div>
+                            <div class="col">
+                                <label class="form-label d-flex">Plan Type <div class="text-muted">(*Required)</div>
+                                </label>
+                                <select class="form-select modal-select2 auto-width-select2" name="plan_type"
+                                    id="edit_plan_type" onchange="update_type_change(this.value)" required>
+                                    <option value="">-</option>
+                                    <option value="Percentage">Percentage</option>
+                                    <option value="Fix">Fix Month</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col">
+                                <label class="form-label d-flex">Interest <div class="text-muted">(*Required)</div>
+                                </label>
+                                <input type="number" class="form-control" min="1" max="100" step="0.01" name="intrest"
+                                    id="edit_intrest" placeholder="Enter Interest" required>
+                            </div>
+                            <div class="col">
+                                <label class="form-label">Notes</label>
+                                <textarea type="number" class="form-control " name="notes" id="edit_notes"
+                                    placeholder="Notes"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-3" id="update_inputfix" style="display: none;">
+                            <div class="col-6">
+                                <label class="form-label d-flex">Fix Months <div class="text-muted">(*Required)</div>
+                                </label>
+                                <input type="number" class="form-control " name="fix_month" id="edit_fix_month"
+                                    placeholder="How Many Months Invest">
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <button class="btn btn-primary" type="submit" id="obj_id">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- All Javascripts URL -->
+    {% set load_js = load_javascript() %}
+    {% if load_js %}
+    {{ load_js | safe }}
+    {% endif %}
+
+
+    <!-- Page Javascript -->
+    {% include 'portal_page_js.html' %}
+
+
+
+
+    <script>
+        // Created Date
+        $(function () {
+            var start = moment().subtract(29, 'days');
+            var end = moment();
+
+            $('input[name="create_date_range"]').on('apply.daterangepicker', function (ev, picker) {
+
+                $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
+            });
+
+            $('input[name="create_date_range"]').on('cancel.daterangepicker', function (ev, picker) {
+                $(this).val('');
+                // $(this)[0].textContent = "khjk"
+                $('#basic-datatable').DataTable().context[0].aoPreSearchCols[6].sSearch = ""
+                $('#basic-datatable').DataTable().ajax.reload()
+            });
+
+            $('input[name="create_date_range"]').daterangepicker({
+                startDate: start,
+                endDate: end,
+                autoUpdateInput: false,
+                "opens": "center",
+                locale: {
+                    cancelLabel: 'Clear',
+                    applyLabel: 'Apply',
+                    fromLabel: 'From',
+                    toLabel: 'To',
+                    customRangeLabel: 'Custom Range',
+                    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    firstDay: 1
+                },
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                },
+                // Datetime and date range picker
+
+            });
+        });
+
+
+        // Updated Date
+        $(function () {
+            var start = moment().subtract(29, 'days');
+            var end = moment();
+
+            $('input[name="update_date_range"]').on('apply.daterangepicker', function (ev, picker) {
+
+                $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
+            });
+
+            $('input[name="update_date_range"]').on('cancel.daterangepicker', function (ev, picker) {
+                $(this).val('');
+                // $(this)[0].textContent = "khjk"
+                $('#basic-datatable').DataTable().context[0].aoPreSearchCols[7].sSearch = ""
+                $('#basic-datatable').DataTable().ajax.reload()
+            });
+
+            $('input[name="update_date_range"]').daterangepicker({
+                startDate: start,
+                endDate: end,
+                autoUpdateInput: false,
+                "opens": "center",
+                locale: {
+                    cancelLabel: 'Clear',
+                    applyLabel: 'Apply',
+                    fromLabel: 'From',
+                    toLabel: 'To',
+                    customRangeLabel: 'Custom Range',
+                    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    firstDay: 1
+                },
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                },
+                // Datetime and date range picker
+
+            });
+        });
+
+
+    </script>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <script>
+        !function (c) {
+            "use strict"; function t() { }
+            t.prototype.send = function (t, o, i, e, n, a, s, r) {
+                t = { heading: t, text: o, position: i, loaderBg: e, icon: n, hideAfter: a = a || 3e3, stack: s = s || 1 };
+                t.showHideTransition = r || "fade", c.toast().reset("all"), c.toast(t)
+            }, c.NotificationApp = new t, c.NotificationApp.Constructor = t,
+                c.NotificationApp.send("Plan-List!", "{{message}}", "top-right", "rgba(0,0,0,0.2)", "success")
+        }(window.jQuery);
+    </script>
+    {% endfor %}
+    {% endif%}
+    {% endwith %}
+
+</body>
+
+</html>

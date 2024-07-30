@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="RegTech Portal | Login" name="description" />
+    <meta content="RegTech Portal | Login" name="admin-login" />
+    <title>RegTech Portal | Login</title>
+
+    {% set load_css = load_css() %}
+    {% if load_css %}
+    {{ load_css | safe }}
+    {% endif %}
+</head>
+
+<body class="authentication-bg">
+    <div class="account-pages pt-2 pt-sm-5 pb-4 pb-sm-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xxl-4 col-lg-5">
+                    <div class="card">
+
+                        <!-- Logo -->
+                        <div class="card-header pt-4 pb-4 text-center bg-primary">
+                            <a href="#">
+                                <span><img src="../static/logo.png" alt="logo" height="22"></span>
+                            </a>
+                        </div>
+
+                        <div class="card-body p-4">
+
+                            <div class="text-center w-75 m-auto">
+                                <h4 class="text-dark-50 text-center pb-0 fw-bold">Login</h4>
+                            </div>
+
+                            <form action="#" method="post">
+
+                                <div class="mb-3">
+                                    <label for="emailaddress" class="form-label">Corporate Name</label>
+                                    <input class="form-control" name="corporate_name" type="text" required
+                                        placeholder="Enter your User-Name">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="emailaddress" class="form-label">User Name</label>
+                                    <input class="form-control" name="user_name" type="text" required
+                                        placeholder="Enter your User-Name">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group input-group-merge">
+                                        <input type="password" id="password" name="password" class="form-control"
+                                            placeholder="Enter your password">
+                                        <div class="input-group-text" data-password="false">
+                                            <span class="password-eye"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3 mb-0 text-center">
+                                    <button class="btn btn-primary" type="submit"> Log In </button>
+                                </div>
+
+                            </form>
+                        </div> <!-- end card-body -->
+                    </div>
+                    <!-- end card -->
+                </div> <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- end container -->
+    </div>
+    <!-- end page -->
+
+    <!-- Footer -->
+    {% set footers = load_footer() %}
+    {% if footers %}
+    {{ footers | safe }}
+    {% endif %}
+
+    <!-- All Javascripts URL -->
+    {% set load_js = load_javascript() %}
+    {% if load_js %}
+    {{ load_js | safe }}
+    {% endif %}
+
+    <!-- Add & update Toasty Notification -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <script>
+        !function (c) {
+            "use strict"; function t() { }
+            t.prototype.send = function (t, o, i, e, n, a, s, r) {
+                t = { heading: t, text: o, position: i, loaderBg: e, icon: n, hideAfter: a = a || 3e3, stack: s = s || 1 };
+                t.showHideTransition = r || "fade", c.toast().reset("all"), c.toast(t)
+            }, c.NotificationApp = new t, c.NotificationApp.Constructor = t,
+                c.NotificationApp.send("Login Page!", "{{message}}", "top-right", "rgba(0,0,0,0.2)", "success")
+        }(window.jQuery);
+    </script>
+    {% endfor %}
+    {% endif%}
+    {% endwith %}
+
+</body>
+
+<!-- Mirrored from coderthemes.com/hyper_2/saas/pages-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 17 Nov 2022 05:08:39 GMT -->
+
+</html>
