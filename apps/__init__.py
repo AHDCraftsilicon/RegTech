@@ -64,6 +64,13 @@ def crete_app():
         # else:
         return redirect('/admin/login')
     
+    # ADDED FOR VERSION CHECK IN DEPLOYEMNT
+
+    @app.route('/version-check', methods=["GET"])
+    def version():
+        return {"version":"0.0.6"}
+    
+    #END VERSIONS CHECK
 
     @app.route('/admin/logout', methods=["GET"])
     @jwt_required()
