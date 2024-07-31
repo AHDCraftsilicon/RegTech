@@ -68,7 +68,7 @@ def crete_app():
 
     @app.route('/version-check', methods=["GET"])
     def version():
-        return {"version":"0.0.6"}
+        return {"version":"0.0.7.7"}
     
     #END VERSIONS CHECK
 
