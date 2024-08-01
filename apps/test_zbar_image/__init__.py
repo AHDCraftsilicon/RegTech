@@ -11,7 +11,7 @@ test_zbar_image_bp = Blueprint("test_zbar_image_bp",
                         url_prefix="/")
 
 
-#pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
 def date_get(num):
@@ -43,13 +43,20 @@ def passport_main():
         data_store = []
         mrz_data = mrz.to_dict()
         for key, value in mrz_data.items():
+            print(key)
 
-            try:
-                data_store.append({"mrz_type":mrz_data["mrz_type"]})
-            except:
-                pass
-           
+        get_dob = date_get(mrz_data["date_of_birth"])
+        get_expiration = date_get(mrz_data["expiration_date"])
 
+        data_store.append({
+            "mrz_type":mrz_data["mrz_type"],
+            "date_of_birth":get_dob,
+            "expiration_date":get_expiration,
+            "nationality":mrz_data["nationality"],
+            "gender":mrz_data["sex"],
+            "nationality":mrz_data["nationality"],
+            "mrz_lines":mrz_data["raw_text"],
+            })
 
             
         return jsonify({"Data":data_store})
