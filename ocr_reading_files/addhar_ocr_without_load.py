@@ -13,7 +13,7 @@ from werkzeug.utils import secure_filename
 # import subprocess
 # import xml.etree.ElementTree as ET
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+#pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
 
@@ -453,7 +453,7 @@ def aadhar_ocr_image_read_main(image_path):
 
     # os.remove(image_path)
     if addhar_details_list != {}:
-        return jsonify({"response": "200",
+        return {"response": "200",
             "message": "Success",
             "responseValue": {
                 "Table1": [
@@ -462,10 +462,10 @@ def aadhar_ocr_image_read_main(image_path):
                     }
                 ]
             }
-        }),200
+        }
     else:
         if addhar_details_list == {}:
-            return jsonify({"response": "500",
+            return {"response": "400",
                                 "message": "Error",
-                                "responseValue": "Invalid image! Please upload a clear and readable image!"
-                            }),500
+                                "responseValue": "Please upload a high-quality and readable image."
+                            }

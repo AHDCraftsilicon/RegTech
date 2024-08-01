@@ -274,21 +274,33 @@ def uco_bank_statmenr_main(url):
 
         if ifsc_code == "":
             ifsc_code = extract_ifsc(pdf_to_String)
-            # print("IFSC CODE = " ,ifsc_code)
-            summary_scorecard.append({
-                    "Item": "IFSC Code",
-                    "Details": ifsc_code,
-                    "Verification": "NA"
-                })
+            if ifsc_code != None:
+                summary_scorecard.append({
+                        "Item": "IFSC Code",
+                        "Details": ifsc_code,
+                        "Verification": "NA"
+                    })
+            else:
+                summary_scorecard.append({
+                        "Item": "IFSC Code",
+                        "Details": "NA",
+                        "Verification": "NA"
+                    })
         
         if account_number == "":
             account_number = extract_number(pdf_to_String)
-            # print("ACCOUNT NUMBER = " ,account_number)
-            summary_scorecard.append({
-                "Item": "Account Number",
-                "Details": account_number,
-                "Verification": "NA"      
-                })
+            if account_number != None:
+                summary_scorecard.append({
+                    "Item": "Account Number",
+                    "Details": account_number,
+                    "Verification": "NA"      
+                    })
+            else:
+                summary_scorecard.append({
+                    "Item": "Account Number",
+                    "Details": "NA",
+                    "Verification": "NA"      
+                    })
         
 
 
@@ -296,86 +308,90 @@ def uco_bank_statmenr_main(url):
             main_name = extract_name(pdf_to_String)
             # print("NAME = ", main_name.replace("Status","").strip())
 
-            summary_scorecard.append({
-                "Item": "Customer Name",
-                "Details": main_name.replace("Status","").strip(),
-                "Verification": "NA"
-            })
+            if main_name != None:
+                if "Status" in main_name:
+                    summary_scorecard.append({
+                        "Item": "Customer Name",
+                        "Details": main_name.replace("Status","").strip(),
+                        "Verification": "NA"
+                    })
+                else:
+                    summary_scorecard.append({
+                        "Item": "Customer Name",
+                        "Details": main_name,
+                        "Verification": "NA"
+                    })
+            else:
+                summary_scorecard.append({
+                        "Item": "Customer Name",
+                        "Details": "NA",
+                        "Verification": "NA"
+                    })
+                
 
         if status == "":
             status = extract_status(pdf_to_String)
-            # print("STATUS = ", status)
+          
         
+            if status != None:
+                bureau_ratings_Summary.append(
+                    {
+                        "Item": "Active Accounts",
+                        "Detail": status
+                    })
+            else:
+                bureau_ratings_Summary.append(
+                    {
+                        "Item": "Active Accounts",
+                        "Detail": "NA"
+                    })
 
-            bureau_ratings_Summary.append(
-                {
-                    "Item": "Active Accounts",
-                    "Detail": status
-                },
-            )
-
-        # if currency == "":
-        #     currency = extract_currency(pdf_to_String)
-        #     print("CURRENCY = ", currency)
-        #     details_list.append({
-        #         "CURRENCY" : currency
-        #     })
-
-        # if branch_name == "":
-            # branch_name = extract_branch(pdf_to_String)
-            # if "Debit" in branch_name:
-            #     print("BRANCH NAME = ", branch_name.split("Debit")[0])
-            #     details_list.append({
-            #     "BRANCH NAME" : branch_name.split("Debit")[0]
-            # })
-            # else:
-            #     print("BRANCH NAME = ", branch_name)
-            #     details_list.append({
-            #     "BRANCH NAME" : branch_name
-            # })
-
-        # if open_date == "":
-        #     open_date = extract_open_date(pdf_to_String)
-        #     print("OPEN DATE = ", open_date)
-        #     details_list.append({
-        #         "OPEN DATE" : open_date
-        #     })
+     
 
         if account_type == "":
             account_type = extract_account_type(pdf_to_String)
-            if "Currency" in account_type:
-                summary_scorecard.append({
-                "Item": "Account Type",
-                "Details": account_type.split("Currency")[0].strip(),
-                "Verification": "NA"
-                })
-            else:
-                # print("ACCOUNT TYPE = ", account_type)
-                summary_scorecard.append({
+
+            if account_type != None:
+                if "Currency" in account_type:
+                    summary_scorecard.append({
                     "Item": "Account Type",
-                    "Details": account_type,
+                    "Details": account_type.split("Currency")[0].strip(),
                     "Verification": "NA"
-                })
+                    })
+                else:
+                    # print("ACCOUNT TYPE = ", account_type)
+                    summary_scorecard.append({
+                        "Item": "Account Type",
+                        "Details": account_type,
+                        "Verification": "NA"
+                    })
+            else:
+                summary_scorecard.append({
+                        "Item": "Account Type",
+                        "Details": "NA",
+                        "Verification": "NA"
+                    })
 
 
         if address1 == "":
             address1 = extract_address_line_1(pdf_to_String)
-            # print("ADDRESS1 = ", address1)
-            bureau_ratings_address.append({
-                "ADDRESS1" : address1
-                })
+            if address1 != None:
+                bureau_ratings_address.append({
+                    "ADDRESS1" : address1
+                    })
+                                
 
         if address2 == "":
             address2 = extract_address_line_2(pdf_to_String)
-            # print("ADDRESS2 = ", address2)
-            bureau_ratings_address.append({
-                "ADDRESS2" : address2
-                })
+            if address2 != None:
+                bureau_ratings_address.append({
+                    "ADDRESS2" : address2
+                    })
 
         if contact_number == "":
             contact_number = extract_contact_number(pdf_to_String)
-            # print("CONTACT NUMBER = ", contact_number)
-            bureau_ratings_telephone.append({contact_number})
+            if contact_number != None:
+                bureau_ratings_telephone.append({contact_number})
         
         
         transction_Details = extract_transaction_details(pdf_to_String)
@@ -383,23 +399,29 @@ def uco_bank_statmenr_main(url):
             all_transactions.append(x)
 
 
+    if all_transactions != []:
+        if all_transactions[0] != {}:
+            summary_scorecard.append({
+                "Item": "Start Date",
+                "Details": all_transactions[0]['Date'],
+                "Verification": "NA"})
 
-        # details_list.append({
-        #         "transction_details" : transction_list
-        #         })
-
-    if all_transactions[0] != {}:
-        # print(all_transactions[0])
+        if all_transactions[0] != {}:
+            summary_scorecard.append({
+                "Item": "End Date",
+                "Details": all_transactions[-1]['Date'],
+                "Verification": "NA"})
+            
+    else:
         summary_scorecard.append({
-            "Item": "Start Date",
-            "Details": all_transactions[0]['Date'],
-            "Verification": "NA"})
-
-    if all_transactions[0] != {}:
+                "Item": "Start Date",
+                "Details": "NA",
+                "Verification": "NA"})
+         
         summary_scorecard.append({
-            "Item": "End Date",
-            "Details": all_transactions[-1]['Date'],
-            "Verification": "NA"})
+                "Item": "End Date",
+                "Details": "NA",
+                "Verification": "NA"})
 
 
 

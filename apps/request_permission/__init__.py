@@ -11,7 +11,7 @@ request_permission_bp = Blueprint("request_permission_bp",
 
 
 
-@request_permission_bp.route('/api/v1/regtech/Token',methods=['POST'])
+@request_permission_bp.route('/api/v1/token/gettokenkey',methods=['POST'])
 def request_connection_main():
     if request.method == 'POST':
         data = request.get_json()

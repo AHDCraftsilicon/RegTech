@@ -5,14 +5,22 @@ import numpy as np
 import os,time
 import pandas as pd
 from werkzeug.utils import secure_filename
-# from flask_jwt_extended import JWTManager, jwt_required,get_jwt_identity
+from flask_jwt_extended import jwt_required
 import base64,io
+from data_base_string import *
+from datetime import datetime
 
 # Blueprint
 image_quality_check_bp = Blueprint("image_quality_check_bp",
                         __name__,
                         url_prefix="/",
                         template_folder="templates")
+
+# Database
+Api_request_history_db = Regtch_services_UAT["Api_request_history"]
+
+
+
 
 def get_image_resolution(image_path):
     with Image.open(image_path) as img:
@@ -75,88 +83,256 @@ def classify_resolution(width, height):
         return "best"
 
 
-@image_quality_check_bp.route('/api/v1/imagequalityCheck/imagequality',methods=['POST'])
-# @jwt_required()
+@image_quality_check_bp.route('/api/v1/imagequalitycheck/imagequality',methods=['POST'])
+@jwt_required()
 def quality_check_image_main():
     if request.method == 'POST':
-
+        api_call_start_time = datetime.now()
         data = request.get_json()
 
-        # file_name =  request.files.get('image')
+        if not data or 'CorporateID' not in data:
+
+            api_call_end_time = datetime.now()
+            duration = api_call_end_time - api_call_start_time
+            duration_seconds = duration.total_seconds()
+            store_response = {"response": "400",
+                        "message": "Error",
+                        "responseValue": "CorporateID cannot be null or empty."
+                    }
+            Api_request_history_db.insert_one({
+                            "api_name":"Image_quality_check",
+                            "current_date_time":datetime.now(),
+                            "response_duration":str(duration),
+                            "response_time":duration_seconds,
+                            "return_response" :str(store_response),
+                            "request_data":str(data)
+                        })
+
+            return jsonify(store_response), 400
+
+
+        if not data or 'UniqueID' not in data:
+
+            api_call_end_time = datetime.now()
+            duration = api_call_end_time - api_call_start_time
+            duration_seconds = duration.total_seconds()
+            store_response = {"response": "400",
+                        "message": "Error",
+                        "responseValue": "UniqueID cannot be null or empty."
+                    }
+            Api_request_history_db.insert_one({
+                            "corporate_id":data["CorporateID"],
+                            "api_name":"Image_quality_check",
+                            "current_date_time":datetime.now(),
+                            "response_duration":str(duration),
+                            "response_time":duration_seconds,
+                            "return_response" :str(store_response),
+                            "request_data":str(data)
+                        })
+
+            return jsonify(store_response), 400
+        
+
 
         if not data or 'image' not in data:
-             return jsonify({"response": "999",
+            api_call_end_time = datetime.now()
+            duration = api_call_end_time - api_call_start_time
+            duration_seconds = duration.total_seconds()
+            store_response = {"response": "400",
                         "message": "Error",
                         "responseValue": "image cannot be null or empty."
-                    }), 400
+                    }
+            Api_request_history_db.insert_one({
+                            "corporate_id":data["CorporateID"],
+                            "unique_id":data["UniqueID"],
+                            "api_name":"Image_quality_check",
+                            "current_date_time":datetime.now(),
+                            "response_duration":str(duration),
+                            "response_time":duration_seconds,
+                            "return_response" :str(store_response),
+                            "request_data":str(data)
+                        })
+
+            return jsonify(store_response), 400
         
-        if data['image'] != "":
-            try:
-                base64_string = data['image'].split(',')[1]
-            except:
-                base64_string = data['image']
 
-            # print(base64_string.split(',')[1])
 
-            if base64_string.startswith('data:image/jpeg;base64,'):
-                base64_string = base64_string.replace('data:image/jpeg;base64,', '')
-
-            # Decode the base64 string into bytes
-            image_bytes = base64.b64decode(base64_string)
-
-            # Convert bytes data to PIL Image
-            image = Image.open(io.BytesIO(image_bytes))
-
-            # Save the image to a file (example: 'output.jpg')
-            filename_img = str(time.time()).replace(".", "")
-            # print(filename_img+".png")
-            static_file_name = filename_img+".png"
-
-            image.save(os.path.join('apps/static/quality_check', secure_filename(static_file_name)))
-            
-            image_path = "apps/static/quality_check/" +static_file_name
-
-            # resolution = get_image_resolution(image_path)
-            sharpness = calculate_sharpness(image_path)
-            # noise = calculate_noise(image_path)
-            compression_artifacts = calculate_compression_artifacts(image_path)
-
-            # resolution_class = classify_resolution(*resolution)
-            sharpness_class = classify_sharpness(sharpness)
-            # noise_class = classify_noise_level(noise)
-            compression_class = classify_compression_artifacts(compression_artifacts)
-            
-            width = 0
-            heigth = 0
-            with Image.open(image_path) as img:
-                width = img.size[0]
-                heigth = img.size[1]
-            
-            os.remove("apps/static/quality_check/" +static_file_name)  
-
-            if sharpness_class == "best" or compression_class == "best":
-                return jsonify({"response": "000",
-                                    "message": "Success",
-                                    "responseValue": {
-                                        "Table1": [{
-                                                "Width":width,
-                                                "Height":heigth,
-                                                "Message": "Image quality is good."}]}}),200
-            else:
-                return jsonify({"response": "000",
-                                    "message": "Success",
-                                    "responseValue": {
-                                        "Table1": [{
-                                                "Width":width,
-                                                "Height":heigth,
-                                                "Message": "Image quality is poor."}]}}),200
+                # Check UniqueID
+        
+        
+        
+        if data["UniqueID"] != "":
+            check_log_db = Api_request_history_db.find_one({"unique_id":data["UniqueID"]})
         
         else:
-            return jsonify({"response": "999",
+            api_call_end_time = datetime.now()
+            duration = api_call_end_time - api_call_start_time
+            duration_seconds = duration.total_seconds()
+            store_response = {"response": "400",
                         "message": "Error",
-                        "responseValue": "image cannot be null or empty."
-                    }), 400
+                        "responseValue": "UniqueID cannot be null or empty."
+                    }
+            Api_request_history_db.insert_one({
+                            "api_name":"Aadhar_Masking",
+                            "current_date_time":datetime.now(),
+                            "response_duration":str(duration),
+                            "response_time":duration_seconds,
+                            "return_response" :str(store_response),
+                            "request_data":str(data)
+                        })
+            
+            return jsonify(store_response), 400
+        
+        if data["CorporateID"] == "":
+            api_call_end_time = datetime.now()
+            duration = api_call_end_time - api_call_start_time
+            duration_seconds = duration.total_seconds()
+            store_response = {"response": "400",
+                        "message": "Error",
+                        "responseValue": "CorporateID cannot be null or empty."
+                    }
+            Api_request_history_db.insert_one({
+                            "api_name":"Aadhar_Masking",
+                            "unique_id":data["UniqueID"],
+                            "current_date_time":datetime.now(),
+                            "response_duration":str(duration),
+                            "response_time":duration_seconds,
+                            "return_response" :str(store_response),
+                            "request_data":str(data)
+                        })
+            
+            return jsonify(store_response), 400
 
-    
+
+
+        if check_log_db == None:
+            if data['image'] != "":
+                try:
+                    base64_string = data['image'].split(',')[1]
+                except:
+                    base64_string = data['image']
+
+                if base64_string.startswith('data:image/jpeg;base64,'):
+                    base64_string = base64_string.replace('data:image/jpeg;base64,', '')
+
+                # Decode the base64 string into bytes
+                image_bytes = base64.b64decode(base64_string)
+
+                # Convert bytes data to PIL Image
+                image = Image.open(io.BytesIO(image_bytes))
+
+                # Save the image to a file (example: 'output.jpg')
+                filename_img = str(time.time()).replace(".", "")
+                # print(filename_img+".png")
+                static_file_name = filename_img+".png"
+
+                image.save(os.path.join('apps/static/quality_check', secure_filename(static_file_name)))
+                
+                image_path = "apps/static/quality_check/" +static_file_name
+
+                sharpness = calculate_sharpness(image_path)
+                compression_artifacts = calculate_compression_artifacts(image_path)
+
+                sharpness_class = classify_sharpness(sharpness)
+                compression_class = classify_compression_artifacts(compression_artifacts)
+                
+                width = 0
+                heigth = 0
+                with Image.open(image_path) as img:
+                    width = img.size[0]
+                    heigth = img.size[1]
+                
+                os.remove("apps/static/quality_check/" +static_file_name)  
+
+                if sharpness_class == "best" or compression_class == "best":
+                    api_call_end_time = datetime.now()
+                    duration = api_call_end_time - api_call_start_time
+                    duration_seconds = duration.total_seconds()
+                    store_response = {"response": "200",
+                                        "message": "Success",
+                                        "responseValue": {
+                                            "Table1": [{
+                                                    "Width":width,
+                                                    "Height":heigth,
+                                                    "Message": "Image quality is good."}]}}
+                    Api_request_history_db.insert_one({
+                                    "corporate_id":data["CorporateID"],
+                                    "unique_id":data["UniqueID"],
+                                    "api_name":"Image_quality_check",
+                                    "current_date_time":datetime.now(),
+                                    "response_duration":str(duration),
+                                    "response_time":duration_seconds,
+                                    "return_response" :str(store_response),
+                                    "request_data":str(data)
+                                })
+
+                    return jsonify(store_response), 200
+
+                else:
+                    api_call_end_time = datetime.now()
+                    duration = api_call_end_time - api_call_start_time
+                    duration_seconds = duration.total_seconds()
+                    store_response = {"response": "200",
+                                        "message": "Success",
+                                        "responseValue": {
+                                            "Table1": [{
+                                                    "Width":width,
+                                                    "Height":heigth,
+                                                    "Message": "Image quality is poor."}]}}
+                    Api_request_history_db.insert_one({
+                                    "corporate_id":data["CorporateID"],
+                                    "unique_id":data["UniqueID"],
+                                    "api_name":"Image_quality_check",
+                                    "current_date_time":datetime.now(),
+                                    "response_duration":str(duration),
+                                    "response_time":duration_seconds,
+                                    "return_response" :str(store_response),
+                                    "request_data":str(data)
+                                })
+
+                    return jsonify(store_response), 200
+            
+            else:
+                api_call_end_time = datetime.now()
+                duration = api_call_end_time - api_call_start_time
+                duration_seconds = duration.total_seconds()
+                store_response = {"response": "400",
+                            "message": "Error",
+                            "responseValue": "image cannot be null or empty."
+                        }
+                Api_request_history_db.insert_one({
+                                "corporate_id":data["CorporateID"],
+                                "unique_id":data["UniqueID"],
+                                "api_name":"Image_quality_check",
+                                "current_date_time":datetime.now(),
+                                "response_duration":str(duration),
+                                "response_time":duration_seconds,
+                                "return_response" :str(store_response),
+                                "request_data":str(data)
+                            })
+
+                return jsonify(store_response), 400
+
+        else:
+            api_call_end_time = datetime.now()
+            duration = api_call_end_time - api_call_start_time
+            duration_seconds = duration.total_seconds()
+            store_response = {"response": "400",
+                            "message": "Error",
+                            "responseValue": "Request with the same unique ID has already been processed!"
+                        }
+
+            Api_request_history_db.insert_one({
+                            "corporate_id":data["CorporateID"],
+                            "unique_id":data["UniqueID"],
+                            "api_name":"Aadhar_Masking",
+                            "current_date_time":datetime.now(),
+                            "response_duration":str(duration),
+                            "response_time":duration_seconds,
+                            "return_response" :str(store_response),
+                            "request_data":str(data)
+                        })
+            
+            return jsonify(store_response),400
 
     

@@ -9,7 +9,7 @@ from flask import Flask,jsonify
 # from pyaadhaar.utils import Qr_img_to_text, isSecureQr
 import xml.etree.ElementTree as ET
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+#pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
 def extract_all_lang_text(image_path):

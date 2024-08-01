@@ -8,7 +8,10 @@ import os
 from werkzeug.utils import secure_filename
 import time
 import base64,io
-# from flask_jwt_extended import JWTManager, jwt_required,get_jwt_identity
+from flask_jwt_extended import  jwt_required
+from data_base_string import *
+from datetime import datetime
+
 
 # Blueprint
 adhar_masking_bp = Blueprint("adhar_masking_bp",
@@ -17,7 +20,11 @@ adhar_masking_bp = Blueprint("adhar_masking_bp",
                         static_folder='static')
 
 # Tesseract exe path
-# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+#pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+
+# Database
+Api_request_history_db = Regtch_services_UAT["Api_request_history"]
 
 
 
@@ -209,94 +216,216 @@ def masking_file(input_path):
     masked_img, possible_UIDs = Extract_and_Mask_UIDs(input_path)
 
     if masked_img == "":
-        s = jsonify({'data':"Not Valid Aadhar Card"})
+        s = jsonify({'data':"Please Upload Valid Aadhar Card"})
     else:
 
         s = masked_img
     return s
 
 
-@adhar_masking_bp.route('/api/v1/aadharno/redaction',methods=['POST'])
-# @jwt_required()
+@adhar_masking_bp.route('/api/v1/adharMasking/adharmasking',methods=['POST'])
+@jwt_required()
 def addhar_masking_main():
     if request.method == 'POST':
-
+        api_call_start_time = datetime.now()
         data = request.get_json()
-        # print(data)
+        
+
+        if not data or 'CorporateID' not in data:
+
+            api_call_end_time = datetime.now()
+            duration = api_call_end_time - api_call_start_time
+            duration_seconds = duration.total_seconds()
+            store_response = {"response": "400",
+                        "message": "Error",
+                        "responseValue": "CorporateID cannot be null or empty."
+                    }
+            Api_request_history_db.insert_one({
+                            "api_name":"Aadhar_Masking",
+                            "current_date_time":datetime.now(),
+                            "response_duration":str(duration),
+                            "response_time":duration_seconds,
+                            "return_response" :str(store_response),
+                            "request_data":str(data)
+                        })
+
+            return jsonify(store_response), 400
+
+
+        if not data or 'UniqueID' not in data:
+
+            store_response = {"response": "400",
+                        "message": "Error",
+                        "responseValue": "UniqueID cannot be null or empty."
+                    }
+        
+            return jsonify(store_response), 400
+        
 
         if not data or 'addhar_img' not in data:
-            return jsonify({"response": "999",
+            api_call_end_time = datetime.now()
+            duration = api_call_end_time - api_call_start_time
+            duration_seconds = duration.total_seconds()
+            store_response = {"response": "400",
                         "message": "Error",
                         "responseValue": "addhar_img cannot be null or empty."
-                    }), 400
+                    }
+            Api_request_history_db.insert_one({
+                            "corporate_id":data["CorporateID"],
+                            "unique_id":data["UniqueID"],
+                            "api_name":"Aadhar_Masking",
+                            "current_date_time":datetime.now(),
+                            "response_duration":str(duration),
+                            "response_time":duration_seconds,
+                            "return_response" :str(store_response),
+                            "request_data":str(data)
+                        })
+
+            return jsonify(store_response), 400
         
-        if data['addhar_img'] != "":
-            base64_string = data['addhar_img']
-            if base64_string.startswith('data:image/jpeg;base64,'):
-                base64_string = base64_string.replace('data:image/jpeg;base64,', '')
 
-            # Decode the base64 string into bytes
-            image_bytes = base64.b64decode(base64_string)
+        
+        # Check UniqueID
+        if data["UniqueID"] != "":
+            check_log_db = Api_request_history_db.find_one({"unique_id":data["UniqueID"]})
+        
+        else:
+            store_response = {"response": "400",
+                        "message": "Error",
+                        "responseValue": "UniqueID cannot be null or empty."
+                    }
+        
+            return jsonify(store_response), 400
+        
+        
+        if data["CorporateID"] == "":
+            api_call_end_time = datetime.now()
+            duration = api_call_end_time - api_call_start_time
+            duration_seconds = duration.total_seconds()
+            store_response = {"response": "400",
+                        "message": "Error",
+                        "responseValue": "CorporateID cannot be null or empty."
+                    }
+            Api_request_history_db.insert_one({
+                            "api_name":"Aadhar_Masking",
+                            "unique_id":data["UniqueID"],
+                            "current_date_time":datetime.now(),
+                            "response_duration":str(duration),
+                            "response_time":duration_seconds,
+                            "return_response" :str(store_response),
+                            "request_data":str(data)
+                        })
+            
+            return jsonify(store_response), 400
 
-            # Convert bytes data to PIL Image
-            image = Image.open(io.BytesIO(image_bytes))
 
-            # Save the image to a file (example: 'output.jpg')
-            filename_img = str(time.time()).replace(".", "")
-            # print(filename_img+".png")
-            static_file_name = filename_img+".png"
-            # image.save(filename_img+".png")
-            image.save(os.path.join('apps/static/addhar_masksing_img', secure_filename(static_file_name)))
+        if check_log_db == None:
+            if data['addhar_img'] != "":
+                base64_string = data['addhar_img']
+                if base64_string.startswith('data:image/jpeg;base64,'):
+                    base64_string = base64_string.replace('data:image/jpeg;base64,', '')
+
+                # Decode the base64 string into bytes
+                image_bytes = base64.b64decode(base64_string)
+
+                # Convert bytes data to PIL Image
+                image = Image.open(io.BytesIO(image_bytes))
+
+                # Save the image to a file (example: 'output.jpg')
+                filename_img = str(time.time()).replace(".", "")
+                # print(filename_img+".png")
+                static_file_name = filename_img+".png"
+                # image.save(filename_img+".png")
+                image.save(os.path.join('apps/static/addhar_masksing_img', secure_filename(static_file_name)))
+                
+                image = masking_file("apps/static/addhar_masksing_img/" +static_file_name)
+                if image != "":
+                    os.remove("apps/static/addhar_masksing_img/" +static_file_name)   
+                
+                if image == None:
+                    api_call_end_time = datetime.now()
+                    duration = api_call_end_time - api_call_start_time
+                    duration_seconds = duration.total_seconds()
+                    store_response = {"response": "200",
+                                "message": "Success",'responseValue':"Please Upload Valid Aadhar Card"}
+                    Api_request_history_db.insert_one({
+                                    "corporate_id":data["CorporateID"],
+                                    "unique_id":data["UniqueID"],
+                                    "api_name":"Aadhar_Masking",
+                                    "current_date_time":datetime.now(),
+                                    "response_duration":str(duration),
+                                    "response_time":duration_seconds,
+                                    "return_response" :str(store_response),
+                                    "request_data":str(data)
+                                })
+                
+                    return jsonify(store_response), 200
+                
+
+                api_call_end_time = datetime.now()
+                duration = api_call_end_time - api_call_start_time
+                duration_seconds = duration.total_seconds()
+                store_response = {"response": "200",
+                                "message": "Success",
+                                "responseValue": {
+                                    "Table1": [{
+                                            "Image": "data:image/png;base64,"+image}]}}
+                Api_request_history_db.insert_one({
+                                "corporate_id":data["CorporateID"],
+                                "unique_id":data["UniqueID"],
+                                "api_name":"Aadhar_Masking",
+                                "current_date_time":datetime.now(),
+                                "response_duration":str(duration),
+                                "response_time":duration_seconds,
+                                "return_response" :str(store_response),
+                                "request_data":str(data)
+                            })
             
-            image = masking_file("apps/static/addhar_masksing_img/" +static_file_name)
-            if image != "":
-                os.remove("apps/static/addhar_masksing_img/" +static_file_name)   
+                return jsonify(store_response), 200
+
+
+            else:
+                api_call_end_time = datetime.now()
+                duration = api_call_end_time - api_call_start_time
+                duration_seconds = duration.total_seconds()
+                store_response = {"response": "400",
+                            "message": "Error",
+                            "responseValue": "addhar_img cannot be null or empty."
+                        }
+                Api_request_history_db.insert_one({
+                                "corporate_id":data["CorporateID"],
+                                "unique_id":data["UniqueID"],
+                                "api_name":"Aadhar_Masking",
+                                "current_date_time":datetime.now(),
+                                "response_duration":str(duration),
+                                "response_time":duration_seconds,
+                                "return_response" :str(store_response),
+                                "request_data":str(data)
+                            })
             
-            if image == None:
-                return jsonify({"response": "000",
-                            "message": "Success",'responseValue':"Not Valid Aadhar Card"}),200
-            
-            return jsonify({"response": "000",
-                            "message": "Success",
-                            "responseValue": {
-                                "Table1": [{
-                                        "Image": "data:image/png;base64,"+image}]}}),200
+                return jsonify(store_response), 400
+
 
         else:
-            return jsonify({"response": "999",
-                        "message": "Error",
-                        "responseValue": "addhar_img cannot be null or empty."
-                    }), 400
+            api_call_end_time = datetime.now()
+            duration = api_call_end_time - api_call_start_time
+            duration_seconds = duration.total_seconds()
+            store_response = {"response": "400",
+                            "message": "Error",
+                            "responseValue": "Request with the same unique ID has already been processed!"
+                        }
 
+            Api_request_history_db.insert_one({
+                            "corporate_id":data["CorporateID"],
+                            "unique_id":data["UniqueID"],
+                            "api_name":"Aadhar_Masking",
+                            "current_date_time":datetime.now(),
+                            "response_duration":str(duration),
+                            "response_time":duration_seconds,
+                            "return_response" :str(store_response),
+                            "request_data":str(data)
+                        })
+            
+            return jsonify(store_response),400
+        
 
-        # return jsonify()
-        
-        # if file_name == None:
-        #      return jsonify({"response": "999",
-        #                 "message": "Error",
-        #                 "responseValue": "addhar_img cannot be null or empty."
-        #             }), 400
-        
-        # if file_name.filename != "":
-                # filename_img = str(time.time()).replace(".", "")
-                # static_file_name = filename_img+"."+ file_name.filename.split(".")[-1]
-                # file_name.save(os.path.join('apps/static/addhar_masksing_img', secure_filename(static_file_name)))
-                # image = masking_file("apps/static/addhar_masksing_img/" +static_file_name)
-                # if image != "":
-                #     os.remove("apps/static/addhar_masksing_img/" +static_file_name)   
-                
-                # if image == None:
-                #     return jsonify({"response": "000",
-                #                 "message": "Success",'responseValue':"Not Valid Aadhar Card"}),200
-                
-                # return jsonify({"response": "000",
-                #                 "message": "Success",
-                #                 "responseValue": {
-                #                     "Table1": [{
-                #                             "Image": "data:image/png;base64,"+image}]}}),200
-           
-        # else:
-        #     return jsonify({"response": "999",
-        #                 "message": "Error",
-        #                 "responseValue": "addhar_img cannot be null or empty."
-        #             }), 400

@@ -9,7 +9,7 @@ import os
 from flask import Flask,jsonify
 
  
-# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+# #pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
 def all_language_text(image_path):
@@ -418,7 +418,7 @@ def voter_id_read(image_path):
     
     # os.remove(image_path)
     if voter_list != {}:
-        return jsonify({"response": "200",
+        return {"response": "200",
             "message": "Success",
             "responseValue": {
                 "Table1": [
@@ -427,12 +427,12 @@ def voter_id_read(image_path):
                     }
                 ]
             }
-        }),200
+        }
     
     else:
-        return jsonify({"response": "400",
+        return {"response": "400",
             "message": "Error",
-            "responseValue": "Invalid image! Please upload a clear and readable image!"
-        }),400
+            "responseValue": "Please upload a high-quality and readable image."
+        }
 
 

@@ -27,34 +27,25 @@
         searching: true,
         sort: true,
         'columns': [
-            { data: "company_name" },
-            { data: 'service_name' },
+            { data: "corporate_id" },
+            { data: 'api_name' },
             {
-                data: null,
-                'sortable': false,
-                'searchable': false,
-                'render': function (data, type, full) {
-                    if (!data) {
-                        return 'N/A';
-                    } else {
-                        return `<span>` + data.year + `  -  ` + data.month + `  -  ` + data.date + `</span>`;
-                    }
-                }
+                data: "date"
             },
-            {
-                data: null,
-                'sortable': false,
-                'searchable': false,
-                'render': function (data, type, full) {
-                    if (!data) {
-                        return 'N/A';
-                    } else {
-                        const myJSON = JSON.stringify(data);
-                        view = `<a href="javascript:void(0);" onclick="view_modal(this.name)" name='` + myJSON + `' class="font-18 text-primary me-2 hover-eff-btn"><i class="mdi mdi-eye"></i><span class="font-12 badge badge-primary-lighten">Log View</span></a>`
-                        return view;
-                    }
-                }
-            }
+            // {
+            //     data: null,
+            //     'sortable': false,
+            //     'searchable': false,
+            //     'render': function (data, type, full) {
+            //         if (!data) {
+            //             return 'N/A';
+            //         } else {
+            //             const myJSON = JSON.stringify(data);
+            //             view = `<a href="javascript:void(0);" onclick="view_modal(this.name)" name='` + myJSON + `' class="font-18 text-primary me-2 hover-eff-btn"><i class="mdi mdi-eye"></i><span class="font-12 badge badge-primary-lighten">Log View</span></a>`
+            //             return view;
+            //         }
+            //     }
+            // }
         ],
 
         orderCellsTop: true,

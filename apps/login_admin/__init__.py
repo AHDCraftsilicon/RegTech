@@ -32,18 +32,22 @@ def login_admin_main():
         
         if request.form['corporate_name'] != "" and request.form["user_name"] != "" and request.form["password"] != "":
             login_Details = login_db.find_one({"username":request.form["user_name"] , "corporate_name":request.form["corporate_name"] , "password":request.form["password"]})
-            duration = timedelta(minutes=10)
-            access_token = create_access_token(expires_delta=duration,identity={'data':'Admin Login Successfully','objid':str(login_Details['_id'])}
-                                            ,additional_claims={"is_api": False,"is_admin":True})
-            
             if login_Details != None:
-                resp = redirect('/poratl-page')
-                set_access_cookies(resp, access_token)
-                # response = make_response(resp)
-                # response.set_cookie('admin_token', access_token)
-                flash(''+login_Details['username']+' Login Successfully!')
-                return resp
-    
+            
+                duration = timedelta(minutes=30)
+                access_token = create_access_token(expires_delta=duration,identity={'data':'Admin Login Successfully','objid':str(login_Details['_id'])}
+                                                ,additional_claims={"is_api": False,"is_admin":True})
+                
+                if login_Details != None:
+                    resp = redirect('/poratl-page')
+                    set_access_cookies(resp, access_token)
+                    # response = make_response(resp)
+                    # response.set_cookie('admin_token', access_token)
+                    flash(''+login_Details['username']+' Login Successfully!')
+                    return resp
+            else:
+                flash('Please Add Valid Corporate Name & User Name & Password!')
+                return redirect("/admin/login")
         
             
 

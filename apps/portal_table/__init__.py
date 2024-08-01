@@ -1,13 +1,19 @@
 from flask import Blueprint, render_template,request,redirect,flash,jsonify,send_file
 import os
-
+from data_base_string import *
 from flask_jwt_extended import JWTManager, jwt_required,get_jwt
+from datetime import datetime
+
+
 # Blueprint
 portal_table_bp = Blueprint("portal_table_bp",
                         __name__,
                         url_prefix="/",
                         template_folder="templates")
 
+
+# Database
+Api_request_history_db = Regtch_services_UAT["Api_request_history"]
 
 
 @portal_table_bp.route("/poratl-page",methods=["GET","POST"])
@@ -21,41 +27,86 @@ def portal_main_page():
 @portal_table_bp.route("/poratl-data_table",methods=["GET","POST"])
 @jwt_required(locations=['cookies'])
 def portal_data_table():
-    parent_path = os.listdir("./apps/static/NimbleRegTechlog/")
+    # parent_path = os.listdir("./apps/static/NimbleRegTechlog/")
     
     lists = []
-    for company_name in parent_path:
-        print(company_name)
-        for service_name in os.listdir("./apps/static/NimbleRegTechlog/"+company_name):
-                for year in os.listdir("./apps/static/NimbleRegTechlog/"+ company_name + "/" +service_name):
-                    for month in os.listdir("./apps/static/NimbleRegTechlog/"+ company_name + "/" +service_name + "/" +year):
-                        for date in os.listdir("./apps/static/NimbleRegTechlog/"+ company_name + "/" +service_name + "/"+year+"/"+month):
-                            # for log_file in os.listdir("./apps/static/NimbleRegTechlog/"+ company_name + "/" +project_name + "/"+api_name+"/"+year+"/"+month+"/"+date):
-                            lists.append({
-                                "company_name":company_name,
-                                "service_name":service_name,
-                                "year":year,
-                                "month":month,
-                                "date":date,
-                                # "log_file_download": "./apps/static/NimbleRegTechlog/"+ company_name + "/" +project_name + "/"+api_name+"/"+year+"/"+month+"/"+date+ "/"+ log_file,
-                                # "log_file":log_file
-                            })
+
+    finding = Api_request_history_db.aggregate([{
+        "$group": {
+            "_id": {
+                "api_name": "$api_name",
+                "corporate_id":"$corporate_id",
+                "date": {
+                    "$dateToString": {
+                        "format": "%Y-%m-%d",
+                        "date": "$current_date_time",
+                        
+                    }}},
+            "data": {
+                "$push": {
+                    "current_date_time": "$current_date_time",
+                    "response_duration": "$response_duration",
+                    "response_time": "$response_time",
+                    "return_response": "$return_response",
+                    "request_data": "$request_data",
+                  "corporate_id":"$corporate_id"
+                }}}},{"$sort": {
+                    "_id.api_name": 1,
+                    "_id.date": 1}},
+                    {"$project": {
+                                "_id": 0,
+                                "api_name": "$_id.api_name",
+                                "date": "$_id.date",
+                                "data": 1,
+                                "corporate_id":"$_id.corporate_id"
+                            }}])
+    
+    for x in finding:
+        lists.append({
+            "api_name":x["api_name"],
+            "date":x["date"],
+            "corporate_id":x["corporate_id"],
+        })
+        # print(x)
+        # break
+
+    # for company_name in parent_path:
+    #     print(company_name)
+    #     for service_name in os.listdir("./apps/static/NimbleRegTechlog/"+company_name):
+    #             for year in os.listdir("./apps/static/NimbleRegTechlog/"+ company_name + "/" +service_name):
+    #                 for month in os.listdir("./apps/static/NimbleRegTechlog/"+ company_name + "/" +service_name + "/" +year):
+    #                     for date in os.listdir("./apps/static/NimbleRegTechlog/"+ company_name + "/" +service_name + "/"+year+"/"+month):
+    #                         # for log_file in os.listdir("./apps/static/NimbleRegTechlog/"+ company_name + "/" +project_name + "/"+api_name+"/"+year+"/"+month+"/"+date):
+    #                         lists.append({
+    #                             "company_name":company_name,
+    #                             "service_name":service_name,
+    #                             "year":year,
+    #                             "month":month,
+    #                             "date":date,
+    #                             # "log_file_download": "./apps/static/NimbleRegTechlog/"+ company_name + "/" +project_name + "/"+api_name+"/"+year+"/"+month+"/"+date+ "/"+ log_file,
+    #                             # "log_file":log_file
+    #                         })
                     
               
     return jsonify({"data":lists})
 
-@portal_table_bp.route("/log_text_file_list/table",methods=["POST"])
+@portal_table_bp.route("/log_text_file_list/table")
 def log_text_list_Files():
 
-    if request.method == 'POST': 
-        data = []
-        for log_file in os.listdir("./apps/static/NimbleRegTechlog/"+ request.form["path_name"]):
-            data.append({
-                "log_file":log_file,
-                "log_file_download": "./static/NimbleRegTechlog/"+ request.form["path_name"] + "/" + log_file
-            })
+    # if request.method == 'POST': 
+    data = []
+    date_str = "30-07-2024".split(" - ")[0]
 
+    # Parse the date string into a datetime object
+    date_obj = datetime.strptime(date_str, "%d-%m-%Y")
 
+    print(type(date_obj))
+    
+    finding = Api_request_history_db.find({"current_date_time":{"$gte" :date_obj}})
+    
+    # print("----- ", finding)
+    for x in finding:
+        print(x)
     return jsonify({"data":data})
 
 
