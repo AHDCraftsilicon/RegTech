@@ -21,7 +21,7 @@
         'serverMethod': 'get',
         "autoWidth": false,
         'ajax': {
-            'url': '/poratl-data_table'
+            'url': '/poratl-data_tabless'
         },
         'lengthMenu': [[10, 50, 100], [10, 50, 100]],
         searching: true,
@@ -29,9 +29,11 @@
         'columns': [
             { data: "corporate_id" },
             { data: 'api_name' },
-            {
-                data: "date"
-            },
+            { data: 'unique_id' },
+            {data: "current_date_time"},
+            {data: "request_data"},
+            {data: "_id"},
+
             // {
             //     data: null,
             //     'sortable': false,

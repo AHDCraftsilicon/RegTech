@@ -2,7 +2,7 @@ from flask import Blueprint, render_template,request,redirect,flash,jsonify,send
 import os
 from data_base_string import *
 from flask_jwt_extended import JWTManager, jwt_required,get_jwt
-from datetime import datetime
+from datetime import datetime,timedelta
 
 
 # Blueprint
@@ -89,6 +89,37 @@ def portal_data_table():
                     
               
     return jsonify({"data":lists})
+
+
+@portal_table_bp.route("/poratl-data_tabless",methods=["GET","POST"])
+@jwt_required(locations=['cookies'])
+def portal_data_tabless():
+    # parent_path = os.listdir("./apps/static/NimbleRegTechlog/")
+    
+    lists = []
+
+    finding = Api_request_history_db.find()
+    
+    for x in finding:
+        
+        try:
+            unique_id  = x["unique_id"]
+        except:
+            unique_id = ""
+        lists.append({
+            "corporate_id":x["corporate_id"],
+            "api_name":x["api_name"],
+            "unique_id":unique_id,
+            "current_date_time": str((x["current_date_time"]+timedelta(hours=5,minutes=30)).strftime("%d-%m-%Y %H:%M:%S")),
+            "request_data":x['request_data'],
+            "_id":str(x["_id"]),
+        })
+    
+                    
+              
+    return jsonify({"data":lists})
+
+
 
 @portal_table_bp.route("/log_text_file_list/table")
 def log_text_list_Files():
