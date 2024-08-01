@@ -52,7 +52,7 @@ def passport_main():
 
 
             
-        return jsonify({"Data":mrz.to_dict()})
+        return jsonify({"Data":data_store})
     else:
         print("MRZ could not be extracted.")
     return jsonify({"data":"ajgdjsg"})
