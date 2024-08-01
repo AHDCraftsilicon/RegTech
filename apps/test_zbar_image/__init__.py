@@ -36,7 +36,7 @@ def date_get(num):
 
 @test_zbar_image_bp.route('/passport_testing')
 def passport_main():
-    mrz = read_mrz("./apps/static/lakshami.png")
+    mrz = read_mrz("./apps/static/abc.jpg")
 
 # Print the extracted MRZ data
     if mrz is not None:
@@ -54,12 +54,13 @@ def passport_main():
             "expiration_date":get_expiration,
             "nationality":mrz_data["nationality"],
             "gender":mrz_data["sex"],
-            "nationality":mrz_data["nationality"],
+            "number":mrz_data["number"],
+            "personal_number":mrz_data["personal_number"],
             "mrz_lines":mrz_data["raw_text"],
             })
 
             
-        return jsonify({"Data":data_store})
+        return jsonify({"Data":mrz.to_dict()})
     else:
         print("MRZ could not be extracted.")
     return jsonify({"data":"ajgdjsg"})
