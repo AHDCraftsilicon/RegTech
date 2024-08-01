@@ -41,23 +41,23 @@ def passport_main():
 # Print the extracted MRZ data
     if mrz is not None:
         data_store = []
-        mrz_data = mrz.to_dict()
-        for key, value in mrz_data.items():
-            print(key)
+        # mrz_data = mrz.to_dict()
+        # for key, value in mrz_data.items():
+        #     print(key)
 
-        get_dob = date_get(mrz_data["date_of_birth"])
-        get_expiration = date_get(mrz_data["expiration_date"])
+        # get_dob = date_get(mrz_data["date_of_birth"])
+        # get_expiration = date_get(mrz_data["expiration_date"])
 
-        data_store.append({
-            "mrz_type":mrz_data["mrz_type"],
-            "date_of_birth":get_dob,
-            "expiration_date":get_expiration,
-            "nationality":mrz_data["nationality"],
-            "gender":mrz_data["sex"],
-            "number":mrz_data["number"],
-            "personal_number":mrz_data["personal_number"],
-            "mrz_lines":mrz_data["raw_text"],
-            })
+        # data_store.append({
+        #     "mrz_type":mrz_data["mrz_type"],
+        #     "date_of_birth":get_dob,
+        #     "expiration_date":get_expiration,
+        #     "nationality":mrz_data["nationality"],
+        #     "gender":mrz_data["sex"],
+        #     "number":mrz_data["number"],
+        #     "personal_number":mrz_data["personal_number"],
+        #     "mrz_lines":mrz_data["raw_text"],
+        #     })
 
             
         return jsonify({"Data":mrz.to_dict()})
