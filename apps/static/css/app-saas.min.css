@@ -15537,7 +15537,8 @@ fieldset:disabled .btn {
 
 .side-nav {
     padding-left: 0;
-    list-style-type: none
+    list-style-type: none;
+    padding-top: 1rem;
 }
 
 .side-nav ul {
@@ -16246,7 +16247,7 @@ html[data-sidenav-color=dark] .leftside-menu {
 }
 
 html[data-sidenav-color=dark] .leftside-menu .logo {
-    background: #285275 !important
+    background: #093b65 !important
 }
 
 html[data-sidenav-color=dark] .leftbar-user .leftbar-user-name {
@@ -16686,7 +16687,8 @@ html[data-sidenav-color=dark][data-sidenav-size=condensed] .side-nav .side-nav-i
 }
 
 .nav-user {
-    padding: calc(31px * .5) 20px calc(31px * .5) 57px !important;
+    /* padding: calc(31px * .5) 20px calc(31px * .5) 57px !important; */
+    padding : 1rem !important;
     /* text-align: left !important; */
     position: relative;
     background-color: var(--ct-nav-user-bg-topbar);
@@ -21286,6 +21288,8 @@ table.dataTable tbody tr.odd td {
     background-color: transparent
 }
 
+
+
 table.dataTable tbody>tr.selected td {
     background-color: #727cf5
 }
@@ -23177,9 +23181,9 @@ body.modal-open .content-page {
 }
 
 .header_logo {
-    width: 4rem;
+    width: 10rem;
     height: 4rem;
-    filter: invert(200%) sepia(0%) saturate(0%) hue-rotate(300deg) brightness(200%) contrast(200%);
+    /* filter: invert(200%) sepia(0%) saturate(0%) hue-rotate(300deg) brightness(200%) contrast(200%); */
 }
 
 

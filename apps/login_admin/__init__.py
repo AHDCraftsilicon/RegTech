@@ -34,12 +34,12 @@ def login_admin_main():
             login_Details = login_db.find_one({"username":request.form["user_name"] , "corporate_name":request.form["corporate_name"] , "password":request.form["password"]})
             if login_Details != None:
             
-                duration = timedelta(minutes=30)
+                duration = timedelta(hours=1)
                 access_token = create_access_token(expires_delta=duration,identity={'data':'Admin Login Successfully','objid':str(login_Details['_id'])}
                                                 ,additional_claims={"is_api": False,"is_admin":True})
                 
                 if login_Details != None:
-                    resp = redirect('/poratl-page')
+                    resp = redirect('/database-log')
                     set_access_cookies(resp, access_token)
                     # response = make_response(resp)
                     # response.set_cookie('admin_token', access_token)

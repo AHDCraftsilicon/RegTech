@@ -22,6 +22,15 @@ def language_translator_main():
         api_call_start_time = datetime.now()
         data = request.get_json()
 
+        if not data or 'UniqueID' not in data:
+            store_response = {"response": "400",
+                        "message": "Error",
+                        "responseValue": "UniqueID cannot be null or empty."
+                    }
+        
+            return jsonify(store_response), 400
+        
+
 
         if not data or 'CorporateID' not in data:
             api_call_end_time = datetime.now()
@@ -32,8 +41,7 @@ def language_translator_main():
                         "responseValue": "CorporateID cannot be null or empty."
                     }
             Api_request_history_db.insert_one({
-                            "api_name":"Lang_Translate",
-                            
+                            "api_name":"Lang_Translate",                            
                             # "unique_id":data["UniqueID"],
                             "current_date_time":datetime.now(),
                             "response_duration":str(duration),
@@ -45,14 +53,7 @@ def language_translator_main():
             return jsonify(store_response), 400
 
 
-        if not data or 'UniqueID' not in data:
-            store_response = {"response": "400",
-                        "message": "Error",
-                        "responseValue": "UniqueID cannot be null or empty."
-                    }
-        
-            return jsonify(store_response), 400
-        
+       
         
 
         
@@ -171,6 +172,7 @@ def language_translator_main():
                 Api_request_history_db.insert_one({
                                 "corporate_id":data["CorporateID"],
                                 "api_name":"Lang_Translate",
+                                "unique_id":data["UniqueID"],
                                 "current_date_time":datetime.now(),
                                 "response_duration":str(duration),
                                 "response_time":duration_seconds,
@@ -191,6 +193,7 @@ def language_translator_main():
                 Api_request_history_db.insert_one({
                                 "corporate_id":data["CorporateID"],
                                 "api_name":"Lang_Translate",
+                                "unique_id":data["UniqueID"],
                                 "current_date_time":datetime.now(),
                                 "response_duration":str(duration),
                                 "response_time":duration_seconds,
@@ -212,6 +215,7 @@ def language_translator_main():
                 Api_request_history_db.insert_one({
                                 "corporate_id":data["CorporateID"],
                                 "api_name":"Lang_Translate",
+                                "unique_id":data["UniqueID"],
                                 "current_date_time":datetime.now(),
                                 "response_duration":str(duration),
                                 "response_time":duration_seconds,
@@ -237,6 +241,7 @@ def language_translator_main():
                                             "TranslatedText": translation.text}]}}
                 Api_request_history_db.insert_one({
                                 "api_name":"Lang_Translate",
+                                "unique_id":data["UniqueID"],
                                 "corporate_id":data["CorporateID"],
                                 "current_date_time":datetime.now(),
                                 "response_duration":str(duration),
@@ -256,6 +261,7 @@ def language_translator_main():
                                 'responseValue':"Please Choose Correct language!"}
                 Api_request_history_db.insert_one({
                                 "api_name":"Lang_Translate",
+                                "unique_id":data["UniqueID"],
                                 "corporate_id":data["CorporateID"],
                                 "current_date_time":datetime.now(),
                                 "response_duration":str(duration),

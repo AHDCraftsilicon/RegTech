@@ -337,6 +337,13 @@ table.table-bordered.dataTable td {
     border-left-width: 0
 }
 
+
+.line_texts {
+    width: 200px !important;
+    text-wrap: wrap !important;
+    text-align: center !important;
+}
+
 table.table-bordered.dataTable th:first-child,
 table.table-bordered.dataTable th:first-child,
 table.table-bordered.dataTable td:first-child,

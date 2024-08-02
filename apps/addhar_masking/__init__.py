@@ -230,6 +230,16 @@ def addhar_masking_main():
         api_call_start_time = datetime.now()
         data = request.get_json()
         
+        if not data or 'UniqueID' not in data:
+
+            store_response = {"response": "400",
+                        "message": "Error",
+                        "responseValue": "UniqueID cannot be null or empty."
+                    }
+        
+            return jsonify(store_response), 400
+        
+
 
         if not data or 'CorporateID' not in data:
 
@@ -252,16 +262,7 @@ def addhar_masking_main():
             return jsonify(store_response), 400
 
 
-        if not data or 'UniqueID' not in data:
-
-            store_response = {"response": "400",
-                        "message": "Error",
-                        "responseValue": "UniqueID cannot be null or empty."
-                    }
-        
-            return jsonify(store_response), 400
-        
-
+      
         if not data or 'addhar_img' not in data:
             api_call_end_time = datetime.now()
             duration = api_call_end_time - api_call_start_time

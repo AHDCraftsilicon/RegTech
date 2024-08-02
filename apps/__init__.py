@@ -6,11 +6,12 @@ from apps.string_compartion import string_compartion_bp
 from apps.language_translate import language_translate_bp
 from apps.request_permission import request_permission_bp
 from apps.ocr_image_readings import ocr_image_reading_bp
-from apps.portal_table import portal_table_bp
+from apps.database_log import database_table_bp
 from apps.login_admin import login_Admin_bp
 from apps.ocr_image_read_form_Data import ocr_image_reading_form_bp
 from apps.object_detaction import object_detaction_bp
 from apps.bank_statement_pdf_text import bank_statement_bp
+from apps.company_list import comapny_list_table_bp
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required,unset_jwt_cookies
 from datetime import datetime, timedelta
 
@@ -62,8 +63,8 @@ def crete_app():
         # print("jwt",jwt_payload)        
         # original_request_path = request.path
         # print(original_request_path)
-        # if original_request_path == '/poratl-page' :
-        #     return redirect('/poratl-page')
+        # if original_request_path == '/database-log' :
+        #     return redirect('/database-log')
         # else:
         return redirect('/admin/login')
     
@@ -125,12 +126,13 @@ def crete_app():
     app.register_blueprint(language_translate_bp)
     app.register_blueprint(request_permission_bp)
     app.register_blueprint(ocr_image_reading_bp)
-    app.register_blueprint(portal_table_bp)
+    app.register_blueprint(database_table_bp)
     app.register_blueprint(login_Admin_bp)
     app.register_blueprint(ocr_image_reading_form_bp)
     app.register_blueprint(test_zbar_image_bp)
     app.register_blueprint(object_detaction_bp)
     app.register_blueprint(bank_statement_bp)
+    app.register_blueprint(comapny_list_table_bp)
 
 
     app.jinja_env.globals['load_topbar'] = load_topbar

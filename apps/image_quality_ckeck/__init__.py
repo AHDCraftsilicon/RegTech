@@ -90,6 +90,21 @@ def quality_check_image_main():
         api_call_start_time = datetime.now()
         data = request.get_json()
 
+        
+        if not data or 'UniqueID' not in data:
+
+            api_call_end_time = datetime.now()
+            duration = api_call_end_time - api_call_start_time
+            duration_seconds = duration.total_seconds()
+            store_response = {"response": "400",
+                        "message": "Error",
+                        "responseValue": "UniqueID cannot be null or empty."
+                    }
+
+            return jsonify(store_response), 400
+        
+
+
         if not data or 'CorporateID' not in data:
 
             api_call_end_time = datetime.now()
@@ -110,28 +125,6 @@ def quality_check_image_main():
 
             return jsonify(store_response), 400
 
-
-        if not data or 'UniqueID' not in data:
-
-            api_call_end_time = datetime.now()
-            duration = api_call_end_time - api_call_start_time
-            duration_seconds = duration.total_seconds()
-            store_response = {"response": "400",
-                        "message": "Error",
-                        "responseValue": "UniqueID cannot be null or empty."
-                    }
-            Api_request_history_db.insert_one({
-                            "corporate_id":data["CorporateID"],
-                            "api_name":"Image_quality_check",
-                            "current_date_time":datetime.now(),
-                            "response_duration":str(duration),
-                            "response_time":duration_seconds,
-                            "return_response" :str(store_response),
-                            "request_data":str(data)
-                        })
-
-            return jsonify(store_response), 400
-        
 
 
         if not data or 'image' not in data:
@@ -172,14 +165,6 @@ def quality_check_image_main():
                         "message": "Error",
                         "responseValue": "UniqueID cannot be null or empty."
                     }
-            Api_request_history_db.insert_one({
-                            "api_name":"Aadhar_Masking",
-                            "current_date_time":datetime.now(),
-                            "response_duration":str(duration),
-                            "response_time":duration_seconds,
-                            "return_response" :str(store_response),
-                            "request_data":str(data)
-                        })
             
             return jsonify(store_response), 400
         

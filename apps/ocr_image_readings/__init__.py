@@ -29,6 +29,15 @@ def ocr_image_read_text_main():
 
             data = request.get_json() 
 
+            if not data or 'UniqueID' not in data:
+                store_response = {"response": "400",
+                            "message": "Error",
+                            "responseValue": "UniqueID cannot be null or empty."
+                        }
+
+                return jsonify(store_response), 400
+        
+
             if not data or 'CorporateID' not in data:
 
                 api_call_end_time = datetime.now()
@@ -51,14 +60,7 @@ def ocr_image_read_text_main():
                 return jsonify(store_response), 400
 
 
-            if not data or 'UniqueID' not in data:
-                store_response = {"response": "400",
-                            "message": "Error",
-                            "responseValue": "UniqueID cannot be null or empty."
-                        }
-
-                return jsonify(store_response), 400
-        
+            
         
             
             # Check UniqueID

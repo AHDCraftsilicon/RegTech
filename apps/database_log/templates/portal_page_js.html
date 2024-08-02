@@ -1,0 +1,203 @@
+<script>
+
+
+
+    function add_type_change(e) {
+        if (e.value === 'Percentage') {
+            $('#inpufix').hide()
+            $(e).parent().parent().parent().children().eq(2).find('input').prop("required", false)
+        }
+        else if (e.value === 'Fix') {
+            $('#inpufix').show()
+            $(e).parent().parent().parent().children().eq(2).find('input').prop("required", true)
+        }
+    }
+
+
+
+    var table = $('#basic-datatable').DataTable({
+        'processing': true,
+        'serverSide': false,
+        'serverMethod': 'get',
+        "autoWidth": false,
+        'ajax': {
+            'url': '/poratl-data_tabless'
+        },
+        'lengthMenu': [[10, 50, 100], [10, 50, 100]],
+        searching: true,
+        sort: true,
+        'columns': [
+            { data: "corporate_id" },
+            { data: 'api_name' },
+            {
+                data: 'unique_id',
+                'sortable': false,
+                'searchable': false,
+                'render': function (unique_id) {
+                    if (!unique_id) {
+                        return 'N/A';
+                    } else {
+                        return `<div style="width: 200px;text-wrap: wrap;text-align: center;">` + unique_id + `</div>`;
+                    }
+                }
+            },
+            { data: "current_date_time" },
+            {
+                data: "objid",
+                'sortable': false,
+                'searchable': false,
+                'render': function (objid) {
+                    if (!objid) {
+                        return 'N/A';
+                    } else {
+                        return `<a href="javascript:void(0);" onclick="download_file(this.name)" name='` + objid + `' class="font-18 text-success me-2 hover-eff-btn"><i class="mdi mdi-download-circle"></i><span class="font-12 badge badge-success-lighten">Download</span></a>`;
+                    }
+                }
+            },
+        ],
+
+        orderCellsTop: true,
+        fixedHeader: true,
+        columnDefs: [
+            { orderable: true, className: 'line_texts', targets: [2] },
+        ],
+
+        createdRow: function (row, data, dataIndex) {
+            $(row).addClass('centerele');
+        },
+        keys: !0, language: {
+            paginate: { previous: "<i class='mdi mdi-chevron-left'>", next: "<i class='mdi mdi-chevron-right'>" }
+        }, drawCallback: function () {
+            $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+        },
+    });
+
+    const log_file_modal = new bootstrap.Modal('#log_file_modal')
+
+    function view_modal(json_val) {
+        log_file_modal.show()
+        var obj = JSON.parse(json_val)
+        const myHeaders = new Headers();
+        console.log(obj);
+        const formdata = new FormData();
+        formdata.append("path_name", "/" + obj.company_name + "/" + obj.service_name + "/" + obj.year + "/" + obj.month + "/" + obj.date);
+
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formdata,
+            redirect: "follow"
+        };
+
+        fetch("/log_text_file_list/table", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(result);
+                var table_abc = $('#log-datatable').DataTable({
+                    "autoWidth": false,
+                    "aaData": result.data,
+                    "destroy": true,
+                    'lengthMenu': [[10, 50, 100], [10, 50, 100]],
+                    searching: true,
+                    sort: true,
+                    'columns': [
+                        { data: "log_file" },
+                        {
+                            data: null,
+                            'sortable': false,
+                            'searchable': false,
+                            'render': function (data, type, full) {
+                                if (!data.log_file_download) {
+                                    return 'N/A';
+                                } else {
+                                    view = `<a href="` + data.log_file_download + `" download class="font-18 text-primary me-2 hover-eff-btn"><i class="mdi mdi-download-circle"></i><span class="font-12 badge badge-primary-lighten">Log Download</span></a>`
+                                    return view;
+                                }
+                            }
+                        },
+                    ],
+
+                    orderCellsTop: true,
+                    fixedHeader: true,
+
+                    createdRow: function (row, data, dataIndex) {
+                        $(row).addClass('centerele');
+                    },
+                    keys: !0, language: {
+                        paginate: { previous: "<i class='mdi mdi-chevron-left'>", next: "<i class='mdi mdi-chevron-right'>" }
+                    }, drawCallback: function () {
+                        $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+                    },
+                });
+
+            })
+            .catch((error) => console.error(error));
+
+    }
+
+
+    function downloadFile(values) {
+        const filename = "D:/NimbleRegTechlog//Craftsilicon/KYC_Check/2024/July/19/0039b4e8053246e486c60997e498ef43.log";
+        const url = `/download/${filename}`;
+
+        // Create a temporary anchor element
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename; // Suggests a filename for saving
+
+        // Append anchor to the body
+        document.body.appendChild(a);
+
+        // Trigger a click on the anchor
+        a.click();
+
+        // Remove anchor from the body
+        document.body.removeChild(a);
+    }
+
+
+    function download_file(objid) {
+        fetch("/log_file/download/" + objid)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                // Define the text content for the file
+                var textContent = "";
+                textContent += "Request :" + data.data[0]["request_data"] + "\n"
+                textContent += "Response :" + data.data[0]["return_response"] + "\n"
+                textContent += "Unique Id :" + data.data[0]["unique_id"] + "\n"
+
+                // Create a Blob with the text content
+                const blob = new Blob([textContent], { type: 'text/plain' });
+
+                // Generate a URL for the Blob
+                const url = URL.createObjectURL(blob);
+
+                // Create an anchor element and set the href attribute to the Blob URL
+                const a = document.createElement('a');
+                a.href = url;
+                file_name = data.data[0]["unique_id"]
+                if (file_name == "") {
+                    file_name = objid
+                }
+                a.download = file_name + '.txt'; // Set the desired file name
+
+                // Append the anchor element to the body
+                document.body.appendChild(a);
+
+                // Programmatically click the anchor element to trigger the download
+                a.click();
+
+                // Remove the anchor element from the document
+                document.body.removeChild(a);
+
+                // Revoke the Blob URL
+                URL.revokeObjectURL(url);
+            })
+    }
+
+
+
+
+
+</script>
