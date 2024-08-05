@@ -36,7 +36,7 @@ def generate_random_alphanumeric(length=10):
 def ocr_image_read_text_main():
     if request.method == 'POST':  
 
-        try:
+        # try:
             api_call_start_time = datetime.now()
 
             data = request.get_json() 
@@ -77,7 +77,7 @@ def ocr_image_read_text_main():
             # Check UniqueID
             random_string = generate_random_alphanumeric(10)
             data["UniqueID"] = random_string
-            # print(random_string)
+            print(random_string)
             if data["UniqueID"] != "":
                 check_log_db = Api_request_history_db.find_one({"unique_id":data["UniqueID"]})
             
@@ -319,28 +319,28 @@ def ocr_image_read_text_main():
                 return jsonify(store_response),400
         
    
-        except:
+        # except:
 
-            api_call_end_time = datetime.now()
-            duration = api_call_end_time - api_call_start_time
-            duration_seconds = duration.total_seconds()
-            store_response = {"response": "400",
-                            "message": "Error",
-                            "responseValue": "Error Processing your request"
-                        }
+        #     api_call_end_time = datetime.now()
+        #     duration = api_call_end_time - api_call_start_time
+        #     duration_seconds = duration.total_seconds()
+        #     store_response = {"response": "400",
+        #                     "message": "Error",
+        #                     "responseValue": "Error Processing your request"
+        #                 }
 
-            Api_request_history_db.insert_one({
-                            "corporate_id":data["CorporateID"],
-                            "unique_id":data["UniqueID"],
-                            "api_name":"OCR_img_reading",
-                            "current_date_time":datetime.now(),
-                            "response_duration":str(duration),
-                            "response_time":duration_seconds,
-                            "return_response" :str(store_response),
-                            "request_data":str(data)
-                        })
+        #     Api_request_history_db.insert_one({
+        #                     "corporate_id":data["CorporateID"],
+        #                     "unique_id":data["UniqueID"],
+        #                     "api_name":"OCR_img_reading",
+        #                     "current_date_time":datetime.now(),
+        #                     "response_duration":str(duration),
+        #                     "response_time":duration_seconds,
+        #                     "return_response" :str(store_response),
+        #                     "request_data":str(data)
+        #                 })
             
-            return jsonify(store_response),400
+        #     return jsonify(store_response),400
 
 
         # f = request.files["ImageBase64"]
