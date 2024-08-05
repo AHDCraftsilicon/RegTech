@@ -1,10 +1,11 @@
 from flask import Blueprint, request,jsonify
 from werkzeug.utils import secure_filename
 import time , os
-from apps.bank_statement_pdf_text.uco_bank_pdf_text import *
 from data_base_string import *
 from datetime import datetime
 from flask_jwt_extended import  jwt_required
+from apps.bank_statement_pdf_text.uco_bank_pdf_text import *
+from apps.bank_statement_pdf_text.hdfc_bank_pdf_text import *
 
 # Blueprint
 bank_statement_bp = Blueprint("bank_statement_bp",
@@ -172,7 +173,27 @@ def bank_statment_get_main():
                     return jsonify(store_response), 200
 
                 elif BankName == "HDFCBANK":
-                    print()
+                    hdfc_response = hdfc_bank_statment_main(pdf_store_file)
+                    api_call_end_time = datetime.now()
+                    duration = api_call_end_time - api_call_start_time
+                    duration_seconds = duration.total_seconds()
+                    store_response = {"response": "200",
+                                            "message": "Success",
+                                            "responseValue": {
+                                                "Table1": [hdfc_response]}}
+                    
+                    Api_request_history_db.insert_one({
+                                    "api_name":"Bank_statement",
+                                    "corporate_id":request.form["CorporateID"],
+                                    "unique_id":UniqueID,
+                                    "current_date_time":datetime.now(),
+                                    "response_duration":str(duration),
+                                    "response_time":duration_seconds,
+                                    "return_response" :str(store_response),
+                                    "request_data":str(datass)
+                                })
+
+                    return jsonify(store_response), 200
 
             else:
                 api_call_end_time = datetime.now()

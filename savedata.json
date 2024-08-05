@@ -1,0 +1,1546 @@
+{
+      "Summary - Scorecard": [
+            {
+                  "Item": "Monthly Average Surplus",
+                  "Details": "NA",
+                  "Verification": "NA"
+            },
+            {
+                  "Item": "Account Type",
+                  "Details": "NA",
+                  "Verification": "NA"
+            },
+            {
+                  "Item": "EMI Detected",
+                  "Details": false,
+                  "Verification": "NA"
+            },
+            {
+                  "Item": "Cheque Bounce",
+                  "Details": "NA",
+                  "Verification": "NA"
+            },
+            {
+                  "Item": "Bank",
+                  "Details": "UCO BANK",
+                  "Verification": "NA"
+            },
+            {
+                  "Item": "MICR Code",
+                  "Details": "NA",
+                  "Verification": "NA"
+            },
+            {
+                  "Item": "Monthly Average Balance",
+                  "Details": null,
+                  "Verification": "NA"
+            },
+            {
+                  "Item": "Customer Name",
+                  "Details": "ARNABGHORAI\nS",
+                  "Verification": "NA"
+            },
+            {
+                  "Item": "Account Number",
+                  "Details": "08901000019398",
+                  "Verification": "NA"
+            },
+            {
+                  "Item": "IFSC Code",
+                  "Details": "HDFC0000890",
+                  "Verification": "NA"
+            },
+            {
+                  "Item": "MICR Code",
+                  "Details": "380240018",
+                  "Verification": "NA"
+            },
+            {
+                  "Item": "Start Date",
+                  "Details": "01/06/2023",
+                  "Verification": "NA"
+            },
+            {
+                  "Item": "End Date",
+                  "Details": "30/06/2023",
+                  "Verification": "NA"
+            },
+            {
+                  "Item": "Opening Balance",
+                  "Details": "66,124.72",
+                  "Verification": "NA"
+            },
+            {
+                  "Item": "Closing Balance",
+                  "Details": "49,402.00",
+                  "Verification": "NA"
+            }
+      ],
+      "Summary - Document Authenticity Check": [
+            {
+                  "Tag": "Fingerprint Check",
+                  "Status": "Yes"
+            },
+            {
+                  "Tag": "Balance Recon",
+                  "Status": "NA"
+            }
+      ],
+      "Summary - Fixed Income / Obligation": [
+            {
+                  "Salary": "Not Identified",
+                  "Probable Salary": "Not Identified",
+                  "EMI/Loan": "NA"
+            }
+      ],
+      "Fraud Check Triggers - Fraud Checks": [
+            {
+                  "Possible Fraud Indicators": "Balance Reconciliation",
+                  "Identified?": false
+            },
+            {
+                  "Possible Fraud Indicators": "Equal Debit Credit",
+                  "Identified?": "NA"
+            },
+            {
+                  "Possible Fraud Indicators": "Suspected Income Infusion",
+                  "Identified?": false
+            },
+            {
+                  "Possible Fraud Indicators": "Negative EOD Balance",
+                  "Identified?": "NA"
+            },
+            {
+                  "Possible Fraud Indicators": "Transactions on Bank Holidays",
+                  "Identified?": "NA"
+            },
+            {
+                  "Possible Fraud Indicators": "Suspicious RTGS Transactions",
+                  "Identified?": "NA"
+            },
+            {
+                  "Possible Fraud Indicators": "Suspicious Tax Payments",
+                  "Identified?": "NA"
+            },
+            {
+                  "Possible Fraud Indicators": "Irregular Credit Card Payments",
+                  "Identified?": "NA"
+            },
+            {
+                  "Possible Fraud Indicators": "Irregular Salary Credits",
+                  "Identified?": "NA"
+            },
+            {
+                  "Possible Fraud Indicators": "Unchanged Salary Credit Amount",
+                  "Identified?": "NA"
+            },
+            {
+                  "Possible Fraud Indicators": "Irregular Transfers to Parties",
+                  "Identified?": false
+            },
+            {
+                  "Possible Fraud Indicators": "Data Duplicity",
+                  "Identified?": "NA"
+            },
+            {
+                  "Possible Fraud Indicators": "Irregularr Interest Charges",
+                  "Identified?": "NA"
+            }
+      ],
+      "Fraud Check Triggers - Fraud Check Details": [],
+      "Emi Details": null,
+      "Month Wise Details": [],
+      "EOD": {},
+      "All Transactions": [
+            {
+                  "Date": "01/06/23",
+                  "Narration": "50100230072114-TPT-FUNDTRANSFER-PRASHANTCHAMPAKLALPADARIYA",
+                  "Chq_Ref_No": "0000000153961826",
+                  "value_date": "01/06/23",
+                  "amount": "10,000.00",
+                  "closing_balance": "76,124.72",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "01/06/23",
+                  "Narration": "UPI-REENAGHORAI-REENAGHORAI1@OKHDFCBANK-HDFC0000890-315282122631-UPI",
+                  "Chq_Ref_No": "0000315282122631",
+                  "value_date": "01/06/23",
+                  "amount": "5,000.00",
+                  "closing_balance": "81,124.72",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "01/06/23",
+                  "Narration": "UPI-LAZYPAYPRIVATELIMI-LAZYPAYPVTLTD.RZP@ICICI-ICIC0DC0099-315288535579-LAZYPAYREPAYMENT",
+                  "Chq_Ref_No": "0000315288535579",
+                  "value_date": "01/06/23",
+                  "amount": "9,238.00",
+                  "closing_balance": "71,886.72",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "01/06/23",
+                  "Narration": "UPI-AMAZONPAY-AMAZONPAY@APL-UTIB0000100-351859349301-REQUESTFROMAMAZO",
+                  "Chq_Ref_No": "0000351859349301",
+                  "value_date": "01/06/23",
+                  "amount": "5,165.00",
+                  "closing_balance": "66,721.72",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "01/06/23",
+                  "Narration": "UPI-SIMPL-SIMPL@AXB-UTIB0000100-315288591353-UPIINTENT",
+                  "Chq_Ref_No": "0000315288591353",
+                  "value_date": "01/06/23",
+                  "amount": "1,731.60",
+                  "closing_balance": "64,990.12",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "01/06/23",
+                  "Narration": "POS512967XXXXXX4873PLAYSTATIONNETWO",
+                  "Chq_Ref_No": "0000000000727770",
+                  "value_date": "01/06/23",
+                  "amount": "1,979.00",
+                  "closing_balance": "63,011.12",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "01/06/23",
+                  "Narration": "POS512967XXXXXX4873PLAYSTATIONNETWO",
+                  "Chq_Ref_No": "0000000000103111",
+                  "value_date": "01/06/23",
+                  "amount": "674.00",
+                  "closing_balance": "62,337.12",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "02/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-315305605852-UPI",
+                  "Chq_Ref_No": "0000315305605852",
+                  "value_date": "02/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "62,137.12",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "02/06/23",
+                  "Narration": "UPI-NITESHHARSHADBHAIT-NEETTRIVEDI09@OKHDFCBANK-BARB0GONDAL-315307681019-UPI",
+                  "Chq_Ref_No": "0000315307681019",
+                  "value_date": "02/06/23",
+                  "amount": "30.00",
+                  "closing_balance": "62,167.12",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "02/06/23",
+                  "Narration": "UPI-BRATATIMISTRI-BRATATIMISTRI2000-1@OKAXIS-KKBK0002560-315309762689-UPI",
+                  "Chq_Ref_No": "0000315309762689",
+                  "value_date": "02/06/23",
+                  "amount": "300.00",
+                  "closing_balance": "61,867.12",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "02/06/23",
+                  "Narration": "UPI-RABARIKANUBHAIABHA-KANUMALDHARI347@OKSBI-UBIN0933236-315321637881-UPI",
+                  "Chq_Ref_No": "0000315321637881",
+                  "value_date": "02/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "61,667.12",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "02/06/23",
+                  "Narration": "UPI-SUMANPANJIYAR-PANJIYARSUMAN6@OKICICI-UBIN0826235-315328338367-UPI",
+                  "Chq_Ref_No": "0000315328338367",
+                  "value_date": "02/06/23",
+                  "amount": "580.00",
+                  "closing_balance": "61,087.12",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "02/06/23",
+                  "Narration": "UPI-SUMANPANJIYAR-PANJIYARSUMAN6@OKICICI-UBIN0826235-315328360797-UPI",
+                  "Chq_Ref_No": "0000315328360797",
+                  "value_date": "02/06/23",
+                  "amount": "270.00",
+                  "closing_balance": "60,817.12",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "04/06/23",
+                  "Narration": "MEDCSI512967XXXXXX4873GOOGLEPLAY",
+                  "Chq_Ref_No": "0000000000344655",
+                  "value_date": "04/06/23",
+                  "amount": "99.00",
+                  "closing_balance": "60,718.12",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "04/06/23",
+                  "Narration": "UPI-OLA-OLAONLINE@YBL-YESB0YBLUPI-352196498674-PAYMENTFOR981126HDFCBANKLIMITED",
+                  "Chq_Ref_No": "0000352196498674",
+                  "value_date": "04/06/23",
+                  "amount": "300.00",
+                  "closing_balance": "60,418.12",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "04/06/23",
+                  "Narration": "UPI-PHONEPE-PHONEPEMERCHANT@YESBANK-YESB0000022-315531429423-R02PHONEPEREVERS",
+                  "Chq_Ref_No": "0000315531429423",
+                  "value_date": "04/06/23",
+                  "amount": "41.00",
+                  "closing_balance": "60,459.12",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "04/06/23",
+                  "Narration": "UPI-AMZN1ACCOUNTAEU6PC4N-AMAZONPAYGIFTCARDLOAD@APL-UTIB0000100-315513570698-REQUESTFROMAMAZO",
+                  "Chq_Ref_No": "0000315513570698",
+                  "value_date": "05/06/23",
+                  "amount": "235.00",
+                  "closing_balance": "60,224.12",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "05/06/23",
+                  "Narration": "DC1019060024953797AUTOPAYSI-TAD",
+                  "Chq_Ref_No": "0000000513604257",
+                  "value_date": "05/06/23",
+                  "amount": "6,032.11",
+                  "closing_balance": "54,192.01",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "05/06/23",
+                  "Narration": "DC1019060023979066AUTOPAYSI-TAD",
+                  "Chq_Ref_No": "0000000513445454",
+                  "value_date": "05/06/23",
+                  "amount": "5,011.75",
+                  "closing_balance": "49,180.26",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "05/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-315685667199-UPI",
+                  "Chq_Ref_No": "0000315685667199",
+                  "value_date": "05/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "48,980.26",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "05/06/23",
+                  "Narration": "UPI-AMAZONPAYINDIAPVT-AMAZON.REFUNDS@AXISBANK-UTIB0000100-315679327367-REFUNDFORYOURAM",
+                  "Chq_Ref_No": "0000315679327367",
+                  "value_date": "05/06/23",
+                  "amount": "319.00",
+                  "closing_balance": "49,299.26",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "05/06/23",
+                  "Narration": "UPI-NITESHHARSHADBHAIT-NEETTRIVEDI09@OKICICI-BARB0GONDAL-315639231157-UPI",
+                  "Chq_Ref_No": "0000315639231157",
+                  "value_date": "05/06/23",
+                  "amount": "30.00",
+                  "closing_balance": "49,329.26",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "05/06/23",
+                  "Narration": "UPI-SUMEDHACHHIKARA-SUMEDHACHHIKARA@YBL-HDFC0000325-315675168197-PAYMENTFROMPHONE",
+                  "Chq_Ref_No": "0000315675168197",
+                  "value_date": "05/06/23",
+                  "amount": "30.00",
+                  "closing_balance": "49,359.26",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "05/06/23",
+                  "Narration": "UPI-RABARIKANUBHAIABHA-KANUMALDHARI347@OKSBI-UBIN0933236-315601734409-UPI",
+                  "Chq_Ref_No": "0000315601734409",
+                  "value_date": "05/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "49,159.26",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "05/06/23",
+                  "Narration": "UPI-ADDMONEYTOWALLET-ADD-MONEY@PAYTM-PYTM0123456-352265986333-OID21208302981@PAY",
+                  "Chq_Ref_No": "0000352265986333",
+                  "value_date": "05/06/23",
+                  "amount": "1,100.00",
+                  "closing_balance": "48,059.26",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "06/06/23",
+                  "Narration": "UPI-ADDMONEYTOWALLET-ADD-MONEY@PAYTM-PYTM0123456-315754148751-OID21204209849@PAY",
+                  "Chq_Ref_No": "0000315754148751",
+                  "value_date": "06/06/23",
+                  "amount": "2,000.00",
+                  "closing_balance": "46,059.26",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "06/06/23",
+                  "Narration": "UPI-MAGSONRETAILANDDI-BHARATPE90718395237@YESBANKLTD-YESB0YESUPI-315732471449-UPI",
+                  "Chq_Ref_No": "0000315732471449",
+                  "value_date": "06/06/23",
+                  "amount": "2,000.00",
+                  "closing_balance": "44,059.26",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "06/06/23",
+                  "Narration": "UPI-MAGSONRETAILANDDI-BHARATPE9071839HDFCBANKLIMITED",
+                  "Chq_Ref_No": "0000315732490428",
+                  "value_date": "06/06/23",
+                  "amount": "894.00",
+                  "closing_balance": "43,165.26",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "06/06/23",
+                  "Narration": "UPI-RABARIKANUBHAIABHA-KANUMALDHARI347@OKSBI-UBIN0933236-315728602870-UPI",
+                  "Chq_Ref_No": "0000315728602870",
+                  "value_date": "06/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "42,965.26",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "07/06/23",
+                  "Narration": "UPI-ADDMONEYTOWALLET-ADD-MONEY@PAYTM-PYTM0123456-315854279470-OIDURBANCLAP-69449",
+                  "Chq_Ref_No": "0000315854279470",
+                  "value_date": "07/06/23",
+                  "amount": "2,262.70",
+                  "closing_balance": "40,702.56",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "07/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-315838780563-UPI",
+                  "Chq_Ref_No": "0000315838780563",
+                  "value_date": "07/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "40,502.56",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "07/06/23",
+                  "Narration": "UPI-ADDMONEYTOWALLET-ADD-MONEY@PAYTM-PYTM0123456-315860549749-OID21258512304@PAY",
+                  "Chq_Ref_No": "0000315860549749",
+                  "value_date": "07/06/23",
+                  "amount": "2,000.00",
+                  "closing_balance": "38,502.56",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "08/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-315965331169-UPI",
+                  "Chq_Ref_No": "0000315965331169",
+                  "value_date": "08/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "38,302.56",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "08/06/23",
+                  "Narration": "UPI-ZERODHABROKINGLTD-ZERODHABROKING@HDFCBANK-HDFC0000523-315968113794-8291851350962453Z",
+                  "Chq_Ref_No": "0000315968113794",
+                  "value_date": "08/06/23",
+                  "amount": "1,000.00",
+                  "closing_balance": "37,302.56",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "08/06/23",
+                  "Narration": "UPI-RABARIKANUBHAIABHA-KANUMALDHARI347@OKSBI-UBIN0933236-315981126950-UPI",
+                  "Chq_Ref_No": "0000315981126950",
+                  "value_date": "08/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "37,102.56",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "08/06/23",
+                  "Narration": "UPI-BRATATIMISTRI-BRATATIMISTRI2000-1@OKAXIS-KKBK0002560-315987629212-UPI",
+                  "Chq_Ref_No": "0000315987629212",
+                  "value_date": "08/06/23",
+                  "amount": "2,000.00",
+                  "closing_balance": "35,102.56",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "09/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-316091534364-UPI",
+                  "Chq_Ref_No": "0000316091534364",
+                  "value_date": "09/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "34,902.56",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "09/06/23",
+                  "Narration": "UPI-RABARIKANUBHAIABHA-KANUMALDHARI347@OKSBI-UBIN0933236-316008190663-UPI",
+                  "Chq_Ref_No": "0000316008190663",
+                  "value_date": "09/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "34,702.56",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "09/06/23",
+                  "Narration": "MEDCSI512967XXXXXX4873GOOGLEPLAY",
+                  "Chq_Ref_No": "0000000000763681",
+                  "value_date": "09/06/23",
+                  "amount": "99.00",
+                  "closing_balance": "34,603.56",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "10/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-316117730349-UPIHDFCBANKLIMITED",
+                  "Chq_Ref_No": "0000316117730349",
+                  "value_date": "10/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "34,403.56",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "10/06/23",
+                  "Narration": "POS512967XXXXXX4873PLAYSTATIONNETWO",
+                  "Chq_Ref_No": "0000000000389864",
+                  "value_date": "10/06/23",
+                  "amount": "2,499.00",
+                  "closing_balance": "31,904.56",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "11/06/23",
+                  "Narration": "UPI-ADDMONEYTOWALLET-ADD-MONEY@PAYTM-PYTM0123456-352856223124-OIDURBANCLAP-69806",
+                  "Chq_Ref_No": "0000352856223124",
+                  "value_date": "11/06/23",
+                  "amount": "263.36",
+                  "closing_balance": "31,641.20",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "11/06/23",
+                  "Narration": "UPI-MAGSONRETAILANDDI-BHARATPE90718395245@YESBANKLTD-YESB0YESUPI-316287713041-UPI",
+                  "Chq_Ref_No": "0000316287713041",
+                  "value_date": "11/06/23",
+                  "amount": "2,000.00",
+                  "closing_balance": "29,641.20",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "11/06/23",
+                  "Narration": "UPI-MAGSONRETAILANDDI-BHARATPE90718395245@YESBANKLTD-YESB0YESUPI-316287723244-UPI",
+                  "Chq_Ref_No": "0000316287723244",
+                  "value_date": "11/06/23",
+                  "amount": "854.00",
+                  "closing_balance": "28,787.20",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "12/06/23",
+                  "Narration": "POS512967XXXXXX4873PTM*PAYTMWALLET",
+                  "Chq_Ref_No": "0000000000402906",
+                  "value_date": "12/06/23",
+                  "amount": "2,000.00",
+                  "closing_balance": "26,787.20",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "12/06/23",
+                  "Narration": "UPI-RABARIKANUBHAIABHA-KANUMALDHARI347@OKSBI-UBIN0933236-316386094775-UPI",
+                  "Chq_Ref_No": "0000316386094775",
+                  "value_date": "12/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "26,587.20",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "13/06/23",
+                  "Narration": "UPI-HIRENAPATEL-9825010470@UPI-SBIN0005097-316417247678-NOREMARKS",
+                  "Chq_Ref_No": "0000316417247678",
+                  "value_date": "13/06/23",
+                  "amount": "40.00",
+                  "closing_balance": "26,627.20",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "13/06/23",
+                  "Narration": "UPI-SUMEDHACHHIKARA-SUMEDHACHHIKARA@YBL-ICIC0007734-316427691045-PAYMENTFROMPHONE",
+                  "Chq_Ref_No": "0000316427691045",
+                  "value_date": "13/06/23",
+                  "amount": "40.00",
+                  "closing_balance": "26,667.20",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "13/06/23",
+                  "Narration": "UPI-HINALBIHARIBHAIMIS-HINAL.MISTRY90-1@OKICICI-ICIC0000361-353075074244-UPI",
+                  "Chq_Ref_No": "0000353075074244",
+                  "value_date": "13/06/23",
+                  "amount": "40.00",
+                  "closing_balance": "26,707.20",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "13/06/23",
+                  "Narration": "UPI-LANGALIAPRERNAPIYU-PRERNA.SONI86@OKAXIS-RNSB0000001-316466852837-UPI",
+                  "Chq_Ref_No": "0000316466852837",
+                  "value_date": "13/06/23",
+                  "amount": "40.00",
+                  "closing_balance": "26,747.20",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "13/06/23",
+                  "Narration": "UPI-KORIHARSH-HARSHKORI001@OKICICI-ICIC0004397-353040779681-UPI",
+                  "Chq_Ref_No": "0000353040779681",
+                  "value_date": "13/06/23",
+                  "amount": "40.00",
+                  "closing_balance": "26,787.20",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "13/06/23",
+                  "Narration": "UPI-NIKUNJPARSOTAMBHAI-SAKARIYANK81@OKSBI-SBIN0060074-316473566372-PUFF",
+                  "Chq_Ref_No": "0000316473566372",
+                  "value_date": "13/06/23",
+                  "amount": "40.00",
+                  "closing_balance": "26,827.20",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "13/06/23",
+                  "Narration": "UPI-NITESHHARSHADBHAIT-NEETTRIVEDI09@OKHDFCBANK-BARB0GONDAL-316407566642-UPI",
+                  "Chq_Ref_No": "0000316407566642",
+                  "value_date": "13/06/23",
+                  "amount": "40.00",
+                  "closing_balance": "26,867.20",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "13/06/23",
+                  "Narration": "UPI-RABARIKANUBHAIABHA-KANUMALDHARI347@OKSBI-UBIN0933236-316411871538-UPIHDFCBANKLIMITED",
+                  "Chq_Ref_No": "0000316411871538",
+                  "value_date": "13/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "26,667.20",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "14/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-316521804244-UPI",
+                  "Chq_Ref_No": "0000316521804244",
+                  "value_date": "14/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "26,467.20",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "14/06/23",
+                  "Narration": "MEDCSI512967XXXXXX4873YOUTUBE",
+                  "Chq_Ref_No": "0000000000906182",
+                  "value_date": "14/06/23",
+                  "amount": "99.00",
+                  "closing_balance": "26,368.20",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "14/06/23",
+                  "Narration": "UPI-SWETPDADHANIYA-ASHUDADHANIYA96-1@OKHDFCBANK-HDFC0000048-316538364626-UPI",
+                  "Chq_Ref_No": "0000316538364626",
+                  "value_date": "14/06/23",
+                  "amount": "290.00",
+                  "closing_balance": "26,658.20",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "15/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-316647973856-UPI",
+                  "Chq_Ref_No": "0000316647973856",
+                  "value_date": "15/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "26,458.20",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "15/06/23",
+                  "Narration": "UPI-ADDMONEYTOWALLET-ADD-MONEY@PAYTM-PYTM0123456-316660640774-OIDURBANCLAP-70098",
+                  "Chq_Ref_No": "0000316660640774",
+                  "value_date": "15/06/23",
+                  "amount": "146.89",
+                  "closing_balance": "26,311.31",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "15/06/23",
+                  "Narration": "UPI-RABARIKANUBHAIABHA-KANUMALDHARI347@OKSBI-UBIN0933236-316662920097-UPI",
+                  "Chq_Ref_No": "0000316662920097",
+                  "value_date": "15/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "26,111.31",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "16/06/23",
+                  "Narration": "UPI-GOOGLEINDIADIGITAL-PLAYSTORE@AXISBANK-UTIB0000553-316770938599-UPI",
+                  "Chq_Ref_No": "0000316770938599",
+                  "value_date": "16/06/23",
+                  "amount": "65.00",
+                  "closing_balance": "26,046.31",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "16/06/23",
+                  "Narration": "POS512967XXXXXX4873PTM*PAYTMWALLET",
+                  "Chq_Ref_No": "0000000000379897",
+                  "value_date": "16/06/23",
+                  "amount": "2,000.00",
+                  "closing_balance": "24,046.31",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "16/06/23",
+                  "Narration": "UPI-LAZYPAYPRIVATELIMI-LAZYPAYPVTLTD.RZP@ICICI-ICIC0DC0099-316774708802-LAZYPAYREPAYMENT",
+                  "Chq_Ref_No": "0000316774708802",
+                  "value_date": "16/06/23",
+                  "amount": "9,017.00",
+                  "closing_balance": "15,029.31",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "16/06/23",
+                  "Narration": "UPI-SIMPL-SIMPL@AXB-UTIB0000100-316775149411-UPIINTENT",
+                  "Chq_Ref_No": "0000316775149411",
+                  "value_date": "16/06/23",
+                  "amount": "2,070.98",
+                  "closing_balance": "12,958.33",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "16/06/23",
+                  "Narration": "UPI-RABARIKANUBHAIABHA-KANUMALDHARI347@OKSBI-UBIN0933236-316787561812-UPI",
+                  "Chq_Ref_No": "0000316787561812",
+                  "value_date": "16/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "12,758.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "17/06/23",
+                  "Narration": "UPI-ICCLZERODHACOIN-ZERODHAMF@HDFCBANK-HDFC0000060-316853267423-1V5B6ZWQZJFVZH2OTS",
+                  "Chq_Ref_No": "0000316853267423",
+                  "value_date": "17/06/23",
+                  "amount": "5,000.00",
+                  "closing_balance": "7,758.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "18/06/23",
+                  "Narration": "POS512967XXXXXX4873PLAYSTATIONNETWO",
+                  "Chq_Ref_No": "0000000000158502",
+                  "value_date": "18/06/23",
+                  "amount": "1,664.00",
+                  "closing_balance": "6,094.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "19/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-317050832096-UPI",
+                  "Chq_Ref_No": "0000317050832096",
+                  "value_date": "19/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "5,894.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "19/06/23",
+                  "Narration": "UPI-RABARIKANUBHAIABHA-KANUMALDHARI347@OKSBI-UBIN0933236-317066138185-UPIHDFCBANKLIMITED",
+                  "Chq_Ref_No": "0000317066138185",
+                  "value_date": "19/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "5,694.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "20/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-317175894427-UPI",
+                  "Chq_Ref_No": "0000317175894427",
+                  "value_date": "20/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "5,494.33",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "20/06/23",
+                  "Narration": "UPI-SEEMAJAMANBHAITHES-SEEMATHESIA.162-1@OKHDFCBANK-HDFC0001679-317186866769-PUFF",
+                  "Chq_Ref_No": "0000317186866769",
+                  "value_date": "20/06/23",
+                  "amount": "40.00",
+                  "closing_balance": "5,534.33",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "20/06/23",
+                  "Narration": "UPI-VAGHELASHARADBEN-JAYDIPVAGHELA38@OKHDFCBANK-KKBK0002576-317188456220-UPI",
+                  "Chq_Ref_No": "0000317188456220",
+                  "value_date": "20/06/23",
+                  "amount": "500.00",
+                  "closing_balance": "5,034.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "20/06/23",
+                  "Narration": "UPI-RABARIKANUBHAIABHA-KANUMALDHARI347@OKSBI-UBIN0933236-317190661606-UPI",
+                  "Chq_Ref_No": "0000317190661606",
+                  "value_date": "20/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "4,834.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "21/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-317200368566-UPI",
+                  "Chq_Ref_No": "0000317200368566",
+                  "value_date": "21/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "4,634.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "21/06/23",
+                  "Narration": "UPI-HINALBIHARIBHAIMIS-HINAL.MISTRY90-1@OKICICI-ICIC0000361-317210487796-UPI",
+                  "Chq_Ref_No": "0000317210487796",
+                  "value_date": "21/06/23",
+                  "amount": "60.00",
+                  "closing_balance": "4,574.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "21/06/23",
+                  "Narration": "UPI-HINALBIHARIBHAIMIS-HINAL.MISTRY90-1@OKICICI-ICIC0000361-317210640066-UPI",
+                  "Chq_Ref_No": "0000317210640066",
+                  "value_date": "21/06/23",
+                  "amount": "10.00",
+                  "closing_balance": "4,564.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "21/06/23",
+                  "Narration": "UPI-RABARIKANUBHAIABHA-KANUMALDHARI347@OKSBI-UBIN0933236-317215360283-UPI",
+                  "Chq_Ref_No": "0000317215360283",
+                  "value_date": "21/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "4,364.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "22/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-317324811822-UPI",
+                  "Chq_Ref_No": "0000317324811822",
+                  "value_date": "22/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "4,164.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "22/06/23",
+                  "Narration": "UPI-RABARIKANUBHAIABHA-KANUMALDHARI347@OKSBI-UBIN0933236-317339539662-UPI",
+                  "Chq_Ref_No": "0000317339539662",
+                  "value_date": "22/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "3,964.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "23/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-317449625321-UPI",
+                  "Chq_Ref_No": "0000317449625321",
+                  "value_date": "23/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "3,764.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "23/06/23",
+                  "Narration": "UPI-RABARIKANUBHAIABHA-KANUMALDHARI347@OKSBI-UBIN0933236-317464735298-UPI",
+                  "Chq_Ref_No": "0000317464735298",
+                  "value_date": "23/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "3,564.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "23/06/23",
+                  "Narration": "UPI-DELHIVERY-DELHIVERY.RZP@HDFCBANK-HDFC0000053-354032566568-TRANSACTION",
+                  "Chq_Ref_No": "0000354032566568",
+                  "value_date": "23/06/23",
+                  "amount": "225.00",
+                  "closing_balance": "3,339.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "24/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-317574231054-UPI",
+                  "Chq_Ref_No": "0000317574231054",
+                  "value_date": "24/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "3,139.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "24/06/23",
+                  "Narration": "UPI-SMARTSHIFTLOGISTICS-RAZORPAYONLINE@YBL-YESB0YBLUPI-317551021500-PAYMENTFROMPHONEHDFCBANKLIMITED",
+                  "Chq_Ref_No": "0000317551021500",
+                  "value_date": "24/06/23",
+                  "amount": "126.00",
+                  "closing_balance": "3,013.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "24/06/23",
+                  "Narration": "UPI-RABARIKANUBHAIABHA-KANUMALDHARI347@OKSBI-UBIN0933236-317589606300-UPI",
+                  "Chq_Ref_No": "0000317589606300",
+                  "value_date": "24/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "2,813.33",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "25/06/23",
+                  "Narration": "UPI-DHAVALKUMARGANPATBH-DHAVALBHAI4279@OKSBI-SBIN0013760-317607761602-UPI",
+                  "Chq_Ref_No": "0000317607761602",
+                  "value_date": "25/06/23",
+                  "amount": "800.00",
+                  "closing_balance": "2,013.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "25/06/23",
+                  "Narration": "UPI-ARNABGHORAI-8128666710@ICICI-ICIC0007734-317607375844-UPIPAYMENT",
+                  "Chq_Ref_No": "0000317607375844",
+                  "value_date": "25/06/23",
+                  "amount": "32,338.00",
+                  "closing_balance": "34,351.33",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "25/06/23",
+                  "Narration": "UPI-LAZYPAYPRIVATELIMI-LAZYPAYPVTLTD.RZP@ICICI-ICIC0DC0099-317618766674-LAZYPAYREPAYMENT",
+                  "Chq_Ref_No": "0000317618766674",
+                  "value_date": "25/06/23",
+                  "amount": "9,769.00",
+                  "closing_balance": "24,582.33",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "25/06/23",
+                  "Narration": "UPI-SIMPL-SIMPL@AXB-UTIB0000100-317618773834-UPIINTENT",
+                  "Chq_Ref_No": "0000317618773834",
+                  "value_date": "25/06/23",
+                  "amount": "1,483.39",
+                  "closing_balance": "23,098.94",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "25/06/23",
+                  "Narration": "UPI-AMAZONPAY-AMAZONPAY@APL-UTIB0000100-317618270214-REQUESTFROMAMAZO",
+                  "Chq_Ref_No": "0000317618270214",
+                  "value_date": "25/06/23",
+                  "amount": "6,694.00",
+                  "closing_balance": "16,404.94",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "26/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-317722718218-UPI",
+                  "Chq_Ref_No": "0000317722718218",
+                  "value_date": "26/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "16,204.94",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "27/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-317846433558-UPI",
+                  "Chq_Ref_No": "0000317846433558",
+                  "value_date": "27/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "16,004.94",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "28/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-317970768132-UPI",
+                  "Chq_Ref_No": "0000317970768132",
+                  "value_date": "28/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "15,804.94",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "28/06/23",
+                  "Narration": "POS512967XXXXXX4873PAYTM_PAYTMADDMO",
+                  "Chq_Ref_No": "0000000000998346",
+                  "value_date": "28/06/23",
+                  "amount": "1,000.00",
+                  "closing_balance": "14,804.94",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "28/06/23",
+                  "Narration": "UPI-RABARIKANUBHAIABHA-KANUMALDHARI347@OKSBI-UBIN0933236-317986437860-UPI",
+                  "Chq_Ref_No": "0000317986437860",
+                  "value_date": "28/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "14,604.94",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "29/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-318095954998-UPI",
+                  "Chq_Ref_No": "0000318095954998",
+                  "value_date": "29/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "14,404.94",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "29/06/23",
+                  "Narration": "UPI-DEEPKUMARTHAKAR-DEEP.THAKAR1@IBL-ICIC0007678-318030689714-PAYMENTFROMPHONE",
+                  "Chq_Ref_No": "0000318030689714",
+                  "value_date": "29/06/23",
+                  "amount": "100.00",
+                  "closing_balance": "14,504.94",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "29/06/23",
+                  "Narration": "UPI-RABARIKANUBHAIABHA-KANUMALDHARI347@OKSBI-UBIN0933236-318010271751-UPI",
+                  "Chq_Ref_No": "0000318010271751",
+                  "value_date": "29/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "14,304.94",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "30/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-318118619223-UPIHDFCBANKLIMITED",
+                  "Chq_Ref_No": "0000318118619223",
+                  "value_date": "30/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "14,104.94",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "30/06/23",
+                  "Narration": "UPI-DELHIVERY-DELHIVERY.RZP@HDFCBANK-HDFC0000240-318184973551-REFUNDFORDELHIVE",
+                  "Chq_Ref_No": "0000318184973551",
+                  "value_date": "30/06/23",
+                  "amount": "225.00",
+                  "closing_balance": "14,329.94",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "30/06/23",
+                  "Narration": "UPI-RAKESHKISHANLALPU-9723957608@YBL-SBIN0060428-318135053769-UPI",
+                  "Chq_Ref_No": "0000318135053769",
+                  "value_date": "30/06/23",
+                  "amount": "370.00",
+                  "closing_balance": "13,959.94",
+                  "type": "Withdrawal"
+            }
+      ],
+      "Credit Card Info - Credit Card Details": [
+            {
+                  "Card Number": "",
+                  "Statement Date": "",
+                  "Start Date": "",
+                  "End Date": "",
+                  "Payment Due": "",
+                  "Minimum Due": "",
+                  "Due Date": "",
+                  "Payment": "",
+                  "Payment in Statement": "",
+                  "Payment Date": "",
+                  "Payments Percentage": null
+            },
+            {
+                  "Card Number": "",
+                  "Statement Date": "",
+                  "Start Date": "",
+                  "End Date": "",
+                  "Payment Due": "",
+                  "Minimum Due": "",
+                  "Due Date": "",
+                  "Payment": "",
+                  "Payment in Statement": "",
+                  "Payment Date": "",
+                  "Payments Percentage": null
+            }
+      ],
+      "Credit Card Info - Credit Cards": null,
+      "Return Transactions": [],
+      "Recurring Debits": [],
+      "Recurring Credits": [],
+      "Scoring Details": [
+            {
+                  "Description": "Monthly Average Inflow",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Monthly Average Outflow",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Average Credit Transactions",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Average Debit Transactions",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Total Credit Amount",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Total Debit Amount",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Total Count of Credit Transactions",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Total Count of Debit Transactions",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Monthly Average Surplus",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Fixed Obligation To Income Ratio",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Maximum Balance",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Minimum Balance",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Maximum Credit",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Minimum Credit",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Maximum Debit",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Minimum Debit",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Month end balance in last 90 days",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Month end balance in last 180 days",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Number of Cash withdrawal in last 3 months",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Number of Cash withdrawal in last 6 months",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Count of interest credited in last 3 months",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Amount of interest credited in last 3 months",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Count of interest credited in last 6 months",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Amount of interest credited in last 6 months",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Count of Cheque Bounce in last 3 months",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Amount of Cheque Bounce in last 3 months",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Count of Cheque Bounce in last 6 months",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Amount of Cheque Bounce in last 6 months",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Velocity \u2013 (Sum of debits and credits) /AMB in the last 3 months",
+                  "Value": "NA"
+            },
+            {
+                  "Description": "Velocity \u2013 (Sum of debits and credits) /AMB in the last 6 months",
+                  "Value": "NA"
+            }
+      ],
+      "Summary - Bureau Rating": [
+            {
+                  "Item": "Total EMIs",
+                  "Bureau Ratings": "NA",
+                  "Bank Statement": "NA",
+                  "Reconciled": "NA"
+            },
+            {
+                  "Item": "EMI Value",
+                  "Bureau Ratings": "NA",
+                  "Bank Statement": "NA",
+                  "Reconciled": "NA"
+            }
+      ],
+      "Summary - Credit Card": [
+            {
+                  "Item": "Payment Made",
+                  "Credit Data": "NA",
+                  "Bank Statement": "NA",
+                  "Reconciled": "NA"
+            },
+            {
+                  "Item": "Payment Amount",
+                  "Credit Data": "NA",
+                  "Bank Statement": "NA",
+                  "Reconciled": "NA"
+            },
+            {
+                  "Item": "Payment Due",
+                  "Credit Data": "NA",
+                  "Bank Statement": "NA",
+                  "Reconciled": "NA"
+            }
+      ],
+      "Summary - Salary Details": [
+            {
+                  "Item": "Total Salary Transaction",
+                  "Salary Slip": "NA",
+                  "Bank Statement": "NA",
+                  "Reconciled": "NA"
+            },
+            {
+                  "Item": "Total Salary Credit",
+                  "Salary Slip": "NA",
+                  "Bank Statement": "NA",
+                  "Reconciled": "NA"
+            }
+      ],
+      "Summary - Cheque Bounce Charges": [
+            {
+                  "Type": "Amount of Cheque Bounce",
+                  "Value": "NA"
+            },
+            {
+                  "Type": "Count of Cheque Bounce",
+                  "Value": "NA"
+            }
+      ],
+      "Salary Slip Info": [],
+      "Bureau Ratings - Telephone": [],
+      "Bureau Ratings - Address": [],
+      "Bureau Ratings - Loans": [],
+      "Bureau Ratings - Enquiry": {
+            "Member": null,
+            "Enquiry Date": null,
+            "Enquiry Purpose": null,
+            "Enquiry Amount": null
+      },
+      "Bureau Ratings - Consumer Information": [
+            [
+                  {
+                        "Item": "Date of Birth",
+                        "Detail": null
+                  },
+                  {
+                        "Item": "Gender",
+                        "Detail": null
+                  }
+            ]
+      ],
+      "Bureau Ratings - Identification Type": [],
+      "Bureau Ratings - Emails": [
+            "ARNAB_GHORAI@HOTMAIL.COM"
+      ],
+      "Bureau Ratings - Summary": [
+            {
+                  "Item": "Credit Score",
+                  "Detail": null
+            },
+            {
+                  "Item": "Status",
+                  "Detail": null
+            },
+            {
+                  "Item": "Total accounts",
+                  "Detail": null
+            },
+            {
+                  "Item": "Active Accounts",
+                  "Detail": [
+                        {
+                              "Item": "Active Accounts",
+                              "Detail": "Regular"
+                        }
+                  ]
+            },
+            {
+                  "Item": "Active Loan Accounts",
+                  "Detail": null
+            },
+            {
+                  "Item": "Active CC Accounts",
+                  "Detail": null
+            },
+            {
+                  "Item": "Overdue Accounts",
+                  "Detail": null
+            },
+            {
+                  "Item": "Delayed Payments",
+                  "Detail": null
+            },
+            {
+                  "Item": "Max Payment Delay Inactive",
+                  "Detail": null
+            },
+            {
+                  "Item": "Source",
+                  "Detail": null
+            }
+      ],
+      "Salary Slip Info - Summary": [
+            [
+                  {
+                        "Item": "Employee Name",
+                        "Details": null,
+                        "Verification": ""
+                  },
+                  {
+                        "Item": "PAN Number",
+                        "Details": null,
+                        "Verification": ""
+                  },
+                  {
+                        "Item": "UAN Number",
+                        "Details": null,
+                        "Verification": ""
+                  },
+                  {
+                        "Item": "A/C Number",
+                        "Details": null,
+                        "Verification": ""
+                  },
+                  {
+                        "Item": "Bank Name",
+                        "Details": null,
+                        "Verification": ""
+                  },
+                  {
+                        "Item": "Name of Employer",
+                        "Details": null,
+                        "Verification": ""
+                  }
+            ]
+      ],
+      "Salary Slip Info - Details": [],
+      "Associated Party Transactions": [],
+      "Top Transactions - Top 10 Credit Transaction": [
+            {
+                  "Date": "01/06/23",
+                  "Transaction_Details": "UPI-REENAGHORAI-REENAGHORAI1@OKHDFCBANK-HDFC0000890-315282122631-UPI",
+                  "Chq_Ref_No": "0000315282122631",
+                  "Amount": "5,000.00",
+                  "value_date": "01/06/23",
+                  "Total_Balance": "81,124.72"
+            },
+            {
+                  "Date": "02/06/23",
+                  "Transaction_Details": "UPI-NITESHHARSHADBHAIT-NEETTRIVEDI09@OKHDFCBANK-BARB0GONDAL-315307681019-UPI",
+                  "Chq_Ref_No": "0000315307681019",
+                  "Amount": "30.00",
+                  "value_date": "02/06/23",
+                  "Total_Balance": "62,167.12"
+            }
+      ],
+      "Top Transactions - Top 10 Debit Transaction": [
+            {
+                  "Date": "01/06/23",
+                  "Transaction_Details": "UPI-LAZYPAYPRIVATELIMI-LAZYPAYPVTLTD.RZP@ICICI-ICIC0DC0099-315288535579-LAZYPAYREPAYMENT",
+                  "Chq_Ref_No": "0000315288535579",
+                  "Amount": "9,238.00",
+                  "value_date": "01/06/23",
+                  "Total_Balance": "71,886.72"
+            },
+            {
+                  "Date": "01/06/23",
+                  "Transaction_Details": "UPI-AMAZONPAY-AMAZONPAY@APL-UTIB0000100-351859349301-REQUESTFROMAMAZO",
+                  "Chq_Ref_No": "0000351859349301",
+                  "Amount": "5,165.00",
+                  "value_date": "01/06/23",
+                  "Total_Balance": "66,721.72"
+            },
+            {
+                  "Date": "01/06/23",
+                  "Transaction_Details": "POS512967XXXXXX4873PLAYSTATIONNETWO",
+                  "Chq_Ref_No": "0000000000727770",
+                  "Amount": "1,979.00",
+                  "value_date": "01/06/23",
+                  "Total_Balance": "63,011.12"
+            },
+            {
+                  "Date": "01/06/23",
+                  "Transaction_Details": "POS512967XXXXXX4873PLAYSTATIONNETWO",
+                  "Chq_Ref_No": "0000000000103111",
+                  "Amount": "674.00",
+                  "value_date": "01/06/23",
+                  "Total_Balance": "62,337.12"
+            },
+            {
+                  "Date": "02/06/23",
+                  "Transaction_Details": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-315305605852-UPI",
+                  "Chq_Ref_No": "0000315305605852",
+                  "Amount": "200.00",
+                  "value_date": "02/06/23",
+                  "Total_Balance": "62,137.12"
+            },
+            {
+                  "Date": "02/06/23",
+                  "Transaction_Details": "UPI-BRATATIMISTRI-BRATATIMISTRI2000-1@OKAXIS-KKBK0002560-315309762689-UPI",
+                  "Chq_Ref_No": "0000315309762689",
+                  "Amount": "300.00",
+                  "value_date": "02/06/23",
+                  "Total_Balance": "61,867.12"
+            }
+      ],
+      "Top Transactions - Top 10 Monthly Transaction": [
+            {
+                  "Date": "01/06/23",
+                  "Narration": "50100230072114-TPT-FUNDTRANSFER-PRASHANTCHAMPAKLALPADARIYA",
+                  "Chq_Ref_No": "0000000153961826",
+                  "value_date": "01/06/23",
+                  "amount": "10,000.00",
+                  "closing_balance": "76,124.72",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "01/06/23",
+                  "Narration": "UPI-REENAGHORAI-REENAGHORAI1@OKHDFCBANK-HDFC0000890-315282122631-UPI",
+                  "Chq_Ref_No": "0000315282122631",
+                  "value_date": "01/06/23",
+                  "amount": "5,000.00",
+                  "closing_balance": "81,124.72",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "01/06/23",
+                  "Narration": "UPI-LAZYPAYPRIVATELIMI-LAZYPAYPVTLTD.RZP@ICICI-ICIC0DC0099-315288535579-LAZYPAYREPAYMENT",
+                  "Chq_Ref_No": "0000315288535579",
+                  "value_date": "01/06/23",
+                  "amount": "9,238.00",
+                  "closing_balance": "71,886.72",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "01/06/23",
+                  "Narration": "UPI-AMAZONPAY-AMAZONPAY@APL-UTIB0000100-351859349301-REQUESTFROMAMAZO",
+                  "Chq_Ref_No": "0000351859349301",
+                  "value_date": "01/06/23",
+                  "amount": "5,165.00",
+                  "closing_balance": "66,721.72",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "01/06/23",
+                  "Narration": "UPI-SIMPL-SIMPL@AXB-UTIB0000100-315288591353-UPIINTENT",
+                  "Chq_Ref_No": "0000315288591353",
+                  "value_date": "01/06/23",
+                  "amount": "1,731.60",
+                  "closing_balance": "64,990.12",
+                  "type": "Unknown"
+            },
+            {
+                  "Date": "01/06/23",
+                  "Narration": "POS512967XXXXXX4873PLAYSTATIONNETWO",
+                  "Chq_Ref_No": "0000000000727770",
+                  "value_date": "01/06/23",
+                  "amount": "1,979.00",
+                  "closing_balance": "63,011.12",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "01/06/23",
+                  "Narration": "POS512967XXXXXX4873PLAYSTATIONNETWO",
+                  "Chq_Ref_No": "0000000000103111",
+                  "value_date": "01/06/23",
+                  "amount": "674.00",
+                  "closing_balance": "62,337.12",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "02/06/23",
+                  "Narration": "UPI-SANJAYBHAIVALABHAI-Q262718503@YBL-SBIN0060160-315305605852-UPI",
+                  "Chq_Ref_No": "0000315305605852",
+                  "value_date": "02/06/23",
+                  "amount": "200.00",
+                  "closing_balance": "62,137.12",
+                  "type": "Withdrawal"
+            },
+            {
+                  "Date": "02/06/23",
+                  "Narration": "UPI-NITESHHARSHADBHAIT-NEETTRIVEDI09@OKHDFCBANK-BARB0GONDAL-315307681019-UPI",
+                  "Chq_Ref_No": "0000315307681019",
+                  "value_date": "02/06/23",
+                  "amount": "30.00",
+                  "closing_balance": "62,167.12",
+                  "type": "Deposit"
+            },
+            {
+                  "Date": "02/06/23",
+                  "Narration": "UPI-BRATATIMISTRI-BRATATIMISTRI2000-1@OKAXIS-KKBK0002560-315309762689-UPI",
+                  "Chq_Ref_No": "0000315309762689",
+                  "value_date": "02/06/23",
+                  "amount": "300.00",
+                  "closing_balance": "61,867.12",
+                  "type": "Withdrawal"
+            }
+      ]
+}
