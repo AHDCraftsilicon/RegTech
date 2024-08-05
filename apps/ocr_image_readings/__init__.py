@@ -78,16 +78,16 @@ def ocr_image_read_text_main():
             random_string = generate_random_alphanumeric(10)
             data["UniqueID"] = random_string
             print(random_string)
-            if data["UniqueID"] != "":
-                check_log_db = Api_request_history_db.find_one({"unique_id":data["UniqueID"]})
+            # if data["UniqueID"] != "":
+            #     check_log_db = Api_request_history_db.find_one({"unique_id":data["UniqueID"]})
             
-            else:
+            # else:
               
-                store_response = {"response": "400",
-                            "message": "Error",
-                            "responseValue": "UniqueID cannot be null or empty."
-                        }
-                return jsonify(store_response), 400
+            #     store_response = {"response": "400",
+            #                 "message": "Error",
+            #                 "responseValue": "UniqueID cannot be null or empty."
+            #             }
+            #     return jsonify(store_response), 400
             
             if data["CorporateID"] == "":
                 api_call_end_time = datetime.now()
@@ -153,148 +153,148 @@ def ocr_image_read_text_main():
 
                 return jsonify(store_response), 400
 
-            if check_log_db == None: 
-                if data['ImageBase64'] != "":
+            # if check_log_db == None: 
+            if data['ImageBase64'] != "":
+                
+                try:
+                    base64_string = data['ImageBase64'].split(',')[1]
+                except:
+                    base64_string = data['ImageBase64']
+
+
+                if base64_string.startswith('data:image/jpeg;base64,'):
+                    base64_string = base64_string.replace('data:image/jpeg;base64,', '')
+
+                # Decode the base64 string into bytes
+                image_bytes = base64.b64decode(base64_string)
+
+                # Convert bytes data to PIL Image
+                image = Image.open(io.BytesIO(image_bytes))
+
+                # Save the image to a file (example: 'output.jpg')
+                filename_img = str(time.time()).replace(".", "")
+                # print(filename_img+".png")
+                static_file_name = filename_img+".png"
+
+                image.save(os.path.join('apps/static/ocr_image', secure_filename(static_file_name)))
+                
+                image_path = "./apps/static/ocr_image/" +static_file_name
+
+                if data['documenttype'] == "PanCard":
+                    pancard = pancard_main(image_path)
+
+                    api_call_end_time = datetime.now()
+                    duration = api_call_end_time - api_call_start_time
+                    duration_seconds = duration.total_seconds()
                     
-                    try:
-                        base64_string = data['ImageBase64'].split(',')[1]
-                    except:
-                        base64_string = data['ImageBase64']
+                    Api_request_history_db.insert_one({
+                                    "corporate_id":data["CorporateID"],
+                                    "unique_id":data["UniqueID"],
+                                    "api_name":"OCR_img_reading",
+                                    "current_date_time":datetime.now(),
+                                    "response_duration":str(duration),
+                                    "response_time":duration_seconds,
+                                    "return_response" :str(pancard),
+                                    "request_data":str(data)
+                                })
 
-
-                    if base64_string.startswith('data:image/jpeg;base64,'):
-                        base64_string = base64_string.replace('data:image/jpeg;base64,', '')
-
-                    # Decode the base64 string into bytes
-                    image_bytes = base64.b64decode(base64_string)
-
-                    # Convert bytes data to PIL Image
-                    image = Image.open(io.BytesIO(image_bytes))
-
-                    # Save the image to a file (example: 'output.jpg')
-                    filename_img = str(time.time()).replace(".", "")
-                    # print(filename_img+".png")
-                    static_file_name = filename_img+".png"
-
-                    image.save(os.path.join('apps/static/ocr_image', secure_filename(static_file_name)))
                     
-                    image_path = "./apps/static/ocr_image/" +static_file_name
-
-                    if data['documenttype'] == "PanCard":
-                        pancard = pancard_main(image_path)
-
-                        api_call_end_time = datetime.now()
-                        duration = api_call_end_time - api_call_start_time
-                        duration_seconds = duration.total_seconds()
-                      
-                        Api_request_history_db.insert_one({
-                                        "corporate_id":data["CorporateID"],
-                                        "unique_id":data["UniqueID"],
-                                        "api_name":"OCR_img_reading",
-                                        "current_date_time":datetime.now(),
-                                        "response_duration":str(duration),
-                                        "response_time":duration_seconds,
-                                        "return_response" :str(pancard),
-                                        "request_data":str(data)
-                                    })
-
-                        
-                        
-                        if pancard['response'] == "200":
-                            return jsonify(pancard),200
-                        else:
-                            return jsonify(pancard), 400
-                        
-                    elif data['documenttype'] == "AadharCard":
-                        addhar_Card = aadhar_ocr_image_read_main(image_path)
-
-                        api_call_end_time = datetime.now()
-                        duration = api_call_end_time - api_call_start_time
-                        duration_seconds = duration.total_seconds()
-                      
-                        Api_request_history_db.insert_one({
-                                        "corporate_id":data["CorporateID"],
-                                        "unique_id":data["UniqueID"],
-                                        "api_name":"OCR_img_reading",
-                                        "current_date_time":datetime.now(),
-                                        "response_duration":str(duration),
-                                        "response_time":duration_seconds,
-                                        "return_response" :str(addhar_Card),
-                                        "request_data":str(data)
-                                    })
-
-                        
-                        if addhar_Card['response'] == "200":
-                            return jsonify(addhar_Card),200
-                        else:
-                            return jsonify(addhar_Card),400
-
-                    elif data['documenttype'] == "VoterID":
-                        election_Card = voter_id_read(image_path)
-
-                        api_call_end_time = datetime.now()
-                        duration = api_call_end_time - api_call_start_time
-                        duration_seconds = duration.total_seconds()
-                      
-                        Api_request_history_db.insert_one({
-                                        "corporate_id":data["CorporateID"],
-                                        "unique_id":data["UniqueID"],
-                                        "api_name":"OCR_img_reading",
-                                        "current_date_time":datetime.now(),
-                                        "response_duration":str(duration),
-                                        "response_time":duration_seconds,
-                                        "return_response" :str(election_Card),
-                                        "request_data":str(data)
-                                    })
-
-                        
-                        if election_Card['response'] == "200":
-                            return jsonify(election_Card),200
-                        else:
-                            return jsonify(election_Card),400
-                    elif data['documenttype'] == "PassportID":
-                        passport = passport_main(image_path)
-
-                        api_call_end_time = datetime.now()
-                        duration = api_call_end_time - api_call_start_time
-                        duration_seconds = duration.total_seconds()
-                      
-                        Api_request_history_db.insert_one({
-                                        "corporate_id":data["CorporateID"],
-                                        "unique_id":data["UniqueID"],
-                                        "api_name":"OCR_img_reading",
-                                        "current_date_time":datetime.now(),
-                                        "response_duration":str(duration),
-                                        "response_time":duration_seconds,
-                                        "return_response" :str(passport),
-                                        "request_data":str(data)
-                                    })
-
-                        if passport['response'] == "200":
-                            return jsonify(passport),200
-                        else:
-                            return jsonify(passport),400
-
+                    
+                    if pancard['response'] == "200":
+                        return jsonify(pancard),200
                     else:
-                        api_call_end_time = datetime.now()
-                        duration = api_call_end_time - api_call_start_time
-                        duration_seconds = duration.total_seconds()
+                        return jsonify(pancard), 400
+                    
+                elif data['documenttype'] == "AadharCard":
+                    addhar_Card = aadhar_ocr_image_read_main(image_path)
 
-                        store_response = {"response": "400",
-                                "message": "Error",
-                                "responseValue": "Please add Valid documenttype!"
-                            }
-                        Api_request_history_db.insert_one({
-                                        "corporate_id":data["CorporateID"],
-                                        "unique_id":data["UniqueID"],
-                                        "api_name":"OCR_img_reading",
-                                        "current_date_time":datetime.now(),
-                                        "response_duration":str(duration),
-                                        "response_time":duration_seconds,
-                                        "return_response" :str(passport),
-                                        "request_data":str(data)
-                                    })
-                        return jsonify(store_response),400
+                    api_call_end_time = datetime.now()
+                    duration = api_call_end_time - api_call_start_time
+                    duration_seconds = duration.total_seconds()
+                    
+                    Api_request_history_db.insert_one({
+                                    "corporate_id":data["CorporateID"],
+                                    "unique_id":data["UniqueID"],
+                                    "api_name":"OCR_img_reading",
+                                    "current_date_time":datetime.now(),
+                                    "response_duration":str(duration),
+                                    "response_time":duration_seconds,
+                                    "return_response" :str(addhar_Card),
+                                    "request_data":str(data)
+                                })
+
+                    
+                    if addhar_Card['response'] == "200":
+                        return jsonify(addhar_Card),200
+                    else:
+                        return jsonify(addhar_Card),400
+
+                elif data['documenttype'] == "VoterID":
+                    election_Card = voter_id_read(image_path)
+
+                    api_call_end_time = datetime.now()
+                    duration = api_call_end_time - api_call_start_time
+                    duration_seconds = duration.total_seconds()
+                    
+                    Api_request_history_db.insert_one({
+                                    "corporate_id":data["CorporateID"],
+                                    "unique_id":data["UniqueID"],
+                                    "api_name":"OCR_img_reading",
+                                    "current_date_time":datetime.now(),
+                                    "response_duration":str(duration),
+                                    "response_time":duration_seconds,
+                                    "return_response" :str(election_Card),
+                                    "request_data":str(data)
+                                })
+
+                    
+                    if election_Card['response'] == "200":
+                        return jsonify(election_Card),200
+                    else:
+                        return jsonify(election_Card),400
+                elif data['documenttype'] == "PassportID":
+                    passport = passport_main(image_path)
+
+                    api_call_end_time = datetime.now()
+                    duration = api_call_end_time - api_call_start_time
+                    duration_seconds = duration.total_seconds()
+                    
+                    Api_request_history_db.insert_one({
+                                    "corporate_id":data["CorporateID"],
+                                    "unique_id":data["UniqueID"],
+                                    "api_name":"OCR_img_reading",
+                                    "current_date_time":datetime.now(),
+                                    "response_duration":str(duration),
+                                    "response_time":duration_seconds,
+                                    "return_response" :str(passport),
+                                    "request_data":str(data)
+                                })
+
+                    if passport['response'] == "200":
+                        return jsonify(passport),200
+                    else:
+                        return jsonify(passport),400
+
+                else:
+                    api_call_end_time = datetime.now()
+                    duration = api_call_end_time - api_call_start_time
+                    duration_seconds = duration.total_seconds()
+
+                    store_response = {"response": "400",
+                            "message": "Error",
+                            "responseValue": "Please add Valid documenttype!"
+                        }
+                    Api_request_history_db.insert_one({
+                                    "corporate_id":data["CorporateID"],
+                                    "unique_id":data["UniqueID"],
+                                    "api_name":"OCR_img_reading",
+                                    "current_date_time":datetime.now(),
+                                    "response_duration":str(duration),
+                                    "response_time":duration_seconds,
+                                    "return_response" :str(passport),
+                                    "request_data":str(data)
+                                })
+                    return jsonify(store_response),400
 
             else:
                 api_call_end_time = datetime.now()
