@@ -13,7 +13,7 @@ from werkzeug.utils import secure_filename
 # import subprocess
 # import xml.etree.ElementTree as ET
 
-#pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
 

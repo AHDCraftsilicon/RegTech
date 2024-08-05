@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-# from flask_jwt_extended import JWTManager, jwt_required,get_jwt_identity
+from flask_jwt_extended import JWTManager, jwt_required,get_jwt_identity
 import time , os
 from werkzeug.utils import secure_filename
 from ocr_reading_files.pancard_ocr import *
@@ -9,6 +9,8 @@ from ocr_reading_files.addhar_ocr_without_load import *
 import base64 , io
 from data_base_string import *
 from datetime import datetime
+import random
+import string
 
 # Blueprint
 ocr_image_reading_bp = Blueprint("ocr_image_reading_bp",
@@ -20,7 +22,17 @@ ocr_image_reading_bp = Blueprint("ocr_image_reading_bp",
 Api_request_history_db = Regtch_services_UAT["Api_request_history"]
 
 
+def generate_random_alphanumeric(length=10):
+    characters = string.ascii_letters + string.digits
+    random_string = ''.join(random.choice(characters) for _ in range(length))
+    return random_string
+
+# Generate a random 10-digit alphanumeric string
+
+
+
 @ocr_image_reading_bp.route('/api/v1/readdocument/readiamgetext',methods=['POST'])
+@jwt_required()
 def ocr_image_read_text_main():
     if request.method == 'POST':  
 
@@ -61,9 +73,11 @@ def ocr_image_read_text_main():
 
 
             
-        
             
             # Check UniqueID
+            random_string = generate_random_alphanumeric(10)
+            data["UniqueID"] = random_string
+            # print(random_string)
             if data["UniqueID"] != "":
                 check_log_db = Api_request_history_db.find_one({"unique_id":data["UniqueID"]})
             
