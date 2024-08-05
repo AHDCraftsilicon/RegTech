@@ -170,8 +170,10 @@ def bank_statment_get_main():
                                 })
 
                     return jsonify(store_response), 200
-                    # return jsonify({"data":uco_response})
-                
+
+                elif BankName == "HDFCBANK":
+                    print()
+
             else:
                 api_call_end_time = datetime.now()
                 duration = api_call_end_time - api_call_start_time

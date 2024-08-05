@@ -35,7 +35,7 @@ def request_connection_main():
                     indentity_dict = {'client_id':data['client_id'],
                               'client_secret':data['client_secret'],
                               'grant_type':data['grant_type']}
-                    duration = timedelta(seconds=180)
+                    duration = timedelta(minutes=20)
                     access_token = create_access_token(expires_delta=duration,identity=indentity_dict,
                                                        additional_claims={"is_api": True})
                     return jsonify({"token_type": "bearer",
