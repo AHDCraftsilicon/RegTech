@@ -227,9 +227,18 @@ def language_translator_main():
 
 
 
-            translation = translator.translate(data['SampleText'], src=data['ToLanguage'], dest=data['FromLanguage'])
-            
-            if translation.text != "":
+            # translation = translator.translate(data['SampleText'], src=data['ToLanguage'], dest=data['FromLanguage'])
+            chunks = [data['SampleText'][i:i+4900] for i in range(0, len(data['SampleText']), 4900)]
+            all_string = ""
+            for chunk in chunks:
+                if chunk != "":
+                    # print(type(chunk))
+                    translation = translator.translate(chunk, src=data['ToLanguage'], dest=data['FromLanguage'])
+                    if translation.text != "":
+                        all_string += translation.text
+
+
+            if all_string != "":
                 api_call_end_time = datetime.now()
                 duration = api_call_end_time - api_call_start_time
                 duration_seconds = duration.total_seconds()
@@ -238,7 +247,7 @@ def language_translator_main():
                                 "message": "Success",
                                 "responseValue": {
                                     "Table1": [{
-                                            "TranslatedText": translation.text}]}}
+                                            "TranslatedText": all_string}]}}
                 Api_request_history_db.insert_one({
                                 "api_name":"Lang_Translate",
                                 "unique_id":data["UniqueID"],
