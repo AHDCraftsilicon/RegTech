@@ -9,7 +9,7 @@ import os
 from flask import Flask,jsonify
 
  
-# #pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
 def all_language_text(image_path):

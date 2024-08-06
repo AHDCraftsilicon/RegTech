@@ -122,6 +122,111 @@ def portal_data_tabless():
     return jsonify({"data":lists})
 
 
+
+@database_table_bp.route("/poratl-data_tabless_ajex",methods=["GET","POST"])
+@jwt_required(locations=['cookies'])
+def portal_data_tabless_ajex():
+    # parent_path = os.listdir("./apps/static/NimbleRegTechlog/")
+    
+    quiry = {}
+    dictinory = []
+    
+    sort_quiry = {}
+    
+    if request.form["columns[1][search][value]"] != "" :
+            quiry['api_name'] = {'$regex' : request.form["columns[1][search][value]"], "$options" :"i"}
+    
+    if request.form["columns[2][search][value]"] != "" :
+        quiry['unique_id'] = {'$regex' : request.form["columns[2][search][value]"], "$options" :"i"}
+
+    
+    
+    if request.form["columns[3][search][value]"] != "":
+        if datetime.now().date() == datetime.strptime(request.form["columns[3][search][value]"].split(" - ")[0], "%d-%m-%Y").date():
+            quiry["current_date_time"] = {"$gte": datetime.strptime(
+                request.form["columns[3][search][value]"].split(" - ")[0], "%d-%m-%Y")}
+        elif (datetime.now().date() - timedelta(days=1)) == datetime.strptime(request.form["columns[3][search][value]"].split(" - ")[0], "%d-%m-%Y").date():
+            quiry["current_date_time"] = {
+                "$gte": datetime.strptime(request.form["columns[3][search][value]"].split(" - ")[0], "%d-%m-%Y"),
+                "$lt": (datetime.strptime(request.form["columns[3][search][value]"].split(" - ")[0], "%d-%m-%Y")+timedelta(hours=23, minutes=59, seconds=59))
+            }
+        else:
+            quiry["current_date_time"] = {
+                "$gte": datetime.strptime(request.form["columns[3][search][value]"].split(" - ")[0], "%d-%m-%Y"),
+                "$lt": (datetime.strptime(request.form["columns[3][search][value]"].split(" - ")[1], "%d-%m-%Y")+timedelta(hours=23, minutes=59, seconds=59))
+            }
+            
+ 
+
+    if request.form['order[0][column]'] == '3':
+        if request.form['order[0][dir]'] == 'asc':
+            sort_quiry = {"current_date_time" : 1}
+        else:
+            sort_quiry = {"current_date_time" : -1}
+
+    
+    
+    try:
+        skp = int(int(request.form['start']) / int(request.form['length'])) - int(request.form['length'])
+    except (KeyError, ValueError, ZeroDivisionError) as e:
+        skp = 0  # default value if calculation fails
+ 
+        
+    if skp < 0:
+        skp = 0
+    per_page = int(request.form['length'])
+    if per_page < 0:
+        per_page = None
+    
+
+    
+
+    finding = Api_request_history_db.aggregate([        
+        {"$match": quiry},
+        {'$sort': sort_quiry},
+        {"$skip": int(request.form['start'])},
+        {"$limit": int(request.form['length'])}
+    ])
+   
+        # Handle the error
+
+    dictinory = []
+    for x in finding:
+        
+        try:
+            unique_id  = x["unique_id"]
+        except:
+            unique_id = ""
+
+        dictinory.append(
+            {
+                "corporate_id":x["corporate_id"],
+                "api_name":x["api_name"],
+                "unique_id":unique_id,
+                "current_date_time": str((x["current_date_time"]+timedelta(hours=5,minutes=30)).strftime("%d-%m-%Y %H:%M:%S")),
+                "request_data":x['request_data'],
+                "objid":str(x["_id"]),
+            }
+        )
+        
+    try:
+        if quiry == {}:
+            total_data = Api_request_history_db.estimated_document_count()
+        else:
+            total_data = Api_request_history_db.count_documents(quiry)
+    except Exception as e:
+        total_data = 0  # or any other default value or handling you prefer
+
+        
+    data = {"iTotalDisplayRecords": total_data,
+            'aaData': dictinory,
+            "iTotalRecords": total_data/int(request.form['length']),
+                }
+    
+    return jsonify(data) 
+
+
+
 # Database-log file download
 @database_table_bp.route("/log_file/download/<objid>")
 @jwt_required(locations=['cookies'])

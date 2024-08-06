@@ -17,15 +17,16 @@
 
     var table = $('#basic-datatable').DataTable({
         'processing': true,
-        'serverSide': false,
-        'serverMethod': 'get',
+        'serverSide': true,
+        'serverMethod': 'post',
         "autoWidth": false,
         'ajax': {
-            'url': '/poratl-data_tabless'
+            'url': '/poratl-data_tabless_ajex'
         },
-        'lengthMenu': [[10, 50, 100], [10, 50, 100]],
+        'lengthMenu': [[10, 20, 50, 100, 500], [10, 20, 50, 100, 500]],
         searching: true,
         sort: true,
+        "aaSorting": [[3, "desc"]],
         'columns': [
             { data: "corporate_id" },
             { data: 'api_name' },
@@ -70,6 +71,112 @@
         }, drawCallback: function () {
             $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
         },
+        initComplete: function () {
+            var api = this.api();
+            // For each column
+
+            $('#ci_name').on('change', function () {
+                var regexr = '{search}';
+                api
+                    .column(1)
+                    .search(
+                        this.value != ''
+                            ? regexr.replace('{search}', this.value)
+                            : '',
+                        this.value != '',
+                        this.value == ''
+                    )
+                    .draw();
+            })
+
+            $('#add_by').on('change', function () {
+                var regexr = '{search}';
+                api
+                    .column(7)
+                    .search(
+                        this.value != ''
+                            ? regexr.replace('{search}', this.value)
+                            : '',
+                        this.value != '',
+                        this.value == ''
+                    )
+                    .draw();
+            })
+
+            $('input[name="create_date_range"]').on('apply.daterangepicker', function () {
+                var regexr = '{search}';
+                api
+                    .column(9)
+                    .search(
+                        this.value != ''
+                            ? regexr.replace('{search}', $(this)[0].value)
+                            : '',
+                        this.value != '',
+                        this.value == '',
+
+                    )
+                    .draw();
+            });
+
+            $('input[name="update_date_range"]').on('apply.daterangepicker', function () {
+                var regexr = '{search}';
+                api
+                    .column(10)
+                    .search(
+                        this.value != ''
+                            ? regexr.replace('{search}', $(this)[0].value)
+                            : '',
+                        this.value != '',
+                        this.value == '',
+
+                    )
+                    .draw();
+            });
+
+            api
+                .columns()
+                .eq(0)
+                .each(function (colIdx) {
+                    // Set the header cell to contain the input element
+                    var cell = $('.filters th').eq(
+                        $(api.column(colIdx).header()).index()
+                    );
+
+                    $(
+                        'input',
+                        $('.filters th').eq($(api.column(colIdx).header()).index())
+                    )
+                        .off('keyup change')
+                        .on('change', function (e) {
+                            // Get the search value
+                            $(this).attr('title', $(this).val());
+                            var regexr = '{search}'; //$(this).parents('th').find('select').val();
+
+                            var cursorPosition = this.selectionStart;
+                            // Search the column for that value
+                            api
+                                .column(colIdx)
+                                .search(
+                                    this.value != ''
+                                        ? regexr.replace('{search}', this.value).replace(/\\/g, "")
+                                        : '',
+                                    this.value != '',
+                                    this.value == ''
+                                )
+                                .draw();
+                        })
+                        .on('keyup', function (e) {
+                            e.stopPropagation();
+                            $(this).trigger('change');
+                            $(this)
+                                .focus()[0]
+                            // .setSelectionRange(cursorPosition, cursorPosition);
+                        });
+                });
+
+        },
+
+
     });
 
     const log_file_modal = new bootstrap.Modal('#log_file_modal')
