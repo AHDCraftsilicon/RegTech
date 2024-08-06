@@ -291,7 +291,7 @@ def ocr_image_read_text_main():
                                         "current_date_time":datetime.now(),
                                         "response_duration":str(duration),
                                         "response_time":duration_seconds,
-                                        "return_response" :str(passport),
+                                        "return_response" :str(store_response),
                                         "request_data":str(data)
                                     })
                         return jsonify(store_response),400
