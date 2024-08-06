@@ -61,6 +61,7 @@
         fixedHeader: true,
         columnDefs: [
             { orderable: true, className: 'line_texts', targets: [2] },
+            { orderable: false, className: 'line_texts', targets: [0,1] },
         ],
 
         createdRow: function (row, data, dataIndex) {
