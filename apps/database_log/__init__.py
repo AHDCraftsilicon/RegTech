@@ -14,7 +14,7 @@ database_table_bp = Blueprint("database_table_bp",
 
 
 # Database
-Api_request_history_db = Regtch_services_UAT["Api_request_history"]
+Api_request_history_db = Regtch_services_UAT["Api_request_history_test"]
 
 
 # Database Log Route
@@ -133,34 +133,70 @@ def portal_data_tabless_ajex():
     
     sort_quiry = {}
     
+    if request.form["columns[0][search][value]"] != "" :
+            quiry['corporate_id'] = request.form["columns[0][search][value]"]
+    
     if request.form["columns[1][search][value]"] != "" :
-            quiry['api_name'] = {'$regex' : request.form["columns[1][search][value]"], "$options" :"i"}
+            quiry['api_name'] = request.form["columns[1][search][value]"]
     
     if request.form["columns[2][search][value]"] != "" :
         quiry['unique_id'] = {'$regex' : request.form["columns[2][search][value]"], "$options" :"i"}
     
-    if request.form["columns[3][search][value]"] != "":
-        if datetime.now().date() == datetime.strptime(request.form["columns[3][search][value]"].split(" - ")[0], "%d-%m-%Y").date():
-            quiry["current_date_time"] = {"$gte": datetime.strptime(
-                request.form["columns[3][search][value]"].split(" - ")[0], "%d-%m-%Y")}
-        elif (datetime.now().date() - timedelta(days=1)) == datetime.strptime(request.form["columns[3][search][value]"].split(" - ")[0], "%d-%m-%Y").date():
-            quiry["current_date_time"] = {
-                "$gte": datetime.strptime(request.form["columns[3][search][value]"].split(" - ")[0], "%d-%m-%Y"),
-                "$lt": (datetime.strptime(request.form["columns[3][search][value]"].split(" - ")[0], "%d-%m-%Y")+timedelta(hours=23, minutes=59, seconds=59))
+    if request.form["columns[3][search][value]"] != "" :
+            quiry['status'] = request.form["columns[3][search][value]"]
+
+    if request.form["columns[4][search][value]"] != "":
+        if datetime.now().date() == datetime.strptime(request.form["columns[4][search][value]"].split(" - ")[0], "%d-%m-%Y").date():
+            quiry["api_start_time"] = {"$gte": datetime.strptime(
+                request.form["columns[4][search][value]"].split(" - ")[0], "%d-%m-%Y")}
+        elif (datetime.now().date() - timedelta(days=1)) == datetime.strptime(request.form["columns[4][search][value]"].split(" - ")[0], "%d-%m-%Y").date():
+            quiry["api_start_time"] = {
+                "$gte": datetime.strptime(request.form["columns[4][search][value]"].split(" - ")[0], "%d-%m-%Y"),
+                "$lt": (datetime.strptime(request.form["columns[4][search][value]"].split(" - ")[0], "%d-%m-%Y")+timedelta(hours=23, minutes=59, seconds=59))
             }
         else:
-            quiry["current_date_time"] = {
-                "$gte": datetime.strptime(request.form["columns[3][search][value]"].split(" - ")[0], "%d-%m-%Y"),
-                "$lt": (datetime.strptime(request.form["columns[3][search][value]"].split(" - ")[1], "%d-%m-%Y")+timedelta(hours=23, minutes=59, seconds=59))
+            quiry["api_start_time"] = {
+                "$gte": datetime.strptime(request.form["columns[4][search][value]"].split(" - ")[0], "%d-%m-%Y"),
+                "$lt": (datetime.strptime(request.form["columns[4][search][value]"].split(" - ")[1], "%d-%m-%Y")+timedelta(hours=23, minutes=59, seconds=59))
+            }
+
+    if request.form["columns[5][search][value]"] != "":
+        if datetime.now().date() == datetime.strptime(request.form["columns[5][search][value]"].split(" - ")[0], "%d-%m-%Y").date():
+            quiry["api_end_time"] = {"$gte": datetime.strptime(
+                request.form["columns[5][search][value]"].split(" - ")[0], "%d-%m-%Y")}
+        elif (datetime.now().date() - timedelta(days=1)) == datetime.strptime(request.form["columns[5][search][value]"].split(" - ")[0], "%d-%m-%Y").date():
+            quiry["api_end_time"] = {
+                "$gte": datetime.strptime(request.form["columns[5][search][value]"].split(" - ")[0], "%d-%m-%Y"),
+                "$lt": (datetime.strptime(request.form["columns[5][search][value]"].split(" - ")[0], "%d-%m-%Y")+timedelta(hours=23, minutes=59, seconds=59))
+            }
+        else:
+            quiry["api_end_time"] = {
+                "$gte": datetime.strptime(request.form["columns[5][search][value]"].split(" - ")[0], "%d-%m-%Y"),
+                "$lt": (datetime.strptime(request.form["columns[5][search][value]"].split(" - ")[1], "%d-%m-%Y")+timedelta(hours=23, minutes=59, seconds=59))
             }
             
+    
+    if request.form["columns[7][search][value]"] != "":
+        if datetime.now().date() == datetime.strptime(request.form["columns[7][search][value]"].split(" - ")[0], "%d-%m-%Y").date():
+            quiry["creadte_date"] = {"$gte": datetime.strptime(
+                request.form["columns[7][search][value]"].split(" - ")[0], "%d-%m-%Y")}
+        elif (datetime.now().date() - timedelta(days=1)) == datetime.strptime(request.form["columns[7][search][value]"].split(" - ")[0], "%d-%m-%Y").date():
+            quiry["creadte_date"] = {
+                "$gte": datetime.strptime(request.form["columns[7][search][value]"].split(" - ")[0], "%d-%m-%Y"),
+                "$lt": (datetime.strptime(request.form["columns[7][search][value]"].split(" - ")[0], "%d-%m-%Y")+timedelta(hours=23, minutes=59, seconds=59))
+            }
+        else:
+            quiry["creadte_date"] = {
+                "$gte": datetime.strptime(request.form["columns[7][search][value]"].split(" - ")[0], "%d-%m-%Y"),
+                "$lt": (datetime.strptime(request.form["columns[7][search][value]"].split(" - ")[1], "%d-%m-%Y")+timedelta(hours=23, minutes=59, seconds=59))
+            }
  
 
-    if request.form['order[0][column]'] == '3':
+    if request.form['order[0][column]'] == '7':
         if request.form['order[0][dir]'] == 'asc':
-            sort_quiry = {"current_date_time" : 1}
+            sort_quiry = {"creadte_date" : 1}
         else:
-            sort_quiry = {"current_date_time" : -1}
+            sort_quiry = {"creadte_date" : -1}
 
     
     
@@ -192,17 +228,25 @@ def portal_data_tabless_ajex():
     for x in finding:
         
         try:
+            corporate_id  = x["corporate_id"]
+        except:
+            corporate_id = ""
+
+        try:
             unique_id  = x["unique_id"]
         except:
             unique_id = ""
 
         dictinory.append(
             {
-                "corporate_id":x["corporate_id"],
+                "corporate_id":corporate_id,
                 "api_name":x["api_name"],
                 "unique_id":unique_id,
-                "current_date_time": str((x["current_date_time"]+timedelta(hours=5,minutes=30)).strftime("%d-%m-%Y %H:%M:%S")),
-                "request_data":x['request_data'],
+                "status":x["status"],
+                "api_start_time": str((x["api_start_time"]+timedelta(hours=5,minutes=30)).strftime("%d-%m-%Y %H:%M:%S")),
+                "api_end_time": str((x["api_end_time"]+timedelta(hours=5,minutes=30)).strftime("%d-%m-%Y %H:%M:%S")),
+                "response_time":x["response_time"],
+                "creadte_date": str((x["creadte_date"]+timedelta(hours=5,minutes=30)).strftime("%d-%m-%Y %H:%M:%S")),
                 "objid":str(x["_id"]),
             }
         )
@@ -238,116 +282,15 @@ def log_download(objid):
     except:
         unique_id = ""
     request_list.append({
-        "return_response":data["return_response"],
+        "response_data":data["response_data"],
         "request_data":data["request_data"],
-        "unique_id":unique_id
+        "unique_id":unique_id,
+        "api_start_time": str((data["api_start_time"]+timedelta(hours=5,minutes=30)).strftime("%d-%m-%Y %H:%M:%S")),
+        "api_end_time": str((data["api_end_time"]+timedelta(hours=5,minutes=30)).strftime("%d-%m-%Y %H:%M:%S")),
+        "response_time":data["response_time"],
+        "creadte_date": str((data["creadte_date"]+timedelta(hours=5,minutes=30)).strftime("%d-%m-%Y %H:%M:%S")),
+        "status":data["status"],
+
     })
 
     return jsonify({"data":request_list})
-
-
-# # Plan Table
-# @planlist_bp.route('/plan_list/data_table/api',methods=['GET','POST'])
-# @admin_required()
-# def plan_data_table():
-#     quiry = {}
-#     sort_quiry = {}
-#     if request.form["columns[1][search][value]"] != "":
-#         quiry["plan_name"] = {"$regex": request.form["columns[1][search][value]"], "$options": "i"}
-    
-#     if request.form["columns[2][search][value]"] != "":
-#         quiry["plan_type"] = request.form["columns[2][search][value]"]
-    
-#     if request.form["columns[3][search][value]"] != "":
-#         quiry["intrest"] = {"$regex": request.form["columns[3][search][value]"], "$options": "i"}
-   
-#     if request.form["columns[4][search][value]"] != "":
-#         quiry["fix_month"] ={"$regex": request.form["columns[4][search][value]"]}
-
-#     if request.form["columns[6][search][value]"] != "":
-#         if datetime.now().date() == datetime.strptime(request.form["columns[6][search][value]"].split(" - ")[0], "%d-%m-%Y").date():
-#             quiry["created_date"] = {"$gte": datetime.strptime(
-#                 request.form["columns[6][search][value]"].split(" - ")[0], "%d-%m-%Y")}
-       
-#         elif (datetime.now().date() - timedelta(days=1)) == datetime.strptime(request.form["columns[6][search][value]"].split(" - ")[0], "%d-%m-%Y").date():
-#             quiry["created_date"] = {
-#                 "$gte": datetime.strptime(request.form["columns[6][search][value]"].split(" - ")[0], "%d-%m-%Y"),
-#                 "$lt": (datetime.strptime(request.form["columns[6][search][value]"].split(" - ")[0], "%d-%m-%Y")+timedelta(hours=23, minutes=59, seconds=59))
-#             }
-        
-#         else:
-#             quiry["created_date"] = {
-#                 "$gte": datetime.strptime(request.form["columns[6][search][value]"].split(" - ")[0], "%d-%m-%Y"),
-#                 "$lt": (datetime.strptime(request.form["columns[6][search][value]"].split(" - ")[1], "%d-%m-%Y")+timedelta(hours=23, minutes=59, seconds=59))
-#             }
-            
-#     if request.form["columns[7][search][value]"] != "":
-#         if datetime.now().date() == datetime.strptime(request.form["columns[7][search][value]"].split(" - ")[0], "%d-%m-%Y").date():
-#             quiry["updated_date"] = {"$gte": datetime.strptime(
-#                 request.form["columns[7][search][value]"].split(" - ")[0], "%d-%m-%Y")}
-       
-#         elif (datetime.now().date() - timedelta(days=1)) == datetime.strptime(request.form["columns[7][search][value]"].split(" - ")[0], "%d-%m-%Y").date():
-#             quiry["updated_date"] = {
-#                 "$gte": datetime.strptime(request.form["columns[7][search][value]"].split(" - ")[0], "%d-%m-%Y"),
-#                 "$lt": (datetime.strptime(request.form["columns[7][search][value]"].split(" - ")[0], "%d-%m-%Y")+timedelta(hours=23, minutes=59, seconds=59))
-#             }
-       
-#         else:
-#             quiry["updated_date"] = {
-#                 "$gte": datetime.strptime(request.form["columns[7][search][value]"].split(" - ")[0], "%d-%m-%Y"),
-#                 "$lt": (datetime.strptime(request.form["columns[7][search][value]"].split(" - ")[1], "%d-%m-%Y")+timedelta(hours=23, minutes=59, seconds=59))
-#             }
-    
-#     if request.form['order[0][column]'] == '1':
-#         if request.form['order[0][dir]'] == 'asc':
-#             sort_quiry = {'_id':1}
-#         else:
-#             sort_quiry = {'_id': -1}
-    
-#     if request.form['order[0][column]'] == '6':
-#         if request.form['order[0][dir]'] == 'asc':
-#             sort_quiry = {'created_date':1}
-#         else:
-#             sort_quiry  = {'created_date': -1}
-            
-#     if request.form['order[0][column]'] == '7':
-#         if request.form['order[0][dir]'] == 'asc':
-#             sort_quiry = {'updated_date': 1}
-#         else:
-#             sort_quiry = {'updated_date': -1}
-    
-    
-#     dictinory = []
-#     skp = int(int(request.form['start']) /
-#               int(request.form['length']))-int(request.form['length'])
-#     if skp < 0:
-#         skp = 0
-#     per_page = int(request.form['length'])
-#     if per_page < 0:
-#         per_page = None
-
-#     finding = plan_db.aggregate([{'$sort':sort_quiry},
-#                                  {"$match":quiry},
-#                                  {"$skip":int(request.form['start'])},
-#                                  {"$limit":int(request.form['length'])}])
-#     for x in finding:
-#         dictinory.append({
-#             "plan_name": x["plan_name"],
-#             "plan_type": x["plan_type"],
-#             "intrest": x["intrest"],
-#             "fix_month": x["fix_month"],
-#             "notes": x["notes"],
-#             "created_date": str(x["created_date"].strftime("%d-%m-%Y  %H:%M:%S")),
-#             "updated_date": str(x["updated_date"].strftime("%d-%m-%Y  %H:%M:%S")),
-#             "_id": str(x["_id"])
-#         })
-#     if quiry == {}:
-#         total_data = plan_db.estimated_document_count()
-#     else:
-#         total_data = plan_db.count_documents(quiry)
-#     data = {
-#         "iTotalDisplayRecords": total_data,
-#         'aaData': dictinory,
-#         "iTotalRecords": total_data/int(request.form['length']),
-#     }
-#     return jsonify(data)

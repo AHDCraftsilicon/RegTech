@@ -64,7 +64,11 @@
                                                         Service Name</th>
                                                     <th class="text-wrap" style="width:300px">
                                                         Unique ID</th>
-                                                    <th class="text-wrap" style="width:300px">Date</th>
+                                                    <th class="text-wrap" style="width:300px">Status</th>
+                                                    <th class="text-wrap" style="width:300px">Request Date</th>
+                                                    <th class="text-wrap" style="width:300px">Response Date</th>
+                                                    <th class="text-wrap" style="width:300px">Time Taken</th>
+                                                    <th class="text-wrap" style="width:300px">Created Date</th>
                                                     <th class="text-wrap" style="width:300px">Download</th>
 
                                                 </tr>
@@ -72,22 +76,54 @@
                                             <thead class="filters display">
                                                 <tr>
                                                     <th style="white-space: nowrap;" id="permission_action_filter">
-                                                        &nbsp;
+                                                        <select class="form-control select2" id="company_name"
+                                                            style="min-width: 150px;">
+                                                            <option value="">Select Company Name</option>
+                                                            <option value="Craftsilicon">Craftsilicon</option>
+                                                        </select>
                                                     </th>
                                                     <th style="white-space: nowrap;">
-                                                        <input class="form-control" type="text"
-                                                            placeholder="Service Name" />
+                                                        <select class="form-control select2" id="api_service"
+                                                            style="min-width: 150px;">
+                                                            <option value="">Select Service</option>
+                                                            <option value="Aadhar_Masking">Aadhar_Masking</option>
+                                                            <option value="Bank_statement">Bank_statement</option>
+                                                            <option value="Image_quality_check">Image_quality_check
+                                                            </option>
+                                                            <option value="Lang_Translate">Lang_Translate</option>
+                                                            <option value="Name_Match">Name_Match</option>
+                                                            <option value="Object_detaction">Object_detaction</option>
+                                                            <option value="OCR_img_reading">OCR_img_reading</option>
+                                                        </select>
                                                     </th>
                                                     <th style="white-space: nowrap;">
                                                         <input class="form-control" type="text"
                                                             placeholder="Unique ID" />
                                                     </th>
                                                     <th style="white-space: nowrap;">
-                                                        <input type="text" class="form-control "
-                                                            name="create_date_range" value="" autocomplete="off"
-                                                            readonly />
+                                                        <select class="form-control select2" id="api_status"
+                                                            style="min-width: 150px;">
+                                                            <option value="">Select Status</option>
+                                                            <option value="Fail">Fail</option>
+                                                            <option value="Success">Success</option>
+                                                        </select>
                                                     </th>
-                                                    <th style="white-space: nowrap;" id="permission_action_filter">
+                                                    <th style="white-space: nowrap;">
+                                                        <input type="text" class="form-control " name="request_date"
+                                                            value="" autocomplete="off" readonly />
+                                                    </th>
+                                                    <th style="white-space: nowrap;">
+                                                        <input type="text" class="form-control " name="response_date"
+                                                            value="" autocomplete="off" readonly />
+                                                    </th>
+                                                    <th style="white-space: nowrap;">
+                                                        &nbsp;
+                                                    </th>
+                                                    <th style="white-space: nowrap;">
+                                                        <input type="text" class="form-control " name="created_date"
+                                                            value="" autocomplete="off" readonly />
+                                                    </th>
+                                                    <th style="white-space: nowrap;">
                                                         &nbsp;
                                                     </th>
                                                 </tr>
@@ -282,24 +318,24 @@
 
 
     <script>
-        // Created Date
+        // Request Date
         $(function () {
             var start = moment().subtract(29, 'days');
             var end = moment();
 
-            $('input[name="create_date_range"]').on('apply.daterangepicker', function (ev, picker) {
+            $('input[name="request_date"]').on('apply.daterangepicker', function (ev, picker) {
 
                 $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
             });
 
-            $('input[name="create_date_range"]').on('cancel.daterangepicker', function (ev, picker) {
+            $('input[name="request_date"]').on('cancel.daterangepicker', function (ev, picker) {
                 $(this).val('');
                 // $(this)[0].textContent = "khjk"
-                $('#basic-datatable').DataTable().context[0].aoPreSearchCols[3].sSearch = ""
+                $('#basic-datatable').DataTable().context[0].aoPreSearchCols[4].sSearch = ""
                 $('#basic-datatable').DataTable().ajax.reload()
             });
 
-            $('input[name="create_date_range"]').daterangepicker({
+            $('input[name="request_date"]').daterangepicker({
                 startDate: start,
                 endDate: end,
                 autoUpdateInput: false,
@@ -325,6 +361,92 @@
             });
         });
 
+
+        // Responce date
+        $(function () {
+            var start = moment().subtract(29, 'days');
+            var end = moment();
+
+            $('input[name="response_date"]').on('apply.daterangepicker', function (ev, picker) {
+
+                $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
+            });
+
+            $('input[name="response_date"]').on('cancel.daterangepicker', function (ev, picker) {
+                $(this).val('');
+                // $(this)[0].textContent = "khjk"
+                $('#basic-datatable').DataTable().context[0].aoPreSearchCols[5].sSearch = ""
+                $('#basic-datatable').DataTable().ajax.reload()
+            });
+
+            $('input[name="response_date"]').daterangepicker({
+                startDate: start,
+                endDate: end,
+                autoUpdateInput: false,
+                "opens": "center",
+                locale: {
+                    cancelLabel: 'Clear',
+                    applyLabel: 'Apply',
+                    fromLabel: 'From',
+                    toLabel: 'To',
+                    customRangeLabel: 'Custom Range',
+                    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    firstDay: 1
+                },
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                },
+                // Datetime and date range picker
+
+            });
+        });
+
+        // Created Date
+        $(function () {
+            var start = moment().subtract(29, 'days');
+            var end = moment();
+
+            $('input[name="created_date"]').on('apply.daterangepicker', function (ev, picker) {
+
+                $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
+            });
+
+            $('input[name="created_date"]').on('cancel.daterangepicker', function (ev, picker) {
+                $(this).val('');
+                // $(this)[0].textContent = "khjk"
+                $('#basic-datatable').DataTable().context[0].aoPreSearchCols[7].sSearch = ""
+                $('#basic-datatable').DataTable().ajax.reload()
+            });
+
+            $('input[name="created_date"]').daterangepicker({
+                startDate: start,
+                endDate: end,
+                autoUpdateInput: false,
+                "opens": "center",
+                locale: {
+                    cancelLabel: 'Clear',
+                    applyLabel: 'Apply',
+                    fromLabel: 'From',
+                    toLabel: 'To',
+                    customRangeLabel: 'Custom Range',
+                    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    firstDay: 1
+                },
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                },
+                // Datetime and date range picker
+
+            });
+        });
 
 
     </script>
