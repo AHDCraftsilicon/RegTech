@@ -66,51 +66,32 @@
                                                         Unique ID</th>
                                                     <th class="text-wrap" style="width:300px">Date</th>
                                                     <th class="text-wrap" style="width:300px">Download</th>
-                                                   
+
                                                 </tr>
                                             </thead>
-                                            <!-- <thead class="filters display">
+                                            <thead class="filters display">
                                                 <tr>
                                                     <th style="white-space: nowrap;" id="permission_action_filter">
                                                         &nbsp;
                                                     </th>
                                                     <th style="white-space: nowrap;">
                                                         <input class="form-control" type="text"
-                                                            placeholder="Plan Name" />
-                                                    </th>
-                                                    <th style="white-space: nowrap;">
-                                                        <select class="form-select select2" data-toggle="select2"
-                                                            id="plan_list">
-                                                            <option value="">-</option>
-                                                            <option value='Percentage'>Percentage</option>
-                                                            <option value='Fix'>Fix</option>
-                                                        </select>
+                                                            placeholder="Service Name" />
                                                     </th>
                                                     <th style="white-space: nowrap;">
                                                         <input class="form-control" type="text"
-                                                            placeholder="Interest" />
-                                                    </th>
-                                                    <th style="white-space: nowrap;">
-                                                        <input class="form-control" type="text"
-                                                            placeholder="Fix Months" />
-                                                    </th>
-
-                                                    <th style="white-space: nowrap;">
-                                                        &nbsp;
+                                                            placeholder="Unique ID" />
                                                     </th>
                                                     <th style="white-space: nowrap;">
                                                         <input type="text" class="form-control "
                                                             name="create_date_range" value="" autocomplete="off"
                                                             readonly />
                                                     </th>
-                                                    <th style="white-space: nowrap;">
-                                                        <input type="text" class="form-control "
-                                                            name="update_date_range" value="" autocomplete="off"
-                                                            readonly />
+                                                    <th style="white-space: nowrap;" id="permission_action_filter">
+                                                        &nbsp;
                                                     </th>
-
                                                 </tr>
-                                            </thead> -->
+                                            </thead>
 
                                             <tbody>
 
@@ -314,7 +295,7 @@
             $('input[name="create_date_range"]').on('cancel.daterangepicker', function (ev, picker) {
                 $(this).val('');
                 // $(this)[0].textContent = "khjk"
-                $('#basic-datatable').DataTable().context[0].aoPreSearchCols[6].sSearch = ""
+                $('#basic-datatable').DataTable().context[0].aoPreSearchCols[3].sSearch = ""
                 $('#basic-datatable').DataTable().ajax.reload()
             });
 
@@ -344,49 +325,6 @@
             });
         });
 
-
-        // Updated Date
-        $(function () {
-            var start = moment().subtract(29, 'days');
-            var end = moment();
-
-            $('input[name="update_date_range"]').on('apply.daterangepicker', function (ev, picker) {
-
-                $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
-            });
-
-            $('input[name="update_date_range"]').on('cancel.daterangepicker', function (ev, picker) {
-                $(this).val('');
-                // $(this)[0].textContent = "khjk"
-                $('#basic-datatable').DataTable().context[0].aoPreSearchCols[7].sSearch = ""
-                $('#basic-datatable').DataTable().ajax.reload()
-            });
-
-            $('input[name="update_date_range"]').daterangepicker({
-                startDate: start,
-                endDate: end,
-                autoUpdateInput: false,
-                "opens": "center",
-                locale: {
-                    cancelLabel: 'Clear',
-                    applyLabel: 'Apply',
-                    fromLabel: 'From',
-                    toLabel: 'To',
-                    customRangeLabel: 'Custom Range',
-                    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-                    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                    firstDay: 1
-                },
-                ranges: {
-                    'Today': [moment(), moment()],
-                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                },
-                // Datetime and date range picker
-
-            });
-        });
 
 
     </script>

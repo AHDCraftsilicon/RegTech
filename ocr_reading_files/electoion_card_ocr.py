@@ -418,7 +418,7 @@ def voter_id_read(image_path):
     
     # os.remove(image_path)
     if voter_list != {}:
-        return {"response": "200",
+        return {"response": 200,
             "message": "Success",
             "responseValue": {
                 "Table1": [
@@ -430,7 +430,7 @@ def voter_id_read(image_path):
         }
     
     else:
-        return {"response": "400",
+        return {"response": 400,
             "message": "Error",
             "responseValue": "Please upload a high-quality and readable image."
         }

@@ -11,7 +11,7 @@ test_zbar_image_bp = Blueprint("test_zbar_image_bp",
                         url_prefix="/")
 
 
-# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
 def date_get(num):

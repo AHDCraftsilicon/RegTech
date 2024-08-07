@@ -143,7 +143,7 @@ def pancard_main(image_path):
         pancard_list["Name"] = holder_name
 
     if pancard_list != {}:
-        return {"response": "200",
+        return {"response": 200,
             "message": "Success",
             "responseValue": {
                 "Table1": [
@@ -155,7 +155,7 @@ def pancard_main(image_path):
         }
     
     else:
-        return {"response": "400",
+        return {"response": 400,
             "message": "Error",
             "responseValue": "Please upload a high-quality and readable image."
         }

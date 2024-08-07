@@ -138,8 +138,6 @@ def portal_data_tabless_ajex():
     
     if request.form["columns[2][search][value]"] != "" :
         quiry['unique_id'] = {'$regex' : request.form["columns[2][search][value]"], "$options" :"i"}
-
-    
     
     if request.form["columns[3][search][value]"] != "":
         if datetime.now().date() == datetime.strptime(request.form["columns[3][search][value]"].split(" - ")[0], "%d-%m-%Y").date():

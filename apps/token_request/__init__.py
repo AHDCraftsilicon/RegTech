@@ -5,13 +5,13 @@ from datetime import timedelta
 
 
 # Blueprint
-request_permission_bp = Blueprint("request_permission_bp",
+token_request_bp = Blueprint("token_request_bp",
                         __name__,
                         url_prefix="/")
 
 
 
-@request_permission_bp.route('/api/v1/token/gettokenkey',methods=['POST'])
+@token_request_bp.route('/api/v1/token/gettokenkey',methods=['POST'])
 def request_connection_main():
     if request.method == 'POST':
         data = request.get_json()

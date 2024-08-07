@@ -2,13 +2,12 @@ from flask import Flask,jsonify,redirect,url_for,request,render_template,render_
 from functools import wraps
 from apps.addhar_masking import adhar_masking_bp
 from apps.image_quality_ckeck import image_quality_check_bp
-from apps.string_compartion import string_compartion_bp
+from apps.name_matching import name_matching_bp
 from apps.language_translate import language_translate_bp
-from apps.request_permission import request_permission_bp
+from apps.token_request import token_request_bp
 from apps.ocr_image_readings import ocr_image_reading_bp
 from apps.database_log import database_table_bp
 from apps.login_admin import login_Admin_bp
-from apps.ocr_image_read_form_Data import ocr_image_reading_form_bp
 from apps.object_detaction import object_detaction_bp
 from apps.bank_statement_pdf_text import bank_statement_bp
 from apps.company_list import comapny_list_table_bp
@@ -122,13 +121,12 @@ def crete_app():
 
     app.register_blueprint(adhar_masking_bp)
     app.register_blueprint(image_quality_check_bp)
-    app.register_blueprint(string_compartion_bp)
+    app.register_blueprint(name_matching_bp)
     app.register_blueprint(language_translate_bp)
-    app.register_blueprint(request_permission_bp)
+    app.register_blueprint(token_request_bp)
     app.register_blueprint(ocr_image_reading_bp)
     app.register_blueprint(database_table_bp)
     app.register_blueprint(login_Admin_bp)
-    app.register_blueprint(ocr_image_reading_form_bp)
     app.register_blueprint(test_zbar_image_bp)
     app.register_blueprint(object_detaction_bp)
     app.register_blueprint(bank_statement_bp)

@@ -13,7 +13,7 @@ translator = Translator()
 
 
 # Database
-Api_request_history_db = Regtch_services_UAT["Api_request_history"]
+Api_request_history_db = Regtch_services_UAT["Api_request_history_test"]
 
 @language_translate_bp.route('/api/v1/languagetransalator/getlanguagetranslator',methods=['POST'])
 @jwt_required()
@@ -22,284 +22,179 @@ def language_translator_main():
         api_call_start_time = datetime.now()
         data = request.get_json()
 
-        if not data or 'UniqueID' not in data:
-            store_response = {"response": "400",
-                        "message": "Error",
-                        "responseValue": "UniqueID cannot be null or empty."
-                    }
+        keys_to_check = ['UniqueID', 'CorporateID', 'SampleText','ToLanguage','FromLanguage']
         
-            return jsonify(store_response), 400
+        for key in keys_to_check:
+            if key not in data or not data[key]:
+                # UniqueID Check 
+                if key == "UniqueID":
+                    store_response = {"response": 400,
+                            "message": "Error",
+                            "responseValue": key +" cannot be null or empty."
+                        }
+                    return jsonify(store_response), 400
+               
+                else:
+                    check_log_db = Api_request_history_db.find_one({"unique_id":data["UniqueID"]})
+                    
+                    if check_log_db != None:
+                        api_call_end_time = datetime.now()
+                        duration = api_call_end_time - api_call_start_time
+                        duration_seconds = duration.total_seconds()
+                        store_response = {"response": 400,
+                                        "message": "Error",
+                                        "responseValue": "Request with the same unique ID has already been processed!"
+                                    }
+
+                        Api_request_history_db.insert_one({
+                                        "corporate_id":data["CorporateID"],
+                                        "unique_id":data["UniqueID"],
+                                        "api_name":"Lang_Translate",
+                                        "api_start_time":api_call_start_time,
+                                        "api_end_time":datetime.now(),
+                                        "status": "Fail",
+                                        "response_duration":str(duration),
+                                        "response_time":duration_seconds,
+                                        "request_data":str(data),
+                                        "response_data" :str(store_response),
+                                        "creadte_date":datetime.now(),
+                                    })
+                        
+                        return jsonify(store_response),400
+                    
+                    api_call_end_time = datetime.now()
+                    duration = api_call_end_time - api_call_start_time
+                    duration_seconds = duration.total_seconds()
+                    # CorporateId
+                    if key == "CorporateID":
+                        store_response = {"response": 400,
+                                "message": "Error",
+                                "responseValue": key +" cannot be null or empty."
+                            }
+                        
+                        Api_request_history_db.insert_one({
+                                        "unique_id":data["UniqueID"],
+                                        "api_name":"Lang_Translate",
+                                        "api_start_time":api_call_start_time,
+                                        "api_end_time":datetime.now(),
+                                        "status": "Fail",
+                                        "response_duration":str(duration),
+                                        "response_time":duration_seconds,
+                                        "request_data":str(data),
+                                        "response_data" :str(store_response),
+                                        "creadte_date":datetime.now(),
+                                    })
+                        
+                    else:
+                        store_response = {"response": 400,
+                                "message": "Error",
+                                "responseValue": key +" cannot be null or empty."
+                            }
+                        
+                        Api_request_history_db.insert_one({
+                                        "unique_id":data["UniqueID"],
+                                        "corporate_id":data["CorporateID"],
+                                        "api_name":"Lang_Translate",
+                                        "api_start_time":api_call_start_time,
+                                        "api_end_time":datetime.now(),
+                                        "status": "Fail",
+                                        "response_duration":str(duration),
+                                        "response_time":duration_seconds,
+                                        "request_data":str(data),
+                                        "response_data" :str(store_response),
+                                        "creadte_date":datetime.now(),
+                                    })
+
+                    
+                    return jsonify(store_response), 400
+
         
-
-
-        if not data or 'CorporateID' not in data:
-            api_call_end_time = datetime.now()
-            duration = api_call_end_time - api_call_start_time
-            duration_seconds = duration.total_seconds()
-            store_response = {"response": "400",
-                        "message": "Error",
-                        "responseValue": "CorporateID cannot be null or empty."
-                    }
-            Api_request_history_db.insert_one({
-                            "api_name":"Lang_Translate",                            
-                            # "unique_id":data["UniqueID"],
-                            "current_date_time":datetime.now(),
-                            "response_duration":str(duration),
-                            "response_time":duration_seconds,
-                            "return_response" :str(store_response),
-                            "request_data":str(data)
-                        })
-
-            return jsonify(store_response), 400
-
-
-       
-        
-
-        
-        if data["CorporateID"] == "":
-            api_call_end_time = datetime.now()
-            duration = api_call_end_time - api_call_start_time
-            duration_seconds = duration.total_seconds()
-            store_response = {"response": "400",
-                        "message": "Error",
-                        "responseValue": "CorporateID cannot be null or empty."
-                    }
-            Api_request_history_db.insert_one({
-                            "api_name":"Lang_Translate",
-                            "unique_id":data["UniqueID"],
-                            "current_date_time":datetime.now(),
-                            "response_duration":str(duration),
-                            "response_time":duration_seconds,
-                            "return_response" :str(store_response),
-                            "request_data":str(data)
-                        })
-            
-            return jsonify(store_response), 400
-
-
-        if not data or 'SampleText' not in data:
-            api_call_end_time = datetime.now()
-            duration = api_call_end_time - api_call_start_time
-            duration_seconds = duration.total_seconds()
-            store_response = {"response": "400",
-                    "message": "Error",
-                    "responseValue": "SampleText cannot be null or empty."
-                }
-            Api_request_history_db.insert_one({
-                            "corporate_id":data["CorporateID"],
-                            "unique_id":data["UniqueID"],
-                            "api_name":"Lang_Translate",
-                            "current_date_time":datetime.now(),
-                            "response_duration":str(duration),
-                            "response_time":duration_seconds,
-                            "return_response" :str(store_response),
-                            "request_data":str(data)
-                        })
-        
-            return jsonify(store_response), 400
-       
-        if not data or 'ToLanguage' not in data:
-            api_call_end_time = datetime.now()
-            duration = api_call_end_time - api_call_start_time
-            duration_seconds = duration.total_seconds()
-            store_response = {"response": "400",
-                    "message": "Error",
-                    "responseValue": "ToLanguage cannot be null or empty."
-                }
-            Api_request_history_db.insert_one({
-                            "corporate_id":data["CorporateID"],
-                            "unique_id":data["UniqueID"],
-                            "api_name":"Lang_Translate",
-                            "current_date_time":datetime.now(),
-                            "response_duration":str(duration),
-                            "response_time":duration_seconds,
-                            "return_response" :str(store_response),
-                            "request_data":str(data)
-                        })
-        
-            return jsonify(store_response), 400
-          
-        if not data or 'FromLanguage' not in data:
-            api_call_end_time = datetime.now()
-            duration = api_call_end_time - api_call_start_time
-            duration_seconds = duration.total_seconds()
-            store_response = {"response": "400",
-                    "message": "Error",
-                    "responseValue": "FromLanguage cannot be null or empty."
-                }
-            Api_request_history_db.insert_one({
-                            "corporate_id":data["CorporateID"],
-                            "unique_id":data["UniqueID"],
-                            "api_name":"Lang_Translate",
-                            "current_date_time":datetime.now(),
-                            "response_duration":str(duration),
-                            "response_time":duration_seconds,
-                            "return_response" :str(store_response),
-                            "request_data":str(data)
-                        })
-        
-            return jsonify(store_response), 400
-
-
-
-          # Check UniqueID
-        
-        
-        if data["UniqueID"] != "":
-            check_log_db = Api_request_history_db.find_one({"unique_id":data["UniqueID"]})
-        
-        else:
-            store_response = {"response": "400",
-                        "message": "Error",
-                        "responseValue": "UniqueID cannot be null or empty."
-                    }
-            
-            return jsonify(store_response), 400
+        check_log_db = Api_request_history_db.find_one({"unique_id":data["UniqueID"]})
         
 
         if check_log_db == None:
             
+            try:
             
-            if data['SampleText'] == "":
+                chunks = [data['SampleText'][i:i+4900] for i in range(0, len(data['SampleText']), 4900)]
+                all_string = ""
+                for chunk in chunks:
+                    if chunk != "":
+                        translation = translator.translate(chunk, src=data['ToLanguage'], dest=data['FromLanguage'])
+                        if translation.text != "":
+                            all_string += translation.text
+
+
+                if all_string != "":
+                    api_call_end_time = datetime.now()
+                    duration = api_call_end_time - api_call_start_time
+                    duration_seconds = duration.total_seconds()
+
+                    store_response = {"response": 200,
+                                    "message": "Success",
+                                    "responseValue": {
+                                        "Table1": [{
+                                                "TranslatedText": all_string}]}}
+                    Api_request_history_db.insert_one({
+                                    "corporate_id":data["CorporateID"],
+                                    "unique_id":data["UniqueID"],
+                                    "api_name":"Lang_Translate",
+                                    "api_start_time":api_call_start_time,
+                                    "api_end_time":datetime.now(),
+                                    "status": "Success",
+                                    "response_duration":str(duration),
+                                    "response_time":duration_seconds,
+                                    "request_data":str(data),
+                                    "response_data" :str(store_response),
+                                    "creadte_date":datetime.now(),
+                                })
+                    
+                    return jsonify(store_response), 200
+
+            except:
                 api_call_end_time = datetime.now()
                 duration = api_call_end_time - api_call_start_time
                 duration_seconds = duration.total_seconds()
-                store_response = {"response": "400",
-                            "message": "Error",
-                            "responseValue": "SampleText cannot be null or empty."
-                        }
-                Api_request_history_db.insert_one({
-                                "corporate_id":data["CorporateID"],
-                                "api_name":"Lang_Translate",
-                                "unique_id":data["UniqueID"],
-                                "current_date_time":datetime.now(),
-                                "response_duration":str(duration),
-                                "response_time":duration_seconds,
-                                "return_response" :str(store_response),
-                                "request_data":str(data)
-                            })
-                
-                return jsonify(store_response), 400
-            
-            if data['ToLanguage'] == "":
-                api_call_end_time = datetime.now()
-                duration = api_call_end_time - api_call_start_time
-                duration_seconds = duration.total_seconds()
-                store_response = {"response": "400",
-                            "message": "Error",
-                            "responseValue": "ToLanguage cannot be null or empty."
-                        }
-                Api_request_history_db.insert_one({
-                                "corporate_id":data["CorporateID"],
-                                "api_name":"Lang_Translate",
-                                "unique_id":data["UniqueID"],
-                                "current_date_time":datetime.now(),
-                                "response_duration":str(duration),
-                                "response_time":duration_seconds,
-                                "return_response" :str(store_response),
-                                "request_data":str(data)
-                            })
-                
-                return jsonify(store_response), 400
-
-            
-            if data['FromLanguage'] == "":
-                api_call_end_time = datetime.now()
-                duration = api_call_end_time - api_call_start_time
-                duration_seconds = duration.total_seconds()
-                store_response = {"response": "400",
-                            "message": "Error",
-                            "responseValue": "FromLanguage cannot be null or empty."
-                        }
-                Api_request_history_db.insert_one({
-                                "corporate_id":data["CorporateID"],
-                                "api_name":"Lang_Translate",
-                                "unique_id":data["UniqueID"],
-                                "current_date_time":datetime.now(),
-                                "response_duration":str(duration),
-                                "response_time":duration_seconds,
-                                "return_response" :str(store_response),
-                                "request_data":str(data)
-                            })
-                
-                return jsonify(store_response), 400
-
-
-
-            # translation = translator.translate(data['SampleText'], src=data['ToLanguage'], dest=data['FromLanguage'])
-            chunks = [data['SampleText'][i:i+4900] for i in range(0, len(data['SampleText']), 4900)]
-            all_string = ""
-            for chunk in chunks:
-                if chunk != "":
-                    # print(type(chunk))
-                    translation = translator.translate(chunk, src=data['ToLanguage'], dest=data['FromLanguage'])
-                    if translation.text != "":
-                        all_string += translation.text
-
-
-            if all_string != "":
-                api_call_end_time = datetime.now()
-                duration = api_call_end_time - api_call_start_time
-                duration_seconds = duration.total_seconds()
-
-                store_response = {"response": "200",
-                                "message": "Success",
-                                "responseValue": {
-                                    "Table1": [{
-                                            "TranslatedText": all_string}]}}
-                Api_request_history_db.insert_one({
-                                "api_name":"Lang_Translate",
-                                "unique_id":data["UniqueID"],
-                                "corporate_id":data["CorporateID"],
-                                "current_date_time":datetime.now(),
-                                "response_duration":str(duration),
-                                "response_time":duration_seconds,
-                                "return_response" :str(store_response),
-                                "request_data":str(data)
-                            })
-                
-                return jsonify(store_response), 200
-            
-            else:
-                api_call_end_time = datetime.now()
-                duration = api_call_end_time - api_call_start_time
-                duration_seconds = duration.total_seconds()
-                store_response = {"response": "200",
-                                "message": "Success",
+                store_response = {"response": 400,
+                                "message": "Error",
                                 'responseValue':"Please Choose Correct language!"}
                 Api_request_history_db.insert_one({
-                                "api_name":"Lang_Translate",
-                                "unique_id":data["UniqueID"],
                                 "corporate_id":data["CorporateID"],
-                                "current_date_time":datetime.now(),
+                                "unique_id":data["UniqueID"],
+                                "api_name":"Lang_Translate",
+                                "api_start_time":api_call_start_time,
+                                "api_end_time":datetime.now(),
+                                "status": "Fail",
                                 "response_duration":str(duration),
                                 "response_time":duration_seconds,
-                                "return_response" :str(store_response),
-                                "request_data":str(data)
+                                "request_data":str(data),
+                                "response_data" :str(store_response),
+                                "creadte_date":datetime.now(),
                             })
                 
-                return jsonify(store_response), 200
-
+                return jsonify(store_response), 400
 
         else:
             api_call_end_time = datetime.now()
             duration = api_call_end_time - api_call_start_time
             duration_seconds = duration.total_seconds()
-            store_response = {"response": "400",
+            store_response = {"response": 400,
                             "message": "Error",
                             "responseValue": "Request with the same unique ID has already been processed!"
                         }
 
             Api_request_history_db.insert_one({
-                            "corporate_id":data["CorporateID"],
+                           "corporate_id":data["CorporateID"],
                             "unique_id":data["UniqueID"],
                             "api_name":"Lang_Translate",
-                            "current_date_time":datetime.now(),
+                            "api_start_time":api_call_start_time,
+                            "api_end_time":datetime.now(),
+                            "status": "Fail",
                             "response_duration":str(duration),
                             "response_time":duration_seconds,
-                            "return_response" :str(store_response),
-                            "request_data":str(data)
+                            "request_data":str(data),
+                            "response_data" :str(store_response),
+                            "creadte_date":datetime.now(),
                         })
             
             return jsonify(store_response),400

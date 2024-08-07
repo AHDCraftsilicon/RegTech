@@ -76,38 +76,11 @@
             var api = this.api();
             // For each column
 
-            $('#ci_name').on('change', function () {
-                var regexr = '{search}';
-                api
-                    .column(1)
-                    .search(
-                        this.value != ''
-                            ? regexr.replace('{search}', this.value)
-                            : '',
-                        this.value != '',
-                        this.value == ''
-                    )
-                    .draw();
-            })
-
-            $('#add_by').on('change', function () {
-                var regexr = '{search}';
-                api
-                    .column(7)
-                    .search(
-                        this.value != ''
-                            ? regexr.replace('{search}', this.value)
-                            : '',
-                        this.value != '',
-                        this.value == ''
-                    )
-                    .draw();
-            })
-
+         
             $('input[name="create_date_range"]').on('apply.daterangepicker', function () {
                 var regexr = '{search}';
                 api
-                    .column(9)
+                    .column(3)
                     .search(
                         this.value != ''
                             ? regexr.replace('{search}', $(this)[0].value)
@@ -119,20 +92,20 @@
                     .draw();
             });
 
-            $('input[name="update_date_range"]').on('apply.daterangepicker', function () {
-                var regexr = '{search}';
-                api
-                    .column(10)
-                    .search(
-                        this.value != ''
-                            ? regexr.replace('{search}', $(this)[0].value)
-                            : '',
-                        this.value != '',
-                        this.value == '',
+            // $('input[name="update_date_range"]').on('apply.daterangepicker', function () {
+            //     var regexr = '{search}';
+            //     api
+            //         .column(10)
+            //         .search(
+            //             this.value != ''
+            //                 ? regexr.replace('{search}', $(this)[0].value)
+            //                 : '',
+            //             this.value != '',
+            //             this.value == '',
 
-                    )
-                    .draw();
-            });
+            //         )
+            //         .draw();
+            // });
 
             api
                 .columns()

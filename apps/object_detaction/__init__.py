@@ -24,226 +24,235 @@ Api_request_history_db = Regtch_services_UAT["Api_request_history"]
 
 
 @object_detaction_bp.route("/api/v1/objectdetection/imagedetection",methods=['POST'])
-@jwt_required()
+# @jwt_required()
 def object_detaction_main():
+    if request.method == 'POST':
+        api_call_start_time = datetime.now()
+        data = request.get_json()
 
-    api_call_start_time = datetime.now()
-    data = request.get_json()
+        keys_to_check = ['UniqueID', 'CorporateID', 'image']
+
+        # Check for missing keys and items can't be empty
+
+        for key in keys_to_check:
+            if key not in data or not data[key]:
+                # UniqueID Check 
+                if key == "UniqueID":
+                    store_response = {"response": 400,
+                            "message": "Error",
+                            "responseValue": key +" cannot be null or empty."
+                        }
+                    return jsonify(store_response), 400
+            
+                else:
+                    check_log_db = Api_request_history_db.find_one({"unique_id":data["UniqueID"]})
+                    
+                    if check_log_db != None:
+                        api_call_end_time = datetime.now()
+                        duration = api_call_end_time - api_call_start_time
+                        duration_seconds = duration.total_seconds()
+                        store_response = {"response": 400,
+                                        "message": "Error",
+                                        "responseValue": "Request with the same unique ID has already been processed!"
+                                    }
+
+                        Api_request_history_db.insert_one({
+                                        "corporate_id":data["CorporateID"],
+                                        "unique_id":data["UniqueID"],
+                                        "api_name":"Object_detaction",
+                                        "api_start_time":api_call_start_time,
+                                        "api_end_time":datetime.now(),
+                                        "status": "Fail",
+                                        "response_duration":str(duration),
+                                        "response_time":duration_seconds,
+                                        "request_data":str(data),
+                                        "response_data" :str(store_response),
+                                        "creadte_date":datetime.now(),
+                                    })
+                        
+                        return jsonify(store_response),400
+                    
+                    api_call_end_time = datetime.now()
+                    duration = api_call_end_time - api_call_start_time
+                    duration_seconds = duration.total_seconds()
+                    # CorporateId
+                    if key == "CorporateID":
+                        store_response = {"response": 400,
+                                "message": "Error",
+                                "responseValue": key +" cannot be null or empty."
+                            }
+                        
+                        Api_request_history_db.insert_one({
+                                        "unique_id":data["UniqueID"],
+                                        "api_name":"Object_detaction",
+                                        "api_start_time":api_call_start_time,
+                                        "api_end_time":datetime.now(),
+                                        "status": "Fail",
+                                        "response_duration":str(duration),
+                                        "response_time":duration_seconds,
+                                        "request_data":str(data),
+                                        "response_data" :str(store_response),
+                                        "creadte_date":datetime.now(),
+                                    })
+                        
+                    else:
+                        store_response = {"response": 400,
+                                "message": "Error",
+                                "responseValue": key +" cannot be null or empty."
+                            }
+                        
+                        Api_request_history_db.insert_one({
+                                        "unique_id":data["UniqueID"],
+                                        "corporate_id":data["CorporateID"],
+                                        "api_name":"Object_detaction",
+                                        "api_start_time":api_call_start_time,
+                                        "api_end_time":datetime.now(),
+                                        "status": "Fail",
+                                        "response_duration":str(duration),
+                                        "response_time":duration_seconds,
+                                        "request_data":str(data),
+                                        "response_data" :str(store_response),
+                                        "creadte_date":datetime.now(),
+                                    })
+
+                    
+                    return jsonify(store_response), 400
 
 
-    if not data or 'UniqueID' not in data:
-        store_response = {"response": "400",
-                    "message": "Error",
-                    "responseValue": "UniqueID cannot be null or empty."
-                }
-
-        return jsonify(store_response), 400
-    
-
-    if not data or 'CorporateID' not in data:
-
-            api_call_end_time = datetime.now()
-            duration = api_call_end_time - api_call_start_time
-            duration_seconds = duration.total_seconds()
-            store_response = {"response": "400",
-                        "message": "Error",
-                        "responseValue": "CorporateID cannot be null or empty."
-                    }
-            Api_request_history_db.insert_one({
-                            "api_name":"Object_detaction",
-                            "unique_id":data["UniqueID"],
-                            "current_date_time":datetime.now(),
-                            "response_duration":str(duration),
-                            "response_time":duration_seconds,
-                            "return_response" :str(store_response),
-                            "request_data":str(data)
-                        })
-
-            return jsonify(store_response), 400
-
-    
-    # Check UniqueID
-    if data["UniqueID"] != "":
+        # Check UniqueID
         check_log_db = Api_request_history_db.find_one({"unique_id":data["UniqueID"]})
     
-    else:
-        store_response = {"response": "400",
-                    "message": "Error",
-                    "responseValue": "UniqueID cannot be null or empty."
-                }
+        if check_log_db == None:
+            try:
+                base64_string = data['image'].split(',')[1]
+            except:
+                base64_string = data['image']
 
-        return jsonify(store_response), 400
+            # print(base64_string.split(',')[1])
 
-    
-    if data["CorporateID"] == "":
-        api_call_end_time = datetime.now()
-        duration = api_call_end_time - api_call_start_time
-        duration_seconds = duration.total_seconds()
-        store_response = {"response": "400",
-                    "message": "Error",
-                    "responseValue": "CorporateID cannot be null or empty."
-                }
-        Api_request_history_db.insert_one({
-                        "api_name":"Object_detaction",
-                        "unique_id":data["UniqueID"],
-                        "current_date_time":datetime.now(),
-                        "response_duration":str(duration),
-                        "response_time":duration_seconds,
-                        "return_response" :str(store_response),
-                        "request_data":str(data)
-                    })
-        
-        return jsonify(store_response), 400
-    
+            # Base64 Convert To Image
+            if base64_string.startswith('data:image/jpeg;base64,'):
+                base64_string = base64_string.replace('data:image/jpeg;base64,', '')
 
-    if not data or 'image' not in data:
-            api_call_end_time = datetime.now()
-            duration = api_call_end_time - api_call_start_time
-            duration_seconds = duration.total_seconds()
-            store_response = {"response": "400",
-                        "message": "Error",
-                        "responseValue": "image cannot be null or empty."
-                    }
-            Api_request_history_db.insert_one({
-                            "corporate_id":data["CorporateID"],
-                            "unique_id":data["UniqueID"],
-                            "api_name":"Object_detaction",
-                            "current_date_time":datetime.now(),
-                            "response_duration":str(duration),
-                            "response_time":duration_seconds,
-                            "return_response" :str(store_response),
-                            "request_data":str(data)
-                        })
-        
-            return jsonify(store_response), 400
-        
-    if check_log_db == None:
-        if data['image'] != "":
-                try:
-                    base64_string = data['image'].split(',')[1]
-                except:
-                    base64_string = data['image']
+            # Decode the base64 string into bytes
+            image_bytes = base64.b64decode(base64_string)
 
-                # print(base64_string.split(',')[1])
+            # Convert bytes data to PIL Image
+            image = Image.open(io.BytesIO(image_bytes))
 
-                # Base64 Convert To Image
-                if base64_string.startswith('data:image/jpeg;base64,'):
-                    base64_string = base64_string.replace('data:image/jpeg;base64,', '')
+            # Save the image to a file (example: 'output.jpg')
+            filename_img = str(time.time()).replace(".", "")
+            # print(filename_img+".png")
+            static_file_name = filename_img+".png"
 
-                # Decode the base64 string into bytes
-                image_bytes = base64.b64decode(base64_string)
+            image.save(os.path.join('apps/static/object_Detaction', secure_filename(static_file_name)))
+            
+            image_path = "apps/static/object_Detaction/" +static_file_name
 
-                # Convert bytes data to PIL Image
-                image = Image.open(io.BytesIO(image_bytes))
+            # Response Store List
+            responce_list = []
 
-                # Save the image to a file (example: 'output.jpg')
-                filename_img = str(time.time()).replace(".", "")
-                # print(filename_img+".png")
-                static_file_name = filename_img+".png"
-
-                image.save(os.path.join('apps/static/object_Detaction', secure_filename(static_file_name)))
-                
-                image_path = "apps/static/object_Detaction/" +static_file_name
-
-                # Response Store List
-                responce_list = []
-
-                # Yolo Model Work Start
-                imgss = cv2.imread(image_path)
-                if imgss is None:
-                    return "Failed to load image", 400
-
-                results = model(imgss)
-                # results.show()
-
-                output_path = './static/obj_dect_output/test.jpg'
-                results.save(output_path)
-
-                # time.sleep(2)
-                img_rgb = cv2.cvtColor(imgss, cv2.COLOR_BGR2RGB)
-                pil_img = Image.fromarray(img_rgb)
-
-                # Create a BytesIO object to save the image in-memory
-                buffered = io.BytesIO()
-                pil_img.save(buffered, format="JPEG")
-
-                # Encode image to Base64
-                img_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-
-                responce_list.append({"image":img_base64})
-
-
-                object_list = []
-                # with open("image_base64.txt", "w") as text_file:
-                #     text_file.write(img_base64)
-
-                item_counts = Counter(results.pandas().xyxy[0]['name'].tolist())
-                for x,y in zip(item_counts.keys(), item_counts.values()):
-                    object_list.append({"object_name":y,"object_count":x})
-                    # print(x,y)
-
-                responce_list.append({"object_list":object_list})
-
+            # Yolo Model Work Start
+            imgss = cv2.imread(image_path)
+            
+            # Image validation
+            if imgss is None:
                 api_call_end_time = datetime.now()
                 duration = api_call_end_time - api_call_start_time
                 duration_seconds = duration.total_seconds()
-                store_response = {"response": "200",
-                            "message": "Success",
-                            "responseValue": {
-                                "Table1":responce_list}}
+                store_response = {"response": 400,
+                            "message": "Error",'responseValue':"Please Upload Valid Image"}
                 Api_request_history_db.insert_one({
                                 "corporate_id":data["CorporateID"],
                                 "unique_id":data["UniqueID"],
                                 "api_name":"Object_detaction",
-                                "current_date_time":datetime.now(),
+                                "api_start_time":api_call_start_time,
+                                "api_end_time":datetime.now(),
+                                "status": "Fail",
                                 "response_duration":str(duration),
                                 "response_time":duration_seconds,
-                                "return_response" :str(store_response),
-                                "request_data":str(data)
+                                "request_data":str(data),
+                                "response_data" :str(store_response),
+                                "creadte_date":datetime.now(),
                             })
+            
+                return jsonify(store_response), 400
 
-                return jsonify(store_response), 200
-        
+            results = model(imgss)
+            # results.show()
 
+            output_path = './static/obj_dect_output/test.jpg'
+            results.save(output_path)
+
+            # time.sleep(2)
+            img_rgb = cv2.cvtColor(imgss, cv2.COLOR_BGR2RGB)
+            pil_img = Image.fromarray(img_rgb)
+
+            # Create a BytesIO object to save the image in-memory
+            buffered = io.BytesIO()
+            pil_img.save(buffered, format="JPEG")
+
+            # Encode image to Base64
+            img_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+            responce_list.append({"image":img_base64})
+
+
+            object_list = []
+
+
+            item_counts = Counter(results.pandas().xyxy[0]['name'].tolist())
+            for x,y in zip(item_counts.keys(), item_counts.values()):
+                object_list.append({"object_name":y,"object_count":x})
+                # print(x,y)
+
+            responce_list.append({"object_list":object_list})
+
+            api_call_end_time = datetime.now()
+            duration = api_call_end_time - api_call_start_time
+            duration_seconds = duration.total_seconds()
+            store_response = {"response": 200,
+                        "message": "Success",
+                        "responseValue": {
+                            "Table1":responce_list}}
+            Api_request_history_db.insert_one({
+                             "corporate_id":data["CorporateID"],
+                                "unique_id":data["UniqueID"],
+                                "api_name":"Object_detaction",
+                                "api_start_time":api_call_start_time,
+                                "api_end_time":datetime.now(),
+                                "status": "Success",
+                                "response_duration":str(duration),
+                                "response_time":duration_seconds,
+                                "request_data":str(data),
+                                "response_data" :str(store_response),
+                                "creadte_date":datetime.now(),
+                        })
+
+            return jsonify(store_response), 200
+            
         else:
             api_call_end_time = datetime.now()
             duration = api_call_end_time - api_call_start_time
             duration_seconds = duration.total_seconds()
-            store_response = {"response": "400",
-                        "message": "Error",
-                        "responseValue": "image cannot be null or empty."
-                    }
+            store_response = {"response": 400,
+                            "message": "Error",
+                            "responseValue": "Request with the same unique ID has already been processed!"
+                        }
+
             Api_request_history_db.insert_one({
-                            "api_name":"Object_detaction",
+                            "corporate_id":data["CorporateID"],
                             "unique_id":data["UniqueID"],
-                            "current_date_time":datetime.now(),
+                            "api_name":"Object_detaction",
+                            "api_start_time":api_call_start_time,
+                            "api_end_time":datetime.now(),
+                            "status": "Fail",
                             "response_duration":str(duration),
                             "response_time":duration_seconds,
-                            "return_response" :str(store_response),
-                            "request_data":str(data)
+                            "request_data":str(data),
+                            "response_data" :str(store_response),
+                            "creadte_date":datetime.now(),
                         })
             
-            return jsonify(store_response), 400
-
-    else:
-        api_call_end_time = datetime.now()
-        duration = api_call_end_time - api_call_start_time
-        duration_seconds = duration.total_seconds()
-        store_response = {"response": "400",
-                        "message": "Error",
-                        "responseValue": "Request with the same unique ID has already been processed!"
-                    }
-
-        Api_request_history_db.insert_one({
-                        "corporate_id":data["CorporateID"],
-                        "unique_id":data["UniqueID"],
-                        "api_name":"Object_detaction",
-                        "current_date_time":datetime.now(),
-                        "response_duration":str(duration),
-                        "response_time":duration_seconds,
-                        "return_response" :str(store_response),
-                        "request_data":str(data)
-                    })
-        
-        return jsonify(store_response),400
+            return jsonify(store_response),400
     

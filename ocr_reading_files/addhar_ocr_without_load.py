@@ -453,7 +453,7 @@ def aadhar_ocr_image_read_main(image_path):
 
     # os.remove(image_path)
     if addhar_details_list != {}:
-        return {"response": "200",
+        return {"response": 200,
             "message": "Success",
             "responseValue": {
                 "Table1": [
@@ -465,7 +465,7 @@ def aadhar_ocr_image_read_main(image_path):
         }
     else:
         if addhar_details_list == {}:
-            return {"response": "400",
+            return {"response": 400,
                                 "message": "Error",
                                 "responseValue": "Please upload a high-quality and readable image."
                             }
