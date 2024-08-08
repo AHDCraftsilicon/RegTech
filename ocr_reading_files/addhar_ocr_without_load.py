@@ -25,12 +25,12 @@ def get_all_language_formate_string(image_path):
 
     img2 = cv2.resize(img, (img.shape[1]*2, img.shape[0]*2), interpolation=cv2.INTER_LANCZOS4)  # Resize by x2 using LANCZOS4 interpolation method.
 
-    cv2.imwrite('image3.png', img2)
+    cv2.imwrite('./apps/static/ocr_image/image3.png', img2)
 
     language_codes = ['eng']
     languages = '+'.join(language_codes)
     custom_config = f'--oem 3 --psm 6 -l {languages}'
-    result = pytesseract.image_to_string(Image.open('image3.png'), config=custom_config)
+    result = pytesseract.image_to_string(Image.open('./apps/static/ocr_image/image3.png'), config=custom_config)
 
     return result
 
@@ -41,8 +41,8 @@ def get_english_formate_string(image_path):
 
     img2 = cv2.resize(img, (img.shape[1]*2, img.shape[0]*2), interpolation=cv2.INTER_LANCZOS4)  # Resize by x2 using LANCZOS4 interpolation method.
 
-    cv2.imwrite('image2.png', img2)
-    result = pytesseract.image_to_string(Image.open('image2.png'))
+    cv2.imwrite('./apps/static/ocr_image/image2.png', img2)
+    result = pytesseract.image_to_string(Image.open('./apps/static/ocr_image/image2.png'))
 
     return result
 

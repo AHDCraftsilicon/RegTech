@@ -190,10 +190,10 @@ def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1,
 
     for rotation in rotations:
 
-        cv2.imwrite('rotated_grayscale.png', rotation[0])
+        cv2.imwrite('apps/static/addhar_masksing_img/rotated_grayscale.png', rotation[0])
 
         bounding_boxes = pytesseract.image_to_boxes(Image.open(
-            'rotated_grayscale.png'), config=settings).split(" 0\n")
+            'apps/static/addhar_masksing_img/rotated_grayscale.png'), config=settings).split(" 0\n")
 
         possible_UIDs = Regex_Search(bounding_boxes)
 

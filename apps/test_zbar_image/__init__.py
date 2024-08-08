@@ -3,7 +3,8 @@ from datetime import datetime
 from flask_jwt_extended import  jwt_required
 import subprocess
 from passporteye import read_mrz
-import pytesseract
+import pytesseract , os , time
+from werkzeug.utils import secure_filename
 
 # Blueprint
 test_zbar_image_bp = Blueprint("test_zbar_image_bp",
@@ -64,6 +65,27 @@ def passport_main():
     else:
         print("MRZ could not be extracted.")
     return jsonify({"data":"ajgdjsg"})
+
+
+@test_zbar_image_bp.route('/passport_testing_api',methods=['POST'])
+def passport_main_api():
+    if request.method == 'POST':
+        f = request.files["img"]
+        filename_img = str(time.time()).replace(".", "")
+        if f.filename != "":
+            f.save(os.path.join('./apps/static/passport_data', secure_filename(
+                filename_img+"."+f.filename.split(".")[-1])))
+            img = "apps/static/passport_data/"+filename_img+"."+f.filename.split(".")[-1]
+
+            mrz = read_mrz(img)
+
+            if mrz is not None:
+               
+                    
+                return jsonify({"Data":mrz.to_dict()})
+            else:
+                print("MRZ could not be extracted.")
+                return jsonify({"data":"ajgdjsg"})
 
 
 @test_zbar_image_bp.route('/zbar_testing')
