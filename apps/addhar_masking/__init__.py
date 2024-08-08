@@ -22,7 +22,7 @@ adhar_masking_bp = Blueprint("adhar_masking_bp",
                         static_folder='static')
 
 # Tesseract exe path
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
 # Database
