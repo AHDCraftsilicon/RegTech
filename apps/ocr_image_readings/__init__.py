@@ -3,7 +3,7 @@ from flask_jwt_extended import JWTManager, jwt_required,get_jwt_identity
 import time , os
 from werkzeug.utils import secure_filename
 from ocr_reading_files.pancard_ocr import *
-from ocr_reading_files.electoion_card_ocr import *
+from ocr_reading_files.election_Card_without_load import *
 from ocr_reading_files.passport_id_ocr import *
 from ocr_reading_files.addhar_ocr_without_load import *
 import base64 , io
@@ -214,7 +214,7 @@ def ocr_image_read_text_main():
                     return jsonify(addhar_Card),400
 
             elif data['documenttype'] == "VoterID":
-                election_Card = voter_id_read(image_path)
+                election_Card = voter_ocr_main(image_path)
 
                 api_call_end_time = datetime.now()
                 duration = api_call_end_time - api_call_start_time
