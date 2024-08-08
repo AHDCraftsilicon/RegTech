@@ -5,6 +5,7 @@ import subprocess
 from passporteye import read_mrz
 import pytesseract , os , time
 from werkzeug.utils import secure_filename
+import re
 
 # Blueprint
 test_zbar_image_bp = Blueprint("test_zbar_image_bp",
@@ -33,6 +34,7 @@ def date_get(num):
     date = datetime(year, month, day)
 
     return date.strftime('%Y-%m-%d')
+
 
 
 @test_zbar_image_bp.route('/passport_testing')
@@ -67,6 +69,7 @@ def passport_main():
     return jsonify({"data":"ajgdjsg"})
 
 
+
 @test_zbar_image_bp.route('/passport_testing_api',methods=['POST'])
 def passport_main_api():
     if request.method == 'POST':
@@ -79,13 +82,59 @@ def passport_main_api():
 
             mrz = read_mrz(img)
 
+            passport_json_data = {}
             if mrz is not None:
+                passport_data = mrz.to_dict()
+
+                if passport_data['personal_number'] != "":
+                    passport_json_data['personal_number'] = passport_data['personal_number']
+
+                if passport_data['raw_text'] != "":
+                    passport_json_data['raw_text'] = passport_data['raw_text']
+
+                if passport_data['names'] != "":
+                    passport_json_data['name'] = passport_data['names']
+
+                if passport_data['number'] != "":
+                    passport_json_data['number'] = passport_data['number']
+
+                if passport_data['surname'] != "":
+                    passport_json_data['surname'] = passport_data['surname']
+
+                if passport_data['country'] != "":
+                    passport_json_data['country'] = passport_data['country']
+                
+                if passport_data['valid_score'] != "":
+                    passport_json_data['valid_score'] = passport_data['valid_score']
+
+                if passport_data['sex'] != "":
+                    passport_json_data['sex'] = passport_data['sex']
+
+                if passport_data['mrz_type'] != "":
+                    passport_json_data['mrz_type'] = passport_data['mrz_type']
+
                
-                    
-                return jsonify({"Data":mrz.to_dict()})
+                if passport_json_data != {}:
+                    return {"response": 200,
+                            "message": "Success",
+                            "responseValue": {
+                                "Table1": [
+                                    {
+                                        "DocumentResponse": passport_json_data
+                                    }
+                                ]
+                            }
+                        }
+                else:
+                    return {"response": 400,
+                                        "message": "Error",
+                                        "responseValue": "Please upload a high-quality and readable image."
+                                    }
             else:
-                print("MRZ could not be extracted.")
-                return jsonify({"data":"ajgdjsg"})
+                return {"response": 400,
+                                        "message": "Error",
+                                        "responseValue": "Please upload a high-quality and readable image."
+                                    }
 
 
 @test_zbar_image_bp.route('/zbar_testing')
