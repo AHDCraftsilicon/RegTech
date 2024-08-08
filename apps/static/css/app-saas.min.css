@@ -15466,7 +15466,10 @@ fieldset:disabled .btn {
 }
 
 .logo span.logo-lg {
-    display: block
+    display: block;
+    width: 100%;
+    max-width: 160px;
+    margin: 7px 37px 0;
 }
 
 .logo span.logo-sm {

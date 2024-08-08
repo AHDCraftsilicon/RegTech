@@ -11,6 +11,7 @@ from apps.login_admin import login_Admin_bp
 from apps.object_detaction import object_detaction_bp
 from apps.bank_statement_pdf_text import bank_statement_bp
 from apps.company_list import comapny_list_table_bp
+from apps.dashboard_view import dashboard_bp
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required,unset_jwt_cookies
 from datetime import datetime, timedelta
 
@@ -131,6 +132,7 @@ def crete_app():
     app.register_blueprint(object_detaction_bp)
     app.register_blueprint(bank_statement_bp)
     app.register_blueprint(comapny_list_table_bp)
+    app.register_blueprint(dashboard_bp)
 
 
     app.jinja_env.globals['load_topbar'] = load_topbar

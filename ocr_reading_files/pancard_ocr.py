@@ -11,32 +11,6 @@ from flask import Flask,jsonify
 
 #pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-def english_language_text(image_path):
-    result = ''
-
-    img = cv2.imread(image_path)
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-    rotations = [[gray, 1],
-                 [cv2.rotate(gray, cv2.ROTATE_90_COUNTERCLOCKWISE), 2],
-                 [cv2.rotate(gray, cv2.ROTATE_180), 3],
-                 [cv2.rotate(gray, cv2.ROTATE_90_CLOCKWISE), 4],
-                 [cv2.GaussianBlur(gray, (5, 5), 0), 1],
-                 [cv2.GaussianBlur(cv2.rotate(
-                     gray, cv2.ROTATE_90_COUNTERCLOCKWISE), (5, 5), 0), 2],
-                 [cv2.GaussianBlur(cv2.rotate(
-                     gray, cv2.ROTATE_180), (5, 5), 0), 3],
-                 [cv2.GaussianBlur(cv2.rotate(gray, cv2.ROTATE_90_CLOCKWISE), (5, 5), 0), 4]]
-    english_result = ""
-    for rotation in rotations:
-
-        cv2.imwrite('english_rotated_grayscale.png', rotation[0])
-        result = pytesseract.image_to_string(Image.open('english_rotated_grayscale.png'))
-        
-        english_result += result
-    return english_result
- 
-
 
 
 def extract_pan_number(result):

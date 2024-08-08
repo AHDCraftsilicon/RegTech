@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Company List | RegTech Admin" name="description" />
+    <meta content="Company List | RegTech Admin" name="admin" />
+    <title>Company List | RegTech Admin</title>
+
+    {% set load_css = load_css() %}
+    {% if load_css %}
+    {{ load_css | safe }}
+    {% endif %}
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Top Bar -->
+        {% set topbars = load_topbar(username) %}
+        {% if topbars %}
+        {{ topbars | safe }}
+        {% endif %}
+
+        <!-- Routes -->
+        {% set pagelinks = navigation_urls(manage_role) %}
+        {% if pagelinks %}
+        {{ pagelinks | safe }}
+        {% endif %}
+
+
+        <div class="content-page">
+            <div class="content">
+                <!-- Start Content-->
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box">
+                                <div class="page-title-right">
+                                    <form class="d-flex">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control form-control-light date"
+                                                id="singledaterange" data-toggle="date-picker"
+                                                data-cancel-class="btn-warning" data-single-date-picker="true">
+                                            <span class="input-group-text bg-primary border-primary text-white">
+                                                <i class="mdi mdi-calendar-range font-13"></i>
+                                            </span>
+                                        </div>
+                                        <a href="javascript: void(0);" class="btn btn-primary ms-2">
+                                            <i class="mdi mdi-autorenew"></i>
+                                        </a>
+                                    </form>
+                                </div>
+                                <h4 class="page-title">Analytics</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card widget-inline">
+                                <div class="card-body p-0">
+                                    <div class="row g-0">
+                                        <div class="col-sm-6 col-lg-3">
+                                            <div class="card rounded-0 shadow-none m-0">
+                                                <div class="card-body text-center">
+                                                    <i class="mdi mdi-office-building text-primary font-24"></i>
+                                                    <h3><span class="text-primary">{{total_Company_count}}</span></h3>
+                                                    <p class="text-primary font-15 mb-0" style="font-weight: 700;">Total
+                                                        Company</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6 col-lg-3">
+                                            <div class="card rounded-0 shadow-none m-0 border-start border-light">
+                                                <div class="card-body text-center">
+                                                    <i class="ri-list-check-2 text-secondary  font-24"></i>
+                                                    <h3><span class="text-secondary ">{{Today_api_count}}</span></h3>
+                                                    <p class="text-secondary font-15 mb-0" style="font-weight: 700;">
+                                                        Today Api Request</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6 col-lg-3">
+                                            <div class="card rounded-0 shadow-none m-0 border-start border-light">
+                                                <div class="card-body text-center">
+                                                    <i class="mdi mdi-check-decagram text-success  font-24"></i>
+                                                    <h3><span class="text-success">{{Today_api_success_count}}</span>
+                                                    </h3>
+                                                    <p class="text-success  font-15 mb-0" style="font-weight: 700;">
+                                                        Today Success Request</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6 col-lg-3">
+                                            <div class="card rounded-0 shadow-none m-0 border-start border-light">
+                                                <div class="card-body text-center">
+                                                    <i class="mdi mdi-selection-remove text-danger font-24"></i>
+                                                    <h3><span class="text-danger">{{Today_api_fail_count}}</span>
+                                                        <!-- <i class="mdi mdi-arrow-down text-danger"></i> -->
+                                                    </h3>
+                                                    <p class="text-danger font-15 mb-0" style="font-weight: 700;">Today
+                                                        Fail Request</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div> <!-- end row -->
+                                </div>
+                            </div> <!-- end card-box-->
+                        </div> <!-- end col-->
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-12 order-lg-2 order-xl-1">
+                            <div class="card p-3">
+                                <div class="d-flex card-header justify-content-between align-items-center">
+                                    <h4 class="header-title">Company Api Count</h4>
+
+                                </div>
+
+                                <div class="card-body py-0 mb-3" data-simplebar style="max-height: 403px;">
+                                    <div class="timeline-alt py-0">
+                                        <table class="table table-centered table-nowrap table-hover mb-0">
+                                            <tbody>
+                                                <thead>
+                                                    <th>Company Name</th>
+                                                    <th>Api Cout</th>
+                                                </thead>
+                                                <thead>
+                                                    {% for x in company_details %}
+                                                    <tr>
+                                                        <td>{{x["company_name"]}}</td>
+                                                        <td>{{x["api_count"]}}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </thead>
+                                            </tbody>
+                                        </table>
+
+
+                                    </div>
+                                    <!-- end timeline -->
+                                </div> <!-- end slimscroll -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end row-->
+
+            </div> <!-- container -->
+        </div> <!-- content -->
+
+        <!-- Footer -->
+        {% set footers = load_footer() %}
+        {% if footers %}
+        {{ footers | safe }}
+        {% endif %}
+
+        <!-- Layout Wrapper end -->
+    </div>
+
+
+    <!-- All Javascripts URL -->
+    {% set load_js = load_javascript() %}
+    {% if load_js %}
+    {{ load_js | safe }}
+    {% endif %}
+
+
+    <script>
+        // $("#dash-daterange").daterangepicker({
+        //     singleDatePicker: !0,
+        //     locale: {
+        //         cancelLabel: 'Clear'
+        //     }
+        // })
+    </script>
+
+
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <script>
+        !function (c) {
+            "use strict"; function t() { }
+            t.prototype.send = function (t, o, i, e, n, a, s, r) {
+                t = { heading: t, text: o, position: i, loaderBg: e, icon: n, hideAfter: a = a || 3e3, stack: s = s || 1 };
+                t.showHideTransition = r || "fade", c.toast().reset("all"), c.toast(t)
+            }, c.NotificationApp = new t, c.NotificationApp.Constructor = t,
+                c.NotificationApp.send("Plan-List!", "{{message}}", "top-right", "rgba(0,0,0,0.2)", "success")
+        }(window.jQuery);
+    </script>
+    {% endfor %}
+    {% endif%}
+    {% endwith %}
+
+</body>
+
+</html>
