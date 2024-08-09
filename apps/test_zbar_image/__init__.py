@@ -6,7 +6,7 @@ from passporteye import read_mrz
 import pytesseract , os , time
 from werkzeug.utils import secure_filename
 import re
-
+import tabula
 # Blueprint
 test_zbar_image_bp = Blueprint("test_zbar_image_bp",
                         __name__,
@@ -139,6 +139,11 @@ def passport_main_api():
 
 @test_zbar_image_bp.route('/zbar_testing')
 def zbar_main():
-    Qr_Code_scane = subprocess.run(['zbarimg', '--raw', './apps/static/bar_test.png'], capture_output=True)
-    xml_string = Qr_Code_scane.stdout.decode('utf-8')
-    return jsonify({"data":xml_string})
+    # Qr_Code_scane = subprocess.run(['zbarimg', '--raw', './apps/static/bar_test.png'], capture_output=True)
+    # xml_string = Qr_Code_scane.stdout.decode('utf-8')
+    # return jsonify({"data":xml_string})
+
+    dfa = tabula.read_pdf("apps/static/HDFC statement with EMI (1).pdf",pages=[1,2],relative_area=True,relative_columns=True)
+    df = dfa[0].columns.values.tolist()
+
+    return jsonify({"Data":df})
