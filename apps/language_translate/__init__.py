@@ -16,7 +16,7 @@ translator = Translator()
 Api_request_history_db = Regtch_services_UAT["Api_request_history_test"]
 
 @language_translate_bp.route('/api/v1/languagetransalator/getlanguagetranslator',methods=['POST'])
-@jwt_required()
+# @jwt_required()
 def language_translator_main():
     if request.method == 'POST':
         api_call_start_time = datetime.now()

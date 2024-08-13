@@ -84,7 +84,7 @@ def classify_resolution(width, height):
 
 
 @image_quality_check_bp.route('/api/v1/imagequalitycheck/imagequality',methods=['POST'])
-@jwt_required()
+# @jwt_required()
 def quality_check_image_main():
     if request.method == 'POST':
         api_call_start_time = datetime.now()

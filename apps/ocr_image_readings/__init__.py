@@ -32,7 +32,7 @@ def generate_random_alphanumeric(length=10):
 
 
 @ocr_image_reading_bp.route('/api/v1/readdocument/readiamgetext',methods=['POST'])
-@jwt_required()
+# @jwt_required()
 def ocr_image_read_text_main():
     try:
         if request.method == 'POST':  

@@ -232,7 +232,7 @@ def generate_random_alphanumeric(length=10):
     return random_string
 
 @adhar_masking_bp.route('/api/v1/adharMasking/adharmasking',methods=['POST'])
-@jwt_required()
+# @jwt_required()
 def addhar_masking_main():
     if request.method == 'POST':
         api_call_start_time = datetime.now()

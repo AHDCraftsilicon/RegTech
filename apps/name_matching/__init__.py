@@ -44,7 +44,7 @@ def convert_time(duration):
     }
 
 @name_matching_bp.route('/api/v1/namematching/getstringsimilarity',methods=['POST'])
-@jwt_required()
+# @jwt_required()
 def compare_strings():
     if request.method == 'POST':
         api_call_start_time = datetime.now()
