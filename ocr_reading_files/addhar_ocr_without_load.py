@@ -25,12 +25,14 @@ def get_all_language_formate_string(image_path):
 
     img2 = cv2.resize(img, (img.shape[1]*2, img.shape[0]*2), interpolation=cv2.INTER_LANCZOS4)  # Resize by x2 using LANCZOS4 interpolation method.
 
-    cv2.imwrite('./apps/static/ocr_image/image3.png', img2)
+    # cv2.imwrite('./apps/static/ocr_image/image3.png', img2)
+    img_rgb = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
 
+    # cv2.imwrite('./apps/static/ocr_image/image2.png', img2)
     language_codes = ['eng']
     languages = '+'.join(language_codes)
     custom_config = f'--oem 3 --psm 6 -l {languages}'
-    result = pytesseract.image_to_string(Image.open('./apps/static/ocr_image/image3.png'), config=custom_config)
+    result = pytesseract.image_to_string(img_rgb, config=custom_config)
 
     return result
 
@@ -40,9 +42,10 @@ def get_english_formate_string(image_path):
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     img2 = cv2.resize(img, (img.shape[1]*2, img.shape[0]*2), interpolation=cv2.INTER_LANCZOS4)  # Resize by x2 using LANCZOS4 interpolation method.
+    img_rgb = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
 
-    cv2.imwrite('./apps/static/ocr_image/image2.png', img2)
-    result = pytesseract.image_to_string(Image.open('./apps/static/ocr_image/image2.png'))
+    # cv2.imwrite('./apps/static/ocr_image/image2.png', img2)
+    result = pytesseract.image_to_string(img_rgb)
 
     return result
 
@@ -280,8 +283,8 @@ def remove_special_characters(s):
 def aadhar_ocr_image_read_main(image_path):
 
     addhar_details_list = {}
-    with open(image_path, 'rb') as image_files:
-        image_data = image_files.read()
+    # with open(image_path, 'rb') as image_files:
+    #     image_data = image_files.read()
     
 
     # img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)  # Read image as grayscale.
@@ -379,11 +382,11 @@ def aadhar_ocr_image_read_main(image_path):
     # else:
     
         # Image To String From Three Way
-    normal_string = pytesseract.image_to_string(Image.open(BytesIO(image_data)))
+    normal_string = pytesseract.image_to_string(Image.open(BytesIO(image_path)))
 
-    english_string = get_english_formate_string(image_data)
+    english_string = get_english_formate_string(image_path)
 
-    all_lan_string = get_all_language_formate_string(image_data)
+    all_lan_string = get_all_language_formate_string(image_path)
 
     # Starting Check Condition From Here.
 

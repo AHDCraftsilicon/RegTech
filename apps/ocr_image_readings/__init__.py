@@ -147,19 +147,19 @@ def ocr_image_read_text_main():
                     base64_string = base64_string.replace('data:image/jpeg;base64,', '')
 
                 # Decode the base64 string into bytes
-                image_bytes = base64.b64decode(base64_string)
+                image_path = base64.b64decode(base64_string)
 
                 # Convert bytes data to PIL Image
-                image = Image.open(io.BytesIO(image_bytes))
+                # image = Image.open(io.BytesIO(image_bytes))
 
-                # Save the image to a file (example: 'output.jpg')
-                filename_img = str(time.time()).replace(".", "")
-                # print(filename_img+".png")
-                static_file_name = filename_img+".png"
+                # # Save the image to a file (example: 'output.jpg')
+                # filename_img = str(time.time()).replace(".", "")
+                # # print(filename_img+".png")
+                # static_file_name = filename_img+".png"
 
-                image.save(os.path.join('apps/static/ocr_image', secure_filename(static_file_name)))
+                # image.save(os.path.join('apps/static/ocr_image', secure_filename(static_file_name)))
                 
-                image_path = "./apps/static/ocr_image/" +static_file_name
+                # image_path = "./apps/static/ocr_image/" +static_file_name
 
                 if data['documenttype'] == "PanCard":
                     pancard = pancard_main(image_path)

@@ -20,13 +20,12 @@ def get_all_language_formate_string(image_path):
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     img2 = cv2.resize(img, (img.shape[1]*2, img.shape[0]*2), interpolation=cv2.INTER_LANCZOS4)  # Resize by x2 using LANCZOS4 interpolation method.
-
-    cv2.imwrite('image3.png', img2)
+    img_rgb = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
 
     language_codes = ['eng']
     languages = '+'.join(language_codes)
     custom_config = f'--oem 3 --psm 6 -l {languages}'
-    result = pytesseract.image_to_string(Image.open('image3.png'), config=custom_config)
+    result = pytesseract.image_to_string(img_rgb, config=custom_config)
 
     return result
 
@@ -34,11 +33,9 @@ def get_english_formate_string(image_path):
     result = ''
     nparr = np.frombuffer(image_path, np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-
     img2 = cv2.resize(img, (img.shape[1]*2, img.shape[0]*2), interpolation=cv2.INTER_LANCZOS4)  # Resize by x2 using LANCZOS4 interpolation method.
-
-    cv2.imwrite('image2.png', img2)
-    result = pytesseract.image_to_string(Image.open('image2.png'))
+    img_rgb = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
+    result = pytesseract.image_to_string(img_rgb)
 
     return result
 
@@ -326,14 +323,14 @@ def string_to_get_address_details(normal_string,english_string,all_lan_string):
 
 def voter_ocr_main(image_path):
 
-    with open(image_path, 'rb') as image_files:
-        image_data = image_files.read()
+    # with open(image_path, 'rb') as image_files:
+    #     image_data = image_files.read()
 
-    normal_string = pytesseract.image_to_string(Image.open(BytesIO(image_data)))
+    normal_string = pytesseract.image_to_string(Image.open(BytesIO(image_path)))
     normal_string = "\n".join(line for line in normal_string.split('\n') if line.strip())
 
-    english_string = get_english_formate_string(image_data)
-    all_lan_string = get_all_language_formate_string(image_data)
+    english_string = get_english_formate_string(image_path)
+    all_lan_string = get_all_language_formate_string(image_path)
     # print(normal_string , "----------\n")
     # print(english_string , "----------\n")
     # print(all_lan_string , "----------\n")
@@ -351,7 +348,7 @@ def voter_ocr_main(image_path):
 
 
     dob_date = string_to_get_dob(normal_string,english_string,all_lan_string)
-    if dob_date != "Unknown":
+    if dob_date != "Unknown" and dob_date != "":
         voter_data["DOB"] = dob_date
 
 

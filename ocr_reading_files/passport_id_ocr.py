@@ -8,13 +8,14 @@ import pandas as pd
 import os
 from flask import Flask,jsonify
 from passporteye import read_mrz
+from io import BytesIO
 
 # pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
 
 def passport_main(image_path):
-    mrz = read_mrz(image_path)
+    mrz = read_mrz(BytesIO(image_path))
 
     passport_json_data = {}
     if mrz is not None:

@@ -6,10 +6,11 @@ import numpy as np
 import pandas as pd
 import os
 from flask import Flask,jsonify
+from io import BytesIO
 
 
 
-#pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 
 
@@ -97,7 +98,7 @@ def get_pancard_holder_name(result):
 def pancard_main(image_path):
     pancard_list ={}
 
-    simple_image_string = pytesseract.image_to_string(Image.open(image_path))
+    simple_image_string = pytesseract.image_to_string(Image.open(BytesIO(image_path)))
     simple_text_blank_remove = "\n".join(line for line in simple_image_string.split('\n') if line.strip())
 
     pancard_number = extract_pan_number(simple_text_blank_remove)
