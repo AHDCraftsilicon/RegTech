@@ -26,7 +26,7 @@ adhar_masking_bp = Blueprint("adhar_masking_bp",
 # pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 # Linux Server 
-os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'
+os.environ['TESSDATA_PREFIX'] = r'/usr/local/share/tessdata/'
 pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
 
 # Database
