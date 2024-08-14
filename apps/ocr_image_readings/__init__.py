@@ -34,7 +34,7 @@ def generate_random_alphanumeric(length=10):
 @ocr_image_reading_bp.route('/api/v1/readdocument/readiamgetext',methods=['POST'])
 # @jwt_required()
 def ocr_image_read_text_main():
-    try:
+    # try:
         if request.method == 'POST':  
 
             api_call_start_time = datetime.now()
@@ -316,13 +316,13 @@ def ocr_image_read_text_main():
                 
                 return jsonify(store_response),400
 
-    except:
-        store_response = {"response": 400,
-                        "message": "Error",
-                        "responseValue": "Could not find Image!"
-                    }
+    # except:
+    #     store_response = {"response": 400,
+    #                     "message": "Error",
+    #                     "responseValue": "Could not find Image!"
+    #                 }
         
-        return jsonify(store_response),400
+    #     return jsonify(store_response),400
 
             
 
