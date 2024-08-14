@@ -14,7 +14,7 @@ from werkzeug.utils import secure_filename
 # import xml.etree.ElementTree as ET
 
 # pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-# pytesseract.pytesseract.tesseract_cmd = r'/home/azureuser/tesseract-5.4.0/tesseract.exe'
+pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
 # custom_oem_psm_config = r'--tessdata-dir "/usr/share/tessdata"'
 
 # pytesseract.pytesseract.tesseract_cmd = r'/usr/local/bin/tesseract'  # Update with your path
