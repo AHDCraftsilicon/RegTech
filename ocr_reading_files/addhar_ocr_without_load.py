@@ -13,8 +13,9 @@ from werkzeug.utils import secure_filename
 # import subprocess
 # import xml.etree.ElementTree as ET
 
-# os.environ['TESSDATA_PREFIX'] = r'C:\Program Files\Tesseract-OCR\tessdata'
 
+# Tesseract exe path local
+# os.environ['TESSDATA_PREFIX'] = r'C:\Program Files\Tesseract-OCR\tessdata'
 # pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 # Linux Server

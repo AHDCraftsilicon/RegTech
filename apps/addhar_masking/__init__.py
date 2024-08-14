@@ -22,11 +22,10 @@ adhar_masking_bp = Blueprint("adhar_masking_bp",
                         static_folder='static')
 
 # Tesseract exe path
-# os.environ['TESSDATA_PREFIX'] = r'C:\Program Files\Tesseract-OCR\tessdata'
 # pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
-# Linux Server 
-os.environ['TESSDATA_PREFIX'] = r'/usr/local/share/tessdata/'
+# Linux Server
+os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'
 pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
 
 # Database
@@ -190,14 +189,14 @@ def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1,
                      gray, cv2.ROTATE_180), (5, 5), 0), 3],
                  [cv2.GaussianBlur(cv2.rotate(gray, cv2.ROTATE_90_CLOCKWISE), (5, 5), 0), 4]]
 
-    # settings = ('-l eng --oem 3 --psm 11')
+    settings = ('-l eng --oem 3 --psm 11')
 
     for rotation in rotations:
 
         cv2.imwrite('apps/static/addhar_masksing_img/rotated_grayscale.png', rotation[0])
 
         bounding_boxes = pytesseract.image_to_boxes(Image.open(
-            'apps/static/addhar_masksing_img/rotated_grayscale.png')).split(" 0\n")
+            'apps/static/addhar_masksing_img/rotated_grayscale.png'), config=settings).split(" 0\n")
 
         possible_UIDs = Regex_Search(bounding_boxes)
 
