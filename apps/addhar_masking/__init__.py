@@ -347,35 +347,40 @@ def addhar_masking_main():
             static_file_name = filename_img+".png"
             image.save(os.path.join('apps/static/addhar_masksing_img', secure_filename(static_file_name)))
             
-            image = masking_file("apps/static/addhar_masksing_img/" +static_file_name)
+            # image = masking_file("apps/static/addhar_masksing_img/" +static_file_name)
             if image != "":
                 os.remove("apps/static/addhar_masksing_img/" +static_file_name)   
-            
-            # Valid Image Message
+
             if image == None:
-                api_call_end_time = datetime.now()
-                duration = api_call_end_time - api_call_start_time
-                duration_seconds = duration.total_seconds()
-                store_response = {"response": 400,
-                            "message": "Error",'responseValue':"Please Upload Valid Aadhar Card"}
-                Api_request_history_db.insert_one({
-                                "corporate_id":data["CorporateID"],
-                                "unique_id":random_uniqu,
-                                "api_name":"Aadhar_Masking",
-                                "api_start_time":api_call_start_time,
-                                "api_end_time":datetime.now(),
-                                "status": "Fail",
-                                "response_duration":str(duration),
-                                "response_time":duration_seconds,
-                                "request_data":str(data),
-                                "response_data" :str(store_response),
-                                "creadte_date":datetime.now(),
-                            })
-            
-                return jsonify(store_response), 400
-            
-            # Success Response
+                return jsonify({"data":"None image"})
             else:
+                return jsonify({"data":static_file_name})
+            
+            # # Valid Image Message
+            # if image == None:
+            #     api_call_end_time = datetime.now()
+            #     duration = api_call_end_time - api_call_start_time
+            #     duration_seconds = duration.total_seconds()
+            #     store_response = {"response": 400,
+            #                 "message": "Error",'responseValue':"Please Upload Valid Aadhar Card"}
+            #     Api_request_history_db.insert_one({
+            #                     "corporate_id":data["CorporateID"],
+            #                     "unique_id":random_uniqu,
+            #                     "api_name":"Aadhar_Masking",
+            #                     "api_start_time":api_call_start_time,
+            #                     "api_end_time":datetime.now(),
+            #                     "status": "Fail",
+            #                     "response_duration":str(duration),
+            #                     "response_time":duration_seconds,
+            #                     "request_data":str(data),
+            #                     "response_data" :str(store_response),
+            #                     "creadte_date":datetime.now(),
+            #                 })
+            
+            #     return jsonify(store_response), 400
+            
+            # # Success Response
+            # else:
                 api_call_end_time = datetime.now()
                 duration = api_call_end_time - api_call_start_time
                 duration_seconds = duration.total_seconds()
