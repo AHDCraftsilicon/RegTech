@@ -15,13 +15,11 @@ from werkzeug.utils import secure_filename
 
 # os.environ['TESSDATA_PREFIX'] = '/usr/local/share/'
 
-# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-# pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
-# custom_oem_psm_config = r'--tessdata-dir "/usr/share/tessdata"'
+# pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe''
 os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'
 
 pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'  # Update with your path
-custom_oem_psm_config = r'--tessdata-dir "/usr/local/share/tessdata/"'
+# custom_oem_psm_config = r'--tessdata-dir "/usr/local/share/tessdata/"'
 
 
 
