@@ -13,6 +13,8 @@ from werkzeug.utils import secure_filename
 # import subprocess
 # import xml.etree.ElementTree as ET
 
+os.environ['TESSDATA_PREFIX'] = '/usr/local/share/'
+
 # pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
 # custom_oem_psm_config = r'--tessdata-dir "/usr/share/tessdata"'
