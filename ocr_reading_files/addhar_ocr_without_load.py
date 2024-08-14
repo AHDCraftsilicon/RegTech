@@ -20,7 +20,7 @@ from werkzeug.utils import secure_filename
 # custom_oem_psm_config = r'--tessdata-dir "/usr/share/tessdata"'
 os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'
 
-pytesseract.pytesseract.tesseract_cmd = r'/usr/local/share/bin/tesseract'  # Update with your path
+pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'  # Update with your path
 custom_oem_psm_config = r'--tessdata-dir "/usr/local/share/tessdata/"'
 
 
