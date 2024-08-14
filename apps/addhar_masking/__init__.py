@@ -218,8 +218,8 @@ def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1,
 
 
 def masking_file(input_path):
-    masked_img, possible_UIDs = Extract_and_Mask_UIDs(input_path)
-
+    # masked_img, possible_UIDs = Extract_and_Mask_UIDs(input_path)
+    masked_img = "sadad"
     if masked_img == "":
         s = jsonify({'data':"Please Upload Valid Aadhar Card"})
     else:
