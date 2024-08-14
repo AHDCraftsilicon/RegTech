@@ -348,8 +348,8 @@ def addhar_masking_main():
             image.save(os.path.join('apps/static/addhar_masksing_img', secure_filename(static_file_name)))
             
             # image = masking_file("apps/static/addhar_masksing_img/" +static_file_name)
-            if image != "":
-                os.remove("apps/static/addhar_masksing_img/" +static_file_name)   
+            # if image != "":
+            #     os.remove("apps/static/addhar_masksing_img/" +static_file_name)   
 
             if image == None:
                 return jsonify({"data":"None image"})
