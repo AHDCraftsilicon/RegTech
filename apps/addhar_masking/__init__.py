@@ -348,7 +348,7 @@ def addhar_masking_main():
             image.save(os.path.join('apps/static/addhar_masksing_img', secure_filename(static_file_name)))
             
             # image = masking_file("apps/static/addhar_masksing_img/" +static_file_name)
-            image = masking_file("http://4.240.97.248/static/addhar_masksing_img/17236383529885373.png")
+            image = masking_file("apps/static/addhar_masksing_img/17236383529885373.png")
 
             # if image != "":
             #     os.remove("apps/static/addhar_masksing_img/" +static_file_name)   
