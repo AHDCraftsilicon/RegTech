@@ -17,7 +17,7 @@ from werkzeug.utils import secure_filename
 # pytesseract.pytesseract.tesseract_cmd = r'/home/azureuser/tesseract-5.4.0/tesseract.exe'
 # custom_oem_psm_config = r'--tessdata-dir "/usr/share/tessdata"'
 
-pytesseract.pytesseract.tesseract_cmd = r'/usr/local/bin/tesseract'  # Update with your path
+# pytesseract.pytesseract.tesseract_cmd = r'/usr/local/bin/tesseract'  # Update with your path
 # custom_oem_psm_config = r'--tessdata-dir "/usr/local/share/tessdata/"'
 # os.environ['TESSDATA_PREFIX'] = '/usr/local/share/'
 
