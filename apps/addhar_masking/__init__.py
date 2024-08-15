@@ -105,7 +105,11 @@ def Regex_Search(bounding_boxes):
 
 def Mask_UIDs(image_path, possible_UIDs, bounding_boxes, rtype, SR=False, SR_Ratio=[1, 1]):
 
-    img = cv2.imread(image_path)
+    # img = cv2.imread(image_path)
+    nparr = np.frombuffer(image_path, np.uint8)
+
+    # Step 3: Decode the NumPy array into an image using OpenCV
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     if rtype == 2:
         img = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
@@ -171,10 +175,15 @@ def Mask_UIDs(image_path, possible_UIDs, bounding_boxes, rtype, SR=False, SR_Rat
 
 def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1, 1]):
 
-    if SR == False:
-        img = cv2.imread(image_path)
-    else:
-        img = cv2.imread(sr_image_path)
+    # if SR == False:
+    #     img = cv2.imread(image_path)
+    # else:
+    #     img = cv2.imread(sr_image_path)
+
+    nparr = np.frombuffer(image_path, np.uint8)
+
+    # Step 3: Decode the NumPy array into an image using OpenCV
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -193,25 +202,26 @@ def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1,
 
     for rotation in rotations:
 
-        cv2.imwrite('apps/static/rotated_grayscales.png', rotation[0])
+    #     # cv2.imwrite('apps/static/rotated_grayscales.png', rotation[0])
+        image = Image.fromarray(rotation[0].astype('uint8'))
 
-        bounding_boxes = pytesseract.image_to_boxes(Image.open(
-            'apps/static/rotated_grayscales.png'), config=settings).split(" 0\n")
 
-        # possible_UIDs = Regex_Search(bounding_boxes)
+        bounding_boxes = pytesseract.image_to_boxes(image, config=settings).split(" 0\n")
 
-        # if len(possible_UIDs) == 0:
-        #     continue
-        # else:
+        possible_UIDs = Regex_Search(bounding_boxes)
 
-        #     if SR == False:
-        #         masked_img = Mask_UIDs(
-        #             image_path, possible_UIDs, bounding_boxes, rotation[1])
-        #     else:
-        #         masked_img = Mask_UIDs(
-        #             image_path, possible_UIDs, bounding_boxes, rotation[1], True, SR_Ratio)
+        if len(possible_UIDs) == 0:
+            continue
+        else:
 
-        #     return (masked_img, possible_UIDs)
+            if SR == False:
+                masked_img = Mask_UIDs(
+                    image_path, possible_UIDs, bounding_boxes, rotation[1])
+            else:
+                masked_img = Mask_UIDs(
+                    image_path, possible_UIDs, bounding_boxes, rotation[1], True, SR_Ratio)
+
+            return (masked_img, possible_UIDs)
 
     return (None, None)
 
@@ -219,7 +229,7 @@ def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1,
 
 def masking_file(input_path):
     masked_img, possible_UIDs = Extract_and_Mask_UIDs(input_path)
-    masked_img = "sadad"
+    # masked_img = "sadad"
     if masked_img == "":
         s = jsonify({'data':"Please Upload Valid Aadhar Card"})
     else:
@@ -342,47 +352,46 @@ def addhar_masking_main():
             image_bytes = base64.b64decode(base64_string)
 
             # Convert bytes data to PIL Image
-            image = Image.open(io.BytesIO(image_bytes))
-            filename_img = str(time.time()).replace(".", "")
-            static_file_name = filename_img+".png"
-            image.save(os.path.join('apps/static/addhar_masksing_img', secure_filename(static_file_name)))
+            # image = Image.open(io.BytesIO(image_bytes))
+            # filename_img = str(time.time()).replace(".", "")
+            # static_file_name = filename_img+".png"
+            # image.save(os.path.join('apps/static/addhar_masksing_img', secure_filename(static_file_name)))
             
             # image = masking_file("apps/static/addhar_masksing_img/" +static_file_name)
-            image = masking_file("apps/static/addhar_masksing_img/17236383529885373.png")
+            image = masking_file(image_bytes)
 
             # if image != "":
             #     os.remove("apps/static/addhar_masksing_img/" +static_file_name)   
 
-            if image == None:
-                return jsonify({"data":"None image"})
-            else:
-                return jsonify({"data":static_file_name})
+            # if image == None:
+            #     return jsonify({"data":"None image"})
+            # else:
             
             # # Valid Image Message
-            # if image == None:
-            #     api_call_end_time = datetime.now()
-            #     duration = api_call_end_time - api_call_start_time
-            #     duration_seconds = duration.total_seconds()
-            #     store_response = {"response": 400,
-            #                 "message": "Error",'responseValue':"Please Upload Valid Aadhar Card"}
-            #     Api_request_history_db.insert_one({
-            #                     "corporate_id":data["CorporateID"],
-            #                     "unique_id":random_uniqu,
-            #                     "api_name":"Aadhar_Masking",
-            #                     "api_start_time":api_call_start_time,
-            #                     "api_end_time":datetime.now(),
-            #                     "status": "Fail",
-            #                     "response_duration":str(duration),
-            #                     "response_time":duration_seconds,
-            #                     "request_data":str(data),
-            #                     "response_data" :str(store_response),
-            #                     "creadte_date":datetime.now(),
-            #                 })
+            if image == None:
+                api_call_end_time = datetime.now()
+                duration = api_call_end_time - api_call_start_time
+                duration_seconds = duration.total_seconds()
+                store_response = {"response": 400,
+                            "message": "Error",'responseValue':"Please Upload Valid Aadhar Card"}
+                Api_request_history_db.insert_one({
+                                "corporate_id":data["CorporateID"],
+                                "unique_id":random_uniqu,
+                                "api_name":"Aadhar_Masking",
+                                "api_start_time":api_call_start_time,
+                                "api_end_time":datetime.now(),
+                                "status": "Fail",
+                                "response_duration":str(duration),
+                                "response_time":duration_seconds,
+                                "request_data":str(data),
+                                "response_data" :str(store_response),
+                                "creadte_date":datetime.now(),
+                            })
             
-            #     return jsonify(store_response), 400
+                return jsonify(store_response), 400
             
-            # # Success Response
-            # else:
+            # # # Success Response
+            else:
                 api_call_end_time = datetime.now()
                 duration = api_call_end_time - api_call_start_time
                 duration_seconds = duration.total_seconds()
