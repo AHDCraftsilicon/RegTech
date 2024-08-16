@@ -64,7 +64,6 @@ def compute_checksum(number):
 
     # transform number list
     number = tuple(int(n) for n in reversed(str(number)))
-    # print(number)
 
     # calculate checksum
     checksum = 0
@@ -72,7 +71,6 @@ def compute_checksum(number):
     for i, n in enumerate(number):
         checksum = multiplication_table[checksum][permutation_table[i % 8][n]]
 
-    # print(checksum)
     return checksum
 
 
@@ -80,6 +78,7 @@ def compute_checksum(number):
 def Regex_Search(bounding_boxes):
     possible_UIDs = []
     Result = ""
+
 
     for character in range(len(bounding_boxes)):
         if len(bounding_boxes[character]) != 0:
@@ -202,27 +201,26 @@ def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1,
 
     for rotation in rotations:
 
-    # #     # cv2.imwrite('apps/static/rotated_grayscales.png', rotation[0])
+    #     # cv2.imwrite('apps/static/rotated_grayscales.png', rotation[0])
         image = Image.fromarray(rotation[0].astype('uint8'))
 
 
-        bounding_boxes = pytesseract.image_to_boxes(image).split(" 0\n")
-        print(bounding_boxes)
+        bounding_boxes = pytesseract.image_to_boxes(image, config=settings).split(" 0\n")
 
-    #     possible_UIDs = Regex_Search(bounding_boxes)
+        possible_UIDs = Regex_Search(bounding_boxes)
 
-    #     if len(possible_UIDs) == 0:
-    #         continue
-    #     else:
+        if len(possible_UIDs) == 0:
+            continue
+        else:
 
-    #         if SR == False:
-    #             masked_img = Mask_UIDs(
-    #                 image_path, possible_UIDs, bounding_boxes, rotation[1])
-    #         else:
-    #             masked_img = Mask_UIDs(
-    #                 image_path, possible_UIDs, bounding_boxes, rotation[1], True, SR_Ratio)
+            if SR == False:
+                masked_img = Mask_UIDs(
+                    image_path, possible_UIDs, bounding_boxes, rotation[1])
+            else:
+                masked_img = Mask_UIDs(
+                    image_path, possible_UIDs, bounding_boxes, rotation[1], True, SR_Ratio)
 
-    #         return (masked_img, possible_UIDs)
+            return (masked_img, possible_UIDs)
 
     return (None, None)
 
@@ -368,56 +366,55 @@ def addhar_masking_main():
             #     return jsonify({"data":"None image"})
             # else:
             
-            # # # Valid Image Message
-            # if image == None:
-            #     api_call_end_time = datetime.now()
-            #     duration = api_call_end_time - api_call_start_time
-            #     duration_seconds = duration.total_seconds()
-            #     store_response = {"response": 400,
-            #                 "message": "Error",'responseValue':"Please Upload Valid Aadhar Card"}
-            #     Api_request_history_db.insert_one({
-            #                     "corporate_id":data["CorporateID"],
-            #                     "unique_id":random_uniqu,
-            #                     "api_name":"Aadhar_Masking",
-            #                     "api_start_time":api_call_start_time,
-            #                     "api_end_time":datetime.now(),
-            #                     "status": "Fail",
-            #                     "response_duration":str(duration),
-            #                     "response_time":duration_seconds,
-            #                     "request_data":str(data),
-            #                     "response_data" :str(store_response),
-            #                     "creadte_date":datetime.now(),
-            #                 })
+            # # Valid Image Message
+            if image == None:
+                api_call_end_time = datetime.now()
+                duration = api_call_end_time - api_call_start_time
+                duration_seconds = duration.total_seconds()
+                store_response = {"response": 400,
+                            "message": "Error",'responseValue':"Please Upload Valid Aadhar Card"}
+                Api_request_history_db.insert_one({
+                                "corporate_id":data["CorporateID"],
+                                "unique_id":random_uniqu,
+                                "api_name":"Aadhar_Masking",
+                                "api_start_time":api_call_start_time,
+                                "api_end_time":datetime.now(),
+                                "status": "Fail",
+                                "response_duration":str(duration),
+                                "response_time":duration_seconds,
+                                "request_data":str(data),
+                                "response_data" :str(store_response),
+                                "creadte_date":datetime.now(),
+                            })
             
-            #     return jsonify(store_response), 400
+                return jsonify(store_response), 400
             
-            # # # # Success Response
-            # else:
-                # api_call_end_time = datetime.now()
-                # duration = api_call_end_time - api_call_start_time
-                # duration_seconds = duration.total_seconds()
-                # store_response = {"response": 200,
-                #                 "message": "Success",
-                #                 "responseValue": {
-                #                     "Table1": [{
-                #                             "Image": "data:image/png;base64,"+image}]}}
-                # Api_request_history_db.insert_one({
-                #                 "corporate_id":data["CorporateID"],
-                #                 "unique_id":random_uniqu,
-                #                 "api_name":"Aadhar_Masking",
-                #                 "api_start_time":api_call_start_time,
-                #                 "api_end_time":datetime.now(),
-                #                 "status": "Success",
-                #                 "response_duration":str(duration),
-                #                 "response_time":duration_seconds,
-                #                 "request_data":str(data),
-                #                 "response_data" :str(store_response),
-                #                 "creadte_date":datetime.now(),
-                #             })
+            # # # Success Response
+            else:
+                api_call_end_time = datetime.now()
+                duration = api_call_end_time - api_call_start_time
+                duration_seconds = duration.total_seconds()
+                store_response = {"response": 200,
+                                "message": "Success",
+                                "responseValue": {
+                                    "Table1": [{
+                                            "Image": "data:image/png;base64,"+image}]}}
+                Api_request_history_db.insert_one({
+                                "corporate_id":data["CorporateID"],
+                                "unique_id":random_uniqu,
+                                "api_name":"Aadhar_Masking",
+                                "api_start_time":api_call_start_time,
+                                "api_end_time":datetime.now(),
+                                "status": "Success",
+                                "response_duration":str(duration),
+                                "response_time":duration_seconds,
+                                "request_data":str(data),
+                                "response_data" :str(store_response),
+                                "creadte_date":datetime.now(),
+                            })
             
-                # return jsonify(store_response), 200
+                return jsonify(store_response), 200
 
-            return jsonify({"data":"jhgjgad"})
         else:
             api_call_end_time = datetime.now()
             duration = api_call_end_time - api_call_start_time

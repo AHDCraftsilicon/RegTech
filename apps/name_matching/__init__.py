@@ -3,7 +3,8 @@ from datetime import datetime
 from flask_jwt_extended import  jwt_required
 from data_base_string import *
 from datetime import datetime
-
+import random
+import string
 
 
 # Blueprint
@@ -43,6 +44,14 @@ def convert_time(duration):
         'minutes': duration / 60
     }
 
+
+# Generate Random Number
+def generate_random_alphanumeric(length=10):
+    characters = string.ascii_letters + string.digits
+    random_string = ''.join(random.choice(characters) for _ in range(length))
+    return random_string
+
+
 @name_matching_bp.route('/api/v1/namematching/getstringsimilarity',methods=['POST'])
 # @jwt_required()
 def compare_strings():
@@ -50,7 +59,7 @@ def compare_strings():
         api_call_start_time = datetime.now()
         data = request.get_json()
 
-
+        random_uniqu = generate_random_alphanumeric()
         keys_to_check = ['UniqueID', 'CorporateID', 'name1','name2','isCaseSensitive']
 
          # Check for missing keys and items can't be empty
@@ -66,7 +75,7 @@ def compare_strings():
                     return jsonify(store_response), 400
                
                 else:
-                    check_log_db = Api_request_history_db.find_one({"unique_id":data["UniqueID"]})
+                    check_log_db = Api_request_history_db.find_one({"unique_id":random_uniqu})
                     
                     if check_log_db != None:
                         api_call_end_time = datetime.now()
@@ -79,7 +88,7 @@ def compare_strings():
 
                         Api_request_history_db.insert_one({
                                         "corporate_id":data["CorporateID"],
-                                        "unique_id":data["UniqueID"],
+                                        "unique_id":random_uniqu,
                                         "api_name":"Name_Match",
                                         "api_start_time":api_call_start_time,
                                         "api_end_time":datetime.now(),
@@ -104,7 +113,7 @@ def compare_strings():
                             }
                         
                         Api_request_history_db.insert_one({
-                                        "unique_id":data["UniqueID"],
+                                        "unique_id":random_uniqu,
                                         "api_name":"Name_Match",
                                         "api_start_time":api_call_start_time,
                                         "api_end_time":datetime.now(),
@@ -123,7 +132,7 @@ def compare_strings():
                             }
                         
                         Api_request_history_db.insert_one({
-                                        "unique_id":data["UniqueID"],
+                                        "unique_id":random_uniqu,
                                         "corporate_id":data["CorporateID"],
                                         "api_name":"Name_Match",
                                         "api_start_time":api_call_start_time,
@@ -140,7 +149,7 @@ def compare_strings():
                     return jsonify(store_response), 400
 
         # Check UniqueID
-        check_log_db = Api_request_history_db.find_one({"unique_id":data["UniqueID"]})
+        check_log_db = Api_request_history_db.find_one({"unique_id":random_uniqu})
         
 
         # Check database documents
@@ -172,7 +181,7 @@ def compare_strings():
                             }}
                 Api_request_history_db.insert_one({
                             "corporate_id":data["CorporateID"],
-                            "unique_id":data["UniqueID"],
+                            "unique_id":random_uniqu,
                             "api_name":"Name_Match",
                             "api_start_time":api_call_start_time,
                             "api_end_time":datetime.now(),
@@ -205,7 +214,7 @@ def compare_strings():
                                 }}
                 Api_request_history_db.insert_one({
                                 "corporate_id":data["CorporateID"],
-                                "unique_id":data["UniqueID"],
+                                "unique_id":random_uniqu,
                                 "api_name":"Name_Match",
                                 "api_start_time":api_call_start_time,
                                 "api_end_time":datetime.now(),
@@ -232,7 +241,7 @@ def compare_strings():
 
             Api_request_history_db.insert_one({
                            "corporate_id":data["CorporateID"],
-                            "unique_id":data["UniqueID"],
+                            "unique_id":random_uniqu,
                             "api_name":"Name_Match",
                             "api_start_time":api_call_start_time,
                             "api_end_time":datetime.now(),
