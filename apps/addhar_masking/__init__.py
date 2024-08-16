@@ -206,7 +206,8 @@ def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1,
         image = Image.fromarray(rotation[0].astype('uint8'))
 
 
-        bounding_boxes = pytesseract.image_to_boxes(image, config=settings).split(" 0\n")
+        bounding_boxes = pytesseract.image_to_boxes(image).split(" 0\n")
+        print(bounding_boxes)
 
     #     possible_UIDs = Regex_Search(bounding_boxes)
 
