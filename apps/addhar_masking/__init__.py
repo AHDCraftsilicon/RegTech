@@ -200,10 +200,10 @@ def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1,
 
     settings = ('-l eng --oem 3 --psm 11')
 
-    # for rotation in rotations:
+    for rotation in rotations:
 
     # #     # cv2.imwrite('apps/static/rotated_grayscales.png', rotation[0])
-    #     image = Image.fromarray(rotation[0].astype('uint8'))
+        image = Image.fromarray(rotation[0].astype('uint8'))
 
 
     #     bounding_boxes = pytesseract.image_to_boxes(image, config=settings).split(" 0\n")
