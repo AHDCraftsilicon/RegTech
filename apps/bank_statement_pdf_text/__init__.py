@@ -6,6 +6,7 @@ from datetime import datetime
 from flask_jwt_extended import  jwt_required
 from apps.bank_statement_pdf_text.uco_bank_pdf_text import *
 from apps.bank_statement_pdf_text.hdfc_bank_pdf_text import *
+from apps.bank_statement_pdf_text.icici_bank_pdf_text import *
 from werkzeug.datastructures import ImmutableMultiDict
 
 # Blueprint
@@ -188,6 +189,32 @@ def bank_statment_get_main():
                                             "message": "Success",
                                             "responseValue": {
                                                 "Table1": [hdfc_response]}}
+                    
+                    Api_request_history_db.insert_one({
+                                    "corporate_id":form_data["CorporateID"],
+                                    "unique_id":form_data["UniqueID"],
+                                    "api_name":"Bank_statement",
+                                    "api_start_time":api_call_start_time,
+                                    "api_end_time":datetime.now(),
+                                    "status": "Success",
+                                    "response_duration":str(duration),
+                                    "response_time":duration_seconds,
+                                    "request_data":str(data),
+                                    "response_data" :str(store_response),
+                                    "creadte_date":datetime.now(),
+                                })
+
+                    return jsonify(store_response), 200
+                
+                elif form_data["BankName"] == "ICICIBANK":
+                    icici_response = icic_bank_statement_main(pdf_store_file)
+                    api_call_end_time = datetime.now()
+                    duration = api_call_end_time - api_call_start_time
+                    duration_seconds = duration.total_seconds()
+                    store_response = {"response": 200,
+                                            "message": "Success",
+                                            "responseValue": {
+                                                "Table1": [icici_response]}}
                     
                     Api_request_history_db.insert_one({
                                     "corporate_id":form_data["CorporateID"],

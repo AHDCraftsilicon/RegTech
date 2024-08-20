@@ -214,7 +214,7 @@ def hdfc_bank_statment_main(url):
                 },
                 {
                     "Item": "Bank",
-                    "Details": "UCO BANK",
+                    "Details": "HDFC BANK",
                     "Verification": "NA"
                 },                {
                 "Item": "MICR Code",

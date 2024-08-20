@@ -20,15 +20,21 @@ def dashboard_main():
     # Total Comapny Count
     company_details = []
     company_agg = Api_request_history_db.aggregate([{
-        '$group': {
-            '_id': '$corporate_id', 
-            'count': {
-                '$sum': 1
-            }, 'documents': {
-                '$push': '$$ROOT'}}}, {'$match': {
-            'count': {
-                '$gt': 1
-            }}}])
+                '$group': {
+                    '_id': '$corporate_id',
+                    'count': {'$sum': 1},
+                    'documents': {
+                        '$push': {
+                            '$slice': ['$documents', 10]  
+                        }
+                    }
+                }
+            },
+            {
+                '$match': {
+                    'count': {'$gt': 1}
+                }
+            }])
     total_Company_count = 0
     for company_count in  company_agg:
         if company_count["_id"] != None and company_count["_id"] != "":
