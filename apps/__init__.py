@@ -77,7 +77,7 @@ def crete_app():
     #END VERSIONS CHECK
 
     @app.route('/admin/logout', methods=["GET"])
-    @jwt_required()
+    # @jwt_required()
     def logout():
         m = redirect('/admin/login')
         unset_jwt_cookies(m)
