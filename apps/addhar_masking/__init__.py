@@ -465,7 +465,7 @@ def addhar_masking_main():
     image = Image.open(io.BytesIO(image_data))
 
     # Step 3: Use pytesseract to get bounding boxes for each character
-    boxes = pytesseract.image_to_boxes(image)
+    boxes = pytesseract.image_to_boxes(image,config = " -c tessedit_create_boxfile=1")
     abc = []
     # Print the result
     abc.append(boxes)
