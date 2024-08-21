@@ -205,20 +205,9 @@ def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1,
 
     #     # cv2.imwrite('apps/static/rotated_grayscales.png', rotation[0])
         image = Image.fromarray(rotation[0].astype('uint8'))
+        config = f"{settings} -c tessedit_create_boxfile=1"
 
-        # with tempfile.TemporaryDirectory() as temp_dir:
-            # os.environ['TESSDATA_PREFIXS'] = temp_dir
-        # bounding_boxes = pytesseract.image_to_boxes(image)
-
-        
-        # try:
-        #     boxes = pytesseract.image_to_boxes(image, config = " -c tessedit_create_boxfile=1")
-        #     print("Bounding boxes:")
-        #     print(boxes)
-        # except pytesseract.TesseractError as e:
-        #     print(f"An error occurred: {e}")
-
-        bounding_boxes = pytesseract.image_to_boxes(image, config = " -c tessedit_create_boxfile=1")
+        bounding_boxes = pytesseract.image_to_boxes(image, config = config)
         # print(bounding_boxes)
 
         possible_UIDs = Regex_Search(bounding_boxes)
