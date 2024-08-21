@@ -208,7 +208,18 @@ def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1,
 
         # with tempfile.TemporaryDirectory() as temp_dir:
             # os.environ['TESSDATA_PREFIXS'] = temp_dir
-        # bounding_boxes = pytesseract.image_to_boxes(image).split(" 0\n")
+        # bounding_boxes = pytesseract.image_to_boxes(image)
+
+        
+        try:
+            boxes = pytesseract.image_to_boxes(image)
+            print("Bounding boxes:")
+            print(boxes)
+        except pytesseract.TesseractError as e:
+            print(f"An error occurred: {e}")
+
+
+        # print(bounding_boxes)
 
         # possible_UIDs = Regex_Search(bounding_boxes)
 
