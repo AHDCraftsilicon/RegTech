@@ -210,20 +210,20 @@ def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1,
             # os.environ['TESSDATA_PREFIXS'] = temp_dir
         bounding_boxes = pytesseract.image_to_boxes(image).split(" 0\n")
 
-    #     possible_UIDs = Regex_Search(bounding_boxes)
+        possible_UIDs = Regex_Search(bounding_boxes)
 
-    #     if len(possible_UIDs) == 0:
-    #         continue
-    #     else:
+        if len(possible_UIDs) == 0:
+            continue
+        else:
 
-    #         if SR == False:
-    #             masked_img = Mask_UIDs(
-    #                 image_path, possible_UIDs, bounding_boxes, rotation[1])
-    #         else:
-    #             masked_img = Mask_UIDs(
-    #                 image_path, possible_UIDs, bounding_boxes, rotation[1], True, SR_Ratio)
+            if SR == False:
+                masked_img = Mask_UIDs(
+                    image_path, possible_UIDs, bounding_boxes, rotation[1])
+            else:
+                masked_img = Mask_UIDs(
+                    image_path, possible_UIDs, bounding_boxes, rotation[1], True, SR_Ratio)
 
-    #         return (masked_img, possible_UIDs)
+            return (masked_img, possible_UIDs)
 
     return (None, None)
 
