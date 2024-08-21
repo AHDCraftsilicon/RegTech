@@ -27,6 +27,7 @@ adhar_masking_bp = Blueprint("adhar_masking_bp",
 
 os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'
 pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'  # Update with your path
+os.environ['TMPDIR'] = '/home/azureuser/tesseract_tmp'
 
 
 # Database
