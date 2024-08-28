@@ -13,7 +13,7 @@ from data_base_string import *
 from datetime import datetime
 import random
 import string
-import tempfile
+import tempfile , subprocess
 
 
 # Blueprint
@@ -210,24 +210,40 @@ def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1,
         print("image add in tessract")
         config = f"{settings}"
         # -c tessedit_create_boxfile=1
+        output_base = 'output_file'
 
-        bounding_boxes = pytesseract.run_tesseract(image,  lang='eng', config='-c tessedit_create_boxfile=1').split(" 0\n")
-        print(bounding_boxes)
+        # bounding_boxes = pytesseract.run_tesseract(image,  lang='eng', config='-c tessedit_create_boxfile=1').split(" 0\n")
+        # print(bounding_boxes)
 
-        possible_UIDs = Regex_Search(bounding_boxes)
+        command = [
+            'tesseract',
+            image,
+            output_base,
+            '-l', "eng",
+            '-c', 'tessedit_create_boxfile=1'
+        ]
 
-        if len(possible_UIDs) == 0:
-            continue
-        else:
+        # Execute the command
+        try:
+            subprocess.run(command, check=True)
+            print(f"Box file and text output generated successfully at {output_base}.box and {output_base}.txt")
+        except subprocess.CalledProcessError as e:
+            print(f"An error occurred: {e}")
 
-            if SR == False:
-                masked_img = Mask_UIDs(
-                    image_path, possible_UIDs, bounding_boxes, rotation[1])
-            else:
-                masked_img = Mask_UIDs(
-                    image_path, possible_UIDs, bounding_boxes, rotation[1], True, SR_Ratio)
+        # possible_UIDs = Regex_Search(bounding_boxes)
 
-            return (masked_img, possible_UIDs)
+        # if len(possible_UIDs) == 0:
+        #     continue
+        # else:
+
+        #     if SR == False:
+        #         masked_img = Mask_UIDs(
+        #             image_path, possible_UIDs, bounding_boxes, rotation[1])
+        #     else:
+        #         masked_img = Mask_UIDs(
+        #             image_path, possible_UIDs, bounding_boxes, rotation[1], True, SR_Ratio)
+
+        #     return (masked_img, possible_UIDs)
 
     return (None, None)
 
