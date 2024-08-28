@@ -25,7 +25,6 @@ pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'  # Update with you
 
 
 
-
 def get_all_language_formate_string(image_path):
     result = ''
     nparr = np.frombuffer(image_path, np.uint8)
@@ -390,14 +389,11 @@ def aadhar_ocr_image_read_main(image_path):
     # else:
     
         # Image To String From Three Way
-    print("file add in tessreact...")
     normal_string = pytesseract.image_to_string(Image.open(BytesIO(image_path)))
 
     english_string = get_english_formate_string(image_path)
 
     all_lan_string = get_all_language_formate_string(image_path)
-
-    print(normal_string , english_string , all_lan_string)
 
     # Starting Check Condition From Here.
 

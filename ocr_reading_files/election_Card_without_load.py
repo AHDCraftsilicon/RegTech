@@ -331,9 +331,9 @@ def voter_ocr_main(image_path):
 
     english_string = get_english_formate_string(image_path)
     all_lan_string = get_all_language_formate_string(image_path)
-    print(normal_string , "----------\n")
-    print(english_string , "----------\n")
-    print(all_lan_string , "----------\n")
+    # print(normal_string , "----------\n")
+    # print(english_string , "----------\n")
+    # print(all_lan_string , "----------\n")
   
     voter_data = {}
 
