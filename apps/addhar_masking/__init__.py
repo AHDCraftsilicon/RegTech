@@ -687,7 +687,7 @@ def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1,
         cv2.imwrite('rotated_grayscale.png', rotation[0])
 
         bounding_boxes = pytesseract.image_to_boxes(Image.open(
-            'rotated_grayscale.png'), config=settings).split(" 0\n")
+            'rotated_grayscale.png'), lang='eng', config='-c tessedit_create_boxfile=1').split(" 0\n")
         
         print("complatly store....")
 
