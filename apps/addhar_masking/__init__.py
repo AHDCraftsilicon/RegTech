@@ -208,7 +208,7 @@ def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1,
     #     # cv2.imwrite('apps/static/rotated_grayscales.png', rotation[0])
         image = Image.fromarray(rotation[0].astype('uint8'))
         print("image add in tessract")
-        config = f"{settings} -c tessedit_create_boxfile=1"
+        config = f"{settings}"
         # -c tessedit_create_boxfile=1
 
         bounding_boxes = pytesseract.image_to_boxes(image, config = config).split(" 0\n")
