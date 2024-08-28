@@ -211,7 +211,7 @@ def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1,
         config = f"{settings}"
         # -c tessedit_create_boxfile=1
 
-        bounding_boxes = pytesseract.image_to_boxes(image, config = config).split(" 0\n")
+        bounding_boxes = pytesseract.run_tesseract(image,  lang='eng', config='-c tessedit_create_boxfile=1').split(" 0\n")
         print(bounding_boxes)
 
         possible_UIDs = Regex_Search(bounding_boxes)
