@@ -940,6 +940,4 @@ def addhar_masking_main():
                 
                 return jsonify(store_response),400
         except Exception as e:
-#             print(e)
-
             return jsonify({"data":str(e)})
