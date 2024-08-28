@@ -507,7 +507,12 @@ import os
 from werkzeug.utils import secure_filename
 import time
 import base64,io
-# from flask_jwt_extended import JWTManager, jwt_required,get_jwt_identity
+from flask_jwt_extended import  jwt_required
+from data_base_string import *
+from datetime import datetime
+import random
+import string
+import tempfile , subprocess
 
 # Blueprint
 adhar_masking_bp = Blueprint("adhar_masking_bp",
@@ -521,6 +526,10 @@ adhar_masking_bp = Blueprint("adhar_masking_bp",
 
 os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'
 pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
+
+
+# # Database
+Api_request_history_db = Regtch_services_UAT["Api_request_history_test"]
 
 
 multiplication_table = (
@@ -721,21 +730,120 @@ def masking_file(input_path):
     return s
 
 
+# # Generate Random Number
+def generate_random_alphanumeric(length=10):
+    characters = string.ascii_letters + string.digits
+    random_string = ''.join(random.choice(characters) for _ in range(length))
+    return random_string
+
+
 @adhar_masking_bp.route('/api/v1/adharMasking/adharmasking',methods=['POST'])
 # @jwt_required()
 def addhar_masking_main():
     if request.method == 'POST':
         try:
             data = request.get_json()
-            # print(data)
+            api_call_start_time = datetime.now()
+            data = request.get_json()
+            random_uniqu = generate_random_alphanumeric()
+            keys_to_check = ['UniqueID', 'CorporateID', 'addhar_img']
 
-            if not data or 'addhar_img' not in data:
-                return jsonify({"response": "999",
-                            "message": "Error",
-                            "responseValue": "addhar_img cannot be null or empty."
-                        }), 400
+            # Check for missing keys and items can't be empty
 
-            if data['addhar_img'] != "":
+            for key in keys_to_check:
+                if key not in data or not data[key]:
+                    # UniqueID Check 
+                    print("checked in database...")
+                    if key == "UniqueID":
+                        store_response = {"response": 400,
+                                "message": "Error",
+                                "responseValue": key +" cannot be null or empty."
+                            }
+                        return jsonify(store_response), 400
+                    
+                    else:
+                        check_log_db = Api_request_history_db.find_one({"unique_id":random_uniqu})
+                        
+                        if check_log_db != None:
+                            api_call_end_time = datetime.now()
+                            duration = api_call_end_time - api_call_start_time
+                            duration_seconds = duration.total_seconds()
+                            store_response = {"response": 400,
+                                            "message": "Error",
+                                            "responseValue": "Request with the same unique ID has already been processed!"
+                                        }
+
+                            Api_request_history_db.insert_one({
+                                            "corporate_id":data["CorporateID"],
+                                            "unique_id":random_uniqu,
+                                            "api_name":"Aadhar_Masking",
+                                            "api_start_time":api_call_start_time,
+                                            "api_end_time":datetime.now(),
+                                            "status": "Fail",
+                                            "response_duration":str(duration),
+                                            "response_time":duration_seconds,
+                                            "request_data":str(data),
+                                            "response_data" :str(store_response),
+                                            "creadte_date":datetime.now(),
+                                        })
+                            
+                            return jsonify(store_response),400
+                        
+                        api_call_end_time = datetime.now()
+                        duration = api_call_end_time - api_call_start_time
+                        duration_seconds = duration.total_seconds()
+                        
+                        # CorporateId
+                        if key == "CorporateID":
+                            store_response = {"response": 400,
+                                    "message": "Error",
+                                    "responseValue": key +" cannot be null or empty."
+                                }
+                            
+                            Api_request_history_db.insert_one({
+                                            "unique_id":random_uniqu,
+                                            "api_name":"Aadhar_Masking",
+                                            "api_start_time":api_call_start_time,
+                                            "api_end_time":datetime.now(),
+                                            "status": "Fail",
+                                            "response_duration":str(duration),
+                                            "response_time":duration_seconds,
+                                            "request_data":str(data),
+                                            "response_data" :str(store_response),
+                                            "creadte_date":datetime.now(),
+                                        })
+                            
+                        else:
+                            store_response = {"response": 400,
+                                    "message": "Error",
+                                    "responseValue": key +" cannot be null or empty."
+                                }
+                            
+                            Api_request_history_db.insert_one({
+                                            "unique_id":random_uniqu,
+                                            "corporate_id":data["CorporateID"],
+                                            "api_name":"Aadhar_Masking",
+                                            "api_start_time":api_call_start_time,
+                                            "api_end_time":datetime.now(),
+                                            "status": "Fail",
+                                            "response_duration":str(duration),
+                                            "response_time":duration_seconds,
+                                            "request_data":str(data),
+                                            "response_data" :str(store_response),
+                                            "creadte_date":datetime.now(),
+                                        })
+
+                        
+                        return jsonify(store_response), 400
+
+
+
+            ## Check UniqueID
+            check_log_db = Api_request_history_db.find_one({"unique_id":random_uniqu})
+
+
+
+            if check_log_db == None:
                 base64_string = data['addhar_img']
                 if base64_string.startswith('data:image/jpeg;base64,'):
                     base64_string = base64_string.replace('data:image/jpeg;base64,', '')
@@ -761,21 +869,76 @@ def addhar_masking_main():
                 #     os.remove("apps/static/addhar_masksing_img/" +static_file_name)   
 
                 if image == None:
-                    return jsonify({"response": "000",
-                                "message": "Success",'responseValue':"Not Valid Aadhar Card"}),200
+                    api_call_end_time = datetime.now()
+                    duration = api_call_end_time - api_call_start_time
+                    duration_seconds = duration.total_seconds()
+                    store_response = {"response": 400,
+                                "message": "Error",'responseValue':"Please Upload Valid Aadhar Card"}
+                    Api_request_history_db.insert_one({
+                                    "corporate_id":data["CorporateID"],
+                                    "unique_id":random_uniqu,
+                                    "api_name":"Aadhar_Masking",
+                                    "api_start_time":api_call_start_time,
+                                    "api_end_time":datetime.now(),
+                                    "status": "Fail",
+                                    "response_duration":str(duration),
+                                    "response_time":duration_seconds,
+                                    "request_data":str(data),
+                                    "response_data" :str(store_response),
+                                    "creadte_date":datetime.now(),
+                                })
+            
+                    return jsonify(store_response), 400
 
-                return jsonify({"response": "000",
-                                "message": "Success",
-                                "responseValue": {
-                                    "Table1": [{
-                                            "Image": "data:image/png;base64,"+image}]}}),200
+                 # # # Success Response
+                else:
+                    api_call_end_time = datetime.now()
+                    duration = api_call_end_time - api_call_start_time
+                    duration_seconds = duration.total_seconds()
+                    store_response = {"response": 200,
+                                    "message": "Success",
+                                    "responseValue": {"Image": 
+                                                      "data:image/png;base64,"+image}}
+                    Api_request_history_db.insert_one({
+                                    "corporate_id":data["CorporateID"],
+                                    "unique_id":random_uniqu,
+                                    "api_name":"Aadhar_Masking",
+                                    "api_start_time":api_call_start_time,
+                                    "api_end_time":datetime.now(),
+                                    "status": "Success",
+                                    "response_duration":str(duration),
+                                    "response_time":duration_seconds,
+                                    "request_data":str(data),
+                                    "response_data" :str(store_response),
+                                    "creadte_date":datetime.now(),
+                                })
+                
+                    return jsonify(store_response), 200
 
             else:
-                return jsonify({"response": "999",
-                            "message": "Error",
-                            "responseValue": "addhar_img cannot be null or empty."
-                        }), 400
-        
+                api_call_end_time = datetime.now()
+                duration = api_call_end_time - api_call_start_time
+                duration_seconds = duration.total_seconds()
+                store_response = {"response": 400,
+                                "message": "Error",
+                                "responseValue": "Request with the same unique ID has already been processed!"
+                            }
+
+                Api_request_history_db.insert_one({
+                                "corporate_id":data["CorporateID"],
+                                "unique_id":random_uniqu,
+                                "api_name":"Aadhar_Masking",
+                                "api_start_time":api_call_start_time,
+                                "api_end_time":datetime.now(),
+                                "status": "Fail",
+                                "response_duration":str(duration),
+                                "response_time":duration_seconds,
+                                "request_data":str(data),
+                                "response_data" :str(store_response),
+                                "creadte_date":datetime.now(),
+                            })
+                
+                return jsonify(store_response),400
         except Exception as e:
 #             print(e)
 
