@@ -207,11 +207,12 @@ def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1,
 
     #     # cv2.imwrite('apps/static/rotated_grayscales.png', rotation[0])
         image = Image.fromarray(rotation[0].astype('uint8'))
+        print("image add in tessract")
         config = f"{settings} -c tessedit_create_boxfile=1"
         # -c tessedit_create_boxfile=1
 
         bounding_boxes = pytesseract.image_to_boxes(image, config = config).split(" 0\n")
-        # print(bounding_boxes)
+        print(bounding_boxes)
 
         possible_UIDs = Regex_Search(bounding_boxes)
 
@@ -256,6 +257,7 @@ def addhar_masking_main():
     if request.method == 'POST':
 
         try:
+            print("request fired.....")
             api_call_start_time = datetime.now()
             data = request.get_json()
             random_uniqu = generate_random_alphanumeric()
@@ -266,6 +268,7 @@ def addhar_masking_main():
             for key in keys_to_check:
                 if key not in data or not data[key]:
                     # UniqueID Check 
+                    print("checked in database...")
                     if key == "UniqueID":
                         store_response = {"response": 400,
                                 "message": "Error",
@@ -358,7 +361,7 @@ def addhar_masking_main():
 
                 # Decode the base64 string into bytes
                 image_bytes = base64.b64decode(base64_string)
-
+                print("image store in bytes")
                 # Convert bytes data to PIL Image
                 # image = Image.open(io.BytesIO(image_bytes))
                 # filename_img = str(time.time()).replace(".", "")
