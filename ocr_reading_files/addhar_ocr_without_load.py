@@ -25,6 +25,7 @@ pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'  # Update with you
 
 
 
+
 def get_all_language_formate_string(image_path):
     result = ''
     nparr = np.frombuffer(image_path, np.uint8)
@@ -288,7 +289,7 @@ def remove_special_characters(s):
 
 
 def aadhar_ocr_image_read_main(image_path):
-
+    print("image_path addhar ocr = " , image_path)
     addhar_details_list = {}
     # with open(image_path, 'rb') as image_files:
     #     image_data = image_files.read()
@@ -390,6 +391,7 @@ def aadhar_ocr_image_read_main(image_path):
     
         # Image To String From Three Way
     normal_string = pytesseract.image_to_string(Image.open(BytesIO(image_path)))
+    print(normal_string)
 
     english_string = get_english_formate_string(image_path)
 

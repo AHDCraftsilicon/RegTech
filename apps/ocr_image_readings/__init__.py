@@ -35,7 +35,8 @@ def generate_random_alphanumeric(length=10):
 # @jwt_required()
 def ocr_image_read_text_main():
     # try:
-        if request.method == 'POST':  
+        if request.method == 'POST': 
+            print("code start...") 
 
             api_call_start_time = datetime.now()
 
@@ -188,6 +189,7 @@ def ocr_image_read_text_main():
                         return jsonify(pancard), 400
                     
                 elif data['documenttype'] == "AadharCard":
+                    # print(image_path)
                     addhar_Card = aadhar_ocr_image_read_main(image_path)
 
                     api_call_end_time = datetime.now()
