@@ -25,6 +25,7 @@ pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'  # Update with you
 
 
 
+
 def get_all_language_formate_string(image_path):
     result = ''
     nparr = np.frombuffer(image_path, np.uint8)
