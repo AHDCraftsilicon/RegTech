@@ -155,7 +155,7 @@ def bank_statment_get_main():
                 pdf_store_file = "apps/static//bank_statement_analysing/"+filename_ipdf+"."+pdf_file.filename.split(".")[-1]
                 
                 if form_data["BankName"] == "UCOBANK":
-                    uco_response =  uco_bank_statmenr_main(pdf_store_file)
+                    uco_response =  uco_bank_statement_main(pdf_store_file)
                     api_call_end_time = datetime.now()
                     duration = api_call_end_time - api_call_start_time
                     duration_seconds = duration.total_seconds()
