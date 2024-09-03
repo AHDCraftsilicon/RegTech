@@ -590,6 +590,7 @@ def Regex_Search(bounding_boxes):
     matches = [match.span() for match in re.finditer(
         r'\d{12}', Result, overlapped=True)]
 
+
     for match in matches:
 
         UID = int(Result[match[0]:match[1]])
@@ -691,7 +692,8 @@ def Extract_and_Mask_UIDs(image_path, SR=False, sr_image_path=None, SR_Ratio=[1,
     settings = ('-l eng --oem 3 --psm 11')
 
     for rotation in rotations:
-        print("image add tessreact")
+        print()
+        print("image add tessreact" , rotation)
 
         cv2.imwrite('rotated_grayscale.png', rotation[0])
 

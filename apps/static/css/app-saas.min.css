@@ -23237,3 +23237,6 @@ body.modal-open .content-page {
 .wrap {
     text-wrap: balance;
 }
+.table>:not(caption)>*>* {
+    background: #FFF !important;
+}
