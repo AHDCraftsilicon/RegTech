@@ -1,22 +1,13 @@
 from flask import Flask,jsonify,redirect,url_for,request,render_template,render_template_string
 from functools import wraps
-from apps.addhar_masking import adhar_masking_bp
-from apps.image_quality_ckeck import image_quality_check_bp
-from apps.name_matching import name_matching_bp
-from apps.language_translate import language_translate_bp
 from apps.token_request import token_request_bp
-from apps.ocr_image_readings import ocr_image_reading_bp
-from apps.database_log import database_table_bp
 from apps.login_admin import login_Admin_bp
-from apps.object_detaction import object_detaction_bp
-from apps.bank_statement_pdf_text import bank_statement_bp
-from apps.company_list import comapny_list_table_bp
 from apps.dashboard_view import dashboard_bp
+from apps.database_log import database_table_bp
+from apps.company_list import comapny_list_table_bp
+from apps.name_matching import name_matching_bp
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required,unset_jwt_cookies
-from datetime import datetime, timedelta
 
-# Testing
-from apps.test_zbar_image import test_zbar_image_bp
 
 
 
@@ -24,9 +15,7 @@ def crete_app():
     app = Flask(__name__)
     # app = Flask(__name__,template_folder='app/components')
     app.secret_key = "djfljdfljfnkjsfhjfshjkfjfjfhjdhfdjhdfu"
-    app.config['UPLOAD_FOLDER'] = "./static/addhar_masksing_img"
-
-    app.config["JWT_SECRET_KEY"] = "craftsiliconniblerectechservice"
+    app.config["JWT_SECRET_KEY"] = "Craft_Silicon_Regtech_Makarba_Ahm"
     app.config['JWT_COOKIE_CSRF_PROTECT'] = False
     # app.config['JWT_TOKEN_LOCATION'] = ['cookies']
     # app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=15)
@@ -118,21 +107,16 @@ def crete_app():
             with app.open_resource('components/script_urls.html') as f:
                 return f.read().decode('utf-8')
             
-
-
-    app.register_blueprint(adhar_masking_bp)
-    app.register_blueprint(image_quality_check_bp)
-    app.register_blueprint(name_matching_bp)
-    app.register_blueprint(language_translate_bp)
     app.register_blueprint(token_request_bp)
-    app.register_blueprint(ocr_image_reading_bp)
-    app.register_blueprint(database_table_bp)
+
     app.register_blueprint(login_Admin_bp)
-    app.register_blueprint(test_zbar_image_bp)
-    app.register_blueprint(object_detaction_bp)
-    app.register_blueprint(bank_statement_bp)
-    app.register_blueprint(comapny_list_table_bp)
     app.register_blueprint(dashboard_bp)
+    app.register_blueprint(database_table_bp)
+    app.register_blueprint(comapny_list_table_bp)
+
+    app.register_blueprint(name_matching_bp)
+
+   
 
 
     app.jinja_env.globals['load_topbar'] = load_topbar
