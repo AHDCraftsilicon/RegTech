@@ -58,10 +58,6 @@ def crete_app():
         return redirect('/admin/login')
     
     # ADDED FOR VERSION CHECK IN DEPLOYEMNT
-
-    @app.route('/version-check', methods=["GET"])
-    def version():
-        return {"version":"0.0.7.7"}
     
     #END VERSIONS CHECK
 
@@ -72,12 +68,12 @@ def crete_app():
         unset_jwt_cookies(m)
         return m
     
-    # @jwt.unauthorized_loader
-    # def my_expired_token_callbacks(jwt_payload):
-    #     return jsonify({"status": "Failure",
-    #                 "statusCode": "401",
-    #                 "statusMessage": "Invalid token or expired token"
-    #             }), 401
+    @jwt.unauthorized_loader
+    def my_expired_token_callbacks(jwt_payload):
+        return jsonify({"status": "Failure",
+                    "statusCode": "401",
+                    "statusMessage": "Invalid token or expired token"
+                }), 401
 
 
 
