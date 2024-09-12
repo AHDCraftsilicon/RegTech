@@ -11,7 +11,7 @@ token_request_bp = Blueprint("token_request_bp",
 
 
 
-@token_request_bp.route('/api/v1/token/gettokenkey',methods=['POST'])
+@token_request_bp.route('/api/v1/token/getkey',methods=['POST'])
 def request_connection_main():
     if request.method == 'POST':
         data = request.get_json()

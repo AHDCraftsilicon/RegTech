@@ -1,13 +1,18 @@
 from flask import Flask,jsonify,redirect,url_for,request,render_template,render_template_string
 from functools import wraps
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required,unset_jwt_cookies
+
 from apps.token_request import token_request_bp
 from apps.login_admin import login_Admin_bp
 from apps.dashboard_view import dashboard_bp
 from apps.database_log import database_table_bp
 from apps.company_list import comapny_list_table_bp
-from apps.name_matching import name_matching_bp
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required,unset_jwt_cookies
 
+# Live Apis For Selling
+from apps.Name_Matching_Live_Api import Name_Matching_Api_bp
+from apps.Aadhaar_Masking_Live_Api import Aadhaar_Masking_Api_bp
+from apps.Image_Quality_Live_Api import Image_Quality_bp
+from apps.Lang_Trans_Live_Api import Lang_Trans_bp
 
 
 
@@ -110,7 +115,13 @@ def crete_app():
     app.register_blueprint(database_table_bp)
     app.register_blueprint(comapny_list_table_bp)
 
-    app.register_blueprint(name_matching_bp)
+
+
+    # Final Api For Selling
+    app.register_blueprint(Name_Matching_Api_bp)
+    app.register_blueprint(Aadhaar_Masking_Api_bp)
+    app.register_blueprint(Image_Quality_bp)
+    app.register_blueprint(Lang_Trans_bp)
 
    
 
