@@ -14,7 +14,8 @@ database_table_bp = Blueprint("database_table_bp",
 
 
 # Database
-Api_request_history_db = Regtch_services_UAT["Api_request_history_test"]
+Api_request_history_db = Regtch_services_UAT["Api_Request_History"]
+Login_db = Regtch_services_UAT["Login_db"]
 
 
 # Database Log Route
@@ -126,7 +127,6 @@ def portal_data_tabless():
 @database_table_bp.route("/poratl-data_tabless_ajex",methods=["GET","POST"])
 @jwt_required(locations=['cookies'])
 def portal_data_tabless_ajex():
-    # parent_path = os.listdir("./apps/static/NimbleRegTechlog/")
     
     quiry = {}
     dictinory = []
@@ -134,7 +134,7 @@ def portal_data_tabless_ajex():
     sort_quiry = {}
     
     if request.form["columns[0][search][value]"] != "" :
-            quiry['corporate_id'] = request.form["columns[0][search][value]"]
+            quiry['corporate_id'] = ObjectId(request.form["columns[0][search][value]"])
     
     if request.form["columns[1][search][value]"] != "" :
             quiry['api_name'] = request.form["columns[1][search][value]"]
@@ -228,7 +228,8 @@ def portal_data_tabless_ajex():
     for x in finding:
         
         try:
-            corporate_id  = x["corporate_id"]
+            logind_details  = Login_db.find_one({"_id":ObjectId(x["corporate_id"])})
+            corporate_id  = logind_details["corporate_id"]
         except:
             corporate_id = ""
 

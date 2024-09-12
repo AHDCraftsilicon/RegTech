@@ -6,7 +6,7 @@
     --ct-box-shadow-lg: 0 0 45px 0 rgba(0, 0, 0, 0.12);
     --ct-box-shadow-inset: inset 0 1px 2px rgba(0, 0, 0, 0.075);
     --ct-component-active-color: #fff;
-    --ct-component-active-bg: #0a406e;
+    --ct-component-active-bg: #139af6;
     --ct-text-muted: #8a969c;
     --ct-blockquote-footer-color: #8a969c;
     --ct-mark-bg: #fcf8e3;
@@ -10832,7 +10832,7 @@ fieldset:disabled .btn {
 
 .bg-primary {
     --ct-bg-opacity: 1;
-    background-color: rgba(var(--ct-primary-rgb), var(--ct-bg-opacity)) !important
+    background: linear-gradient(180deg, #139af6 0%, #046ee4 46.21%);
 }
 
 .bg-secondary {
@@ -16246,25 +16246,25 @@ html[data-sidenav-color=light][data-sidenav-size=condensed] .side-nav .side-nav-
 }
 
 html[data-sidenav-color=dark] .leftside-menu {
-    background: #093b65
+    background: linear-gradient(180deg, #139af6 0%, #046ee4 46.21%) !important;
 }
 
-html[data-sidenav-color=dark] .leftside-menu .logo {
+/* html[data-sidenav-color=dark] .leftside-menu .logo {
     background: #093b65 !important
-}
+} */
 
 html[data-sidenav-color=dark] .leftbar-user .leftbar-user-name {
     color: #eef2f7
 }
 
 html[data-sidenav-color=dark] .side-nav .side-nav-link {
-    color: var(--ct-dark-menu-item)
+    color: #fff;
 }
 
 html[data-sidenav-color=dark] .side-nav .side-nav-link:active,
 html[data-sidenav-color=dark] .side-nav .side-nav-link:focus,
 html[data-sidenav-color=dark] .side-nav .side-nav-link:hover {
-    color: var(--ct-dark-menu-item-hover)
+    color: #fff;
 }
 
 html[data-sidenav-color=dark] .side-nav .menuitem-active>a {
@@ -17613,8 +17613,9 @@ html[data-theme=dark] .accordion .accordion-button:after {
 }
 
 .btn-primary {
-    -webkit-box-shadow: 0 2px 6px 0 #31648f;
-    box-shadow: 0 2px 6px 0 #31648f
+    -webkit-box-shadow: 0 2px 6px 0 #139af6;
+    box-shadow:none;
+    background-color: #139af6 !important; border: none !important;
 }
 
 .btn-secondary {
