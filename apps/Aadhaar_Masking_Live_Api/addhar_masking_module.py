@@ -10,8 +10,8 @@ from werkzeug.utils import secure_filename
 
 
 # try:
-os.environ['TESSDATA_PREFIX'] = r'C:\Program Files\Tesseract-OCR\tessdata'
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+#     os.environ['TESSDATA_PREFIX'] = r'C:\Program Files\Tesseract-OCR\tessdata'
+#     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 # except:
 #     # Linux Server
 #     os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'

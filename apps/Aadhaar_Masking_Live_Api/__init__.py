@@ -25,11 +25,11 @@ Aadhaar_Masking_Api_bp = Blueprint("Aadhaar_Masking_Api_bp",
 
 # Tesseract exe path
 
-try:
-    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-except:
-    os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'
-    pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
+# try:
+#     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+# except:
+#     os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'
+#     pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
 
 
 # # Database
