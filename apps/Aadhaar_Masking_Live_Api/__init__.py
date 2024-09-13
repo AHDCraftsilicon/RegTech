@@ -38,7 +38,7 @@ Login_db = Regtch_services_UAT["Login_db"]
 
 
 
-@Aadhaar_Masking_Api_bp.route('/api/v1/adhar/masking',methods=['POST'])
+@Aadhaar_Masking_Api_bp.route('/api/v1/aadhaar/masking',methods=['POST'])
 @jwt_required()
 def addhar_masking_main():
     if request.method == 'POST':
