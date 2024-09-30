@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - bluBeetle.ai</title>
+
+    {% set Auth_Css_Urls = Auth_Css_Urls() %}
+    {% if Auth_Css_Urls %}
+    {{ Auth_Css_Urls | safe }}
+    {% endif %}
+
+    <div class="c-content">
+        <div class="c-content-main-part">
+            <div id="toastContainer" class="toast-container">
+            </div>
+        </div>
+    </div>
+
+</head>
+
+<body>
+
+    <section class="main-login">
+        <div class="row">
+
+            <!-- Authentication SideBar -->
+            {% set Auth_Sidebar = Auth_Sidebar() %}
+            {% if Auth_Sidebar %}
+            {{ Auth_Sidebar | safe }}
+            {% endif %}
+
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 login-right-main-part">
+                <div class="login-right-part">
+                    <div class="login-padding">
+
+                        <img src="../../static/images/logo.png" class="img-fluid c-logo">
+                        <div class="login-box">
+                            <div class="login-content">
+                                <h1>Login</h1>
+                                <form action="/login/auth/singin" method="post">
+                                    <div>
+                                        <div class="group mb-0">
+                                            <label class="">Work Email</label>
+                                            <input class="input-margin" type="email" id="Email_ID" name="Email_ID"
+                                                required>
+
+                                        </div>
+                                        <div class="group mb-0">
+                                            <label class=""> Password</label>
+                                            <input class="input-margin" type="password" id="Password" name="Password"
+                                                required>
+                                            <i class="toggle-password ri-eye-line"></i>
+                                        </div>
+                                        <div class="group">
+                                            <button class="btn c-btn">Login</button>
+                                        </div>
+                                        <div class="group text-center">
+                                            <p class="c-signUp"> Don't have an Account? <a href="/register/user/new"
+                                                    class="c-link">Sign
+                                                    Up</a></p>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Authentication Toasty -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+
+    <!-- Verify Message -->
+    <script nonce="{{ g.nonce }}">
+        NotifyMessage({ message: "{{message}}", type: "bg-danger" });
+    </script>
+
+    {% endfor %}
+    {% endif%}
+    {% endwith %}
+    <script nonce="{{ g.nonce }}">
+
+        $(document).ready(function () {
+            $(".toggle-password").click(function () {
+                $(this).toggleClass("ri-eye-off-line");
+                input = $(this).parent().find("input");
+                if (input.attr("type") == "password") {
+                    input.attr("type", "text");
+                } else {
+                    input.attr("type", "password");
+                }
+            });
+        });
+
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+<script nonce="{{ g.nonce }}">
+
+
+    $('#itr_analysis_input').on('change', (event) => {
+        const file_name = event.target.files[0].name;
+        $("#itr_pdf_name").text(file_name)
+    });
+
+
+    $("#ITR_analysis_run").click(function () {
+        const formdata = new FormData();
+
+        const fileInput = document.getElementById('itr_analysis_input');
+        const file = fileInput.files[0];
+
+        formdata.append("ITR_Type", "ITR-1");
+        formdata.append("ITR_pdf", file);
+
+        const requestOptions = {
+            method: "POST",
+            body: formdata,
+            redirect: "follow"
+        };
+
+        fetch("/ITR/test-api", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+                
+
+                var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
+                $("#ITR_ana_json").text(formatteddata)
+                $('#eta').show()
+                document.getElementById("ITR_ana_seconds").innerHTML = result.data.result_in_seconds
+            })
+            .catch((error) => console.error(error));
+    })
+
+
+    $("#full_screen_view").click(function () {
+        enableFullScreen("ITR_ana_json");
+    });
+</script>

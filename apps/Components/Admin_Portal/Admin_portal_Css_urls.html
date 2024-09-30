@@ -1,0 +1,30 @@
+<!-- App favicon -->
+<link rel="icon" type="image/x-icon" href="../../static/favicon.png">
+
+<!-- Bootstrap , JQuery, Popper -->
+<link rel="stylesheet" href="../../static/vendor/bootstrap4.6.1/bootstrap.min.css">
+<script src="../../static/vendor/JQuery/JQuery.min.js"></script>
+<script src="../../static/vendor/bootstrap4.6.1/popper.min.js"></script>
+<script src="../../static/vendor/bootstrap4.6.1/bootstrap.vendor.min.js"></script>
+
+<!-- Icons -->
+<link href="../../static/vendor/Icons/remixicon.css" rel="stylesheet">
+
+<!-- DataTables -->
+<link rel="stylesheet" href="../../static/vendor/DataTable/dataTables.min.css">
+<script src="../../static/vendor/DataTable/jquery.dataTables.min.js"></script>
+
+
+<!-- Common css -->
+<link rel="stylesheet" href="../../static/Admin_portal_css/admin-style.css">
+
+
+
+<script nonce="{{ g.nonce }}">
+    $(document).ready(function () {
+        $(".c-toggle").click(function () {
+            $(".side-bar").toggleClass("showmenu");
+            $(".contain-main-part").toggleClass("full-contain-main-part");
+        });
+    });
+</script>

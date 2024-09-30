@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - bluBeetle.ai</title>
+
+    {% set User_Portal_urls = User_Portal_urls() %}
+    {% if User_Portal_urls %}
+    {{ User_Portal_urls | safe }}
+    {% endif %}
+</head>
+
+<body>
+
+    <!-- Topbar -->
+    {% set User_portal_topbar = User_portal_topbar(user_name) %}
+    {% if User_portal_topbar %}
+    {{ User_portal_topbar | safe }}
+    {% endif %}
+
+    <section class="main-part">
+        <!-- Side-Bar -->
+        {% set User_portal_sidebar = User_portal_sidebar() %}
+        {% if User_portal_sidebar %}
+        {{ User_portal_sidebar | safe }}
+        {% endif %}
+
+        <!-- Page Contante -->
+        <div class="page-content">
+            <div class="c-page-padding">
+                <div class="row">
+                    <div class="col-12 c-heading-common">
+                        <h1 class="main-heading">Home</h1>
+                        <div class="testing-credit">
+                            <p class="testing-credit-text">Testing Credit</p>
+                            <p class="testing-credit-digit"><i class="ri-task-line"></i>
+                                <span>{{test_credit[0]["Used_Credits"]}} / {{test_credit[0]["Test_Credit"]}} </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    {% for i in api_list %}
+
+                    {% if i["status"] == 'Enable' %}
+                    <a class="col-lg-4 col-md-4 col-sm-6 col-12" href='{{i["page_url"]}}'>
+                        <div class="dash-box">
+                            <div class="dash-box-padding">
+                                <div class="dash-icon">
+                                    {{i["api_logo"] | safe }}
+                                </div>
+                                <div class="dash-contain">
+                                    <p class="dash-box-heading">{{i["api_name"]}}</p>
+                                    <div class="dash-box-normal-font" id="api-description-{{ i['objid'] }}">
+                                        {{i["sort_api_description"]}}</div>
+                                </div>
+                                <div class="dash-arrow">
+                                    <i class="ri-arrow-right-s-line"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <script nonce="{{ g.nonce }}">
+        function redactAadhaar(text) {
+            const redactedText = text
+
+            // Check if the length exceeds 15 characters
+            if (redactedText.length > 75) {
+                return redactedText.slice(0, 75) + '...';
+            }
+            return redactedText;
+        }
+
+        function addRedactedTextToDiv(text, id_name) {
+            const redacted = redactAadhaar(text);
+            $('#' + id_name).html(redacted);
+        }
+
+
+
+        apicount = JSON.parse('{{api_count|tojson}}')
+
+        for (x = 0; x < apicount.length; x++) {
+            try {
+                addRedactedTextToDiv($("#api-description-" + apicount[x]["objid"])[0]["innerText"], "api-description-" + apicount[x]["objid"])
+            }
+            catch {
+
+            }
+        }
+
+
+    </script>
+</body>
+
+</html>

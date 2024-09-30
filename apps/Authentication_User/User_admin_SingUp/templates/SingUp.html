@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - bluBeetle.ai</title>
+
+    {% set Auth_Css_Urls = Auth_Css_Urls() %}
+    {% if Auth_Css_Urls %}
+    {{ Auth_Css_Urls | safe }}
+    {% endif %}
+
+    <div class="c-content">
+        <div class="c-content-main-part">
+            <div id="toastContainer" class="toast-container">
+            </div>
+        </div>
+    </div>
+
+</head>
+
+<body>
+
+    <section class="main-login">
+        <div class="row">
+
+            <!-- Authentication SideBar -->
+            {% set Auth_Sidebar = Auth_Sidebar() %}
+            {% if Auth_Sidebar %}
+            {{ Auth_Sidebar | safe }}
+            {% endif %}
+
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 login-right-main-part">
+                <div class="login-right-part">
+                    <div class="login-padding">
+
+                        <img src="../../static/images/logo.png" class="img-fluid c-logo">
+                        <div class="login-box">
+                            <div class="login-content">
+                                <h1>Create Account</h1>
+                                <form method="post">
+
+                                    <div>
+                                        <div class="group mb-0">
+                                            <label class="">Company Name</label>
+                                            <input class="input-margin" type="text" name="Company_Name" required>
+
+                                        </div>
+                                        <div class="group mb-0">
+                                            <label class="">Mobile Number</label>
+                                            <input class="input-margin" type="number" min="1000000000" max="9999999999"
+                                                name="Mobile_No" required>
+
+                                        </div>
+                                        <div class="group mb-0">
+                                            <label class="">Work Email</label>
+                                            <input class="input-margin" type="text" name="Email_Id" required>
+
+                                        </div>
+                                        <div class="group">
+                                            <button class="btn c-btn">Sign Up</button>
+                                        </div>
+                                        <div class="group text-center">
+                                            <p class="c-signUp"> Already have an account? <a href="/login/user"
+                                                    class="c-link">Login</a></p>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Authentication Toasty -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+
+    <!-- Verify Message -->
+    {% if message == "Verification link has been successfully sent on your registered email ID." %}
+    <script nonce="{{ g.nonce }}">
+        NotifyMessage({ message: "{{message}}", type: "bg-success" });
+    </script>
+    {% else %}
+    <script nonce="{{ g.nonce }}">
+        NotifyMessage({ message: "{{message}}", type: "bg-danger" });
+    </script>
+    {% endif %}
+
+
+    {% endfor %}
+    {% endif%}
+    {% endwith %}
+
+
+</body>
+
+</html>

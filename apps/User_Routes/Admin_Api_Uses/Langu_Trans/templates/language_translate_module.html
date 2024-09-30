@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Translate - bluBeetle.ai</title>
+
+    {% set User_Portal_urls = User_Portal_urls() %}
+    {% if User_Portal_urls %}
+    {{ User_Portal_urls | safe }}
+    {% endif %}
+
+    <div class="c-content">
+        <div class="c-content-main-part">
+            <div id="toastContainer" class="toast-container">
+            </div>
+        </div>
+    </div>
+
+</head>
+
+<body>
+    <!-- Topbar -->
+    {% set User_portal_topbar =  User_portal_topbar(user_name) %}
+    {% if User_portal_topbar %}
+    {{ User_portal_topbar | safe }}
+    {% endif %}
+
+    <section class="main-part">
+        <!-- Side-Bar -->
+        {% set User_portal_sidebar = User_portal_sidebar() %}
+        {% if User_portal_sidebar %}
+        {{ User_portal_sidebar | safe }}
+        {% endif %}
+
+        <!-- Page Content -->
+        <div class="page-content">
+            <div class="c-page-padding">
+                <div>
+                    <div class="row">
+                        <div class="col-12 c-heading-common">
+                            <h1 class="main-heading">Language Translator</h1>
+                            <div class="testing-credit">
+                                <p class="testing-credit-text">Testing Credit</p>
+                                <p class="testing-credit-digit"><i class="ri-task-line"></i>
+                                    <span>{{test_credit[0]["Used_Credits"]}} / {{test_credit[0]["Test_Credit"]}} </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="cc-box">
+                                <div class="cc-box-padding">
+
+                                    <div class="form-group c-form-group">
+                                        <label>Select Language <span class="required">*</span></label>
+                                        <select class="form-control select2" id="FromLanguage">
+                                            {% for i in lang_list %}
+                                            <option value="{{i['lang_code']}}">{{i['lang']}}</option>
+                                            {% endfor %}
+
+                                        </select>
+
+                                    </div>
+                                    <div class="form-group c-form-group">
+                                        <textarea rows="10" cols="12" class="form-control c-form-control"
+                                            id="translate_textarea"></textarea>
+
+                                    </div>
+                                    <button class="btn c-btn" id="translate_run">Translation</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="cc-box">
+                                <div class="cc-box-padding">
+
+                                    <div class="form-group c-form-group">
+                                        <label>Translate Language <span class="required">*</span></label>
+                                        <select class="form-control select2" id="ToLanguage">
+                                            {% for i in lang_list %}
+                                            <option value="{{i['lang_code']}}">{{i['lang']}}</option>
+                                            {% endfor %}
+                                        </select>
+
+                                    </div>
+
+                                    <div class="form-group c-form-group">
+                                        <textarea rows="10" cols="12" class="form-control c-form-control"
+                                            id="translate_lang"></textarea>
+
+                                    </div>
+                                    <button class="btn c-btn" id="lan_trans_copy">Copy</button>
+
+                                    <button class="btn c-btn2 ml-4" id="lan_trans_download">Download</button>
+
+
+                                    <div class="right-bottom-part">
+                                        <a href="#" class="api-link">API Documentation <i
+                                                class="ri-arrow-right-line"></i></a>
+                                        <div class="inf-bar">
+                                            <div class="info-icon">
+                                                <i class="ri-information-line"></i>
+                                            </div>
+                                            <div class="info-text">
+                                                <h2>Data Privacy</h2>
+                                                <p>BluBeetle does not store your private data, the input data will
+                                                    deleted
+                                                    upon usage of the API. Read more</p>
+                                            </div>
+                                        </div>
+                                        <p class="dash-box-heading-blue pt-4">More about this API </p>
+                                        <p>{{about_api_details}}</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <pre class="d-none" id="lang_translate_json_temp"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page Javascript -->
+    {% include 'language_translate_js.html' %}
+
+
+
+</body>
+
+</html>

@@ -1,141 +1,253 @@
-from flask import Flask,jsonify,redirect,url_for,request,render_template,render_template_string
-from functools import wraps
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required,unset_jwt_cookies
+from flask import Flask,render_template_string,g , session,redirect , request , jsonify
+from flask_jwt_extended import JWTManager
+from flask_cors import CORS
+from datetime import timedelta
+import os
 
-from apps.token_request import token_request_bp
-from apps.login_admin import login_Admin_bp
-from apps.dashboard_view import dashboard_bp
-from apps.database_log import database_table_bp
-from apps.company_list import comapny_list_table_bp
 
-# Live Apis For Selling
-from apps.Name_Matching_Live_Api import Name_Matching_Api_bp
-from apps.Aadhaar_Masking_Live_Api import Aadhaar_Masking_Api_bp
-from apps.Image_Quality_Live_Api import Image_Quality_bp
-from apps.Lang_Trans_Live_Api import Lang_Trans_bp
+# Index Page(Landing Page)
+from apps.Index import Index_Page_bp
 
+# User Authentication
+from apps.Authentication_User.User_admin_SingUp import User_Admin_SignUp_bp
+from apps.Authentication_User.User_admin_SingIn import User_Admin_SignIn_bp
+from apps.Authentication_User.User_Token_verify import User_Token_Verify_bp
+
+# User Api Dashboard
+from apps.User_Routes.User_admin_Api_Dashboard import User_Admin_Api_Dashboard_bp
+# Dashboard Inner Routes
+from apps.User_Routes.Admin_Api_Uses.Name_Comparison import Admin_Api_Uses_Name_Comparison_bp
+from apps.User_Routes.Admin_Api_Uses.Aadhaar_OCR import Aadhaar_OCR_bp
+from apps.User_Routes.Admin_Api_Uses.Aadhaar_Redaction import Aadhaar_Redaction_bp
+from apps.User_Routes.Admin_Api_Uses.Passport_OCR import Passport_OCR_bp
+from apps.User_Routes.Admin_Api_Uses.KYC_Quality_check import KYC_Quality_check_bp
+from apps.User_Routes.Admin_Api_Uses.Langu_Trans import Language_translate_bp
+from apps.User_Routes.Admin_Api_Uses.Bank_Statements import Bank_Statments_bp
+from apps.User_Routes.Admin_Api_Uses.ITR_Analysis import ITR_analysis_bp
+# User Api Credentials
+from apps.User_Routes.Api_Credentials import User_Admin_Api_Credentials_bp
+
+# Admin Authentication
+from apps.Authentication_Admin.Admin_login import Admin_login_bp
+# Admin ROutes
+from apps.Admin_Routes.Admin_Dashboard import Admin_Dashboard_bp
+from apps.Admin_Routes.Company_Details import Admin_Company_details_bp
+
+
+
+# Token For access api
+from apps.Every_Apis.Access_Token import Access_Token_api_bp
+
+# Every Apis
+from apps.Every_Apis.Name_Matching import Name_Matching_api_bp
+from apps.Every_Apis.Language_Translator import Language_Translator_api_bp
+from apps.Every_Apis.KYC_Quality_Check import KYC_Quality_Check_api_bp
+from apps.Every_Apis.Aadhaar_Redaction import Aadhaar_Redaction_api_bp
 
 
 def crete_app():
     app = Flask(__name__)
-    # app = Flask(__name__,template_folder='app/components')
-    app.secret_key = "djfljdfljfnkjsfhjfshjkfjfjfhjdhfdjhdfu"
+    app.secret_key = "jnClOF0X4pzE2wHFdl0sjwFBR4CDiAcb2B13BDED3E63A69CD7F5F2A89A4FDDDF44"
+    app.config['SESSION_PERMANENT'] = True
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
+    app.config['SESSION_COOKIE_NAME'] = 'k_'
+    CORS(app , resources={r"/*": {"origins": "http://20.197.47.40/"}}) 
+
+    # JWT Secret key
     app.config["JWT_SECRET_KEY"] = "Craft_Silicon_Regtech_Makarba_Ahm"
     app.config['JWT_COOKIE_CSRF_PROTECT'] = False
     # app.config['JWT_TOKEN_LOCATION'] = ['cookies']
     # app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=15)
 
     
+
+    
     jwt = JWTManager(app)
 
     @jwt.expired_token_loader
     def my_expired_token_callback(jwt_header, jwt_payload):
-        # print(jwt_payload)
-        if jwt_payload["is_api"] == True:
-            return jsonify({"status": "Failure",
-                    "statusCode": "401",
+        return jsonify({"status": "Failure",
+                    "statusCode": 401,
                     "statusMessage": "Invalid token or expired token"
                 }), 401
-        else:
-            return redirect('/admin/login')
 
     @jwt.invalid_token_loader
     def invalid_token_callback(callback):
-        request_path = request.path
-        # print(callback , request_path)
-        if '/api/v1/' in request_path:
-            return jsonify({"status": "Failure",
-                    "statusCode": "401",
+        return jsonify({"status": "Failure",
+                    "statusCode": 401,
                     "statusMessage": "Invalid token or expired token"
                 }), 401
-        else:
-            return redirect('/admin/login')
     
-    @jwt.unauthorized_loader
-    def my_expired_token_callbacks(jwt_payload):
-        # print('...........')
-        # print("jwt",jwt_payload)        
-        # original_request_path = request.path
-        # print(original_request_path)
-        # if original_request_path == '/database-log' :
-        #     return redirect('/database-log')
-        # else:
-        return redirect('/admin/login')
-    
-    # ADDED FOR VERSION CHECK IN DEPLOYEMNT
-    
-    #END VERSIONS CHECK
 
-    @app.route('/admin/logout', methods=["GET"])
-    # @jwt_required()
-    def logout():
-        m = redirect('/admin/login')
-        unset_jwt_cookies(m)
-        return m
-    
     @jwt.unauthorized_loader
     def my_expired_token_callbacks(jwt_payload):
         return jsonify({"status": "Failure",
-                    "statusCode": "401",
+                    "statusCode": 401,
                     "statusMessage": "Invalid token or expired token"
                 }), 401
-
-
-
-     # Top Bar
-    def load_topbar(username):
-            with app.open_resource('components/topbar.html') as f:
-                return render_template_string(f.read().decode('utf-8'),username=username)
     
-    # # # Navbar Routes  
-    def navigation_urls(manage_role):
-            with app.open_resource('components/nav_routes.html') as f:
-                return render_template_string(f.read().decode('utf-8'))
+    
+
+    
+    # Landing Page Css
+    def Landing_routes_Urls():
+        with app.open_resource('Components/Landing_Page/Landing_page_urls.html') as f:
+           return f.read().decode('utf-8')
+        
+    def Landing_Page_Topbar():
+        with app.open_resource('Components/Landing_Page/Landing_page_Topbar.html') as f:
+           return f.read().decode('utf-8')
+        
+
+    def Landing_Page_Footer():
+        with app.open_resource('Components/Landing_Page/Landing_page_Footer.html') as f:
+           return f.read().decode('utf-8')
+
+
+    # Authentication Css
+    def Auth_Css_Urls():
+        with app.open_resource('Components/Auth_Css_urls.html') as f:
+            return f.read().decode('utf-8')
+        
+    # Auth SideBar
+    def Auth_Sidebar():
+        with app.open_resource('Components/Auth_SideBar.html') as f:
+            return f.read().decode('utf-8')
+        
+    
+    # User Portal Css
+    def User_Portal_urls():
+        with app.open_resource('Components/User_Portal/User_portal_Css_urls.html') as f:
+            return f.read().decode('utf-8')
+
+            
+         
+
+    # User Portal Topbar
+    def User_portal_topbar(user_name):
+        with app.open_resource('Components/User_Portal/User_portal_Topbar.html') as f:
+            return render_template_string(f.read().decode('utf-8'),user_name=user_name)
+        
+    # User Portal SideBar
+    def User_portal_sidebar():
+        with app.open_resource('Components/User_Portal/User_portal_Sidebar.html') as f:
+            return f.read().decode('utf-8')
             
 
-    #   # Footer 
-    def load_footer():
-            with app.open_resource('components/footer.html') as f:
-                return f.read().decode('utf-8')
-    
-    # Css
-    def load_css():
-            with app.open_resource('components/css_urls.html') as f:
-                return f.read().decode('utf-8')
-     
-    # Javascript    
-    def load_javascript():
-            with app.open_resource('components/script_urls.html') as f:
-                return f.read().decode('utf-8')
-            
-    app.register_blueprint(token_request_bp)
-
-    app.register_blueprint(login_Admin_bp)
-    app.register_blueprint(dashboard_bp)
-    app.register_blueprint(database_table_bp)
-    app.register_blueprint(comapny_list_table_bp)
-
-
-
-    # Final Api For Selling
-    app.register_blueprint(Name_Matching_Api_bp)
-    app.register_blueprint(Aadhaar_Masking_Api_bp)
-    app.register_blueprint(Image_Quality_bp)
-    app.register_blueprint(Lang_Trans_bp)
-
-   
-
-
-    app.jinja_env.globals['load_topbar'] = load_topbar
-    app.jinja_env.globals['navigation_urls'] = navigation_urls
-    app.jinja_env.globals['load_footer'] = load_footer
-    app.jinja_env.globals['load_css'] = load_css
-    app.jinja_env.globals['load_javascript'] = load_javascript
-    # app.jinja_env.globals['check_password'] = check_password
-    # app.jinja_env.globals['party_view_javascript'] = party_view_javascript
-    # app.jinja_env.globals['dashboard_url'] = dashboard_url
+    # Admin Portal Css
+    def Admin_Portal_urls():
+        with app.open_resource('Components/Admin_Portal/Admin_portal_Css_urls.html') as f:
+            return f.read().decode('utf-8')
+        
+    # Admin Portal SideBar
+    def Admin_Portal_sidebar():
+        with app.open_resource('Components/Admin_Portal/Admin_portal_Sidebar.html') as f:
+            return f.read().decode('utf-8')
+        
+    # Admin Portal Topbar
+    def Admin_Portal_topbar(name):
+        with app.open_resource('Components/Admin_Portal/Admin_portal_Topbar.html') as f:
+            return render_template_string(f.read().decode('utf-8'),name=name)
 
     
     
+    # User Authentication 
+    app.register_blueprint(User_Admin_SignUp_bp)
+    app.register_blueprint(User_Admin_SignIn_bp)
+    app.register_blueprint(User_Token_Verify_bp)
+
+    # User View
+    app.register_blueprint(User_Admin_Api_Dashboard_bp)
+    # Api Dashboard Pages
+    app.register_blueprint(Admin_Api_Uses_Name_Comparison_bp)
+    app.register_blueprint(Aadhaar_OCR_bp)
+    app.register_blueprint(Aadhaar_Redaction_bp)
+    app.register_blueprint(Passport_OCR_bp)
+    app.register_blueprint(KYC_Quality_check_bp)
+    app.register_blueprint(Language_translate_bp)
+    app.register_blueprint(Bank_Statments_bp)
+    app.register_blueprint(ITR_analysis_bp)
+    # Api Credentials
+    app.register_blueprint(User_Admin_Api_Credentials_bp)
+
+
+    # Index Page
+    app.register_blueprint(Index_Page_bp)
     
+
+    # Admin Authentication
+    app.register_blueprint(Admin_login_bp)
+    # Admin Dashboard
+    app.register_blueprint(Admin_Dashboard_bp)
+    app.register_blueprint(Admin_Company_details_bp)
+    
+
+    # Every api access token 
+    app.register_blueprint(Access_Token_api_bp)
+    # Every Apis
+    app.register_blueprint(Name_Matching_api_bp)
+    app.register_blueprint(Language_Translator_api_bp)
+    app.register_blueprint(KYC_Quality_Check_api_bp)
+    app.register_blueprint(Aadhaar_Redaction_api_bp)
+
+
+
+    # Landing Page URLS
+    app.jinja_env.globals['Landing_routes_Urls'] = Landing_routes_Urls
+    app.jinja_env.globals['Landing_Page_Topbar'] = Landing_Page_Topbar
+    app.jinja_env.globals['Landing_Page_Footer'] = Landing_Page_Footer
+
+    # Templetes Default Modal Call
+    app.jinja_env.globals['Auth_Css_Urls'] = Auth_Css_Urls
+    app.jinja_env.globals['Auth_Sidebar'] = Auth_Sidebar
+
+    # User Portal URLS
+    app.jinja_env.globals['User_Portal_urls'] = User_Portal_urls
+    app.jinja_env.globals['User_portal_topbar'] = User_portal_topbar
+    app.jinja_env.globals['User_portal_sidebar'] = User_portal_sidebar
+
+    # Admin Portal URLs
+    app.jinja_env.globals['Admin_Portal_urls'] = Admin_Portal_urls
+    app.jinja_env.globals['Admin_Portal_topbar'] = Admin_Portal_topbar
+    app.jinja_env.globals['Admin_Portal_sidebar'] = Admin_Portal_sidebar
+    
+    @app.route('/logout')
+    def logout():
+        # Clear all session data
+        session.clear()
+        # Redirect to the login page or any other desired page
+        return redirect("/")
+
+    # Headers Add
+
+    @app.after_request
+    def set_x_frame_options(response):
+        if request.method == 'POST':
+            response.headers['X-Frame-Options'] = 'DENY'  # or 'SAMEORIGIN'
+        return response
+
+    @app.before_request
+    def generate_nonce():
+        g.nonce = os.urandom(16).hex()
+        
+    @app.after_request
+    def apply_security_headers(response):
+        response.headers["Cross-Origin-Window-Policy"] = "deny"
+        response.headers["Content-Security-Policy"] = ("default-src 'self'; "
+                                                        "img-src 'self' data: blob:;" 
+                                                        "script-src 'self' 'report-sample' 'unsafe-eval' 'nonce-{nonce}';" 
+                                                        "style-src 'self' 'unsafe-hashes';"  
+                                                        "frame-ancestors 'self';" 
+                                                        "form-action 'self';" 
+                                                        "connect-src 'self'; "
+                                                        "object-src 'none'; "
+                                                        "base-uri 'self'; "
+                                                        "frame-src 'self';" ).format(nonce=g.nonce)
+        response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+        response.headers['X-Content-Type-Options'] = 'nosniff'
+        response.headers['X-Frame-Options'] = 'DENY'
+        response.headers['X-XSS-Protection'] = '1; mode=block'
+        
+        return response
+
     return app

@@ -1,0 +1,72 @@
+<script nonce="{{ g.nonce }}">
+
+
+    $("#sample_name_comp").click(function () {
+        $("#name1").val("Monika Jain")
+        $("#name2").val("Jain Monika")
+        $("#name_comp_run").removeClass("disabled")
+        $("#name_comp_run").removeAttr("disabled")
+    })
+
+
+    $("#name1").on('change keyup copy paste cut', function () {
+        if (this.value != "") {
+            $("#name_comp_run").removeClass("disabled")
+            $("#name_comp_run").removeAttr("disabled")
+        }
+        else {
+            $("#name_comp_run").addClass("disabled")
+            $('#name_comp_run').prop("disabled", true);
+        }
+    });
+
+    $("#name2").on('change keyup copy paste cut', function () {
+        if (this.value != "") {
+            $("#name_comp_run").removeClass("disabled")
+            $("#name_comp_run").removeAttr("disabled")
+        }
+        else {
+            $("#name_comp_run").addClass("disabled")
+            $('#name_comp_run').prop("disabled", true);
+        }
+    });
+
+
+    $("#name_comp_run").click(function () {
+        const formdata = new FormData();
+        formdata.append("name1", $("#name1").val());
+        formdata.append("name2", $("#name2").val());
+
+        const requestOptions = {
+            method: "POST",
+            body: formdata,
+            redirect: "follow"
+        };
+
+        fetch("/name/test-api", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+
+                var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
+                $("#name_comp_json").text(formatteddata)
+                $('#eta').removeClass('d-none')
+                document.getElementById("name_comp_seconds").innerHTML = result.data.result_in_seconds
+            })
+            .catch((error) => console.error(error));
+    })
+
+
+    $("#full_screen_view").click(function () {
+        enableFullScreen("name_comp_json");
+    });
+
+    $("#name_comp_copy").click(function () {
+        copyToClipboard('#name_comp_json')
+    });
+
+    $("#name_comp_download").click(function () {
+        Json_Download('name_comp_json')
+    });
+
+
+</script>

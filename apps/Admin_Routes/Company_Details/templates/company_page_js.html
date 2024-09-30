@@ -1,0 +1,197 @@
+<script nonce="{{ g.nonce }}">
+
+    var table = $('#basic-datatable').DataTable({
+        'processing': true,
+        'serverSide': true,
+        'serverMethod': 'post',
+        "autoWidth": false,
+        'ajax': {
+            'url': '/BBRgt/company-details/data-table'
+        },
+        'lengthMenu': [[10, 20, 50, 100, 500], [10, 20, 50, 100, 500]],
+        searching: true,
+        sort: true,
+        "aaSorting": [[3, "desc"]],
+        'columns': [
+            { data: "Company_Name" },
+            { data: 'Mobile_No' },
+            { data: 'Email_Id' },
+            {
+                data: "creadte_date",
+                'render': function (creadte_date) {
+                    if (!creadte_date) {
+                        return 'N/A';
+                    } else {
+                        return `<div style="text-wrap: wrap;text-align: center;">` + creadte_date + `</div>`;
+                    }
+                }
+            },
+            {
+                data: "objid",
+                'sortable': false,
+                'searchable': false,
+                'render': function (objid) {
+                    if (!objid) {
+                        return 'N/A';
+                    } else {
+                        return `<a href="javascript:void(0);" onclick="download_file(this.name)" name='` + objid + `' class="font-18 text-primary me-2 hover-eff-btn"><span class="font-12"><u>View</u></span></a>`;
+                    }
+                }
+            },
+        ],
+
+        orderCellsTop: true,
+        fixedHeader: true,
+        columnDefs: [
+            { orderable: true, className: 'line_texts', targets: [3] },
+            { orderable: false, className: 'line_texts', targets: [0, 1, 2, 4] },
+        ],
+
+        createdRow: function (row, data, dataIndex) {
+            $(row).addClass('centerele');
+        },
+        keys: !0, language: {
+            paginate: { previous: "<i class='mdi mdi-chevron-left'>", next: "<i class='mdi mdi-chevron-right'>" }
+        }, drawCallback: function () {
+            $(".dataTables_paginate > .pagination").addClass("pagination-rounded")
+        },
+        initComplete: function () {
+            var api = this.api();
+            // For each column
+
+            // $('#company_name').on('change', function () {
+            //     var regexr = '{search}';
+            //     api
+            //         .column(0)
+            //         .search(
+            //             this.value != ''
+            //                 ? regexr.replace('{search}', this.value)
+            //                 : '',
+            //             this.value != '',
+            //             this.value == ''
+            //         )
+            //         .draw();
+            // })
+
+            // $('#api_service').on('change', function () {
+            //     var regexr = '{search}';
+            //     api
+            //         .column(1)
+            //         .search(
+            //             this.value != ''
+            //                 ? regexr.replace('{search}', this.value)
+            //                 : '',
+            //             this.value != '',
+            //             this.value == ''
+            //         )
+            //         .draw();
+            // })
+
+            // $('#api_status').on('change', function () {
+            //     var regexr = '{search}';
+            //     api
+            //         .column(3)
+            //         .search(
+            //             this.value != ''
+            //                 ? regexr.replace('{search}', this.value)
+            //                 : '',
+            //             this.value != '',
+            //             this.value == ''
+            //         )
+            //         .draw();
+            // })
+
+            // $('input[name="request_date"]').on('apply.daterangepicker', function () {
+            //     var regexr = '{search}';
+            //     api
+            //         .column(4)
+            //         .search(
+            //             this.value != ''
+            //                 ? regexr.replace('{search}', $(this)[0].value)
+            //                 : '',
+            //             this.value != '',
+            //             this.value == '',
+
+            //         )
+            //         .draw();
+            // });
+
+            // $('input[name="response_date"]').on('apply.daterangepicker', function () {
+            //     var regexr = '{search}';
+            //     api
+            //         .column(5)
+            //         .search(
+            //             this.value != ''
+            //                 ? regexr.replace('{search}', $(this)[0].value)
+            //                 : '',
+            //             this.value != '',
+            //             this.value == '',
+
+            //         )
+            //         .draw();
+            // });
+
+            // $('input[name="created_date"]').on('apply.daterangepicker', function () {
+            //     var regexr = '{search}';
+            //     api
+            //         .column(7)
+            //         .search(
+            //             this.value != ''
+            //                 ? regexr.replace('{search}', $(this)[0].value)
+            //                 : '',
+            //             this.value != '',
+            //             this.value == '',
+
+            //         )
+            //         .draw();
+            // });
+
+            api
+                .columns()
+                .eq(0)
+                .each(function (colIdx) {
+                    // Set the header cell to contain the input element
+                    var cell = $('.filters th').eq(
+                        $(api.column(colIdx).header()).index()
+                    );
+
+                    $(
+                        'input',
+                        $('.filters th').eq($(api.column(colIdx).header()).index())
+                    )
+                        .off('keyup change')
+                        .on('change', function (e) {
+                            // Get the search value
+                            $(this).attr('title', $(this).val());
+                            var regexr = '{search}'; //$(this).parents('th').find('select').val();
+
+                            var cursorPosition = this.selectionStart;
+                            // Search the column for that value
+                            api
+                                .column(colIdx)
+                                .search(
+                                    this.value != ''
+                                        ? regexr.replace('{search}', this.value).replace(/\\/g, "")
+                                        : '',
+                                    this.value != '',
+                                    this.value == ''
+                                )
+                                .draw();
+                        })
+                        .on('keyup', function (e) {
+                            e.stopPropagation();
+                            $(this).trigger('change');
+                            $(this)
+                                .focus()[0]
+                            // .setSelectionRange(cursorPosition, cursorPosition);
+                        });
+                });
+
+        },
+
+
+    });
+
+
+
+</script>

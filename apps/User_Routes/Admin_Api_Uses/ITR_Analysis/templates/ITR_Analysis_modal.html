@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITR Analysis - bluBeetle.ai</title>
+
+    {% set User_Portal_urls = User_Portal_urls() %}
+    {% if User_Portal_urls %}
+    {{ User_Portal_urls | safe }}
+    {% endif %}
+</head>
+
+<body>
+    <!-- Topbar -->
+    {% set User_portal_topbar = User_portal_topbar(user_name) %}
+    {% if User_portal_topbar %}
+    {{ User_portal_topbar | safe }}
+    {% endif %}
+
+    <section class="main-part">
+        <!-- Side-Bar -->
+        {% set User_portal_sidebar = User_portal_sidebar() %}
+        {% if User_portal_sidebar %}
+        {{ User_portal_sidebar | safe }}
+        {% endif %}
+
+        <!-- Page Content -->
+        <div class="page-content">
+            <div class="c-page-padding">
+                <div>
+                    <div class="row">
+                        <div class="col-12 c-heading-common">
+                            <h1 class="main-heading">ITR Analysis</h1>
+                            <div class="testing-credit">
+                                <p class="testing-credit-text">Testing Credit</p>
+                                <p class="testing-credit-digit"><i class="ri-task-line"></i>
+                                    <span>{{test_credit[0]["Used_Credits"]}} / {{test_credit[0]["Test_Credit"]}} </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="cc-box">
+                                <div class="cc-box-padding">
+                                    <p class="dash-box-heading-blue">Input</p>
+
+                                    <div class="form-group c-form-group">
+                                        <label>File <span class="required">*</span></label>
+                                        <input type='file' id="itr_analysis_input" accept="application/pdf">
+                                        <label id="itr_pdf_name" class="fw-normal"></label>
+                                    </div>
+                                    <button class="btn c-btn" id="ITR_analysis_run">Run API</button>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="cc-box">
+                                <div class="cc-box-padding">
+                                    <p class="dash-box-heading-blue">Output <span id="eta" class="result d-none">🚀
+                                            Results in
+                                            <span class="seconds" id="ITR_ana_seconds"> 0.656 </span>
+                                            seconds!</span></p>
+
+                                    <div class="form-group c-form-group">
+                                        <div class="dc-flex">
+                                            <label>Json </label>
+                                            <i class="ri-fullscreen-line" id="full_screen_view"></i>
+                                        </div>
+
+                                        <pre class="form-control c-form-control json-div" id="ITR_ana_json">
+                                        </pre>
+                                    </div>
+
+                                    <a href="#" class="btn c-btn">Copy Json</a>
+                                    <a href="#" class="btn c-btn2 ml-4">Download</a>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Page Javascript -->
+    {% include 'ITR_Analysis_js.html' %}
+</body>
+
+</html>

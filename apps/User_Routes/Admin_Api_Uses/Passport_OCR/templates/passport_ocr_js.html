@@ -1,0 +1,62 @@
+<script nonce="{{ g.nonce }}">
+
+    $('#passport_input').on('change', (event) => {
+        var output = document.getElementById('passport_img');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    });
+
+
+    $("#sample_passport_ocr").click(function () {
+        var output = document.getElementById('passport_img');
+        output.src = "../../../../static/images/Passport_OCR.jpg"
+    })
+
+
+    $("#passport_ocr_run").click(function () {
+        const fileInput = document.getElementById('passport_input');
+        const file = fileInput.files[0];
+        if (file != undefined) {
+            const formdata = new FormData();
+            formdata.append("passport_img", file);
+
+            const requestOptions = {
+                method: "POST",
+                body: formdata,
+                redirect: "follow"
+            };
+
+            fetch("/Passport/test-api", requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                    console.log(result);
+                    
+                    var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
+                    $("#passport_ocr_json").text(formatteddata)
+                    $('#eta').removeClass('d-none')
+                    document.getElementById("passport_ocr_seconds").innerHTML = result.data.result_in_seconds
+                })
+                .catch((error) => console.error(error));
+        }
+        else {
+            alert("Please Choose File!")
+        }
+    })
+
+
+    $("#full_screen_view").click(function () {
+        enableFullScreen("passport_ocr_json");
+    });
+
+    $("#passport_ocr_copy").click(function () {
+        copyToClipboard('#passport_ocr_json')
+    });
+
+    $("#passport_ocr_download").click(function () {
+        Json_Download('passport_ocr_json')
+    });
+
+
+</script>

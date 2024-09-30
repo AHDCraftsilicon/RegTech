@@ -1,0 +1,73 @@
+<script nonce="{{ g.nonce }}">
+
+    $('#redaction_input').on('change', (event) => {
+        var output = document.getElementById('aadhaar_red_img');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    });
+
+
+    $("#readct_sample_click").click(function () {
+        var output = document.getElementById('aadhaar_red_img');
+        output.src = "../../../../static/images/aadhaar_ocr.jpg"
+    })
+
+
+    $("#aadhaar_redaction_run").click(function () {
+        const fileInput = document.getElementById('redaction_input');
+        const file = fileInput.files[0];
+        if (file != undefined) {
+            $(".c-loader").removeClass('d-none')
+            const formdata = new FormData();
+            formdata.append("aadhaar_redac_img", file);
+
+            const requestOptions = {
+                method: "POST",
+                body: formdata,
+                redirect: "follow"
+            };
+
+            fetch("/aadhaar/redaction/test-api", requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                    $(".c-loader").addClass('d-none')
+                    var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
+                    $("#aadhaar_redaction_json").text(formatteddata)
+                    $('#eta').removeClass('d-none')
+                    document.getElementById("aadhaar_redaction_seconds").innerHTML = result.data.result_in_seconds
+                    $(".img-preview").removeClass("d-none")
+                    document.getElementById("preview_img").src = result.data.json_data.response.Image
+
+                })
+                .catch((error) => console.error(error));
+        }
+        else {
+            alert("Please Choose File!")
+        }
+
+
+    })
+
+
+    $("#full_screen_view").click(function () {
+        enableFullScreen("aadhaar_redaction_json");
+    });
+
+    $("#aadhaar_redaction_copy").click(function () {
+        copyToClipboard('#aadhaar_redaction_json')
+    });
+
+    $("#aadhaar_redaction_download").click(function () {
+        Json_Download('aadhaar_redaction_json')
+    });
+
+
+    $('.img-preview').click(function (e) {
+        var base64Image = $(this).attr('src');
+        var newTab = window.open();
+        newTab.document.write('<img src="' + base64Image + '" alt="Base64 Image">');
+    });
+
+</script>

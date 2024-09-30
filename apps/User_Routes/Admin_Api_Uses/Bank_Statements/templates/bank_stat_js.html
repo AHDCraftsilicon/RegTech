@@ -1,0 +1,41 @@
+<script nonce="{{ g.nonce }}">
+
+
+    $('#bank_Stat_input').on('change', (event) => {
+        const file_name = event.target.files[0].name;
+        $("#pdf_name").text(file_name)
+    });
+
+    $("#bank_statement_run").click(function () {
+
+        const formdata = new FormData();
+
+        const fileInput = document.getElementById('bank_Stat_input');
+        const file = fileInput.files[0];
+
+        formdata.append("BankName", "ICICIBANK");
+        formdata.append("PDF_File", file);
+
+        const requestOptions = {
+            method: "POST",
+            body: formdata,
+            redirect: "follow"
+        };
+
+        fetch("/bank/test-api", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+                
+
+                var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
+                $("#bank_statment_json").text(formatteddata)
+                $('#eta').show()
+                document.getElementById("bank_statments_seconds").innerHTML = result.data.result_in_seconds
+            })
+            .catch((error) => console.error(error));
+    })
+
+    $("#full_screen_view").click(function () {
+        enableFullScreen("bank_statment_json");
+    });
+</script>

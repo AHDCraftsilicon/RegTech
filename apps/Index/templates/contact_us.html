@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>BlueBeetle.ai</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    {% set Landing_routes_Urls = Landing_routes_Urls() %}
+    {% if Landing_routes_Urls %}
+    {{ Landing_routes_Urls | safe }}
+    {% endif %}
+
+
+</head>
+
+<body>
+
+    {% set Landing_Page_Topbar = Landing_Page_Topbar() %}
+    {% if Landing_Page_Topbar %}
+    {{ Landing_Page_Topbar | safe }}
+    {% endif %}
+    <section class="contact-us-section">
+        <div class="colomn-heading-inner heading">
+            <h3 class="white-heading">Contact</h3>
+        </div>
+        <div class="common-inner-page-padding">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="contact-left">
+                            <div class="section-inner-heading">
+                                <h3>Contact our friendly team</h3>
+                                <p>Let us know how we can help.</p>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label id="" class="c-label mandatory">First name<span
+                                                class="mandatory-sign">*</span></label>
+                                        <input class="form-control c-form-control" id="" name="" onkeypress=""
+                                            type="text" value="" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label id="" class="c-label mandatory">Last name</label>
+                                        <input class="form-control c-form-control" id="" name="" onkeypress=""
+                                            type="text" value="" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label class="c-label mandatory">Mobile<span
+                                                class="mandatory-sign">*</span></label>
+                                        <div class="input-group input-group-sm">
+                                            <input id="" type="text" name="mobile"
+                                                class="form-control c-form-control mobile" onkeypress="" value=""
+                                                autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label id="" class="c-label mandatory">Email<span
+                                                class="mandatory-sign">*</span></label>
+                                        <input class="form-control c-form-control" id="" name="" onkeypress=""
+                                            type="text" value="" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label id="" class="c-label mandatory">Company name<span
+                                                class="mandatory-sign">*</span></label>
+                                        <input class="form-control c-form-control" id="" name="" onkeypress=""
+                                            type="text" value="" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label id="" class="c-label mandatory">Message<span
+                                                class="mandatory-sign">*</span></label>
+                                        <textarea class="form-control c-form-control" name="" id="" cols="30"
+                                            rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label id="" class="c-label mandatory">Which product are you interested in?<span
+                                                class="mandatory-sign">*</span></label>
+                                        <select class="form-control c-form-control" name="" id="">
+                                            <option value="">-Select-</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <div class="form-group">
+                                        <label id="" class="c-label mandatory">Reason for contact</label>
+                                        <select class="form-control c-form-control" name="" id="">
+                                            <option value="">-Select-</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-12 mb-4">
+                                    <div class="form-group c-checkbox">
+                                        <input type="checkbox" id="CheckContent">
+                                        <label class="c-label check-content mb-2" for="CheckContent">I agree to receive
+                                            other communications
+                                            from bluBeetle.</label>
+                                        <p class="check-content">
+                                            By clicking submit below, you consent to allow bluBeetle to store and
+                                            process the personal
+                                            information submitted above to provide you the content requested.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-12 mb-4">
+                                    <a href="/login/user" class="menu-link btn-2 btn-3 w-100 mt-0">Try API</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="contact-right">
+                            <div class="details-content">
+                                <h3>Email support</h3>
+                                <p class="check-content">Email us and we'll get back to you within 24 hours.</p>
+                                <div class="details-box">
+                                    <img src="../../static/landing_images/mail.svg" alt="">
+                                    <a href="mailto:someone@example.com">info@Blubeetle.ai</a>
+                                </div>
+                            </div>
+                            <div class="details-content">
+                                <h3>Call us</h3>
+                                <p class="check-content">Mon - Fri, 9:00 AM - 6:00 PM (IST/GMT +05:30)</p>
+                                <div class="details-box">
+                                    <img src="../../static/landing_images/call.svg" alt="">
+                                    <a href="tel:+91 79 4800 4222">+91 79 4800 4222</a><span>/</span><a
+                                        href="tel:+91 79 4800 8222">+91 79
+                                        4800 8222</a>
+                                </div>
+                            </div>
+                            <div class="details-content">
+                                <h3>Ahmedabad, India</h3>
+                                <p class="check-content">Visit our Office Mon - Fri, 9:00 AM - 6:00 PM.</p>
+                                <div class="details-box">
+                                    <img src="../../static/landing_images/location.svg" alt="">
+                                    <p class="address">Craft Silicon Software Services Pvt. Ltd.
+                                        524-525, Indraprasth Business Park, Landmark: Near DAV School, Prahladnagar
+                                        Extension, Makarba,
+                                        Ahmedabad, Gujarat 380051
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="details-content">
+                                <h3>Bangalore, India</h3>
+                                <p class="check-content">Visit our Office Mon - Fri, 8:00 AM - 8:00 PM.</p>
+                                <div class="details-box">
+                                    <img src="../../static/landing_images/location.svg" alt="">
+                                    <p class="address">Craft Silicon Software Services Pvt. Ltd.
+                                        # 687,VAJRA, 1st & 3rd Floor,
+                                        15th Cross, 100ft Ring Road, J.P.Nagar 2nd Phase,
+                                        Bangalore – 560078
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="details-content">
+                                <h3>Bangalore, India</h3>
+                                <p class="check-content">Visit our Office Mon - Fri, 8:00 AM - 5:00 PM.</p>
+                                <div class="details-box">
+                                    <img src="../../static/landing_images/location.svg" alt="">
+                                    <p class="address">Craft Silicon Software Services Pvt. Ltd.
+                                        Waiyaki Way, P.O. Box 13628-00800.
+                                        Nairobi, Kenya
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    {% set Landing_Page_Footer = Landing_Page_Footer() %}
+    {% if Landing_Page_Footer %}
+    {{ Landing_Page_Footer | safe }}
+    {% endif %}
+
+
+    <script nonce="{{ g.nonce }}">
+
+        $(document).ready(function () {
+            // Toggle to show and hide navbar menu
+            const navbarMenu = document.getElementById("menu");
+            const burgerssMenu = document.getElementById("burgerss");
+
+            burgerssMenu.addEventListener("click", () => {
+                navbarMenu.classList.toggle("is-active");
+                burgerssMenu.classList.toggle("is-active");
+            });
+
+        })
+        // Toggle to show and hide dropdown menu
+        const dropdown = document.querySelectorAll(".dropdown");
+
+        dropdown.forEach((item) => {
+            const dropdownToggle = item.querySelector(".dropdown-toggle");
+
+            dropdownToggle.addEventListener("click", () => {
+                const dropdownShow = document.querySelector(".dropdown-show");
+                toggleDropdownItem(item);
+
+                // Remove 'dropdown-show' class from other dropdown
+                if (dropdownShow && dropdownShow != item) {
+                    toggleDropdownItem(dropdownShow);
+                }
+            });
+        });
+
+        // Function to display the dropdown menu
+        const toggleDropdownItem = (item) => {
+            const dropdownContent = item.querySelector(".dropdown-content");
+
+            // Remove other dropdown that have 'dropdown-show' class
+            if (item.classList.contains("dropdown-show")) {
+                dropdownContent.removeAttribute("style");
+                item.classList.remove("dropdown-show");
+            } else {
+                // Added max-height on active 'dropdown-show' class
+                dropdownContent.style.height = dropdownContent.scrollHeight + "px";
+                item.classList.add("dropdown-show");
+            }
+        };
+
+        // Fixed dropdown menu on window resizing
+        window.addEventListener("resize", () => {
+            if (window.innerWidth > 992) {
+                document.querySelectorAll(".dropdown-content").forEach((item) => {
+                    item.removeAttribute("style");
+                });
+                dropdown.forEach((item) => {
+                    item.classList.remove("dropdown-show");
+                });
+            }
+        });
+
+        // Fixed navbar menu on window resizing
+        window.addEventListener("resize", () => {
+            if (window.innerWidth > 992) {
+                const navbarMenu = document.getElementById("menu");
+                const burgerssMenu = document.getElementById("burgerss");
+                if (navbarMenu.classList.contains("is-active")) {
+                    navbarMenu.classList.remove("is-active");
+                    burgerssMenu.classList.remove("is-active");
+                }
+            }
+        });
+    </script>
+
+
+
+</body>
+
+</html>

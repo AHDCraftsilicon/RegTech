@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Verify Link Expire :: bluBeetle.ai</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% set User_Portal_urls = User_Portal_urls() %}
+    {% if User_Portal_urls %}
+    {{ User_Portal_urls | safe }}
+    {% endif %}
+
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="container-fluid">
+            <div class="main-head">
+                <div class="logo" style="margin: 0 auto; width: 255px; padding: 5px 0px; text-align: center;">
+                    <img src="../../static/images/logo.png" class="img-fluid logo-img">
+
+                </div>
+
+
+            </div>
+        </div>
+    </header>
+    <section class="main-part">
+
+        <div class="email-veri-body-part">
+            <div class="email-veri-padding">
+                <img src="../../static/images/email-icon.png" alt="" class="email-icon">
+                <h2>Your Verification Link Has Expired!</h2>
+                <p>The link you used to verify your email address has expired. For security reasons, verification links are only valid for 30 Minutes.</p>
+                <a href="/login/user" class="btn c-btn">Retry</a>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

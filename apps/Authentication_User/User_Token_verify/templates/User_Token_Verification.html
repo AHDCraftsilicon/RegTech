@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Password :: bluBeetle.ai</title>
+
+    {% set Auth_Css_Urls = Auth_Css_Urls() %}
+    {% if Auth_Css_Urls %}
+    {{ Auth_Css_Urls | safe }}
+    {% endif %}
+
+    <div class="c-content">
+        <div class="c-content-main-part">
+            <div id="toastContainer" class="toast-container">
+            </div>
+        </div>
+    </div>
+
+</head>
+
+<body>
+
+    <section class="main-login">
+        <div class="row">
+
+            <!-- Authentication SideBar -->
+            {% set Auth_Sidebar = Auth_Sidebar() %}
+            {% if Auth_Sidebar %}
+            {{ Auth_Sidebar | safe }}
+            {% endif %}
+
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 login-right-main-part">
+                <div class="login-right-part">
+                    <div class="login-padding">
+
+                        <img src="../../static/images/logo.png" class="img-fluid c-logo">
+                        <div class="login-box">
+                            <div class="login-content">
+                                <h1>Create Account</h1>
+                                <div class="create-pass-field">
+                                    <div class="group mb-0">
+                                        <label for="create password" class="">Create Password</label>
+                                        <input class="input-margin" type="password" id="Create_Password">
+                                        <i class="toggle-password ri-eye-line"></i>
+                                    </div>
+                                    <div id="Create_Password_tooltip"></div>
+                                </div>
+                                <div class="create-pass-field">
+                                    <div class="group mb-0">
+                                        <label for="create password" class="">Confirm Password</label>
+                                        <input class="input-margin" type="password" id="Confirm_Password">
+                                        <i class="toggle-password ri-eye-line"></i>
+                                    </div>
+                                    <div id="Confirm_Password_tooltip"></div>
+                                </div>
+                                <div class="group">
+                                    <button class="btn c-btn" id="set_pass">Set Password</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+
+    <script nonce="{{ g.nonce }}">
+
+        $(document).ready(function () {
+            $(".toggle-password").click(function () {
+                $(this).toggleClass("ri-eye-off-line");
+                input = $(this).parent().find("input");
+                if (input.attr("type") == "password") {
+                    input.attr("type", "text");
+                } else {
+                    input.attr("type", "password");
+                }
+            });
+        });
+
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordInput = document.getElementById('Create_Password');
+            const confirmPasswordInput = document.getElementById('Confirm_Password');
+            const passwordValidation = document.getElementById('Create_Password_tooltip');
+            const confirmPasswordValidation = document.getElementById('Confirm_Password_tooltip');
+
+            function validatePassword() {
+                const password = passwordInput.value;
+                const hasUpperCase = /[A-Z]/.test(password);
+                const hasLowerCase = /[a-z]/.test(password);
+                const hasNumber = /\d/.test(password);
+
+                let message = '';
+
+                if (!hasUpperCase) message += "<p class='c-tooltip' ><i class='ri-information-line'></i>Password must contain at least one uppercase letter.</p>";
+                if (!hasLowerCase) message += "<p class='c-tooltip' ><i class='ri-information-line'></i>Password must contain at least one lowercase letter.</p>";
+                if (!hasNumber) message += "<p class='c-tooltip' ><i class='ri-information-line'></i>Password must contain at least one number.</p>";
+
+                if (message === '') {
+                    passwordValidation.innerHTML = "<p class='c-tooltip'><i class='ri-information-line'></i>Password is valid.</p>";
+                    passwordValidation.className = 'valid';
+                    $("#Create_Password").addClass("input-margin");
+                    $("#Create_Password").removeClass("input-margin");
+                } else {
+                    passwordValidation.innerHTML = message.trim();
+                    passwordValidation.className = 'invalid';
+                    $("#Create_Password").removeClass("input-margin");
+
+                }
+            }
+
+            function validateConfirmPassword() {
+                if (confirmPasswordInput.value === passwordInput.value) {
+                    confirmPasswordValidation.innerHTML = "<p class='c-tooltip'><i class='ri-information-line'></i>Passwords match.</p>";
+                    confirmPasswordValidation.className = 'valid';
+                    $("#Confirm_Password").addClass("input-margin");
+                    $("#Confirm_Password").removeClass("input-margin");
+                } else {
+                    confirmPasswordValidation.innerHTML = "<p class='c-tooltip'><i class='ri-information-line'></i>Passwords do not match. Please ensure that both fields contain the same password.</p>";
+                    confirmPasswordValidation.className = 'invalid';
+                    $("#Confirm_Password").removeClass("input-margin");
+                }
+            }
+
+            passwordInput.addEventListener('keyup', validatePassword);
+            confirmPasswordInput.addEventListener('keyup', validateConfirmPassword);
+        });
+
+        function validatePassword(password) {
+            const hasUpperCase = /[A-Z]/.test(password);
+            const hasLowerCase = /[a-z]/.test(password);
+            const hasNumber = /\d/.test(password);
+            // const minLength = password.length >= 8;
+
+            let errors = [];
+
+            if (!hasUpperCase) {
+                errors.push("Password must contain at least one uppercase letter.");
+            }
+            if (!hasLowerCase) {
+                errors.push("Password must contain at least one lowercase letter.");
+            }
+            if (!hasNumber) {
+                errors.push("Password must contain at least one number.");
+            }
+            // if (!minLength) {
+            //     errors.push("Password must be at least 8 characters long.");
+            // }
+
+            if (errors.length > 0) {
+                return { isValid: false, errors };
+            }
+
+            return { isValid: true, message: "Password is valid." };
+        }
+
+
+
+        $("#set_pass").click(function () {
+
+            if ($("#Create_Password").val() == "") {
+                NotifyMessage({ message: "Create Password Does Not Empty!", type: "bg-danger" });
+            }
+
+            else if ($("#Confirm_Password").val() == "") {
+                NotifyMessage({ message: "Confirm Password Does Not Empty!", type: "bg-danger" });
+            }
+
+
+            else if ($("#Create_Password").val() == $("#Confirm_Password").val()) {
+                validate_create_pass = validatePassword($("#Create_Password").val())
+                if (validate_create_pass["isValid"] == true) {
+
+                    const url = new URL(window.location.href);
+                    const token = url.searchParams.get('token');
+
+                    const formdata = new FormData();
+                    formdata.append("Create_Password", $("#Create_Password").val());
+                    formdata.append("Confirm_Password", $("#Confirm_Password").val());
+                    formdata.append("token", token);
+
+                    const requestOptions = {
+                        method: "POST",
+                        body: formdata,
+                        redirect: "follow"
+                    };
+
+                    fetch("/auth/pass/create", requestOptions)
+                        .then((response) => response.json())
+                        .then((result) => {
+                            if (result["redirect"] == "/verify/expired") {
+                                window.location.replace("/verify/expired");
+                            }
+                            else {
+                                window.location.replace(result["redirect"]);
+                            }
+                        })
+                        .catch((error) => {
+                            console.error(error)
+                        });
+                }
+            }
+            else {
+                NotifyMessage({ message: "Passwords do not match. Please ensure that both fields contain the same password. Please ensure that both fields contain the same password.", type: "bg-danger" });
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>

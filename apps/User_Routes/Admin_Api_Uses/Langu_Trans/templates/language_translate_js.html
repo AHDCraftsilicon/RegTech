@@ -1,0 +1,56 @@
+<script nonce="{{ g.nonce }}">
+
+    $('#FromLanguage').val('en').trigger('change');
+    $('#ToLanguage').val('hi').trigger('change');
+
+
+
+    $("#translate_run").click(function () {
+        console.log($('#translate_textarea').val());
+
+        if ($('#translate_textarea').val() == "") {
+            NotifyMessage({ message: "Enter Text!", type: "bg-danger" });
+            alert("Enter Text!")
+        }
+        else {
+            if ($('#FromLanguage').val() != "" && $('#ToLanguage').val() != "") {
+
+                const formdata = new FormData();
+
+                formdata.append("translate_textarea", $("#translate_textarea").val());
+                formdata.append("FromLanguage", $("#FromLanguage").val());
+                formdata.append("ToLanguage", $("#ToLanguage").val());
+
+                const requestOptions = {
+                    method: "POST",
+                    body: formdata,
+                    redirect: "follow"
+                };
+
+                fetch("/translate/test-api", requestOptions)
+                    .then((response) => response.json())
+                    .then((result) => {
+                        $("#translate_lang").val(result.data.json_data.response)
+
+                        var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
+                        $("#lang_translate_json_temp").text(formatteddata)
+                    })
+                    .catch((error) => console.error(error));
+            }
+            else {
+                NotifyMessage({ message: "Please Select From Lang & ToLang!", type: "bg-danger" });
+            }
+        }
+
+    })
+
+
+    $("#lan_trans_copy").click(function () {
+        copyToClipboard('#lang_translate_json_temp')
+    });
+
+    $("#lan_trans_download").click(function () {
+        Json_Download('lang_translate_json_temp')
+    });
+
+</script>

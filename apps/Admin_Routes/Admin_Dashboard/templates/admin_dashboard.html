@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - bluBeetle.ai</title>
+
+    {% set Admin_Portal_urls = Admin_Portal_urls() %}
+    {% if Admin_Portal_urls %}
+    {{ Admin_Portal_urls | safe }}
+    {% endif %}
+
+</head>
+
+<body>
+    <div class="main">
+        <!-- Common Topbar -->
+        {% set Admin_Portal_topbar = Admin_Portal_topbar(name) %}
+        {% if Admin_Portal_topbar %}
+        {{ Admin_Portal_topbar | safe }}
+        {% endif %}
+
+        <!-- Main Contant -->
+        <div class="main-section">
+            <!-- SideBar -->
+            {% set Admin_Portal_sidebar = Admin_Portal_sidebar() %}
+            {% if Admin_Portal_sidebar %}
+            {{ Admin_Portal_sidebar | safe }}
+            {% endif %}
+
+            <div class="contain-main-part">
+                <div class="c-contain-padding">
+                    <div class="username_part">
+                        <div class="username-text">
+                            <h2>Analytics</h2>
+
+                        </div>
+                        <select name="" id="" class="form-control" style="width: 140px;">
+                            <option value="">Select</option>
+                        </select>
+
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                            <div class="dashboard-box dd-flex">
+                                <div class="icon-part">
+                                    <img src="../../../static/images/icon-1.svg" alt="">
+                                </div>
+                                <div class="text-part">
+                                    <h3>22</h3>
+                                    <p>Total Company</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                            <div class="dashboard-box dd-flex">
+                                <div class="icon-part">
+                                    <img src="../../../static/images/icon-1.svg" alt="">
+                                </div>
+                                <div class="text-part">
+                                    <h3>22</h3>
+                                    <p>Today API Request</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                            <div class="dashboard-box dd-flex">
+                                <div class="icon-part">
+                                    <img src="../../../static/images/icon-1.svg" alt="">
+                                </div>
+                                <div class="text-part">
+                                    <h3>22</h3>
+                                    <p>Today Success Request</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                            <div class="dashboard-box dd-flex">
+                                <div class="icon-part">
+                                    <img src="../../../static/images/icon-1.svg" alt="">
+                                </div>
+                                <div class="text-part">
+                                    <h3>22</h3>
+                                    <p>Today Fail Request</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="c-box">
+                        <div class="c-box-padding">
+                            <div class="row">
+                                <div class="col-12">
+                                    Grid
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>

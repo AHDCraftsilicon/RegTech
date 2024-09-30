@@ -1,0 +1,268 @@
+@media (max-width: 1920px) {
+    video {
+        height: 100% !important;
+    }
+}
+
+@media (max-width: 1440px) {
+    .brand img {
+        margin-left: 15px;
+    }
+
+    .slider-text {
+        height: 80vh !important;
+    }
+
+    .slider {
+        height: 80vh !important;
+    }
+}
+
+@media (max-width: 1199px) {
+    video {
+        height: 64vh !important;
+    }
+
+    .slider {
+        height: 64vh !important;
+    }
+
+    .slider-text {
+        height: 64vh !important;
+    }
+
+    .slider-text-part .row {
+        transform: translate(0px, -80%);
+    }
+
+    .slider-text-part {
+        height: 85vh;
+    }
+
+    .bank-box-part {
+        flex-wrap: wrap;
+    }
+
+    .bank-box {
+        margin: 0 10px 20px 0;
+    }
+
+    .slider-font {
+        font-size: 50px;
+        line-height: 55px;
+    }
+}
+
+@media (max-width: 992px) {
+    .slider {
+        height: 55vh !important;
+    }
+
+    video {
+        height: 55vh !important;
+    }
+
+    .slider-text {
+        height: 55vh !important;
+    }
+
+    .slider-text-part {
+        height: 70vh;
+    }
+
+    .container {
+        height: -webkit-fill-available;
+    }
+
+    #carousel2 .slide-carousel2 {
+        padding: 20px;
+        flex-direction: column-reverse;
+    }
+
+    .solve-problem-part .slder-left {
+        width: calc(100% - 0px);
+        padding: 10px 10px 0 10px;
+    }
+
+    .tab-content .slide-carousel {
+        flex-direction: column;
+    }
+
+    .tab-content .slder-left {
+        width: calc(100% - 0px);
+        padding: 10px 10px 0 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .client-testimonial {
+        flex-direction: column;
+    }
+
+    .client-text {
+        width: calc(100% - 0px);
+        padding-left: 0;
+    }
+
+    .white-heading,
+    .focus-heading {
+        font-size: 28px;
+        line-height: 35px;
+    }
+
+    .slide-carousel {
+        flex-direction: column;
+    }
+
+    .carousel-control-prev,
+    .carousel-control-next {
+        display: none;
+    }
+
+    .slder-right {
+        width: auto;
+    }
+
+    .tab-content>.active {
+        padding: 10px !important;
+    }
+
+    .slide-carousel2 .slder-right img {
+        padding: 0 !important;
+    }
+
+    .tab-content .slder-left {
+        padding: 10px 0 0 0;
+    }
+}
+
+@media (max-width: 576px) {
+    video {
+        height: 100% !important;
+    }
+
+    .slider-font {
+        font-size: 28px;
+        line-height: 32px;
+    }
+
+    .slider-normal {
+        font-size: 15px;
+        line-height: 20px;
+    }
+
+    .white-heading,
+    .focus-heading {
+        font-size: 18px;
+        line-height: 27px;
+        padding: 0;
+    }
+
+    .slide-carousel2 .revolutionize-text h2 {
+        font-size: 18px;
+        line-height: 27px;
+    }
+
+    .slide-carousel2 .revolutionize-text p {
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .client-text p {
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .offer-box-blue h4 {
+        font-size: 19px;
+    }
+
+    .offer-icon-1 {
+        width: 65px;
+        height: 65px;
+    }
+
+    .offer-icon-1 img {
+        width: 40px;
+    }
+
+    .revolutionize-text h2 {
+        font-size: 29px;
+    }
+
+    .revolutionize-part,
+    .focus-part {
+        padding: 40px 0;
+    }
+
+    .revolutionize-text p {
+        font-size: 16px;
+        line-height: 22px;
+    }
+
+    .solve-problem-part .focus-heading {
+        margin-bottom: 10px;
+    }
+
+    .solve-problem-part {
+        padding: 40px 0;
+    }
+
+    .bank-box-part {
+        padding-top: 25px;
+    }
+
+    .bank-box {
+        width: 130px;
+        height: 130px;
+    }
+
+    .bank-box img {
+        max-width: 100px;
+    }
+
+    .gray-font {
+        font-size: 15px;
+    }
+
+    .footer-heading {
+        margin-bottom: 5px;
+    }
+
+    .footer-first p {
+        margin-bottom: 8px;
+    }
+
+    .footer-second ul li a {
+        font-size: 14px;
+    }
+
+    .success-stories {
+        padding: 30px 0;
+    }
+
+    .client-image {
+        width: 150px;
+    }
+
+    footer {
+        padding: 30px 0px 20px 0px;
+    }
+
+    .footer-second ul {
+        margin-bottom: 10px;
+    }
+
+    hr {
+        margin-top: .5rem;
+        margin-bottom: .5rem;
+    }
+
+    .tab-content>.active {
+        padding: 15px !important;
+    }
+
+    .success-stories-slider {
+        padding: 30px 30px;
+    }
+}
