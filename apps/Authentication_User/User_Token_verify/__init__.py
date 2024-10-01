@@ -34,7 +34,8 @@ def User_Token_Verification_main():
     print(request.args.get("token"))
     if request.args.get("token") != None:
         database_document = Authentication_db.find_one({"verify_token":request.args.get("token")})
-
+        
+        print(database_document)
         if database_document != None:
 
             if database_document["flag"] == 1:
@@ -42,7 +43,7 @@ def User_Token_Verification_main():
 
             now = datetime.now()
 
-            time_str1 = str((database_document["verify_token_create_date"]).strftime("%H:%M"))
+            time_str1 = str((database_document["verify_token_create_date"] +timedelta(hours=5,minutes=30)).strftime("%H:%M") )
             time_str2 = str(now.hour) + ":" + str(now.minute)
 
             time_format = "%H:%M"
@@ -50,6 +51,7 @@ def User_Token_Verification_main():
             time2 = datetime.strptime(str(time_str2), time_format)
 
             difference = (time2 - time1).total_seconds() / 60
+            print("-------- ", difference)
             if difference > 30:
                 return redirect("/verify/expired")
 
@@ -60,6 +62,7 @@ def User_Token_Verification_main():
             current_time = datetime.now(timezone.utc)
 
             time_elapsed = current_time - start_time
+      
 
             if time_elapsed >= timedelta(minutes=database_document["token_expired_time_duration_min"]):
                 return redirect("/verify/expired")

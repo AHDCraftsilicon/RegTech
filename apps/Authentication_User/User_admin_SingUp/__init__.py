@@ -35,74 +35,64 @@ def generate_token(length=120):
 # Sent Email
 def user_to_sent_mail(receiver_emailid , token_url,Reciver_name):
     sender_email = "verification@blubeetle.ai"
-    subject = "Test Email"
+    subject = "BluBeetle Verification"
     token_url = token_url
 
 
     html_body = f"""
-       <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Document</title>
-        </head>
-        <body>
-            <table style="width: 655px;margin: 0 auto;font-family: sans-serif;font-size: 13px; padding: 10px; background-color: #ffffff; border: 1px solid #139af6; box-sizing: content-box; border-bottom: 5px solid #046ee4;">
-                <tbody>
-                <tr>
-                    <td style="text-align: center; ">
-                        <div>
-                            <div style="width: 200px;margin: 0 auto;">
-                                <img  src="cid:image1" 
-                                style="padding: 10px 15px;width: 80%;">
+        <table style="width: 655px;margin: 0 auto;font-family: sans-serif;font-size: 13px; padding: 10px; background-color: #ffffff; border: 1px solid #139af6; box-sizing: content-box; border-bottom: 5px solid #046ee4;">
+            <tbody>
+            <tr>
+                <td style="text-align: center; ">
+                    <div>
+                        <div style="width: 200px;margin: 0 auto;">
+                            <img  src="cid:image1" 
+                            style="padding: 10px 15px;width: 80%;">
+                        </div>
+                        <div style="width: 580px; margin: 0 auto;">
+                            <div>                                    
                             </div>
-                            <div style="width: 580px; margin: 0 auto;">
-                                <div>                                    
-                                </div>
-                            </div>
-                        </div>   
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <table style="width: 100%;">
+                        </div>
+                    </div>   
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table style="width: 100%;">
+                        
+                        <tbody>
                             
-                            <tbody>
+                            <tr>
+                            <td style="text-align: center; padding: 10px 10px;" colspan="2">
+                            
+                                <p style="text-align: left;"> Dear """+Reciver_name+""",</p>
+                            
+                                <p style="text-align: left; line-height: 17px;">Welcome to BluBeetle! </p>
+                                <p style="text-align: left; line-height: 17px;"> </p>
+                                <p style="text-align: left; line-height: 17px;">You have successfully registered on our platform. To complete your setup and access your account, please set your password by clicking the button below:</p>
+                                <p style="text-align: left; line-height: 17px;">&nbsp;</p>
+                                <a href='"""+token_url+"""' target="_blank" style="text-decoration: none; background-color: #139af6; color: #fff; padding: 7px 15px; font-size: 14px; font-weight: 600; border-radius: 5px;">Click Here</a>
+                                <p style="text-align: left; line-height: 17px;">&nbsp;</p>
+                                <p style="text-align: left; line-height: 17px;">For security reasons, this link is valid for the next 30 Minutes and will expire after that. If you do not complete the process within this time, you can request a new link by visiting our Portal.</p>
                                 
-                                <tr>
-                                <td style="text-align: center; padding: 10px 10px;" colspan="2">
-                                
-                                    <p style="text-align: left;"> Dear """+Reciver_name+""",</p>
-                                
-                                    <p style="text-align: left; line-height: 17px;">Welcome to BluBeetle! </p>
-                                    <p style="text-align: left; line-height: 17px;"> </p>
-                                    <p style="text-align: left; line-height: 17px;">You have successfully registered on our platform. To complete your setup and access your account, please set your password by clicking the button below:</p>
-                                    <p style="text-align: left; line-height: 0px;">&nbsp;</p>
-                                    <a href='"""+token_url+"""' target="_blank" style="text-decoration: none; background-color: #139af6; color: #fff; padding: 7px 15px; font-size: 14px; font-weight: 600; border-radius: 5px;">Click Here</a>
-                                    <p style="text-align: left; line-height: 0px;">&nbsp;</p>
-                                    <p style="text-align: left; line-height: 17px;">For security reasons, this link is valid for the next 30 Minutes and will expire after that. If you do not complete the process within this time, you can request a new link by visiting our Portal.</p>
-                                    
-                                
-                                    <p style="text-align: left; line-height: 17px;">Thank you for choosing BluBeetle. We look forward to serving you!</p>
-                                    <br> 
-                                    <p style="text-align: left; font-weight: bold;">Best regards,<br>
+                            
+                                <p style="text-align: left; line-height: 17px;">Thank you for choosing BluBeetle. We look forward to serving you!</p>
+                                <br> 
+                                <p style="text-align: left; font-weight: bold;">Best regards,<br>
 
-                                        BluBeetle Team</p>
-                                </td>
-                            </tr>
-                        
-                        
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                
+                                    BluBeetle Team</p>
+                            </td>
+                        </tr>
+                    
+                    
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
             
-                </tbody>
-            </table>
-    </body>
-    </html>
+        
+            </tbody>
+        </table>
         """
     
     msg = MIMEMultipart()
