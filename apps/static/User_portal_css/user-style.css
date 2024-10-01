@@ -754,7 +754,7 @@ header {
 .c-btn {
 
     color: #fff;
-    padding: 7px 35px;
+    padding: 3px 35px;
     border-radius: 25px;
     -webkit-box-shadow: 6px 6px 9px -5px rgb(117 117 117);
     -moz-box-shadow: 6px 6px 9px -5px rgba(117, 117, 117, 1);
@@ -774,7 +774,7 @@ header {
 
 .c-btn:hover {
     color: #fff;
-    padding: 7px 35px;
+    padding: 3px 35px;
     border-radius: 25px;
     -webkit-box-shadow: 6px 6px 9px -5px rgb(117 117 117);
     -moz-box-shadow: 6px 6px 9px -5px rgba(117, 117, 117, 1);
@@ -1384,10 +1384,10 @@ p.testing-credit-digit span {
 }
 
 .c-btn i {
-    font-size: 20px;
+    font-size: 18px;
     padding-right: 10px;
     position: relative;
-    top: 5px;
+    top: 2px;
 }
 
 .custom-control-label::before {
@@ -1542,26 +1542,31 @@ input[type=file] {
 .right-bottom-part {
     padding-top: 20px;
 }
+
 .api-link {
     font-size: 17px;
     font-weight: 800;
     color: #139af6;
-    
+
     padding-bottom: 10px;
     line-height: 30px;
 }
+
 .api-link:hover {
     color: #0f81ce;
 }
+
 .api-link i {
     position: relative;
     top: 3px;
 }
+
 .info-icon i {
     font-size: 23px;
     font-weight: 500;
     color: #139af6;
 }
+
 .inf-bar {
     margin-top: 10px;
     display: flex;
@@ -1570,16 +1575,19 @@ input[type=file] {
     background-color: #f1f1f1cc;
     border-radius: 10px;
 }
+
 .info-text h2 {
     margin: 0;
     font-size: 16px;
     font-weight: 700;
     color: #646464;
 }
+
 .info-text p {
     font-size: 14px;
     color: gray;
 }
+
 .info-text {
     padding-left: 10px;
 }

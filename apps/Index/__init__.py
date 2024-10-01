@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template,request,redirect,flash,jsonify,send_file,make_response
 from flask_jwt_extended import JWTManager, jwt_required,get_jwt
-from datetime import timedelta
+from datetime import   datetime
 
-
+# DataBase
+from data_base_string import *
 
 # Blueprint
 Index_Page_bp = Blueprint("Index_Page_bp",
@@ -10,7 +11,7 @@ Index_Page_bp = Blueprint("Index_Page_bp",
                         url_prefix="/",
                         template_folder="templates")
 
-
+contact_db = Regtch_services_UAT["contact_us"]
 
 @Index_Page_bp.route("/")
 def index_main_page():
@@ -91,5 +92,25 @@ def licence_agreement():
 def contact_us():
 
     return render_template("contact_us.html")
+
+
+
+
+@Index_Page_bp.route("/contact-from",methods=["POST","GET"])
+def contact_us_form():
+    if request.method == 'POST':
+        contact_db.insert_one({
+            "first_name" : request.form["first_name"],
+            "last_name" : request.form["last_name"],
+            "mobile_no" : request.form["mobile_no"],
+            "email" : request.form["email"],
+            "company_name" : request.form["company_name"],
+            "message" : request.form["message"],
+            "created_on" : datetime.now()
+        })
+
+        return redirect('/contact-us')
+    
+    return redirect('/')
 
 

@@ -34,7 +34,7 @@ def generate_token(length=120):
 
 # Sent Email
 def user_to_sent_mail(receiver_emailid , token_url,Reciver_name):
-    sender_email = "jagdish.patil@craftsiliconblr.onmicrosoft.com"
+    sender_email = "verification@blubeetle.ai"
     subject = "Test Email"
     token_url = token_url
 
@@ -114,9 +114,9 @@ def user_to_sent_mail(receiver_emailid , token_url,Reciver_name):
         msg.attach(img)
 
     # Gmail SMTP server details
-    smtp_server = "smtp.office365.com"
+    smtp_server = "secure.emailsrvr.com"
     smtp_port = 587
-    password = "Dol07883@@"  # Use App-specific password for better security
+    password = "4TT1rP8rex1X"  # Use App-specific password for better security
 
     # Create the email
     msg["From"] = sender_email

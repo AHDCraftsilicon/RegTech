@@ -37,91 +37,94 @@
                                 <h3>Contact our friendly team</h3>
                                 <p>Let us know how we can help.</p>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-6 col-md-12 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label id="" class="c-label mandatory">First name<span
-                                                class="mandatory-sign">*</span></label>
-                                        <input class="form-control c-form-control" id="" name="" onkeypress=""
-                                            type="text" value="" autocomplete="off">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-12 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label id="" class="c-label mandatory">Last name</label>
-                                        <input class="form-control c-form-control" id="" name="" onkeypress=""
-                                            type="text" value="" autocomplete="off">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-12 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label class="c-label mandatory">Mobile<span
-                                                class="mandatory-sign">*</span></label>
-                                        <div class="input-group input-group-sm">
-                                            <input id="" type="text" name="mobile"
-                                                class="form-control c-form-control mobile" onkeypress="" value=""
-                                                autocomplete="off">
+                            <form action="/contact-from" method="post">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label class="c-label mandatory">First name<span
+                                                    class="mandatory-sign">*</span></label>
+                                            <input class="form-control c-form-control" name="first_name" type="text"
+                                                value="" autocomplete="off" required>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-6 col-md-12 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label id="" class="c-label mandatory">Email<span
-                                                class="mandatory-sign">*</span></label>
-                                        <input class="form-control c-form-control" id="" name="" onkeypress=""
-                                            type="text" value="" autocomplete="off">
+                                    <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label class="c-label mandatory">Last name</label>
+                                            <input class="form-control c-form-control" name="last_name" type="text"
+                                                value="" autocomplete="off" required>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label id="" class="c-label mandatory">Company name<span
-                                                class="mandatory-sign">*</span></label>
-                                        <input class="form-control c-form-control" id="" name="" onkeypress=""
-                                            type="text" value="" autocomplete="off">
+                                    <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label class="c-label mandatory">Mobile<span
+                                                    class="mandatory-sign">*</span></label>
+                                            <div class="input-group input-group-sm">
+                                                <input type="text" name="mobile_no"
+                                                    class="form-control c-form-control mobile" value=""
+                                                    autocomplete="off" required>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                    <div class="form-group">
-                                        <label id="" class="c-label mandatory">Message<span
-                                                class="mandatory-sign">*</span></label>
-                                        <textarea class="form-control c-form-control" name="" id="" cols="30"
-                                            rows="3"></textarea>
+                                    <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label class="c-label mandatory">Email<span
+                                                    class="mandatory-sign">*</span></label>
+                                            <input class="form-control c-form-control" name="email" type="text" value=""
+                                                autocomplete="off" required>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label class="c-label mandatory">Company name<span
+                                                    class="mandatory-sign">*</span></label>
+                                            <input class="form-control c-form-control" name="company_name" type="text"
+                                                value="" autocomplete="off" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label class="c-label mandatory">Message<span
+                                                    class="mandatory-sign">*</span></label>
+                                            <textarea class="form-control c-form-control" name="message" cols="30"
+                                                rows="3" required></textarea>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label id="" class="c-label mandatory">Which product are you interested in?<span
+                                        <label  class="c-label mandatory">Which product are you interested in?<span
                                                 class="mandatory-sign">*</span></label>
-                                        <select class="form-control c-form-control" name="" id="">
+                                        <select class="form-control c-form-control" name="" >
                                             <option value="">-Select-</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                     <div class="form-group">
-                                        <label id="" class="c-label mandatory">Reason for contact</label>
-                                        <select class="form-control c-form-control" name="" id="">
+                                        <label  class="c-label mandatory">Reason for contact</label>
+                                        <select class="form-control c-form-control" name="" >
                                             <option value="">-Select-</option>
                                         </select>
                                     </div>
-                                </div>
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-12 mb-4">
-                                    <div class="form-group c-checkbox">
-                                        <input type="checkbox" id="CheckContent">
-                                        <label class="c-label check-content mb-2" for="CheckContent">I agree to receive
-                                            other communications
-                                            from bluBeetle.</label>
-                                        <p class="check-content">
-                                            By clicking submit below, you consent to allow bluBeetle to store and
-                                            process the personal
-                                            information submitted above to provide you the content requested.
-                                        </p>
+                                </div> -->
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12 mb-4">
+                                        <div class="form-group c-checkbox">
+                                            <input type="checkbox" id="CheckContent">
+                                            <label class="c-label check-content mb-2" for="CheckContent">I agree to
+                                                receive
+                                                other communications
+                                                from bluBeetle.</label>
+                                            <p class="check-content">
+                                                By clicking submit below, you consent to allow bluBeetle to store and
+                                                process the personal
+                                                information submitted above to provide you the content requested.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12 mb-4">
+                                        <button class="menu-link btn-2 btn-3 w-100 mt-0">Try API</button>
                                     </div>
                                 </div>
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-12 mb-4">
-                                    <a href="/login/user" class="menu-link btn-2 btn-3 w-100 mt-0">Try API</a>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
