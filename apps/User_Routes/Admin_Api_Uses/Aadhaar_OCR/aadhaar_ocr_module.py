@@ -14,15 +14,13 @@ from werkzeug.utils import secure_filename
 # import xml.etree.ElementTree as ET
 
 
-# Tesseract exe path local
-os.environ['TESSDATA_PREFIX'] = r'C:\Program Files\Tesseract-OCR\tessdata'
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-
-# Linux Server
-# os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'
-# pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'  # Update with your path
-
-
+try:
+    os.environ['TESSDATA_PREFIX'] = r'C:\Program Files\Tesseract-OCR\tessdata'
+    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+except:
+    # Linux Server
+    os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'
+    pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
 
 
 

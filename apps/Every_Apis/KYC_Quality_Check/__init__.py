@@ -38,12 +38,13 @@ UUID_PATTERN = re.compile(
     re.IGNORECASE
 )
 
-# Tesseract exe path local
 try:
     os.environ['TESSDATA_PREFIX'] = r'C:\Program Files\Tesseract-OCR\tessdata'
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 except:
-    pass
+    # Linux Server
+    os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'
+    pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
 
 def quality_check_module(image_base64):
     # Decode the Base64 string to get the image
