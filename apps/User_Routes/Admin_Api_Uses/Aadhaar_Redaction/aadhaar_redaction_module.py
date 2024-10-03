@@ -330,76 +330,6 @@ def compute_checksum(number):
     return checksum
 
 
-# def Extract_and_Mask_UIDs(image_path,counts , SR=False, sr_image_path=None, SR_Ratio=[1, 1]):
-#     # Load and preprocess the image
-#     masked_image_pil = Image.open(image_path)
-#     masked_image_cv = cv2.cvtColor(np.array(masked_image_pil), cv2.COLOR_RGB2BGR)
-    
-#     # Rotation angles to check
-#     rotation_angles = [0, 90, 180, 270, 360]
-    
-#     check_addhar_status = False
-#     return_image_number = None
-#     final_masked_image_path = None
-    
-#     # Loop through each angle
-#     for angle in rotation_angles:
-#         rotated_image = masked_image_cv
-
-#         # Apply rotation based on the angle
-#         if angle == 90:
-#             rotated_image = cv2.rotate(masked_image_cv, cv2.ROTATE_90_CLOCKWISE)
-#         elif angle == 180:
-#             rotated_image = cv2.rotate(masked_image_cv, cv2.ROTATE_180)
-#         elif angle == 270:
-#             rotated_image = cv2.rotate(masked_image_cv, cv2.ROTATE_90_COUNTERCLOCKWISE)
-#         # No need to rotate if the angle is 0 or 360
-
-#         # Step 1: Blur the image
-#         blurred_image = cv2.GaussianBlur(rotated_image, (5, 5), 0)
-    
-#         # Step 2: Scale the image if required
-#         if SR:
-#             width = int(blurred_image.shape[1] * SR_Ratio[0])
-#             height = int(blurred_image.shape[0] * SR_Ratio[1])
-#             dim = (width, height)
-#             scaled_image = cv2.resize(blurred_image, dim, interpolation=cv2.INTER_AREA)
-#         else:
-#             scaled_image = blurred_image
-
-#         # Convert back to PIL for OCR
-#         scaled_image_pil = Image.fromarray(cv2.cvtColor(scaled_image, cv2.COLOR_BGR2RGB))
-    
-#         # Step 3: Extract bounding boxes using Tesseract
-#         bounding_boxes = pytesseract.image_to_boxes(scaled_image_pil, config='-c tessedit_create_boxfile=1').split(" 0\n")
-    
-#         # Step 4: Find possible UIDs and mask them
-#         possible_UIDs = Regex_Search(bounding_boxes)
-        
-#         for uid, start_index in possible_UIDs:
-#             for i in range(8):  # Mask only the first 8 characters
-#                 char_box = bounding_boxes[start_index + i].split()
-#                 if char_box[1] != "0":
-#                     check_addhar_status = True
-#                     return_image_number = str(counts)
-
-#                 x1 = int(char_box[1])
-#                 y1 = int(char_box[2])
-#                 x2 = int(char_box[3])
-#                 y2 = int(char_box[4])
-
-#                 cv2.rectangle(scaled_image, (x1, scaled_image.shape[0] - y1), (x2, scaled_image.shape[0] - y2), (255, 255, 255), -1)
-
-#         # Step 5: Save the final masked image with the angle in the file name
-#         final_masked_image_path = f"./apps/static/Aadhaar_Masking/Aadhar_Rotate_images/rotate_masked_image_{counts}_angle_{angle}.jpg"
-#         cv2.imwrite(final_masked_image_path, scaled_image)
-
-#         # Check if Aadhar number is found and break the loop if true
-#         if check_addhar_status:
-#             print(f"Aadhar number found and masked at angle {angle}. Exiting loop.")
-#             break  # Exit the loop when an Aadhar number is found and masked
-    
-#     return final_masked_image_path, possible_UIDs, check_addhar_status, return_image_number
 
 def Regex_Search(bounding_boxes):
     possible_UIDs = []
@@ -425,85 +355,6 @@ def Regex_Search(bounding_boxes):
     return possible_UIDs
 
 
-# def Extract_Law_Quality_Mask_UIDS(image_path , counts):
-#     # print(image_path)
-
-#     with open(image_path, 'rb') as f:
-#         image_bytes = f.read()
-
-#     language_codes = ['eng']
-#     languages = '+'.join(language_codes)
-#     custom_config = f'--oem 3 --psm 6 -l {languages}'
-
-#     # Decode image from bytes
-#     nparr = np.frombuffer(image_bytes, np.uint8)
-#     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    
-
-#     # Rotation angles to check
-#     rotation_angles = [0, 90, 180, 270, 360]
-
-#     check_addhar_status = False
-#     return_image_number = None
-#     final_masked_image_path = None
-    
-#     # Loop through each angle
-#     for angle in rotation_angles:
-#         rotated_image = img
-       
-
-
-#         # Apply rotation based on the angle
-#         if angle == 90:
-#             rotated_image = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
-#         elif angle == 180:
-#             rotated_image = cv2.rotate(img, cv2.ROTATE_180)
-#         elif angle == 270:
-#             rotated_image = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
-#         # No need to rotate for 0 and 360 degrees
-        
-#         # Resize by x2 using LANCZOS4 interpolation method
-        
-#         img2 = cv2.resize(rotated_image, (rotated_image.shape[1] * 2, rotated_image.shape[0] * 2), interpolation=cv2.INTER_LANCZOS4)
-#         # img_rgb = cv2.cvtColor(img2, cv2.COLOR_BGR2RGB)
-
-#         # Step 3: Extract bounding boxes using Tesseract
-#         bounding_boxes = pytesseract.image_to_boxes(img2, config=custom_config).split(" 0\n")
-
-#         # Search for possible UIDs
-#         possible_UIDs = Regex_Search(bounding_boxes)
-
-#         # If no UIDs found, retry without custom config
-#         if len(possible_UIDs) == 0:
-#             bounding_boxes = pytesseract.image_to_boxes(img2).split(" 0\n")
-#             possible_UIDs = Regex_Search(bounding_boxes)
-
-#         # Step 4: Mask possible UIDs
-#         for uid, start_index in possible_UIDs:
-#             for i in range(8):  # Mask only the first 8 characters
-#                 char_box = bounding_boxes[start_index + i].split()
-
-#                 if char_box[1] != "0":
-#                     check_addhar_status = True
-#                     return_image_number = str(counts)
-
-#                 x1 = int(char_box[1])
-#                 y1 = int(char_box[2])
-#                 x2 = int(char_box[3])
-#                 y2 = int(char_box[4])
-
-#                 cv2.rectangle(img2, (x1, img2.shape[0] - y1), (x2, img2.shape[0] - y2), (255, 255, 255), -1)
-
-#         # Step 5: Save the masked image for the current rotation angle
-#         final_masked_image_path = f"./apps/static/Aadhaar_Masking/Aadhar_Rotate_images/rotate_masked_image_{counts}_angle_{angle}.jpg"
-#         cv2.imwrite(final_masked_image_path, img2)
-
-#         # Check if Aadhar number is found and break the loop
-#         if check_addhar_status:
-#             print(f"Aadhar number found and masked at angle {angle}. Exiting loop.")
-#             break  # Exit the loop when an Aadhar number is found and masked
-
-#     return final_masked_image_path, possible_UIDs, check_addhar_status, return_image_number
 
 def image_to_base64(image_path):
     # Open the image file
@@ -522,7 +373,7 @@ def Simple_way_Quality_Mask(image_path, SR=False, sr_image_path=None, SR_Ratio=[
     masked_image_cv = cv2.cvtColor(np.array(masked_image_pil), cv2.COLOR_RGB2BGR)
 
 
-    bounding_boxes = pytesseract.image_to_boxes(masked_image_pil).split(" 0\n")
+    bounding_boxes = pytesseract.image_to_boxes(masked_image_pil ,config='-c tessedit_create_boxfile=1').split(" 0\n")
 
     possible_UIDs = Regex_Search(bounding_boxes)
 
@@ -652,12 +503,12 @@ def Extract_Law_Quality_Mask_UIDS(image_path, counts):
         img2 = cv2.resize(rotated_image, (rotated_image.shape[1] * 2, rotated_image.shape[0] * 2), interpolation=cv2.INTER_LANCZOS4)
 
         # Extract bounding boxes using Tesseract
-        bounding_boxes = pytesseract.image_to_boxes(img2, config=custom_config).split(" 0\n")
+        bounding_boxes = pytesseract.image_to_boxes(img2,lang='eng',config='-c tessedit_create_boxfile=1').split(" 0\n")
         possible_UIDs = Regex_Search(bounding_boxes)
 
         # If no UIDs found, retry without custom config
         if len(possible_UIDs) == 0:
-            bounding_boxes = pytesseract.image_to_boxes(img2).split(" 0\n")
+            bounding_boxes = pytesseract.image_to_boxes(img2,config='-c tessedit_create_boxfile=1').split(" 0\n")
             possible_UIDs = Regex_Search(bounding_boxes)
 
         # Mask possible UIDs on the original image using the transformed coordinates

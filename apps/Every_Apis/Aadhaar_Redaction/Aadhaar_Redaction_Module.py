@@ -104,7 +104,7 @@ def Simple_way_Quality_Mask(image_path, SR=False, sr_image_path=None, SR_Ratio=[
     masked_image_cv = cv2.cvtColor(np.array(masked_image_pil), cv2.COLOR_RGB2BGR)
 
 
-    bounding_boxes = pytesseract.image_to_boxes(masked_image_pil).split(" 0\n")
+    bounding_boxes = pytesseract.image_to_boxes(masked_image_pil ,config='-c tessedit_create_boxfile=1').split(" 0\n")
 
     possible_UIDs = Regex_Search(bounding_boxes)
 
@@ -194,8 +194,8 @@ def Extract_Law_Quality_Mask_UIDS(image_path, counts):
         image_bytes = f.read()
 
     language_codes = ['eng']
-    languages = '+'.join(language_codes)
-    custom_config = f'--oem 3 --psm 6 -l {languages}'
+    # languages = '+'.join(language_codes)
+    # custom_config = f'--oem 3 --psm 6 -l {languages}'
 
     # Decode image from bytes
     nparr = np.frombuffer(image_bytes, np.uint8)
@@ -226,12 +226,14 @@ def Extract_Law_Quality_Mask_UIDS(image_path, counts):
         img2 = cv2.resize(rotated_image, (rotated_image.shape[1] * 2, rotated_image.shape[0] * 2), interpolation=cv2.INTER_LANCZOS4)
 
         # Extract bounding boxes using Tesseract
-        bounding_boxes = pytesseract.image_to_boxes(img2, config=custom_config).split(" 0\n")
+  
+
+        bounding_boxes = pytesseract.image_to_boxes(img2,lang='eng',config='-c tessedit_create_boxfile=1').split(" 0\n")
         possible_UIDs = Regex_Search(bounding_boxes)
 
         # If no UIDs found, retry without custom config
         if len(possible_UIDs) == 0:
-            bounding_boxes = pytesseract.image_to_boxes(img2).split(" 0\n")
+            bounding_boxes = pytesseract.image_to_boxes(img2,config='-c tessedit_create_boxfile=1').split(" 0\n")
             possible_UIDs = Regex_Search(bounding_boxes)
 
         # Mask possible UIDs on the original image using the transformed coordinates
