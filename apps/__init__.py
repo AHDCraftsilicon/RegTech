@@ -30,10 +30,10 @@ from apps.User_Routes.Api_Credentials import User_Admin_Api_Credentials_bp
 from apps.User_Routes.support import User_Support_bp
 
 # Admin Authentication
-from apps.Authentication_Admin.Admin_login import Admin_login_bp
-# Admin ROutes
-from apps.Admin_Routes.Admin_Dashboard import Admin_Dashboard_bp
-from apps.Admin_Routes.Company_Details import Admin_Company_details_bp
+# from apps.Authentication_Admin.Admin_login import Admin_login_bp
+# # Admin ROutes
+# from apps.Admin_Routes.Admin_Dashboard import Admin_Dashboard_bp
+# from apps.Admin_Routes.Company_Details import Admin_Company_details_bp
 
 
 
@@ -45,6 +45,7 @@ from apps.Every_Apis.Name_Matching import Name_Matching_api_bp
 from apps.Every_Apis.Language_Translator import Language_Translator_api_bp
 from apps.Every_Apis.KYC_Quality_Check import KYC_Quality_Check_api_bp
 from apps.Every_Apis.Aadhaar_Redaction import Aadhaar_Redaction_api_bp
+from apps.Every_Apis.OCR import OCR_all_api_bp
 
 
 def crete_app():
@@ -53,7 +54,7 @@ def crete_app():
     app.config['SESSION_PERMANENT'] = True
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
     app.config['SESSION_COOKIE_NAME'] = 'k_'
-    CORS(app , resources={r"/*": {"origins": "http://20.197.47.40/"}}) 
+    CORS(app , resources={r"/*": {"origins": "https://regtech.blubeetle.ai/"}}) 
 
     # JWT Secret key
     app.config["JWT_SECRET_KEY"] = "Craft_Silicon_Regtech_Makarba_Ahm"
@@ -171,20 +172,18 @@ def crete_app():
     app.register_blueprint(ITR_analysis_bp)
     # Api Credentials
     app.register_blueprint(User_Admin_Api_Credentials_bp)
-    # Support
     app.register_blueprint(User_Support_bp)
-
 
 
     # Index Page
     app.register_blueprint(Index_Page_bp)
     
 
-    # Admin Authentication
-    app.register_blueprint(Admin_login_bp)
-    # Admin Dashboard
-    app.register_blueprint(Admin_Dashboard_bp)
-    app.register_blueprint(Admin_Company_details_bp)
+    # # Admin Authentication
+    # app.register_blueprint(Admin_login_bp)
+    # # Admin Dashboard
+    # app.register_blueprint(Admin_Dashboard_bp)
+    # app.register_blueprint(Admin_Company_details_bp)
     
 
     # Every api access token 
@@ -194,6 +193,7 @@ def crete_app():
     app.register_blueprint(Language_Translator_api_bp)
     app.register_blueprint(KYC_Quality_Check_api_bp)
     app.register_blueprint(Aadhaar_Redaction_api_bp)
+    app.register_blueprint(OCR_all_api_bp)
 
 
 
@@ -247,7 +247,8 @@ def crete_app():
                                                         "connect-src 'self'; "
                                                         "object-src 'none'; "
                                                         "base-uri 'self'; "
-                                                        "frame-src 'self';" ).format(nonce=g.nonce)
+                                                        "frame-src 'self';"
+                                                        "font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com;" ).format(nonce=g.nonce)
         response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
         response.headers['X-Content-Type-Options'] = 'nosniff'
         response.headers['X-Frame-Options'] = 'DENY'

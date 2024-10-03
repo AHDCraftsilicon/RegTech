@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template,request,redirect,flash,jsonify,send_file,make_response
 from flask_jwt_extended import JWTManager, jwt_required,get_jwt
-from datetime import   datetime
+from datetime import timedelta , datetime
 
 # DataBase
 from data_base_string import *
@@ -12,6 +12,7 @@ Index_Page_bp = Blueprint("Index_Page_bp",
                         template_folder="templates")
 
 contact_db = Regtch_services_UAT["contact_us"]
+
 
 @Index_Page_bp.route("/")
 def index_main_page():
@@ -94,8 +95,6 @@ def contact_us():
     return render_template("contact_us.html")
 
 
-
-
 @Index_Page_bp.route("/contact-from",methods=["POST","GET"])
 def contact_us_form():
     if request.method == 'POST':
@@ -112,5 +111,4 @@ def contact_us_form():
         return redirect('/contact-us')
     
     return redirect('/')
-
 

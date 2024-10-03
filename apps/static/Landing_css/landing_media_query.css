@@ -1,3 +1,16 @@
+.dd-flex {
+    display: flex;
+    align-items: center;
+}
+
+.f-power {
+    text-align: right;
+}
+
+.footer-power {
+    width: 200px;
+}
+
 @media (max-width: 1920px) {
     video {
         height: 100% !important;
@@ -105,9 +118,18 @@
     .contact-us-section .contact-left {
         padding: 20px 25px 0 25px;
     }
+
+    .power-by {
+        display: none;
+    }
 }
 
 @media (max-width: 768px) {
+
+    .slder-left {
+        width: 100%;
+    }
+
     .client-testimonial {
         flex-direction: column;
     }

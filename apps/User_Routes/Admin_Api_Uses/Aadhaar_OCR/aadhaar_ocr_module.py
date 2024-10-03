@@ -14,13 +14,15 @@ from werkzeug.utils import secure_filename
 # import xml.etree.ElementTree as ET
 
 
+# Tesseract exe path local
 try:
     os.environ['TESSDATA_PREFIX'] = r'C:\Program Files\Tesseract-OCR\tessdata'
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 except:
     # Linux Server
     os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'
-    pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
+    pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract' 
+
 
 
 
@@ -412,11 +414,11 @@ def aadhar_ocr_image_read_main(image_path):
                 
         responce_store.append(responce)
 
-    print(responce_store)
+    # print(responce_store)
 
     most_detailed_dict = get_most_detailed_dict(responce_store)
 
-    print(most_detailed_dict)
+    # print(most_detailed_dict)
 
     if most_detailed_dict == {}:
         return {"status_code": 400,

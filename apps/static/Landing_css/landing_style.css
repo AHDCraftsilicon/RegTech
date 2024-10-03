@@ -1,4 +1,4 @@
-/* @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"); */
+@import url("../Landing_css/fonts-googleapis.css");
 
 :root {
     --color-white-100: hsl(0, 0%, 100%);
@@ -92,9 +92,9 @@ h5 {
     word-wrap: break-word;
 }
 
-p {
-    max-width: 50ch;
-}
+/* p {
+  max-width: 50ch;
+} */
 
 p,
 li {
@@ -604,8 +604,8 @@ ul.menu li {
 
 .slider-font {
     color: #fff;
-    font-size: 65px;
-    line-height: 80px;
+    font-size: 55px;
+    line-height: 65px;
 }
 
 .slider-normal {
@@ -664,7 +664,7 @@ ul.menu li {
 .revolutionize-part {
     width: 100%;
     height: auto;
-    padding: 70px 0px;
+    padding: 40px 0px;
     background-image: url(../../static/landing_images/blue-bg.png);
     background-size: cover;
 }
@@ -1064,7 +1064,7 @@ li.country.highlight {
 }
 
 .iti-flag {
-    background-image: url("../../static/landing_images/flags@2x.png");
+    background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.6/img/flags.png");
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2),
@@ -1074,7 +1074,7 @@ only screen and (min-device-pixel-ratio: 2),
 only screen and (min-resolution: 192dpi),
 only screen and (min-resolution: 2dppx) {
     .iti-flag {
-        background-image: url("../../static/landing_images/flags@2x.png");
+        background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.6/img/flags@2x.png");
     }
 }
 
@@ -1087,6 +1087,7 @@ only screen and (min-resolution: 2dppx) {
     padding: 20px 25px;
     box-shadow: 0px 8px 28px -6px rgba(24, 39, 75, 0.12), 0px 18px 88px -4px rgba(24, 39, 75, 0.14);
     border-radius: 30px;
+    margin-bottom: 20px;
 }
 
 .c-checkbox input {
@@ -1360,7 +1361,7 @@ li.country.highlight {
 }
 
 .iti-flag {
-    background-image: url("../../static/landing_images/flags@2x.png");
+    background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.6/img/flags.png");
 }
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2),
@@ -1370,7 +1371,7 @@ only screen and (min-device-pixel-ratio: 2),
 only screen and (min-resolution: 192dpi),
 only screen and (min-resolution: 2dppx) {
     .iti-flag {
-        background-image: url("../../static/landing_images/flags@2x.png");
+        background-image: url("https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/12.1.6/img/flags@2x.png");
     }
 }
 
@@ -1395,7 +1396,7 @@ only screen and (min-resolution: 2dppx) {
 }
 
 .common-inner-page-padding {
-    padding: 50px 0px;
+    padding-top: 50px;
 }
 
 .btn-3 {
@@ -1419,25 +1420,17 @@ only screen and (min-resolution: 2dppx) {
     border-radius: 10px;
 }
 
-.ad-text2 {
-    position: static;
-}
-
-.ad-icon2 {
-    position: static;
-}
-
-.ad-icon2 img {
+.ad-icon1 img {
     width: 54px;
     padding-bottom: 20px;
 }
 
-.ad-text2 h3 {
+.ad-text1 h3 {
     font-size: 22px;
     height: 50px;
 }
 
-.ad-text2 p {
+.ad-text1 p {
     font-size: 16px;
 }
 
@@ -1463,6 +1456,7 @@ only screen and (min-resolution: 2dppx) {
 .intr-f p svg {
     width: 18px !important;
     margin-right: 10px;
+    max-width: none;
 }
 
 .intr-f p {
@@ -1610,4 +1604,24 @@ only screen and (min-resolution: 2dppx) {
 
 .c-second ul li:nth-child(2) {
     display: none;
+}
+
+.carousel-indicators {
+    z-index: 9 !important;
+}
+
+.bank-box-part {
+    display: none;
+}
+
+.success-stories {
+    display: none;
+}
+
+.carousel-control-next {
+    right: -100px;
+}
+
+.slder-left {
+    width: calc(100% - 400px);
 }
