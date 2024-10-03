@@ -17,6 +17,14 @@ from data_base_string import *
 from Headers_Verify import *
 
 
+# Aadhaar OCR
+from apps.Every_Apis.OCR.aadhaar_ocr_module import *
+# Pancard OCR
+from apps.Every_Apis.OCR.pancard_ocr_module import *
+# Passport OCR
+from apps.Every_Apis.OCR.passport_ocr_module import *
+
+
 # Blueprint
 OCR_all_api_bp = Blueprint("OCR_all_api_bp",
                         __name__,
@@ -43,7 +51,7 @@ UUID_PATTERN = re.compile(
 @check_headers
 def Ocr_Api_route():
     if request.method == 'POST':
-        try:
+        # try:
             data = request.get_json()
 
             # Json IS Empty Or Not
@@ -95,28 +103,84 @@ def Ocr_Api_route():
                         
                         # UniqueID Check in DB
                         unique_id_check = User_test_Api_history_db.find_one({"user_id":check_user_id_in_db["_id"],"User_Unique_id":data["UniqueID"]})
-
+                        api_status = ""
+                        
                         if unique_id_check == None:
-                            
-                            str1 = data['name1']
-                            str2 = data['name2']
+                            try:
+                                ocr_image = data['image'].split(',')[1]
+                            except:
+                                ocr_image = data['image']
 
-                            # similarity = calculate_similarity(str1, str2)
+                            if ocr_image.startswith('data:image/jpeg;base64,'):
+                                ocr_image = ocr_image.replace('data:image/jpeg;base64,', '')
+                            
+                            
+                            if ocr_image.startswith('data:image/png;base64,'):
+                                ocr_image = ocr_image.replace('data:image/png;base64,', '')
+                            
+                            if data["doc_type"] == "Aadhaarcard":
+
+                                img_decoded = base64.b64decode(ocr_image)
+                                aadhaar_responce = aadhar_ocr_image_read_main(img_decoded)
+                                api_status = "Aadhaar_OCR"
+
+                                if aadhaar_responce != {}:
+                                    store_response = {"status_code": 200,
+                                                "status": "Success",
+                                                "response": aadhaar_responce}
+                                else:
+                                    store_response = {"status_code": 400,
+                                    "status": "Error",
+                                    "response": "Please upload a high-quality and readable image."}
+                            
+                            
+                            elif data["doc_type"] == "PANcard":
+                                img_decoded = base64.b64decode(ocr_image)
+                                pan_responce = pancard_main(img_decoded)
+                                api_status = "PAN_OCR"
+
+                                if pan_responce != {}:
+                                    store_response = {"status_code": 200,
+                                                "status": "Success",
+                                                "response": pan_responce}
+                                else:
+                                    store_response = {"status_code": 400,
+                                    "status": "Error",
+                                    "response": "Please upload a high-quality and readable image."}
+
+                            elif data["doc_type"] == "Passport":
+                                img_decoded = base64.b64decode(ocr_image)
+                                passport_responce = passport_main(img_decoded)
+                                api_status = "Passport_OCR"
+
+
+                                if passport_responce != {}:
+                                    store_response = {"status_code": 200,
+                                                "status": "Success",
+                                                "response": passport_responce}
+                                else:
+                                    store_response = {"status_code": 400,
+                                    "status": "Error",
+                                    "response": "Please upload a high-quality and readable image."}
+
+                            
+                            else:
+                                return jsonify({"data":{
+                                        "status_code": 400,
+                                        "status": "Error",
+                                        "response":"Please Select Valid doc_type!"
+                                    }}) , 400
 
                             api_call_end_time = datetime.now()
                             duration = api_call_end_time - api_call_start_time
                             duration_seconds = duration.total_seconds()
-                            store_response = {
-                                            "status_code": 200,
-                                            "status": "Success",
-                                            "response": {"String": str2,
-                                                        "SimilarityPercentage": "similarity"}}
+                                
                             
                             # DataBase Log
                             User_test_Api_history_db.insert_one({
                                     "user_id":check_user_id_in_db["_id"],
                                     "User_Unique_id":data['UniqueID'],
-                                    "api_name":"Name_Match",
+                                    "api_name":api_status,
                                     "api_start_time":api_call_start_time,
                                     "api_end_time":datetime.now(),
                                     "api_status": "Success",
@@ -129,7 +193,7 @@ def Ocr_Api_route():
                                     })
 
                             # Check Api Using Credits
-                            api_use_credit_info = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3b9ce1846511541497")})
+                            api_use_credit_info = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3b9ce1846511541493")})
                             
                             if check_user_id_in_db["unlimited_test_credits"] == False:
                                 # Credit 
@@ -167,17 +231,17 @@ def Ocr_Api_route():
                     }}), 400
             
 
-        except:
-            return jsonify({"data":{
-                        "status_code": 400,
-                        "status": "Error",
-                        "response":"Something went wrong!"
-                    }}), 400
+    #     except:
+    #         return jsonify({"data":{
+    #                     "status_code": 400,
+    #                     "status": "Error",
+    #                     "response":"Something went wrong!"
+    #                 }}), 400
         
-    else:
-        return jsonify({"data":{
-                        "status_code": 400,
-                        "status": "Error",
-                        "response":"Something went wrong!"
-                    }}), 400
+    # else:
+    #     return jsonify({"data":{
+    #                     "status_code": 400,
+    #                     "status": "Error",
+    #                     "response":"Something went wrong!"
+    #                 }}), 400
         
