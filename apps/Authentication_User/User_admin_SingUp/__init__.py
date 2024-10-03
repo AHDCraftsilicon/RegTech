@@ -34,28 +34,20 @@ def generate_token(length=120):
 
 # Sent Email
 def user_to_sent_mail(receiver_emailid , token_url,Reciver_name):
-    sender_email = "jagdish.patil@craftsiliconblr.onmicrosoft.com"
-    subject = "Test Email"
+    sender_email = "verification@blubeetle.ai"
+    subject = "Complete Your Registration – Set Your Password"
     token_url = token_url
 
 
     html_body = f"""
-       <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Document</title>
-        </head>
-        <body>
             <table style="width: 655px;margin: 0 auto;font-family: sans-serif;font-size: 13px; padding: 10px; background-color: #ffffff; border: 1px solid #139af6; box-sizing: content-box; border-bottom: 5px solid #046ee4;">
                 <tbody>
                 <tr>
                     <td style="text-align: center; ">
                         <div>
                             <div style="width: 200px;margin: 0 auto;">
-                                <img  src="cid:image1" 
-                                style="padding: 10px 15px;width: 80%;">
+                                <img  src="cid:image1"  style="padding: 10px 15px;"
+                               width="150">
                             </div>
                             <div style="width: 580px; margin: 0 auto;">
                                 <div>                                    
@@ -79,8 +71,14 @@ def user_to_sent_mail(receiver_emailid , token_url,Reciver_name):
                                     <p style="text-align: left; line-height: 17px;"> </p>
                                     <p style="text-align: left; line-height: 17px;">You have successfully registered on our platform. To complete your setup and access your account, please set your password by clicking the button below:</p>
                                     <p style="text-align: left; line-height: 0px;">&nbsp;</p>
-                                    <a href='"""+token_url+"""' target="_blank" style="text-decoration: none; background-color: #139af6; color: #fff; padding: 7px 15px; font-size: 14px; font-weight: 600; border-radius: 5px;">Click Here</a>
-                                    <p style="text-align: left; line-height: 0px;">&nbsp;</p>
+                                    <a href='"""+token_url+"""' target="_blank"><b>
+                                                                <span style="font-size: 10.5pt;
+                                                                color: white;
+                                                                background: #139AF6;
+                                                                text-decoration: none;
+                                                                padding: 0.1in 0.1in;
+                                                                border-radius: 0.1in;
+                                                                ">Click Here</span></b></a>
                                     <p style="text-align: left; line-height: 17px;">For security reasons, this link is valid for the next 30 Minutes and will expire after that. If you do not complete the process within this time, you can request a new link by visiting our Portal.</p>
                                     
                                 
@@ -101,8 +99,6 @@ def user_to_sent_mail(receiver_emailid , token_url,Reciver_name):
             
                 </tbody>
             </table>
-    </body>
-    </html>
         """
     
     msg = MIMEMultipart()
@@ -114,9 +110,9 @@ def user_to_sent_mail(receiver_emailid , token_url,Reciver_name):
         msg.attach(img)
 
     # Gmail SMTP server details
-    smtp_server = "smtp.office365.com"
+    smtp_server = "secure.emailsrvr.com"
     smtp_port = 587
-    password = "Dol07883@@"  # Use App-specific password for better security
+    password = "4TT1rP8rex1X"  # Use App-specific password for better security
 
     # Create the email
     msg["From"] = sender_email
