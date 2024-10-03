@@ -233,7 +233,7 @@ svg {
     left: 0;
     z-index: 10;
     width: 100%;
-    height: auto;
+    height: 70px;
     background-color: var(--color-white-100);
     box-shadow: var(--shadow-medium);
 }
