@@ -28,6 +28,14 @@ from apps.User_Routes.Admin_Api_Uses.ITR_Analysis import ITR_analysis_bp
 from apps.User_Routes.Api_Credentials import User_Admin_Api_Credentials_bp
 # User Api Support
 from apps.User_Routes.support import User_Support_bp
+# User Api Usage_Insights
+from apps.User_Routes.Usage_Insights import User_Api_Usage_bp
+# User APi Credits & Pricing
+from apps.User_Routes.Credits_pricing import Credits_Pricing_bp
+# USer Api Documentation
+from apps.User_Routes.Api_Documentation import User_api_Documentation_bp
+
+
 
 # Admin Authentication
 # from apps.Authentication_Admin.Admin_login import Admin_login_bp
@@ -173,7 +181,9 @@ def crete_app():
     # Api Credentials
     app.register_blueprint(User_Admin_Api_Credentials_bp)
     app.register_blueprint(User_Support_bp)
-
+    app.register_blueprint(User_Api_Usage_bp)
+    app.register_blueprint(Credits_Pricing_bp)
+    app.register_blueprint(User_api_Documentation_bp)
 
     # Index Page
     app.register_blueprint(Index_Page_bp)

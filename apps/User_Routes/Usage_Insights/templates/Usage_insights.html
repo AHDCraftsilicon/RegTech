@@ -4,19 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Support - bluBeetle.ai</title>
+    <title>Usage Insights - bluBeetle.ai</title>
 
     {% set User_Portal_urls = User_Portal_urls() %}
     {% if User_Portal_urls %}
     {{ User_Portal_urls | safe }}
     {% endif %}
-
-    <div class="c-content">
-        <div class="c-content-main-part">
-            <div id="toastContainer" class="toast-container">
-            </div>
-        </div>
-    </div>
 </head>
 
 <body>
@@ -39,7 +32,7 @@
                 <div>
                     <div class="row">
                         <div class="col-12 c-heading-common">
-                            <h1 class="main-heading">Customer Support</h1>
+                            <h1 class="main-heading">Usage Insights</h1>
                             <div class="testing-credit">
                                 <p class="testing-credit-text">Testing Credit</p>
                                 <p class="testing-credit-digit"><i class="ri-task-line"></i>
@@ -50,25 +43,8 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="cc-box">
-                                <div class="cc-box-padding">
-                                    <form action="/support-form" method="post">
-                                        <div class="form-group c-form-group">
-                                            <label>Subject <span class="required">*</span></label>
-                                            <input type="text" name="subject" class="form-control c-form-control">
-                                        </div>
-                                        <div class="form-group c-form-group">
-                                            <label>Message <span class="required">*</span></label>
-                                            <textarea name="Message" class="form-control c-form-control" rows="3"
-                                                cols="12"></textarea>
-                                        </div>
+                            <h1 class="text-center bold display-1">Comming Soon</h1>
 
-
-                                        <button class="btn c-btn">Submit</button>
-
-                                    </form>
-                                </div>
-                            </div>
                         </div>
 
 
@@ -79,15 +55,6 @@
         </div>
     </section>
 
-    <!-- Verify Message -->
-    <script nonce="{{ g.nonce }}">
-
-        abcd = "{{message}}"
-        if (abcd != "") {
-            alert("{{message}}")
-
-        }
-    </script>
 
 
 </body>
