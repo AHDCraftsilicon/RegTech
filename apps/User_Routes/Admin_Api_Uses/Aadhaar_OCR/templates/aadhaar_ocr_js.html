@@ -32,15 +32,25 @@
 
             fetch("/aadhaar/test-api", requestOptions)
                 .then((response) => response.json())
-                .then((result) => {                    
-                    $(".c-loader").addClass('d-none')
-                    var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
-                    $("#aadhaar_ocr_json").text(formatteddata)
-                    $('#eta').removeClass('d-none')
+                .then((result) => {
 
-                    document.getElementById("aadhaar_ocr_seconds").innerHTML = result.data.result_in_seconds
+                    if (result.data.json_data != undefined) {
+                        $(".c-loader").addClass('d-none')
+                        var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
+                        $("#aadhaar_ocr_json").text(formatteddata)
+                        $('#eta').removeClass('d-none')
+                        document.getElementById("aadhaar_ocr_seconds").innerHTML = result.data.result_in_seconds
+                    }
+                    else {
+                        $(".c-loader").addClass('d-none')
+                        var formatteddata = JSON.stringify(result, null, '\t')
+                        $("#aadhaar_ocr_json").text(formatteddata)
+                        $('#eta').removeClass('d-none')
+                    }
                 })
-                .catch((error) => console.error(error));
+                .catch((error) => {
+                    console.log(error)
+                });
         }
         else {
             alert("Please Choose File!")

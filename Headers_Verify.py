@@ -11,7 +11,8 @@ expected_headers = {
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
     "X-XSS-Protection": "1; mode=block",
-    "Content-Security-Policy": "policy"
+    "Content-Security-Policy": "policy",
+    "Strict-Transport-Security": "max-age=31536000; includeSubDomains; preload"
 }
 
 def normalize_header_value(value):

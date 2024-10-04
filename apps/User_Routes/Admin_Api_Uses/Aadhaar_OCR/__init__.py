@@ -72,7 +72,7 @@ def generate_random_id():
 def Aadhaar_ocr_test_api():
     if request.method == "POST":
 
-        try:
+        # try:
             encrypted_token = session.get('QtSld')
             ip_address = session.get('KLpi')
             if session.get('bkjid') != "":
@@ -80,7 +80,7 @@ def Aadhaar_ocr_test_api():
                 check_user_in_db = User_Authentication_db.find_one({"_id":ObjectId(session.get('bkjid'))})
                 
                 if check_user_in_db != None:
-                    if check_user_in_db["total_test_credits"] >= check_user_in_db["used_test_credits"]:
+                    if check_user_in_db["total_test_credits"] > check_user_in_db["used_test_credits"]:
                         completed_on_ = datetime.now()
                         completed_on = datetime.now(pytz.timezone('Asia/Kolkata'))
                         completed_on = completed_on.strftime('%Y-%m-%dT%H:%M:%S%z')
@@ -141,19 +141,19 @@ def Aadhaar_ocr_test_api():
 
                     else:
                         return jsonify({"data":{
-                                "status_code": 400,
+                                "status_code": "400",
                                 "status": "Error",
                                 "response":"You have zero credits left, please pay for more credits!"
-                            }}), 400
+                            }})
                     
                 return jsonify({"data":{"json_data":"Something went wrong!"}})
             
             return jsonify({"data":{"json_data":"Something went wrong!"}})
         
-        except:
-            return redirect("/")
+    #     except:
+    #         return redirect("/")
     
-    return jsonify({"msg":"method Not allowed!"})
+    # return jsonify({"msg":"method Not allowed!"})
 
 
 

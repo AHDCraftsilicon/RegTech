@@ -75,7 +75,7 @@ def Name_compare_testing_api():
 
                 check_user_in_db = User_Authentication_db.find_one({"_id":ObjectId(session.get('bkjid'))})
                 if check_user_in_db != None:
-                    if check_user_in_db["total_test_credits"] >= check_user_in_db["used_test_credits"]:
+                    if check_user_in_db["total_test_credits"] > check_user_in_db["used_test_credits"]:
 
                         completed_on_ = datetime.now()
                         completed_on = datetime.now(pytz.timezone('Asia/Kolkata'))

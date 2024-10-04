@@ -1,0 +1,47 @@
+.d-flex {
+    display: -ms-flexbox !important;
+    display: flex !important;
+    flex-wrap: wrap;
+}
+@media screen and (max-width: 767px) {
+.login-right-main-part {
+    width: 100% !important;
+    max-width: 400px !important;
+    margin: 0 auto;
+}
+.login-right-main-part {
+    height: 100vh;
+}
+.login-right-part{
+position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+}
+}
+@media screen and (max-width: 640px) {
+    .c-heading-common {
+        flex-wrap: wrap;
+        padding-bottom: 20px;
+    }
+    
+  }
+
+@media screen and (max-width: 570px) {
+    .side-menu {
+        
+        width: 60px;
+    }
+    .page-content {
+       
+        padding-left: 60px;
+    }
+    .c-btn,.c-btn2 {
+        padding: 7px 22px;
+    }
+    .c-budge {
+       
+        display: inline-block;
+    }
+  }

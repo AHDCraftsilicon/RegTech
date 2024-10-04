@@ -94,7 +94,7 @@ def Language_Translator_Api_route():
                 check_user_id_in_db = Authentication_db.find_one({"_id":ObjectId(check_user['sub']['client_id'])})
 
                 if check_user_id_in_db != None:
-                    if check_user_id_in_db["total_test_credits"] >= check_user_id_in_db["used_test_credits"]:
+                    if check_user_id_in_db["total_test_credits"] > check_user_id_in_db["used_test_credits"]:
                         
                         # UniqueID Check in DB
                         unique_id_check = User_test_Api_history_db.find_one({"user_id":check_user_id_in_db["_id"],"User_Unique_id":data["UniqueID"]})

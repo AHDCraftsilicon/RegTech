@@ -541,7 +541,7 @@ header .menu-icon {
 }
 
 header .logo-img {
-    width: calc(100% - 125px);
+    width: 110px;
     padding: 2px 0px;
     box-sizing: border-box;
 }
@@ -1592,4 +1592,11 @@ input[type=file] {
 
 .api-loader {
     width: 87px
+}
+
+.comming-text {
+    text-align: center;
+    margin: 0 auto;
+    font-size: 22px;
+    font-weight: bold;
 }
