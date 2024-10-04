@@ -48,7 +48,7 @@ UUID_PATTERN = re.compile(
 
 @OCR_all_api_bp.route("/ocr",methods=['POST'])
 @jwt_required()
-@check_headers
+#@check_headers
 def Ocr_Api_route():
     if request.method == 'POST':
         # try:

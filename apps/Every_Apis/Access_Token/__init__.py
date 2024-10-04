@@ -22,7 +22,7 @@ User_Authentication_db = Regtch_services_UAT["User_Authentication"]
 
 
 @Access_Token_api_bp.route("/token/getkey",methods=['POST'])
-@check_headers
+#@check_headers
 def Token_access_main_api():
     
     if request.method == 'POST':

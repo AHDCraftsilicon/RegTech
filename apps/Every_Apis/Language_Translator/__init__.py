@@ -41,7 +41,7 @@ translator = Translator()
 
 @Language_Translator_api_bp.route("/language/translator",methods=['POST'])
 @jwt_required()
-@check_headers
+#@check_headers
 def Language_Translator_Api_route():
     if request.method == 'POST':
         try:

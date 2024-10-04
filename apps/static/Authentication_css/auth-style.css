@@ -183,9 +183,11 @@ input {
   line-height: 2rem;
   color: #222B45;
 }
+
 input:hover {
   border: .1rem solid #1C43B9;
 }
+
 input:focus {
   outline: none;
 }
@@ -195,6 +197,7 @@ label {
   display: block;
   text-align: left;
 }
+
 .label {
   color: #999;
   font-size: 1.8rem;
@@ -398,7 +401,38 @@ input:focus~.highlight {
 
   .login-right-main-part {
     height: auto;
+    width: 100% !important;
+    max-width: 400px !important;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
+
+  p.testing-credit-digit span {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 22px;
+    padding-left: 10px;
+    position: relative;
+  }
+
+  .main-heading {
+    font-family: 'Nimble-Regular-font';
+    font-weight: 600;
+    font-size: 2rem;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding-bottom: 20px;
+    padding-top: 10px;
+  }
+
+  .cc-box {
+    width: 100%;
+    margin-bottom: 36px;
+  }
+
 
   .login-right-part .login-padding {
     padding: 0px 20px;
@@ -1594,46 +1628,57 @@ p.demos {
   font-size: 20px;
   color: #99a6c4;
 }
+
 .toast {
   position: fixed !important;
   top: 10px !important;
-  right: 10px !important; border-radius: 5px; padding: 0px 10px;
+  right: 10px !important;
+  border-radius: 5px;
+  padding: 0px 10px;
 }
+
 .toast-body {
   padding: 10px;
   font-size: 15px;
 }
+
 .btn-close {
   font-size: 17px;
 }
+
 .toast.show {
   display: block;
   opacity: 1;
   cursor: pointer !important;
   z-index: 99999 !important;
 }
+
 .c-tooltip {
   margin: 0px !important;
   font-size: 16px !important;
   line-height: 16px;
 }
-.c-tooltip i{
+
+.c-tooltip i {
   position: relative;
-    top: 5px;
+  top: 5px;
   font-size: 20px !important;
-  
+
 }
+
 .valid p {
   color: green !important;
 }
+
 .invalid p {
   color: rgb(255, 18, 37) !important;
 }
 
 
-.input-margin{
+.input-margin {
   margin-bottom: 3rem !important;
 }
+
 .valid {
   margin: 5px 0 15px 0;
 }
@@ -1651,6 +1696,7 @@ p.demos {
   line-height: 2rem;
   color: #222B45;
 }
+
 .c-form-control:hover {
   border: .1rem solid #1C43B9;
 }

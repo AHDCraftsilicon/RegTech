@@ -48,7 +48,7 @@ UUID_PATTERN = re.compile(
 
 @Aadhaar_Redaction_api_bp.route("/aadhaar/masking",methods=['POST'])
 @jwt_required()
-@check_headers
+#@check_headers
 def Aadhaar_Redaction_Api_route():
     if request.method == 'POST':
         # try:

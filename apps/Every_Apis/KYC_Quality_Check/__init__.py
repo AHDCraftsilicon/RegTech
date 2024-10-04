@@ -39,15 +39,6 @@ UUID_PATTERN = re.compile(
 )
 
 # Tesseract exe path local
-# try:
-#     os.environ['TESSDATA_PREFIX'] = r'C:\Program Files\Tesseract-OCR\tessdata'
-#     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-# except:
-#     # Linux Server
-#     os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'
-#     pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract' 
-
-
 os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'
 pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract' 
     
@@ -128,7 +119,7 @@ def is_kyc_document(image_base64):
 
 @KYC_Quality_Check_api_bp.route("/image/imagequality",methods=['POST'])
 @jwt_required()
-@check_headers
+#@check_headers
 def KYC_Quality_Check_Api_route():
     if request.method == 'POST':
         try:

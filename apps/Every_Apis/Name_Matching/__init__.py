@@ -64,7 +64,7 @@ UUID_PATTERN = re.compile(
 
 @Name_Matching_api_bp.route("/name/matching",methods=['POST'])
 @jwt_required()
-@check_headers
+#@check_headers
 def Name_Matching_Api_route():
     if request.method == 'POST':
         try:
