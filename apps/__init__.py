@@ -259,10 +259,17 @@ def crete_app():
                                                         "base-uri 'self'; "
                                                         "frame-src 'self';"
                                                         "font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com;" ).format(nonce=g.nonce)
-        response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+        response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains; preload'
         response.headers['X-Content-Type-Options'] = 'nosniff'
         response.headers['X-Frame-Options'] = 'DENY'
         response.headers['X-XSS-Protection'] = '1; mode=block'
+
+         # access-control
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'origin'
+        response.headers['Age'] = '3600'
+        response.headers['Cache-Control'] = 'public, max-age=3600'
         
         return response
 

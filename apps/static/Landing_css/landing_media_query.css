@@ -49,7 +49,8 @@
     }
 
     .slider-text-part {
-        height: 85vh;
+        height: auto;
+        top: 65%;
     }
 
     .bank-box-part {
@@ -80,11 +81,11 @@
     }
 
     .slider-text-part {
-        height: 70vh;
+        height: auto;
     }
 
     .container {
-        height: -webkit-fill-available;
+        height: auto;
     }
 
     #carousel2 .slide-carousel2 {
