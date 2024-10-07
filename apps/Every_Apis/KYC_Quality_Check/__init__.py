@@ -39,7 +39,7 @@ UUID_PATTERN = re.compile(
 )
 
 # Tesseract exe path local
-os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'
+os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
 pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract' 
     
 

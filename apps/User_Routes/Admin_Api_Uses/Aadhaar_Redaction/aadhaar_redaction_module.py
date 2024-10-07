@@ -14,7 +14,7 @@
 #     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 # except:
 #     # Linux Server
-#     os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'
+#     os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
 #     pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'  
 
 
@@ -276,7 +276,7 @@ import shutil , time
 from werkzeug.utils import secure_filename
 
 
-os.environ['TESSDATA_PREFIX'] = '/usr/local/share/tessdata/'
+os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
 pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract' 
 
 
