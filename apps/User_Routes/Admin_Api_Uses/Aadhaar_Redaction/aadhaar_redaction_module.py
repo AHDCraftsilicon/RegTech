@@ -276,8 +276,8 @@ import shutil , time
 from werkzeug.utils import secure_filename
 
 
-os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
 pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract' 
+os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
 
 
 multiplication_table = (

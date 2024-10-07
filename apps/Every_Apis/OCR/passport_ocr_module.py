@@ -10,8 +10,8 @@ from flask import Flask,jsonify
 from passporteye import read_mrz
 from io import BytesIO
 
-os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
 pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract' 
+os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
 
 def passport_main(image_path):
     mrz = read_mrz(BytesIO(image_path))
