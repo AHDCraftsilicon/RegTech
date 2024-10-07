@@ -374,6 +374,7 @@
     .inner-page-text p {
         font-size: 14px !important;
         margin-bottom: 10px !important;
+        text-align: justify;
     }
 
     .advantages-box.use-api {
