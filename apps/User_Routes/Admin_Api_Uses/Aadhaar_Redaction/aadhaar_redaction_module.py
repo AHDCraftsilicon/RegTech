@@ -14,7 +14,7 @@
 #     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 # except:
 #     # Linux Server
-#     os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
+#     #os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
 #     pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'  
 
 
@@ -277,7 +277,7 @@ from werkzeug.utils import secure_filename
 
 
 pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract' 
-os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
+#os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
 
 
 multiplication_table = (
