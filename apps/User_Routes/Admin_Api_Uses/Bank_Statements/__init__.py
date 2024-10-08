@@ -10,6 +10,8 @@ import pytesseract
 import numpy as np
 import time , os
 from werkzeug.utils import secure_filename
+import uuid
+import ast
 
 
 # Module
@@ -38,7 +40,7 @@ Api_Informations_db = Regtch_services_UAT["Api_Informations"]
 
 
 
-@Bank_Statments_bp.route("/statment")
+@Bank_Statments_bp.route("/statement",methods=["GET","POST"])
 def Bank_Statment_main():
 
     encrypted_token = session.get('QtSld')
@@ -74,45 +76,143 @@ def generate_random_id():
 
 @Bank_Statments_bp.route('/test-api',methods=['POST'])
 def Bank_Statment_test_api():
+
     if request.method == "POST":
+        try:
+            encrypted_token = session.get('QtSld')
+            ip_address = session.get('KLpi')
+            if session.get('bkjid') != "":
 
-        completed_on_ = datetime.now()
-        completed_on = datetime.now(pytz.timezone('Asia/Kolkata'))
-        completed_on = completed_on.strftime('%Y-%m-%dT%H:%M:%S%z')
-        completed_on = completed_on[:-2] + ':' + completed_on[-2:]
+                check_user_in_db = User_Authentication_db.find_one({"_id":ObjectId(session.get('bkjid'))})
+                if check_user_in_db != None:
+                    if check_user_in_db["total_test_credits"] >= check_user_in_db["used_test_credits"]:
 
-
-        pdf_file = request.files["PDF_File"]
-        filename_ipdf = str(time.time()).replace(".", "")
-
-        if pdf_file.filename != "":
-            pdf_file.save(os.path.join('./apps/static/bank_statement_analysing', secure_filename(
-                filename_ipdf+"."+pdf_file.filename.split(".")[-1])))
-            pdf_store_file = "apps/static/bank_statement_analysing/"+filename_ipdf+"."+pdf_file.filename.split(".")[-1]
-                
-            if request.form["BankName"] == "ICICIBANK":
-                icici_response = icic_bank_statement_main(pdf_store_file)
+                        completed_on_ = datetime.now()
+                        completed_on = datetime.now(pytz.timezone('Asia/Kolkata'))
+                        completed_on = completed_on.strftime('%Y-%m-%dT%H:%M:%S%z')
+                        completed_on = completed_on[:-2] + ':' + completed_on[-2:]
 
 
-            created_on = datetime.now(pytz.timezone('Asia/Kolkata'))
-            created_on = created_on.strftime('%Y-%m-%dT%H:%M:%S%z')
-            created_on = created_on[:-2] + ':' + created_on[-2:]
+                        pdf_file = request.files["PDF_File"]
+                        filename_ipdf = str(time.time()).replace(".", "")
 
 
-            duration = datetime.now()- completed_on_ 
-            duration_seconds = duration.total_seconds()
-
-            store_response = {"response": 200,
-                                "status": "Success",
-                                "responseValue":icici_response,
-                                "created_on" : created_on,
-                                "completed_on":completed_on,
-                                "request_id":generate_random_id(),
-                                }
+                        System_Generated_Unique_id = str(uuid.uuid4())
+                        if pdf_file.filename != "":
+                            pdf_file.save(os.path.join('./apps/static/bank_statement_analysing', secure_filename(
+                                filename_ipdf+"."+pdf_file.filename.split(".")[-1])))
+                            pdf_store_file = "apps/static/bank_statement_analysing/"+filename_ipdf+"."+pdf_file.filename.split(".")[-1]
+                                
+                            if request.form["BankName"] == "ICICIBANK":
+                                icici_response = icic_bank_statement_main(pdf_store_file)
 
 
-            return jsonify({"data":
-                            {"json_data": store_response,
-                            "result_in_seconds":duration_seconds}})
-    
+                                created_on = datetime.now(pytz.timezone('Asia/Kolkata'))
+                                created_on = created_on.strftime('%Y-%m-%dT%H:%M:%S%z')
+                                created_on = created_on[:-2] + ':' + created_on[-2:]
+                                
+
+                                duration = datetime.now()- completed_on_ 
+                                duration_seconds = duration.total_seconds()
+
+                                store_response = {"status_code": 200,
+                                                    "status": "Success",
+                                                    "response": icici_response,
+                                                    "created_on" : created_on,
+                                                    "completed_on":completed_on,
+                                                    "request_id":generate_random_id(),
+                                                    "System_Generated_Unique_id" : System_Generated_Unique_id
+                                                    }
+                                
+
+                                # DataBase Log
+                                User_test_Api_history_db.insert_one({
+                                            "user_id":check_user_in_db["_id"],
+                                            "User_Unique_id":"Api Call From Dashboard",
+                                            "api_name":"Bank_Statement",
+                                            "api_start_time":completed_on_,
+                                            "api_end_time":datetime.now(),
+                                            "api_status": "Success",
+                                            "response_duration":str(duration),
+                                            "response_time":duration_seconds,
+                                            "request_data":{},
+                                            "response_data" :str(store_response),
+                                            "creadted_on":datetime.now(),
+                                            "System_Generated_Unique_id" : System_Generated_Unique_id,
+                                            })
+                                
+                                # Check Api Using Credits
+                                api_use_credit_info = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3b9ce184651154149a")})
+                                    
+                                if check_user_in_db["unlimited_test_credits"] == False:
+                                    # Credit 
+                                    User_Authentication_db.update_one({"_id":check_user_in_db["_id"]},{"$set":{
+                                        "used_test_credits": check_user_in_db["used_test_credits"] + api_use_credit_info["credits_per_use"]
+                                    }})
+
+
+                                return jsonify({"data":{"json_data": store_response,
+                                                        "result_in_seconds":duration_seconds}})
+                            
+                            else:
+                                return jsonify({"data":{
+                                "status_code": 400,
+                                "status": "Error",
+                                "response":"Please Mention BankName!"
+                            }}), 400
+
+
+                    else:
+                        return jsonify({"data":{
+                                "status_code": 400,
+                                "status": "Error",
+                                "response":"You have zero credits left, please pay for more credits!"
+                            }}), 400
+
+        
+            return jsonify({"data":{"json_data":"Something went wrong!"}})
+        
+        except:
+            return redirect("/")
+        
+
     return jsonify({"msg":"method Not allowed!"})
+
+                        
+
+
+
+
+@Bank_Statments_bp.route("/statement-Analysis-report",methods=["GET","POST"])
+def Bank_statement_analysis_report_page():
+
+
+    print("---------- " ,request.args.get("_id"))
+
+    if request.args.get("_id") != "":
+    
+        check_system_id = User_test_Api_history_db.find_one({"System_Generated_Unique_id":request.args.get("_id")})
+
+        if check_system_id != None:
+            satement_details = check_system_id["response_data"]
+            # satement_details = json.loads(satement_details)
+
+            data_dict = ast.literal_eval(satement_details)
+            print(data_dict['status_code'])
+
+
+            return render_template("bank_statement_analysis_report.html",
+                                   satement_details = data_dict
+                                   )
+        
+        else:
+            return redirect("/")
+    else:
+        return redirect("/")
+
+
+
+
+
+
+

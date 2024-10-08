@@ -25,9 +25,8 @@
         fetch("/bank/test-api", requestOptions)
             .then((response) => response.json())
             .then((result) => {
-                
-
                 var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
+                $("#system_id_store").val(result.data.json_data["System_Generated_Unique_id"])
                 $("#bank_statment_json").text(formatteddata)
                 $('#eta').show()
                 document.getElementById("bank_statments_seconds").innerHTML = result.data.result_in_seconds
@@ -37,5 +36,9 @@
 
     $("#full_screen_view").click(function () {
         enableFullScreen("bank_statment_json");
+    });
+
+    $("#Statement_analysis").click(function () {
+        window.open("/bank/statement-Analysis-report?_id=" + $("#system_id_store").val(), '_blank');
     });
 </script>

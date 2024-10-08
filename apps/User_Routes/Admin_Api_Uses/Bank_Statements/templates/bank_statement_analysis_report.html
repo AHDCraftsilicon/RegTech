@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Statement - bluBeetle.ai</title>
+
+    {% set User_Portal_urls = User_Portal_urls() %}
+    {% if User_Portal_urls %}
+    {{ User_Portal_urls | safe }}
+    {% endif %}
+</head>
+
+<body>
+    <!-- Topbar -->
+    {% set User_portal_topbar = User_portal_topbar(user_name) %}
+    {% if User_portal_topbar %}
+    {{ User_portal_topbar | safe }}
+    {% endif %}
+
+    <section class="main-part">
+        <!-- Side-Bar -->
+        {% set User_portal_sidebar = User_portal_sidebar() %}
+        {% if User_portal_sidebar %}
+        {{ User_portal_sidebar | safe }}
+        {% endif %}
+
+        <!-- Page Content -->
+        <div class="page-content">
+            <div class="c-page-padding">
+
+                <div>
+                    <div class="row">
+                        <div class="col-12 c-heading-common">
+                            <h1 class="main-heading">Bank Statement Analysis Report</h1>
+                            <div class="testing-credit">
+                                <p class="testing-credit-text">Testing Credit</p>
+                                <p class="testing-credit-digit"><i class="ri-task-line"></i> <span>30</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="cc-box">
+                                <div class="cc-box-padding">
+                                    <p class="dash-box-heading-blue">Basic Information</p>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">Account Holders</label>
+                                                <p class="c-view-data">NA</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">Monthly Average Surplus</label>
+                                                <p class="c-view-data">1.1</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">EMI Detected</label>
+                                                <p class="c-view-data">true</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">Cheque Bounce</label>
+                                                <p class="c-view-data">true</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">Opening Balance</label>
+                                                <p class="c-view-data">NA</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">Closing Balance</label>
+                                                <p class="c-view-data">NA</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">IFSC Code</label>
+                                                <p class="c-view-data">NA</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">MICR Code</label>
+                                                <p class="c-view-data">NA</p>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">Monthly Average Balance</label>
+                                                <p class="c-view-data">10,000</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">Account Type</label>
+                                                <p class="c-view-data">NA</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">Account Opening Date</label>
+                                                <p class="c-view-data">NA</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">Banking Relationship</label>
+                                                <p class="c-view-data">NA</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">Salary Counts vs Months</label>
+                                                <p class="c-view-data">NA</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">Account Status</label>
+                                                <p class="c-view-data">NA</p>
+                                            </div>
+                                        </div>
+
+
+
+
+
+
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">Account Constitution</label>
+                                                <p class="c-view-data">NA</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">Period</label>
+                                                <p class="c-view-data">NA</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">PAN</label>
+                                                <p class="c-view-data">NA</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">Mobile</label>
+                                                <p class="c-view-data">NA</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">Email</label>
+                                                <p class="c-view-data">NA</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                            <div class="form-group c-form-group">
+                                                <label class="cc-lable">Missing Period</label>
+                                                <p class="c-view-data">NA</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="cc-box">
+                                <div class="cc-box-padding">
+
+                                    <p class="dash-box-heading-blue">Top Ten Debits</p>
+                                    <div class="c-table-responsive">
+                                        <table class="table table-striped">
+                                            <tr>
+                                                <th>Month</th>
+                                                <th>Amount</th>
+                                                <th>Description</th>
+                                                <th>Reference</th>
+                                            </tr>
+                                            {% for entry in
+                                            satement_details['response']['Top_Transactions_Top_10_Debit_Transaction'] %}
+                                            {% for key, value in entry.items() %}
+                                            <tr>
+                                                <td>{{ key }}</td>
+                                                <td>{{ value['Top Debited']['Amount'] }}</td>
+                                                <td>{{ value['Top Debited']['Description'] }}</td>
+                                                <td>{{ value['Top Debited']['Reference'] }}</td>
+                                            </tr>
+                                            {% endfor %}
+
+                                            {% endfor %}
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="cc-box">
+                                <div class="cc-box-padding">
+                                    <p class="dash-box-heading-blue">Top Ten Credits</p>
+                                    <div class="c-table-responsive">
+                                        <table class="table table-striped">
+                                            <tr>
+                                                <th>Month</th>
+                                                <th>Amount</th>
+                                                <th>Description</th>
+                                                <th>Reference</th>
+                                            </tr>
+                                            {% for entry in
+                                            satement_details['response']['Top_Transactions_Top_10_Credit_Transaction']
+                                            %}
+                                            {% for key, value in entry.items() %}
+                                            <tr>
+                                                <td>{{ key }}</td>
+                                                <td>{{ value['Top Credited']['Amount'] }}</td>
+                                                <td>{{ value['Top Credited']['Description'] }}</td>
+                                                <td>{{ value['Top Credited']['Reference'] }}</td>
+                                            </tr>
+                                            {% endfor %}
+
+                                            {% endfor %}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="cc-box">
+                                <div class="cc-box-padding">
+                                    <p class="dash-box-heading-blue">Top Ten Monthly Transactions</p>
+                                    <div class="c-table-responsive">
+                                        <table class="table table-striped">
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Type</th>
+                                                <th>Amount</th>
+                                                <th>Balance</th>
+                                                <th>Description</th>
+                                                <th>Mode</th>
+                                            </tr>
+                                            {% for transaction in satement_details['response']['Top_Transactions_Top_10_Monthly_Transaction'] %}
+                                            <tr>
+                                                <td>{{transaction['Date']}}</td>
+                                                <td>{{transaction['Credit/Debit']}}</td>
+                                                <td>{{transaction['Amount']}}</td>
+                                                <td>{{transaction['Balance']}}</td>
+                                                <td>{{transaction['Description']}}</td>
+                                                <td>{{transaction['Mode']}}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="cc-box">
+                                <div class="cc-box-padding">
+                                    <p class="dash-box-heading-blue">Scoring Details</p>
+                                    <div class="c-table-responsive">
+                                        <table class="table table-striped">
+                                            <tr>
+                                                <th>Monthly Average Inflow</th>
+                                                <td>N/A</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Monthly Average Outflow</th>
+                                                <td>N/A</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Average Credit Transactions</th>
+                                                <td>{{satement_details['response']['Scoring Details'][0]['Average_Credit_Transactions']}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Average Debit Transactions</th>
+                                                <td>{{satement_details['response']['Scoring Details'][1]['Average Debit Transactions']}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total Credit Amount</th>
+                                                <td>{{satement_details['response']['Scoring Details'][2]['Total Credit Amount']}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total Debit Amount</th>
+                                                <td>{{satement_details['response']['Scoring Details'][3]['Total Debit Amount']}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total Count of Credit Transactions</th>
+                                                <td>{{satement_details['response']['Scoring Details'][4]['Total Count of Credit Transactions']}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total Count of Debit Transactions</th>
+                                                <td>{{satement_details['response']['Scoring Details'][5]['Total Count of Debit Transactions']}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Monthly Average Surplus</th>
+                                                <td>N/A</td>
+                                            </tr>
+
+
+                                          
+                                            <tr>
+                                                <th>Maximum Balance</th>
+                                                <td>{{satement_details['response']['Scoring Details'][6]['Maximum Balance']}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Minimum Balance</th>
+                                                <td>{{satement_details['response']['Scoring Details'][7]['Minimum Balance']}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Maximum Credit</th>
+                                                <td>{{satement_details['response']['Scoring Details'][8]['Maximum Credit']}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Minimum Credit</th>
+                                                <td>{{satement_details['response']['Scoring Details'][9]['Minimum Credit']}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Maximum Debit</th>
+                                                <td>{{satement_details['response']['Scoring Details'][10]['Maximum Debit']}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Minimum Debit</th>
+                                                <td>{{satement_details['response']['Scoring Details'][11]['Minimum Debit']}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>
