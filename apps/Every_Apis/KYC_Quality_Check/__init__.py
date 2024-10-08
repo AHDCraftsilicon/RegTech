@@ -40,7 +40,7 @@ UUID_PATTERN = re.compile(
 
 # Tesseract exe path local
 pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract' 
-#os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
+os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
     
 
 def quality_check_module(image_base64):

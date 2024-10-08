@@ -10,7 +10,7 @@ from werkzeug.utils import secure_filename
 
 
 pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract' 
-#os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
+os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
 
 
 multiplication_table = (
