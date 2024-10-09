@@ -23,7 +23,8 @@ from apps.Every_Apis.OCR.aadhaar_ocr_module import *
 from apps.Every_Apis.OCR.pancard_ocr_module import *
 # Passport OCR
 from apps.Every_Apis.OCR.passport_ocr_module import *
-
+# Voter OCR
+from apps.Every_Apis.OCR.voter_ocr_module import *
 
 # Blueprint
 OCR_all_api_bp = Blueprint("OCR_all_api_bp",
@@ -163,7 +164,21 @@ def Ocr_Api_route():
                                     "status": "Error",
                                     "response": "Please upload a high-quality and readable image."}
 
-                            
+                            elif data["doc_type"] == "VoterID":
+                                img_decoded = base64.b64decode(ocr_image)
+                                voterid_responce = voter_ocr_main(img_decoded)
+                                api_status = "VoterID_OCR"
+
+
+                                if voterid_responce != {}:
+                                    store_response = {"status_code": 200,
+                                                "status": "Success",
+                                                "response": voterid_responce}
+                                else:
+                                    store_response = {"status_code": 400,
+                                    "status": "Error",
+                                    "response": "Please upload a high-quality and readable image."}
+
                             else:
                                 return jsonify({"data":{
                                         "status_code": 400,
