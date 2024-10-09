@@ -11172,6 +11172,10 @@ button.bg-dark:hover {
     text-align: justify !important
 }
 
+.text-revert {
+    text-align: revert !important
+}
+
 .text-wrap {
     white-space: normal !important
 }

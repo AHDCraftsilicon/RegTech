@@ -1,0 +1,44 @@
+<script nonce="{{ g.nonce }}">
+    $("#send_reset_link").click(function () {
+        var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+        if ($("#Email_Id").val().match(validRegex)) {
+            const myHeaders = new Headers();
+
+            const formdata = new FormData();
+            formdata.append("Email_Id", $("#Email_Id"));
+
+            const requestOptions = {
+                method: "POST",
+                headers: myHeaders,
+                body: formdata,
+                redirect: "follow"
+            };
+
+            fetch("/email-verification", requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                    $("#alert_msg").removeClass("d-none")
+                    $("#alert_msg").text(result.data)
+                })
+                .catch((error) => console.error(error));
+
+        } else {
+            alert("Invalid email address!");
+        }
+
+    })
+
+
+    $('#Email_Id').keyup(function () {
+        var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+        if ($("#Email_Id").val().match(validRegex)) {
+            $("#send_reset_link").prop('disabled', false);
+
+        } else {
+            $("#send_reset_link").prop('disabled', true);
+        }
+
+    })
+</script>

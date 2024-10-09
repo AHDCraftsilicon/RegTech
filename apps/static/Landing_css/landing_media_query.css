@@ -116,7 +116,7 @@
         line-height: 40px !important;
     }
 
-    .contact-us-section .contact-left {
+    .api-headers .contact-left {
         padding: 20px 25px 0 25px;
     }
 
@@ -228,11 +228,11 @@
         line-height: 28px !important;
     }
 
-    .contact-us-section .contact-right {
+    .api-headers .contact-right {
         padding: 20px 0 0 0 !important;
     }
 
-    .contact-us-section .contact-right .details-content {
+    .api-headers .contact-right .details-content {
         margin-bottom: 20px !important;
     }
 

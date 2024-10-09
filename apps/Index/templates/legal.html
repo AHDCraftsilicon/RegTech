@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>BlueBeetle.ai</title>
+    <title>bluBeetle.ai</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -25,7 +25,7 @@
     {{ Landing_Page_Topbar | safe }}
     {% endif %}
 
-    <section class="contact-us-section">
+    <section class="api-headers">
         <div class="colomn-heading-inner heading">
             <h3 class="white-heading">Legal</h3>
         </div>
@@ -331,6 +331,21 @@
                     burgerssMenu.classList.remove("is-active");
                 }
             }
+        });
+
+        var btn = $('#button');
+
+        $(window).scroll(function () {
+            if ($(window).scrollTop() > 300) {
+                btn.addClass('show');
+            } else {
+                btn.removeClass('show');
+            }
+        });
+
+        btn.on('click', function (e) {
+            e.preventDefault();
+            $('html, body').animate({ scrollTop: 0 }, '300');
         });
     </script>
 

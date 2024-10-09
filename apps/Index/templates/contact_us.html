@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>BlueBeetle.ai</title>
+    <title>bluBeetle.ai</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -24,17 +24,16 @@
     {% if Landing_Page_Topbar %}
     {{ Landing_Page_Topbar | safe }}
     {% endif %}
-    <section class="contact-us-section">
-        <div class="colomn-heading-inner heading">
-            <h3 class="white-heading">Contact</h3>
-        </div>
+    <section class="api-headers">
         <div class="common-inner-page-padding">
             <div class="container">
-                <div class="row align-items-center">
+                <h3 class="api-info-headers">Contact Us
+                </h3>
+                <div class="row ">
                     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                         <div class="contact-left">
                             <div class="section-inner-heading">
-                                <h3>Contact our friendly team</h3>
+                                <h3>Contact our team</h3>
                                 <p>Let us know how we can help.</p>
                             </div>
                             <form action="/contact-from" method="post">
@@ -58,7 +57,7 @@
                                         <div class="form-group">
                                             <label class="c-label mandatory">Mobile<span
                                                     class="mandatory-sign">*</span></label>
-                                            <div class="input-group input-group-sm">
+                                            <div class="input-group">
                                                 <input type="text" name="mobile_no"
                                                     class="form-control c-form-control mobile" value=""
                                                     autocomplete="off" required>
@@ -121,23 +120,24 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-12 mb-4">
-                                        <button class="menu-link btn-2 btn-3 w-100 mt-0">Try API</button>
+                                        <button class="menu-link btn-2 btn-3 w-100 mt-0">Submit</button>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+
                         <div class="contact-right">
                             <div class="details-content">
                                 <h3>Email support</h3>
                                 <p class="check-content">Email us and we'll get back to you within 24 hours.</p>
                                 <div class="details-box">
                                     <img src="../../static/landing_images/mail.svg" alt="">
-                                    <a href="mailto:someone@example.com">info@Blubeetle.ai</a>
+                                    <p class="address">info@bluBeetle.ai</p>
                                 </div>
                             </div>
-                            <div class="details-content">
+                            <div class="details-content mb-4">
                                 <h3>Call us</h3>
                                 <p class="check-content">Mon - Fri, 9:00 AM - 6:00 PM (IST)</p>
                                 <div class="details-box">
@@ -252,6 +252,21 @@
                     burgerssMenu.classList.remove("is-active");
                 }
             }
+        });
+
+        var btn = $('#button');
+
+        $(window).scroll(function () {
+            if ($(window).scrollTop() > 300) {
+                btn.addClass('show');
+            } else {
+                btn.removeClass('show');
+            }
+        });
+
+        btn.on('click', function (e) {
+            e.preventDefault();
+            $('html, body').animate({ scrollTop: 0 }, '300');
         });
     </script>
 

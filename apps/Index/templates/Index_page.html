@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>BlueBeetle.ai</title>
+    <title>bluBeetle.ai</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -55,12 +55,12 @@
                     </h3>
                 </div>
                 <div class="col-6 col-md-6 col-sm-12 col-12">
-                    <p class="gray-font">
+                    <p class="gray-font text-justify">
                         Our Regulatory Technology API ensures automated regulatory compliance, fraud prevention, KYC
                         verification,
                         and tax reporting.
 
-                        Built for accuracy and efficiency, they streamline complex processes, helping financial
+                        Built for accuracy and efficiency, it streamlines complex processes, helping financial
                         institutions meet
                         global standards effortlessly.
                     </p>
@@ -142,7 +142,7 @@
                         <div class="carousel-item">
                             <div class="slide-carousel">
                                 <div class="slder-right">
-                                    <img src="../../static/landing_images/slider-img-3.png" alt="">
+                                    <img src="../../static/landing_images//Efficiency 1.png" alt="">
                                 </div>
                                 <div class="slder-left">
                                     <div class="revolutionize-text">
@@ -296,11 +296,10 @@
                                 <div class="slder-left">
                                     <div class="revolutionize-text">
                                         <h2>Enhanced Compliance</h2>
-                                        <p>Ensure strict adherence to regulatory standards through real-time validation
-                                            and precise data
-                                            processing. Our solutions guarantee compliance by delivering timely,
-                                            accurate insights that keep
-                                            your operations aligned with evolving regulations.</p>
+                                        <p>Ensure strict adherence to regulatory standards with real-time validation and
+                                            precise data processing. Our solutions guarantee compliance by delivering
+                                            timely, accurate insights, keeping your operations aligned with evolving
+                                            regulations.</p>
                                     </div>
                                 </div>
                                 <div class="slder-right">
@@ -316,11 +315,9 @@
                                     <div class="revolutionize-text">
                                         <h2>Risk Management</h2>
                                         <p>Proactively manage and mitigate risks with advanced fraud detection and
-                                            document verification
-                                            capabilities. Our technology enables real-time threat detection, automates
-                                            verification processes,
-                                            and enhances accuracy, helping you swiftly address suspicious activities and
-                                            maintain compliance.
+                                            document verification capabilities. Our technology enables real-time threat
+                                            detection, automates verification processes, and enhances accuracy, helping
+                                            you quickly address suspicious activities and maintain compliance.
                                         </p>
                                     </div>
                                 </div>
@@ -334,11 +331,10 @@
                                 <div class="slder-left">
                                     <div class="revolutionize-text">
                                         <h2>Scalability</h2>
-                                        <p>Easily scale your compliance operations to manage increased volumes and
-                                            complexity as your
-                                            business expands. Our flexible solutions adapt to evolving regulatory
-                                            demands, ensuring seamless
-                                            compliance management and supporting your organization's growth.</p>
+                                        <p>Effortlessly scale your compliance operations to manage increased volumes and
+                                            complexity as your business expands. Our flexible solutions adapt to
+                                            evolving regulatory demands, ensuring seamless compliance management and
+                                            supporting your organization's growth.</p>
                                     </div>
                                 </div>
                                 <div class="slder-right">
@@ -350,13 +346,11 @@
                             <div class="slide-carousel slide-carousel2">
                                 <div class="slder-left">
                                     <div class="revolutionize-text">
-                                        <h2>Cost Savings</h2>
+                                        <h2>Cost Savings to Cost Saving</h2>
                                         <p>Minimize operational costs by reducing manual labor and leveraging advanced
-                                            automated solutions.
-                                            Our technology streamlines tasks, increases efficiency, and enables your
-                                            team to focus on
-                                            higher-value activities, driving accuracy, speed, and cost savings for
-                                            long-term growth.</p>
+                                            automated solutions. Our technology streamlines tasks, increases efficiency,
+                                            and enables your team to focus on higher-value activities, driving accuracy,
+                                            speed, and cost savings for sustained growth.</p>
                                     </div>
                                 </div>
                                 <div class="slder-right">
@@ -365,6 +359,15 @@
                             </div>
                         </div> <!-- End of Carousel Item -->
                     </div> <!-- End of Carousel Content -->
+                    <a href="#carousel2" class="carousel-control-prev carousel-control-prev2" role="button"
+                        data-slide="prev">
+                        <img src="../../static/landing_images/prev_arrow.svg">
+                    </a>
+                    <a href="#carousel2" class="carousel-control-next carousel-control-next2" role="button"
+                        data-slide="next">
+                        <img src="../../static/landing_images/next_arrow.svg">
+                    </a>
+
                 </div>
             </div>
         </div>
@@ -374,7 +377,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <h3 class="white-heading">
-                        Our RegTech API Suite simplifies regulatory compliance, enhancing risk management.
+                        Our RegTech API Suite simplifies regulatory compliance and enhances risk management.
                     </h3>
                 </div>
                 <div class="col-md-12">
@@ -439,11 +442,9 @@
                                         <div class="revolutionize-text">
                                             <p class="blue-font">OCR API</p>
                                             <h2>Convert ID & Documents to Structured Data in Seconds</h2>
-                                            <p>Ensure compliance with privacy laws by automatically redacting Aadhaar
-                                                numbers from documents.
-                                                Our Aadhaar Redaction API safeguards sensitive information, enabling
-                                                businesses to process
-                                                documents without exposing personal data.</p>
+                                            <p>The Aadhaar OCR API extracts and digitizes text from Aadhaar cards,
+                                                capturing details like name, DOB, and Aadhaar number for easy processing
+                                                and verification.</p>
                                             <a href="/ocr-api" class="btn btn-2 mt-3 mb-2">Read More</a>
 
                                         </div>
@@ -743,6 +744,21 @@
                     burgerssMenu.classList.remove("is-active");
                 }
             }
+        });
+
+        var btn = $('#button');
+
+        $(window).scroll(function () {
+            if ($(window).scrollTop() > 300) {
+                btn.addClass('show');
+            } else {
+                btn.removeClass('show');
+            }
+        });
+
+        btn.on('click', function (e) {
+            e.preventDefault();
+            $('html, body').animate({ scrollTop: 0 }, '300');
         });
     </script>
 

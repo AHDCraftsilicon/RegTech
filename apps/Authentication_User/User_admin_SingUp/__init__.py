@@ -34,7 +34,7 @@ def generate_token(length=120):
 
 # Sent Email
 def user_to_sent_mail(receiver_emailid , token_url,Reciver_name):
-    sender_email = "verification@blubeetle.ai"
+    sender_email = "verification@bluBeetle.ai"
     subject = "Complete Your Registration – Set Your Password"
     token_url = token_url
 
@@ -67,7 +67,7 @@ def user_to_sent_mail(receiver_emailid , token_url,Reciver_name):
                                 
                                     <p style="text-align: left;"> Dear """+Reciver_name+""",</p>
                                 
-                                    <p style="text-align: left; line-height: 17px;">Welcome to BluBeetle! </p>
+                                    <p style="text-align: left; line-height: 17px;">Welcome to bluBeetle! </p>
                                     <p style="text-align: left; line-height: 17px;"> </p>
                                     <p style="text-align: left; line-height: 17px;">You have successfully registered on our platform. To complete your setup and access your account, please set your password by clicking the button below:</p>
                                     <p style="text-align: left; line-height: 0px;">&nbsp;</p>
@@ -82,11 +82,11 @@ def user_to_sent_mail(receiver_emailid , token_url,Reciver_name):
                                     <p style="text-align: left; line-height: 17px;">For security reasons, this link is valid for the next 30 Minutes and will expire after that. If you do not complete the process within this time, you can request a new link by visiting our Portal.</p>
                                     
                                 
-                                    <p style="text-align: left; line-height: 17px;">Thank you for choosing BluBeetle. We look forward to serving you!</p>
+                                    <p style="text-align: left; line-height: 17px;">Thank you for choosing bluBeetle. We look forward to serving you!</p>
                                     <br> 
                                     <p style="text-align: left; font-weight: bold;">Best regards,<br>
 
-                                        BluBeetle Team</p>
+                                        bluBeetle Team</p>
                                 </td>
                             </tr>
                         
@@ -155,7 +155,7 @@ def User_Admin_Signup_Main():
             
                 verify_token = generate_token()
 
-                url_for_token_verify = "https://regtech.blubeetle.ai/verify?token=" + "HceTgeR."+ verify_token
+                url_for_token_verify = "https://regtech.bluBeetle.ai/verify?token=" + "HceTgeR."+ verify_token
 
                 user_mail_verify = user_to_sent_mail(request.form["Email_Id"],url_for_token_verify,request.form['Company_Name'])
 

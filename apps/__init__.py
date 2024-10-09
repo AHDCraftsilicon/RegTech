@@ -12,6 +12,7 @@ from apps.Index import Index_Page_bp
 from apps.Authentication_User.User_admin_SingUp import User_Admin_SignUp_bp
 from apps.Authentication_User.User_admin_SingIn import User_Admin_SignIn_bp
 from apps.Authentication_User.User_Token_verify import User_Token_Verify_bp
+from apps.Authentication_User.User_Forgot_pass_and_reset import User_Forgot_pass_and_reset_bp
 
 # User Api Dashboard
 from apps.User_Routes.User_admin_Api_Dashboard import User_Admin_Api_Dashboard_bp
@@ -62,7 +63,7 @@ def crete_app():
     app.config['SESSION_PERMANENT'] = True
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
     app.config['SESSION_COOKIE_NAME'] = 'k_'
-    CORS(app , resources={r"/*": {"origins": "https://regtech.blubeetle.ai/"}}) 
+    CORS(app , resources={r"/*": {"origins": "https://regtech.bluBeetle.ai/"}}) 
 
     # JWT Secret key
     app.config["JWT_SECRET_KEY"] = "Craft_Silicon_Regtech_Makarba_Ahm"
@@ -166,6 +167,7 @@ def crete_app():
     app.register_blueprint(User_Admin_SignUp_bp)
     app.register_blueprint(User_Admin_SignIn_bp)
     app.register_blueprint(User_Token_Verify_bp)
+    app.register_blueprint(User_Forgot_pass_and_reset_bp)
 
     # User View
     app.register_blueprint(User_Admin_Api_Dashboard_bp)

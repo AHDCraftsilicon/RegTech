@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>BlueBeetle.ai</title>
+    <title>bluBeetle.ai</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -25,18 +25,16 @@
     {{ Landing_Page_Topbar | safe }}
     {% endif %}
 
-    <section class="contact-us-section">
-        <div class="colomn-heading-inner heading">
-            <h3 class="white-heading">KYC Quality Check API </h3>
-        </div>
+    <section class="api-headers">
         <div class="common-inner-page-padding">
             <div class="discription-of-product">
                 <div class="container">
-                    <div class="row">
+                    <div class="row align-items-center">
                         <div class="col-lg-4 col-md-4 col-sm-12 col-12">
                             <img src="../../static/landing_images/KYC-quality-check.png" alt="">
                         </div>
                         <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+                            <h3 class="api-info-headers">KYC Quality Check API</h3>
                             <div class="inner-page-text">
 
                                 <p>The Image Quality Assessment API evaluates various attributes of an image, such as
@@ -47,7 +45,10 @@
                                     used in applications, whether it's for e-commerce, social media, or content
                                     production.</p>
 
-                                <a href="/login/user" class="menu-link btn-2 btn-3">Try API</a>
+                                <a href="/login/user" class="btn-2 btn-3">
+                                    Try API
+                                    <i class="ri-arrow-right-line right-arrow-icon"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -100,7 +101,7 @@
                         <div class="col-12">
                             <h3 class="focus-heading black-font text-center">A one-time, trouble-free integration</h3>
                         </div>
-                        <div class="col-lg-7 col-md-6 col-sm-12 col-12">
+                        <div class="col">
                             <div class="integration-box">
                                 <div class="intr-f">
                                     <p><svg aria-hidden="true" class="e-font-icon-svg e-fas-check-circle"
@@ -122,15 +123,6 @@
                                     <p> Our easy-to-follow documentation and dedicated support team ensure you have all
                                         you need for
                                         successful API integration.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 col-md-6 col-sm-12 col-12">
-                            <div class="integration-box">
-                                <h3>API For Developers</h3>
-                                <div class="inter-btn">
-                                    <a href="#">API Documentation <i class="ri-arrow-right-line"></i></a>
-                                    <a href="#">API Documentation <i class="ri-arrow-right-line"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -187,69 +179,6 @@
                 </div>
             </div>
 
-            <div class="integration-part">
-
-                <div class="container">
-                    <div class="row">
-                        <div class="col-12">
-                            <h3 class="focus-heading black-font text-center mb-4">Get Your API Access and Secure Your
-                                Business Today
-                            </h3>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label class="c-label mandatory">First Name <span
-                                        class="mandatory-sign">*</span></label>
-                                <div class="input-group input-group-sm">
-                                    <input id="" type="text" name="mobile" class="form-control c-form-control mobile"
-                                        onkeypress="" value="" autocomplete="off">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label class="c-label mandatory">Last Name <span class="mandatory-sign">*</span></label>
-                                <div class="input-group input-group-sm">
-                                    <input id="" type="text" name="mobile" class="form-control c-form-control mobile"
-                                        onkeypress="" value="" autocomplete="off">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label class="c-label mandatory">Mobile <span class="mandatory-sign">*</span></label>
-                                <div class="input-group input-group-sm">
-                                    <input id="" type="text" name="mobile" class="form-control c-form-control mobile"
-                                        onkeypress="" value="" autocomplete="off">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label class="c-label mandatory">Email <span class="mandatory-sign">*</span></label>
-                                <div class="input-group input-group-sm">
-                                    <input id="" type="text" name="mobile" class="form-control c-form-control mobile"
-                                        onkeypress="" value="" autocomplete="off">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div class="form-group">
-                                <label class="c-label mandatory">Message</label>
-                                <div class="input-group input-group-sm">
-                                    <textarea name="" id="" class="form-control c-form-control mobile"></textarea>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <a href="/login/user" class="menu-link btn-2 btn-3 mt-2">Submit</a>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
         </div>
     </section>
 
@@ -327,6 +256,21 @@
                     burgerssMenu.classList.remove("is-active");
                 }
             }
+        });
+
+        var btn = $('#button');
+
+        $(window).scroll(function () {
+            if ($(window).scrollTop() > 300) {
+                btn.addClass('show');
+            } else {
+                btn.removeClass('show');
+            }
+        });
+
+        btn.on('click', function (e) {
+            e.preventDefault();
+            $('html, body').animate({ scrollTop: 0 }, '300');
         });
     </script>
 
