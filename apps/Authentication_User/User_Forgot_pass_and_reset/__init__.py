@@ -35,9 +35,10 @@ def email_verification():
         try:
             if request.form["Email_Id"] != "":
                 database_document = Authentication_db.find_one({"Email_Id":request.form['Email_Id']})
-                if database_document == None:
+                if database_document != None:
                     print()
 
+                    return jsonify()
                 else:
                     return jsonify({"data":"Email ID entered is invaild, please check the id entered or retry."})
                 

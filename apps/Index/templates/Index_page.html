@@ -19,666 +19,715 @@
 </head>
 
 <body>
-
-    {% set Landing_Page_Topbar = Landing_Page_Topbar() %}
-    {% if Landing_Page_Topbar %}
-    {{ Landing_Page_Topbar | safe }}
-    {% endif %}
-
-
-    <!-- Landing Page -->
-
-    <div class="slider">
-        <video width="100%" height="auto" autoplay muted loop playsinline preload="metadata">
-            <source src="../../static/landing_images/banner video1.mp4" type="video/mp4">
+    <div id="landing">
+        <video width="100%" height="auto" autoplay muted loop playsinline preload="metadata" id="loading-video">
+            <source src="../../static/landing_images/Loading.mp4" type="video/mp4">
         </video>
-        <div class="slider-text">
+        <video width="100%" height="auto" autoplay muted loop playsinline preload="metadata" id="loading-video2">
+            <source src="../../static/landing_images/Loading-Mobile-view.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div id="main" class="dd-none">
+
+
+
+        {% set Landing_Page_Topbar = Landing_Page_Topbar() %}
+        {% if Landing_Page_Topbar %}
+        {{ Landing_Page_Topbar | safe }}
+        {% endif %}
+
+
+        <!-- Landing Page -->
+
+        <div class="slider">
+            <video width="100%" height="auto" autoplay muted loop playsinline preload="metadata">
+                <source src="../../static/landing_images/banner video1.mp4" type="video/mp4">
+            </video>
+            <div class="slider-text">
+                <div class="container">
+                    <div class="slider-text-part">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+                                <h2 class="slider-font"> Transforming Compliance with RegTech Innovation</h2>
+                                <p class="slider-normal">Your Path to Streamlined Compliance and
+                                    Enhanced Accuracy.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="focus-part">
             <div class="container">
-                <div class="slider-text-part">
-                    <div class="row">
-                        <div class="col-lg-8 col-md-8 col-sm-12 col-12">
-                            <h2 class="slider-font"> Transforming Compliance with RegTech Innovation</h2>
-                            <p class="slider-normal">Your Path to Streamlined Compliance and
-                                Enhanced Accuracy.</p>
+                <div class="row">
+                    <div class="col-6 col-md-6 col-sm-12 col-12">
+                        <h3 class="focus-heading">
+                            <span class="black-font">RegTech APIs:</span> Streamline Compliance with Ease
+                        </h3>
+                    </div>
+                    <div class="col-6 col-md-6 col-sm-12 col-12">
+                        <p class="gray-font text-justify">
+                            Our Regulatory Technology API ensures automated regulatory compliance, fraud prevention, KYC
+                            verification,
+                            and tax reporting.
+
+                            Built for accuracy and efficiency, it streamlines complex processes, helping financial
+                            institutions meet
+                            global standards effortlessly.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bank-box-part">
+                    <div class="bank-box">
+                        <img src="../../static/landing_images/bank-1.png" alt="">
+                    </div>
+                    <div class="bank-box">
+                        <img src="../../static/landing_images/bank-2.png" alt="">
+                    </div>
+                    <div class="bank-box">
+                        <img src="../../static/landing_images/bank-3.png" alt="">
+                    </div>
+                    <div class="bank-box">
+                        <img src="../../static/landing_images/bank-4.png" alt="">
+                    </div>
+                    <div class="bank-box">
+                        <img src="../../static/landing_images/bank-5.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="revolutionize-part">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="white-heading">Our RegTech APIs revolutionize the way
+                            you handle regulatory requirements</h2>
+
+                    </div>
+
+                </div>
+                <div class="revolutionize-slider">
+                    <div id="carousel" class="carousel slide" data-ride="carousel">
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators">
+                            <li data-target="#carousel" data-slide-to="0" class="active"></li>
+                            <li data-target="#carousel" data-slide-to="1"></li>
+                            <li data-target="#carousel" data-slide-to="2"></li>
+                        </ol> <!-- End of Indicators -->
+
+                        <!-- Carousel Content -->
+                        <div class="carousel-inner" role="listbox">
+                            <div class="carousel-item active">
+                                <div class="slide-carousel">
+                                    <div class="slder-right">
+                                        <img src="../../static/landing_images/slider-img-1.png" alt="">
+                                    </div>
+                                    <div class="slder-left">
+                                        <div class="revolutionize-text">
+                                            <h2>Automation</h2>
+                                            <p>Reduce manual effort and human error with automated processes for name
+                                                matching, document
+                                                verification, and data extraction.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- End of Carousel Item -->
+
+                            <div class="carousel-item">
+                                <div class="slide-carousel">
+                                    <div class="slder-right">
+                                        <img src="../../static/landing_images/slider-img-2.png" alt="">
+                                    </div>
+                                    <div class="slder-left">
+                                        <div class="revolutionize-text">
+                                            <h2>Accuracy</h2>
+                                            <p>Leverage advanced algorithms and real-time processing to ensure precise
+                                                compliance with
+                                                regulations.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- End of Carousel Item -->
+
+                            <div class="carousel-item">
+                                <div class="slide-carousel">
+                                    <div class="slder-right">
+                                        <img src="../../static/landing_images//Efficiency 1.png" alt="">
+                                    </div>
+                                    <div class="slder-left">
+                                        <div class="revolutionize-text">
+                                            <h2>Efficiency</h2>
+                                            <p>Accelerate compliance workflows
+                                                and improve operational efficiency by integrating our APIs into your
+                                                existing systems.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> <!-- End of Carousel Item -->
+                        </div> <!-- End of Carousel Content -->
+
+                        <!-- Previous & Next -->
+                        <a href="#carousel" class="carousel-control-prev" role="button" data-slide="prev">
+                            <img src="../../static/landing_images/prev.png">
+                        </a>
+                        <a href="#carousel" class="carousel-control-next" role="button" data-slide="next">
+                            <img src="../../static/landing_images/next.png">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="we-offer">
+            <div class="container">
+
+                <div class="row">
+
+                    <div class="col-lg-6 col-md-12 col-sm-12 col-12 c-grid">
+                        <h3 class="focus-heading"><span class="black-font">Our RegTech APIs deliver high-quality
+                                solutions,</span>
+                            blending the advantages of automation with complete regulatory compliance.</h3>
+                    </div>
+                    <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12 col-sm-12 col-12"></div>
+                            <div class="col-lg-6 col-md-12 col-sm-12 col-12">
+                                <div class="offer-box-silver">
+                                    <div class="offer-icon-1">
+                                        <img src="../../static/landing_images/id_card.svg" alt="">
+                                    </div>
+                                    <h4>
+                                        Aadhaar Redaction API
+                                    </h4>
+                                    <p>Compliant Aadhaar Redaction for Secure Document Processing</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="offer-box-blue">
+                                    <div class="offer-icon-1">
+                                        <img src="../../static/landing_images/ocr-api.svg" alt="">
+                                    </div>
+                                    <h4>
+                                        OCR API
+                                    </h4>
+                                    <p>Fast and Accurate Optical Character Recognition for Any Workflow</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                                <div class="offer-box-gray">
+                                    <div class="offer-icon-1">
+                                        <img src="../../static/landing_images/bank-statement-icon.svg" alt="">
+                                    </div>
+                                    <h4>
+                                        Bank Statement Analysis API
+                                    </h4>
+                                    <p>Effortless Bank Statement Parsing for Enhanced Analytics</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-sm-12 col-12">
+                        <div class="offer-box-blue">
+                            <div class="offer-icon-1">
+                                <img src="../../static/landing_images/itr-statement.svg" alt="">
+                            </div>
+                            <h4>
+                                ITR Statement Analyzer API
+                            </h4>
+                            <p>Simplify Tax Analysis with Automated ITR Insights</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12 col-12">
+                        <div class="offer-box-silver">
+                            <div class="offer-icon-1">
+                                <img src="../../static/landing_images/match_case.svg" alt="">
+                            </div>
+                            <h4>
+                                Name Match API
+                            </h4>
+                            <p>Powering Secure Verifications through Name Matching Technology</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12 col-12">
+                        <div class="offer-box-gray">
+                            <div class="offer-icon-1">
+                                <img src="../../static/landing_images/translate.svg" alt="">
+                            </div>
+                            <h4>
+                                Language Translator API
+                            </h4>
+                            <p>Empowering Connectivity with Instant Language Support</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-12 col-12">
+                        <div class="offer-box-silver">
+                            <div class="offer-icon-1">
+                                <img src="../../static/landing_images/verified_user.svg" alt="">
+                            </div>
+                            <h4>
+                                KYC Quality Check API
+                            </h4>
+                            <p>Fast and Accurate KYC Validation for Regulatory Compliance</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="focus-part">
-        <div class="container">
-            <div class="row">
-                <div class="col-6 col-md-6 col-sm-12 col-12">
-                    <h3 class="focus-heading">
-                        <span class="black-font">RegTech APIs:</span> Streamline Compliance with Ease
-                    </h3>
-                </div>
-                <div class="col-6 col-md-6 col-sm-12 col-12">
-                    <p class="gray-font text-justify">
-                        Our Regulatory Technology API ensures automated regulatory compliance, fraud prevention, KYC
-                        verification,
-                        and tax reporting.
 
-                        Built for accuracy and efficiency, it streamlines complex processes, helping financial
-                        institutions meet
-                        global standards effortlessly.
-                    </p>
-                </div>
-            </div>
+        <div class="solve-problem-part">
 
-            <div class="bank-box-part">
-                <div class="bank-box">
-                    <img src="../../static/landing_images/bank-1.png" alt="">
-                </div>
-                <div class="bank-box">
-                    <img src="../../static/landing_images/bank-2.png" alt="">
-                </div>
-                <div class="bank-box">
-                    <img src="../../static/landing_images/bank-3.png" alt="">
-                </div>
-                <div class="bank-box">
-                    <img src="../../static/landing_images/bank-4.png" alt="">
-                </div>
-                <div class="bank-box">
-                    <img src="../../static/landing_images/bank-5.png" alt="">
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="revolutionize-part">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <h2 class="white-heading">Our RegTech APIs revolutionize the way
-                        you handle regulatory requirements</h2>
-
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12 text-center">
+                        <h3 class="focus-heading"><span class="black-font">Discover how we deliver precise, </span>
+                            targeted
+                            solutions.
+                        </h3>
+                    </div>
                 </div>
 
-            </div>
-            <div class="revolutionize-slider">
-                <div id="carousel" class="carousel slide" data-ride="carousel">
-                    <!-- Indicators -->
-                    <ol class="carousel-indicators">
-                        <li data-target="#carousel" data-slide-to="0" class="active"></li>
-                        <li data-target="#carousel" data-slide-to="1"></li>
-                        <li data-target="#carousel" data-slide-to="2"></li>
-                    </ol> <!-- End of Indicators -->
+                <div class="revolutionize-slider">
+                    <div id="carousel2" class="carousel slide" data-ride="carousel">
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators">
+                            <li data-target="#carousel2" data-slide-to="0" class="active"></li>
+                            <li data-target="#carousel2" data-slide-to="1"></li>
+                            <li data-target="#carousel2" data-slide-to="2"></li>
+                            <li data-target="#carousel2" data-slide-to="3"></li>
+                        </ol> <!-- End of Indicators -->
 
-                    <!-- Carousel Content -->
-                    <div class="carousel-inner" role="listbox">
-                        <div class="carousel-item active">
-                            <div class="slide-carousel">
-                                <div class="slder-right">
-                                    <img src="../../static/landing_images/slider-img-1.png" alt="">
-                                </div>
-                                <div class="slder-left">
-                                    <div class="revolutionize-text">
-                                        <h2>Automation</h2>
-                                        <p>Reduce manual effort and human error with automated processes for name
-                                            matching, document
-                                            verification, and data extraction.</p>
+                        <!-- Carousel Content -->
+                        <div class="carousel-inner" role="listbox">
+                            <div class="carousel-item active">
+                                <div class="slide-carousel slide-carousel2">
+
+                                    <div class="slder-left">
+                                        <div class="revolutionize-text">
+                                            <h2>Enhanced Compliance</h2>
+                                            <p>Ensure strict adherence to regulatory standards with real-time validation
+                                                and
+                                                precise data processing. Our solutions guarantee compliance by
+                                                delivering
+                                                timely, accurate insights, keeping your operations aligned with evolving
+                                                regulations.</p>
+                                        </div>
+                                    </div>
+                                    <div class="slder-right">
+                                        <img src="../../static/landing_images/solive-slide-1.png" alt="">
                                     </div>
                                 </div>
-                            </div>
-                        </div> <!-- End of Carousel Item -->
+                            </div> <!-- End of Carousel Item -->
 
-                        <div class="carousel-item">
-                            <div class="slide-carousel">
-                                <div class="slder-right">
-                                    <img src="../../static/landing_images/slider-img-2.png" alt="">
-                                </div>
-                                <div class="slder-left">
-                                    <div class="revolutionize-text">
-                                        <h2>Accuracy</h2>
-                                        <p>Leverage advanced algorithms and real-time processing to ensure precise
-                                            compliance with
-                                            regulations.</p>
+                            <div class="carousel-item">
+                                <div class="slide-carousel slide-carousel2">
+
+                                    <div class="slder-left">
+                                        <div class="revolutionize-text">
+                                            <h2>Risk Management</h2>
+                                            <p>Proactively manage and mitigate risks with advanced fraud detection and
+                                                document verification capabilities. Our technology enables real-time
+                                                threat
+                                                detection, automates verification processes, and enhances accuracy,
+                                                helping
+                                                you quickly address suspicious activities and maintain compliance.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="slder-right">
+                                        <img src="../../static/landing_images/solive-slide-2.png" alt="">
                                     </div>
                                 </div>
-                            </div>
-                        </div> <!-- End of Carousel Item -->
-
-                        <div class="carousel-item">
-                            <div class="slide-carousel">
-                                <div class="slder-right">
-                                    <img src="../../static/landing_images//Efficiency 1.png" alt="">
-                                </div>
-                                <div class="slder-left">
-                                    <div class="revolutionize-text">
-                                        <h2>Efficiency</h2>
-                                        <p>Accelerate compliance workflows
-                                            and improve operational efficiency by integrating our APIs into your
-                                            existing systems.</p>
+                            </div> <!-- End of Carousel Item -->
+                            <div class="carousel-item">
+                                <div class="slide-carousel slide-carousel2">
+                                    <div class="slder-left">
+                                        <div class="revolutionize-text">
+                                            <h2>Scalability</h2>
+                                            <p>Effortlessly scale your compliance operations to manage increased volumes
+                                                and
+                                                complexity as your business expands. Our flexible solutions adapt to
+                                                evolving regulatory demands, ensuring seamless compliance management and
+                                                supporting your organization's growth.</p>
+                                        </div>
+                                    </div>
+                                    <div class="slder-right">
+                                        <img src="../../static/landing_images/solive-slide-3.png" alt="">
                                     </div>
                                 </div>
-                            </div>
-                        </div> <!-- End of Carousel Item -->
-                    </div> <!-- End of Carousel Content -->
-
-                    <!-- Previous & Next -->
-                    <a href="#carousel" class="carousel-control-prev" role="button" data-slide="prev">
-                        <img src="../../static/landing_images/prev.png">
-                    </a>
-                    <a href="#carousel" class="carousel-control-next" role="button" data-slide="next">
-                        <img src="../../static/landing_images/next.png">
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="we-offer">
-        <div class="container">
-
-            <div class="row">
-
-                <div class="col-lg-6 col-md-12 col-sm-12 col-12 c-grid">
-                    <h3 class="focus-heading"><span class="black-font">Our RegTech APIs deliver high-quality
-                            solutions,</span>
-                        blending the advantages of automation with complete regulatory compliance.</h3>
-                </div>
-                <div class="col-lg-6 col-md-12 col-sm-12 col-12">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-12 col-sm-12 col-12"></div>
-                        <div class="col-lg-6 col-md-12 col-sm-12 col-12">
-                            <div class="offer-box-silver">
-                                <div class="offer-icon-1">
-                                    <img src="../../static/landing_images/id_card.svg" alt="">
+                            </div> <!-- End of Carousel Item -->
+                            <div class="carousel-item">
+                                <div class="slide-carousel slide-carousel2">
+                                    <div class="slder-left">
+                                        <div class="revolutionize-text">
+                                            <h2>Cost Saving</h2>
+                                            <p>Minimize operational costs by reducing manual labor and leveraging
+                                                advanced
+                                                automated solutions. Our technology streamlines tasks, increases
+                                                efficiency,
+                                                and enables your team to focus on higher-value activities, driving
+                                                accuracy,
+                                                speed, and cost savings for sustained growth.</p>
+                                        </div>
+                                    </div>
+                                    <div class="slder-right">
+                                        <img src="../../static/landing_images/solive-slide-4.png" alt="">
+                                    </div>
                                 </div>
-                                <h4>
-                                    Aadhaar Redaction API
-                                </h4>
-                                <p>Compliant Aadhaar Redaction for Secure Document Processing</p>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="offer-box-blue">
-                                <div class="offer-icon-1">
-                                    <img src="../../static/landing_images/ocr-api.svg" alt="">
-                                </div>
-                                <h4>
-                                    OCR API
-                                </h4>
-                                <p>Fast and Accurate Optical Character Recognition for Any Workflow</p>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="offer-box-gray">
-                                <div class="offer-icon-1">
-                                    <img src="../../static/landing_images/bank-statement-icon.svg" alt="">
-                                </div>
-                                <h4>
-                                    Bank Statement Analysis API
-                                </h4>
-                                <p>Effortless Bank Statement Parsing for Enhanced Analytics</p>
-                            </div>
-                        </div>
+                            </div> <!-- End of Carousel Item -->
+                        </div> <!-- End of Carousel Content -->
+                        <a href="#carousel2" class="carousel-control-prev carousel-control-prev2" role="button"
+                            data-slide="prev">
+                            <img src="../../static/landing_images/prev_arrow.svg">
+                        </a>
+                        <a href="#carousel2" class="carousel-control-next carousel-control-next2" role="button"
+                            data-slide="next">
+                            <img src="../../static/landing_images/next_arrow.svg">
+                        </a>
 
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-12 col-12">
-                    <div class="offer-box-blue">
-                        <div class="offer-icon-1">
-                            <img src="../../static/landing_images/itr-statement.svg" alt="">
-                        </div>
-                        <h4>
-                            ITR Statement Analyzer API
-                        </h4>
-                        <p>Simplify Tax Analysis with Automated ITR Insights</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12 col-12">
-                    <div class="offer-box-silver">
-                        <div class="offer-icon-1">
-                            <img src="../../static/landing_images/match_case.svg" alt="">
-                        </div>
-                        <h4>
-                            Name Match API
-                        </h4>
-                        <p>Powering Secure Verifications through Name Matching Technology</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12 col-12">
-                    <div class="offer-box-gray">
-                        <div class="offer-icon-1">
-                            <img src="../../static/landing_images/translate.svg" alt="">
-                        </div>
-                        <h4>
-                            Language Translator API
-                        </h4>
-                        <p>Empowering Connectivity with Instant Language Support</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 col-sm-12 col-12">
-                    <div class="offer-box-silver">
-                        <div class="offer-icon-1">
-                            <img src="../../static/landing_images/verified_user.svg" alt="">
-                        </div>
-                        <h4>
-                            KYC Quality Check API
-                        </h4>
-                        <p>Fast and Accurate KYC Validation for Regulatory Compliance</p>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+        <div class="black-bg-part">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="white-heading">
+                            Our RegTech API Suite simplifies regulatory compliance and enhances risk management.
+                        </h3>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="black-tab-part">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#tabs-7" role="tab">KYC Quality
+                                        Checker</a>
+                                </li>
 
-    <div class="solve-problem-part">
+                                <li class="nav-item">
+                                    <a class="nav-link " data-toggle="tab" href="#tabs-1" role="tab">Aadhaar
+                                        Redaction</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">OCR</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Bank Statement
+                                        Analysis</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">ITR Statement
+                                        Analyzer</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#tabs-5" role="tab">Name Match</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Language
+                                        Translator</a>
+                                </li>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-12 text-center">
-                    <h3 class="focus-heading"><span class="black-font">Discover how we deliver precise, </span> targeted
-                        solutions.
-                    </h3>
-                </div>
-            </div>
+                            </ul><!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane p-4 " id="tabs-1" role="tabpanel">
+                                    <div class="slide-carousel slide-carousel2">
+                                        <div class="slder-right">
+                                            <img src="../../static/landing_images/aadhaar-redaction.png" alt="">
+                                        </div>
+                                        <div class="slder-left">
+                                            <div class="revolutionize-text">
+                                                <p class="blue-font">Aadhaar Redaction API</p>
+                                                <h2>Protect Sensitive Information with Aadhaar Redaction</h2>
+                                                <p>Ensure compliance with privacy laws by automatically redacting
+                                                    Aadhaar
+                                                    numbers from documents.
+                                                    Our Aadhaar Redaction API safeguards sensitive information, enabling
+                                                    businesses to process
+                                                    documents without exposing personal data.</p>
+                                                <a href="/aadhaar-redaction-api" class="btn btn-2 mt-3 mb-2">Read
+                                                    More <i class="ri-arrow-right-line right-arrow-icon"></i></a>
 
-            <div class="revolutionize-slider">
-                <div id="carousel2" class="carousel slide" data-ride="carousel">
-                    <!-- Indicators -->
-                    <ol class="carousel-indicators">
-                        <li data-target="#carousel2" data-slide-to="0" class="active"></li>
-                        <li data-target="#carousel2" data-slide-to="1"></li>
-                        <li data-target="#carousel2" data-slide-to="2"></li>
-                        <li data-target="#carousel2" data-slide-to="3"></li>
-                    </ol> <!-- End of Indicators -->
+                                            </div>
+                                        </div>
 
-                    <!-- Carousel Content -->
-                    <div class="carousel-inner" role="listbox">
-                        <div class="carousel-item active">
-                            <div class="slide-carousel slide-carousel2">
-
-                                <div class="slder-left">
-                                    <div class="revolutionize-text">
-                                        <h2>Enhanced Compliance</h2>
-                                        <p>Ensure strict adherence to regulatory standards with real-time validation and
-                                            precise data processing. Our solutions guarantee compliance by delivering
-                                            timely, accurate insights, keeping your operations aligned with evolving
-                                            regulations.</p>
                                     </div>
                                 </div>
-                                <div class="slder-right">
-                                    <img src="../../static/landing_images/solive-slide-1.png" alt="">
+                                <div class="tab-pane p-4" id="tabs-2" role="tabpanel">
+                                    <div class="slide-carousel slide-carousel2">
+                                        <div class="slder-right">
+                                            <img src="../../static/landing_images/ocr.png" alt="">
+                                        </div>
+                                        <div class="slder-left">
+                                            <div class="revolutionize-text">
+                                                <p class="blue-font">OCR API</p>
+                                                <h2>Convert ID & Documents to Structured Data in Seconds</h2>
+                                                <p>The Image Document OCR API extracts text from document images,
+                                                    converting
+                                                    them into machine-readable text which helps with automated data
+                                                    entry,
+                                                    document archiving & streamlines data processes while preserving
+                                                    historical records. </p>
+                                                <a href="/ocr-api" class="btn btn-2 mt-3 mb-2">Read More <i
+                                                        class="ri-arrow-right-line right-arrow-icon"></i></a>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="tab-pane p-4" id="tabs-3" role="tabpanel">
+                                    <div class="slide-carousel slide-carousel2">
+                                        <div class="slder-right">
+                                            <img src="../../static/landing_images/bank-statement-analysis.png" alt="">
+                                        </div>
+                                        <div class="slder-left">
+                                            <div class="revolutionize-text">
+                                                <p class="blue-font">Bank Statement Analysis API</p>
+                                                <h2>Automate Bank Statement Reviews for Better Financial Insights</h2>
+                                                <p>Our Bank Statement Analysis API provides automated extraction and
+                                                    analysis of bank statements.
+                                                    It categorizes transactions,
+                                                    identifies patterns, and generates reports,
+                                                    making compliance and financial reporting seamless.</p>
+                                                <a href="/bank-statement-api" class="btn btn-2 mt-3 mb-2">Read
+                                                    More <i class="ri-arrow-right-line right-arrow-icon"></i></a>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="tab-pane p-4" id="tabs-4" role="tabpanel">
+                                    <div class="slide-carousel slide-carousel2">
+                                        <div class="slder-right">
+                                            <img src="../../static/landing_images/ITR-statement.png" alt="">
+                                        </div>
+                                        <div class="slder-left">
+                                            <div class="revolutionize-text">
+                                                <p class="blue-font">ITR Statement Analyzer API</p>
+                                                <h2>Simplify Tax Compliance
+                                                    with Automated ITR Analysis</h2>
+                                                <p>Automate the analysis of Income Tax Returns (ITR) with our API,
+                                                    providing
+                                                    a clear financial
+                                                    picture for compliance and reporting purposes. It extracts,
+                                                    analyzes,
+                                                    and categorizes data to
+                                                    ensure tax compliance.</p>
+                                                <a href="/ITR-statement-api" class="btn btn-2 mt-3 mb-2">Read
+                                                    More <i class="ri-arrow-right-line right-arrow-icon"></i></a>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="tab-pane p-4" id="tabs-5" role="tabpanel">
+                                    <div class="slide-carousel slide-carousel2">
+                                        <div class="slder-right">
+                                            <img src="../../static/landing_images/name-match.png" alt="">
+                                        </div>
+                                        <div class="slder-left">
+                                            <div class="revolutionize-text">
+                                                <p class="blue-font">Name Match API</p>
+                                                <h2>Accurate Name Matching for Fraud Prevention</h2>
+                                                <p>Ensure precision in name matching to detect and prevent identity
+                                                    fraud.
+                                                    Our advanced Name Match
+                                                    API efficiently compares names across various formats and spelling
+                                                    variations, delivering
+                                                    reliable results even with incomplete or altered data.</p>
+                                                <a href="/name-match-api" class="btn btn-2 mt-3 mb-2">Read More
+                                                    <i class="ri-arrow-right-line right-arrow-icon"></i>
+                                                </a>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane p-4" id="tabs-6" role="tabpanel">
+                                    <div class="slide-carousel slide-carousel2">
+                                        <div class="slder-right">
+                                            <img src="../../static/landing_images/language-translator.png" alt="">
+                                        </div>
+                                        <div class="slder-left">
+                                            <div class="revolutionize-text">
+                                                <p class="blue-font">Language Translator API</p>
+                                                <h2>Seamless Translation for Global Compliance</h2>
+                                                <p>Simplify cross-border operations by translating regulatory documents,
+                                                    reports, and
+                                                    communications into multiple languages. Our Language Translator API
+                                                    supports a wide range of
+                                                    languages, ensuring your business stays compliant across regions.
+                                                </p>
+                                                <a href="/lang-translate-api" class="btn btn-2 mt-3 mb-2">Read
+                                                    More <i class="ri-arrow-right-line right-arrow-icon"></i></a>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane p-4 active" id="tabs-7" role="tabpanel">
+                                    <div class="slide-carousel slide-carousel2">
+                                        <div class="slder-right">
+                                            <img src="../../static/landing_images/KYC-quality-check.png" alt="">
+                                        </div>
+                                        <div class="slder-left">
+                                            <div class="revolutionize-text">
+                                                <p class="blue-font">KYC Quality Check API</p>
+                                                <h2>Ensure Compliance with
+                                                    High-Quality KYC Checks</h2>
+                                                <p>Automate and streamline your KYC verification processes with our KYC
+                                                    Quality Check API. It
+                                                    validates customer documents, assesses accuracy, and ensures that
+                                                    all
+                                                    checks meet regulatory
+                                                    standards.</p>
+                                                <a href="/kyc-quality-check-api" class="btn btn-2 mt-3 mb-2">Read
+                                                    More <i class="ri-arrow-right-line right-arrow-icon"></i></a>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
-                        </div> <!-- End of Carousel Item -->
+                        </div>
+                    </div>
+                </div>
 
-                        <div class="carousel-item">
-                            <div class="slide-carousel slide-carousel2">
+            </div>
+        </div>
 
-                                <div class="slder-left">
-                                    <div class="revolutionize-text">
-                                        <h2>Risk Management</h2>
-                                        <p>Proactively manage and mitigate risks with advanced fraud detection and
-                                            document verification capabilities. Our technology enables real-time threat
-                                            detection, automates verification processes, and enhances accuracy, helping
-                                            you quickly address suspicious activities and maintain compliance.
+        <div class="success-stories d-none">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="white-heading">
+                            Client success stories, what our partners say...
+                        </h3>
+                    </div>
+                </div>
+
+                <div class="success-stories-slider">
+
+
+
+                    <div id="carousel3" class="carousel slide" data-ride="carousel">
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators">
+                            <li data-target="#carousel3" data-slide-to="0" class="active"></li>
+                            <li data-target="#carousel3" data-slide-to="1"></li>
+                            <li data-target="#carousel3" data-slide-to="2"></li>
+                        </ol> <!-- End of Indicators -->
+
+                        <!-- Carousel Content -->
+                        <div class="carousel-inner" role="listbox">
+                            <div class="carousel-item active">
+                                <div class="client-testimonial">
+                                    <div class="client-image">
+                                        <img src="../../static/landing_images/client-tel-1.png" alt="">
+                                        <h2>Jane Smith</h2>
+                                        <p>Chief Compliance Officer
+                                            HDFC Bank Group</p>
+                                    </div>
+                                    <div class="client-text">
+                                        <p>“ Working with your team has been a game-changer. The level of
+                                            professionalism
+                                            and attention to
+                                            detail in addressing our regulatory challenges and automating processes is
+                                            impressive. Thanks to
+                                            your support, we've seen significant improvements in accuracy and
+                                            efficiency.”
                                         </p>
                                     </div>
                                 </div>
-                                <div class="slder-right">
-                                    <img src="../../static/landing_images/solive-slide-2.png" alt="">
-                                </div>
-                            </div>
-                        </div> <!-- End of Carousel Item -->
-                        <div class="carousel-item">
-                            <div class="slide-carousel slide-carousel2">
-                                <div class="slder-left">
-                                    <div class="revolutionize-text">
-                                        <h2>Scalability</h2>
-                                        <p>Effortlessly scale your compliance operations to manage increased volumes and
-                                            complexity as your business expands. Our flexible solutions adapt to
-                                            evolving regulatory demands, ensuring seamless compliance management and
-                                            supporting your organization's growth.</p>
+                            </div> <!-- End of Carousel Item -->
+
+                            <div class="carousel-item">
+                                <div class="client-testimonial">
+                                    <div class="client-image">
+                                        <img src="../../static/landing_images/client-tel-1.png" alt="">
+                                        <h2>Jane Smith</h2>
+                                        <p>Chief Compliance Officer
+                                            HDFC Bank Group</p>
+                                    </div>
+                                    <div class="client-text">
+                                        <p>“ Working with your team has been a game-changer. The level of
+                                            professionalism
+                                            and attention to
+                                            detail in addressing our regulatory challenges and automating processes is
+                                            impressive. Thanks to
+                                            your support, we've seen significant improvements in accuracy and
+                                            efficiency.”
+                                        </p>
                                     </div>
                                 </div>
-                                <div class="slder-right">
-                                    <img src="../../static/landing_images/solive-slide-3.png" alt="">
-                                </div>
-                            </div>
-                        </div> <!-- End of Carousel Item -->
-                        <div class="carousel-item">
-                            <div class="slide-carousel slide-carousel2">
-                                <div class="slder-left">
-                                    <div class="revolutionize-text">
-                                        <h2>Cost Saving</h2>
-                                        <p>Minimize operational costs by reducing manual labor and leveraging advanced
-                                            automated solutions. Our technology streamlines tasks, increases efficiency,
-                                            and enables your team to focus on higher-value activities, driving accuracy,
-                                            speed, and cost savings for sustained growth.</p>
+                            </div> <!-- End of Carousel Item -->
+
+                            <div class="carousel-item">
+                                <div class="client-testimonial">
+                                    <div class="client-image">
+                                        <img src="../../static/landing_images/client-tel-1.png" alt="">
+                                        <h2>Jane Smith</h2>
+                                        <p>Chief Compliance Officer
+                                            HDFC Bank Group</p>
+                                    </div>
+                                    <div class="client-text">
+                                        <p>“ Working with your team has been a game-changer. The level of
+                                            professionalism
+                                            and attention to
+                                            detail in addressing our regulatory challenges and automating processes is
+                                            impressive. Thanks to
+                                            your support, we've seen significant improvements in accuracy and
+                                            efficiency.”
+                                        </p>
                                     </div>
                                 </div>
-                                <div class="slder-right">
-                                    <img src="../../static/landing_images/solive-slide-4.png" alt="">
-                                </div>
-                            </div>
-                        </div> <!-- End of Carousel Item -->
-                    </div> <!-- End of Carousel Content -->
-                    <a href="#carousel2" class="carousel-control-prev carousel-control-prev2" role="button"
-                        data-slide="prev">
-                        <img src="../../static/landing_images/prev_arrow.svg">
-                    </a>
-                    <a href="#carousel2" class="carousel-control-next carousel-control-next2" role="button"
-                        data-slide="next">
-                        <img src="../../static/landing_images/next_arrow.svg">
-                    </a>
+                            </div> <!-- End of Carousel Item -->
+                        </div> <!-- End of Carousel Content -->
 
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="black-bg-part">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h3 class="white-heading">
-                        Our RegTech API Suite simplifies regulatory compliance and enhances risk management.
-                    </h3>
-                </div>
-                <div class="col-md-12">
-                    <div class="black-tab-part">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#tabs-7" role="tab">KYC Quality
-                                    Checker</a>
-                            </li>
-
-                            <li class="nav-item">
-                                <a class="nav-link " data-toggle="tab" href="#tabs-1" role="tab">Aadhaar Redaction</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">OCR</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Bank Statement
-                                    Analysis</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-4" role="tab">ITR Statement
-                                    Analyzer</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-5" role="tab">Name Match</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Language Translator</a>
-                            </li>
-
-                        </ul><!-- Tab panes -->
-                        <div class="tab-content">
-                            <div class="tab-pane p-4 " id="tabs-1" role="tabpanel">
-                                <div class="slide-carousel slide-carousel2">
-                                    <div class="slder-right">
-                                        <img src="../../static/landing_images/aadhaar-redaction.png" alt="">
-                                    </div>
-                                    <div class="slder-left">
-                                        <div class="revolutionize-text">
-                                            <p class="blue-font">Aadhaar Redaction API</p>
-                                            <h2>Protect Sensitive Information with Aadhaar Redaction</h2>
-                                            <p>Ensure compliance with privacy laws by automatically redacting Aadhaar
-                                                numbers from documents.
-                                                Our Aadhaar Redaction API safeguards sensitive information, enabling
-                                                businesses to process
-                                                documents without exposing personal data.</p>
-                                            <a href="/aadhaar-redaction-api" class="btn btn-2 mt-3 mb-2">Read
-                                                More</a>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="tab-pane p-4" id="tabs-2" role="tabpanel">
-                                <div class="slide-carousel slide-carousel2">
-                                    <div class="slder-right">
-                                        <img src="../../static/landing_images/ocr.png" alt="">
-                                    </div>
-                                    <div class="slder-left">
-                                        <div class="revolutionize-text">
-                                            <p class="blue-font">OCR API</p>
-                                            <h2>Convert ID & Documents to Structured Data in Seconds</h2>
-                                            <p>The Image Document OCR API extracts text from document images, converting
-                                                them into machine-readable text which helps with automated data entry,
-                                                document archiving & streamlines data processes while preserving
-                                                historical records. </p>
-                                            <a href="/ocr-api" class="btn btn-2 mt-3 mb-2">Read More</a>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="tab-pane p-4" id="tabs-3" role="tabpanel">
-                                <div class="slide-carousel slide-carousel2">
-                                    <div class="slder-right">
-                                        <img src="../../static/landing_images/bank-statement-analysis.png" alt="">
-                                    </div>
-                                    <div class="slder-left">
-                                        <div class="revolutionize-text">
-                                            <p class="blue-font">Bank Statement Analysis API</p>
-                                            <h2>Automate Bank Statement Reviews for Better Financial Insights</h2>
-                                            <p>Our Bank Statement Analysis API provides automated extraction and
-                                                analysis of bank statements.
-                                                It categorizes transactions,
-                                                identifies patterns, and generates reports,
-                                                making compliance and financial reporting seamless.</p>
-                                            <a href="/bank-statement-api" class="btn btn-2 mt-3 mb-2">Read
-                                                More</a>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="tab-pane p-4" id="tabs-4" role="tabpanel">
-                                <div class="slide-carousel slide-carousel2">
-                                    <div class="slder-right">
-                                        <img src="../../static/landing_images/ITR-statement.png" alt="">
-                                    </div>
-                                    <div class="slder-left">
-                                        <div class="revolutionize-text">
-                                            <p class="blue-font">ITR Statement Analyzer API</p>
-                                            <h2>Simplify Tax Compliance
-                                                with Automated ITR Analysis</h2>
-                                            <p>Automate the analysis of Income Tax Returns (ITR) with our API, providing
-                                                a clear financial
-                                                picture for compliance and reporting purposes. It extracts, analyzes,
-                                                and categorizes data to
-                                                ensure tax compliance.</p>
-                                            <a href="/ITR-statement-api" class="btn btn-2 mt-3 mb-2">Read
-                                                More</a>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="tab-pane p-4" id="tabs-5" role="tabpanel">
-                                <div class="slide-carousel slide-carousel2">
-                                    <div class="slder-right">
-                                        <img src="../../static/landing_images/name-match.png" alt="">
-                                    </div>
-                                    <div class="slder-left">
-                                        <div class="revolutionize-text">
-                                            <p class="blue-font">Name Match API</p>
-                                            <h2>Accurate Name Matching for Fraud Prevention</h2>
-                                            <p>Ensure precision in name matching to detect and prevent identity fraud.
-                                                Our advanced Name Match
-                                                API efficiently compares names across various formats and spelling
-                                                variations, delivering
-                                                reliable results even with incomplete or altered data.</p>
-                                            <a href="/name-match-api" class="btn btn-2 mt-3 mb-2">Read More</a>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <div class="tab-pane p-4" id="tabs-6" role="tabpanel">
-                                <div class="slide-carousel slide-carousel2">
-                                    <div class="slder-right">
-                                        <img src="../../static/landing_images/language-translator.png" alt="">
-                                    </div>
-                                    <div class="slder-left">
-                                        <div class="revolutionize-text">
-                                            <p class="blue-font">Language Translator API</p>
-                                            <h2>Seamless Translation for Global Compliance</h2>
-                                            <p>Simplify cross-border operations by translating regulatory documents,
-                                                reports, and
-                                                communications into multiple languages. Our Language Translator API
-                                                supports a wide range of
-                                                languages, ensuring your business stays compliant across regions.</p>
-                                            <a href="/lang-translate-api" class="btn btn-2 mt-3 mb-2">Read
-                                                More</a>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <div class="tab-pane p-4 active" id="tabs-7" role="tabpanel">
-                                <div class="slide-carousel slide-carousel2">
-                                    <div class="slder-right">
-                                        <img src="../../static/landing_images/KYC-quality-check.png" alt="">
-                                    </div>
-                                    <div class="slder-left">
-                                        <div class="revolutionize-text">
-                                            <p class="blue-font">KYC Quality Check API</p>
-                                            <h2>Ensure Compliance with
-                                                High-Quality KYC Checks</h2>
-                                            <p>Automate and streamline your KYC verification processes with our KYC
-                                                Quality Check API. It
-                                                validates customer documents, assesses accuracy, and ensures that all
-                                                checks meet regulatory
-                                                standards.</p>
-                                            <a href="/kyc-quality-check-api" class="btn btn-2 mt-3 mb-2">Read
-                                                More</a>
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
+                        <a href="#carousel3" class="carousel-control-prev slider3-prev" role="button" data-slide="prev">
+                            <img src="../../static/landing_images/slider-left.png">
+                        </a>
+                        <a href="#carousel3" class="carousel-control-next slider3-next" role="button" data-slide="next">
+                            <img src="../../static/landing_images/slider-right.png">
+                        </a>
                     </div>
                 </div>
             </div>
-
         </div>
+
+        <!-- Footer -->
+        {% set Landing_Page_Footer = Landing_Page_Footer() %}
+        {% if Landing_Page_Footer %}
+        {{ Landing_Page_Footer | safe }}
+        {% endif %}
+
     </div>
-
-    <div class="success-stories d-none">
-        <div class="container">
-
-            <div class="row">
-                <div class="col-md-12">
-                    <h3 class="white-heading">
-                        Client success stories, what our partners say...
-                    </h3>
-                </div>
-            </div>
-
-            <div class="success-stories-slider">
-
-
-
-                <div id="carousel3" class="carousel slide" data-ride="carousel">
-                    <!-- Indicators -->
-                    <ol class="carousel-indicators">
-                        <li data-target="#carousel3" data-slide-to="0" class="active"></li>
-                        <li data-target="#carousel3" data-slide-to="1"></li>
-                        <li data-target="#carousel3" data-slide-to="2"></li>
-                    </ol> <!-- End of Indicators -->
-
-                    <!-- Carousel Content -->
-                    <div class="carousel-inner" role="listbox">
-                        <div class="carousel-item active">
-                            <div class="client-testimonial">
-                                <div class="client-image">
-                                    <img src="../../static/landing_images/client-tel-1.png" alt="">
-                                    <h2>Jane Smith</h2>
-                                    <p>Chief Compliance Officer
-                                        HDFC Bank Group</p>
-                                </div>
-                                <div class="client-text">
-                                    <p>“ Working with your team has been a game-changer. The level of professionalism
-                                        and attention to
-                                        detail in addressing our regulatory challenges and automating processes is
-                                        impressive. Thanks to
-                                        your support, we've seen significant improvements in accuracy and efficiency.”
-                                    </p>
-                                </div>
-                            </div>
-                        </div> <!-- End of Carousel Item -->
-
-                        <div class="carousel-item">
-                            <div class="client-testimonial">
-                                <div class="client-image">
-                                    <img src="../../static/landing_images/client-tel-1.png" alt="">
-                                    <h2>Jane Smith</h2>
-                                    <p>Chief Compliance Officer
-                                        HDFC Bank Group</p>
-                                </div>
-                                <div class="client-text">
-                                    <p>“ Working with your team has been a game-changer. The level of professionalism
-                                        and attention to
-                                        detail in addressing our regulatory challenges and automating processes is
-                                        impressive. Thanks to
-                                        your support, we've seen significant improvements in accuracy and efficiency.”
-                                    </p>
-                                </div>
-                            </div>
-                        </div> <!-- End of Carousel Item -->
-
-                        <div class="carousel-item">
-                            <div class="client-testimonial">
-                                <div class="client-image">
-                                    <img src="../../static/landing_images/client-tel-1.png" alt="">
-                                    <h2>Jane Smith</h2>
-                                    <p>Chief Compliance Officer
-                                        HDFC Bank Group</p>
-                                </div>
-                                <div class="client-text">
-                                    <p>“ Working with your team has been a game-changer. The level of professionalism
-                                        and attention to
-                                        detail in addressing our regulatory challenges and automating processes is
-                                        impressive. Thanks to
-                                        your support, we've seen significant improvements in accuracy and efficiency.”
-                                    </p>
-                                </div>
-                            </div>
-                        </div> <!-- End of Carousel Item -->
-                    </div> <!-- End of Carousel Content -->
-
-                    <a href="#carousel3" class="carousel-control-prev slider3-prev" role="button" data-slide="prev">
-                        <img src="../../static/landing_images/slider-left.png">
-                    </a>
-                    <a href="#carousel3" class="carousel-control-next slider3-next" role="button" data-slide="next">
-                        <img src="../../static/landing_images/slider-right.png">
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    {% set Landing_Page_Footer = Landing_Page_Footer() %}
-    {% if Landing_Page_Footer %}
-    {{ Landing_Page_Footer | safe }}
-    {% endif %}
-
-
 
 
 
     <script nonce="{{ g.nonce }}">
+
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#landing').addClass("dd-none");
+                $("#main").addClass("dd-block");
+                // $("#main").css("transition","all 1s ease-in-out");
+
+            }, 5000);
+        });
 
         $(document).ready(function () {
             // Toggle to show and hide navbar menu

@@ -252,14 +252,14 @@ def crete_app():
         response.headers["Cross-Origin-Window-Policy"] = "deny"
         response.headers["Content-Security-Policy"] = ("default-src 'self'; "
                                                         "img-src 'self' data: blob:;" 
-                                                        "script-src 'self' 'report-sample' 'unsafe-eval' 'nonce-{nonce}';" 
+                                                        "script-src 'self' 'report-sample' 'unsafe-eval' 'nonce-{nonce}' https://www.gstatic.com https://www.google.com;" 
                                                         "style-src 'self' 'unsafe-hashes';"  
                                                         "frame-ancestors 'self';" 
                                                         "form-action 'self';" 
                                                         "connect-src 'self'; "
                                                         "object-src 'none'; "
                                                         "base-uri 'self'; "
-                                                        "frame-src 'self';"
+                                                        "frame-src 'self' https://www.google.com/;"
                                                         "font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com;" ).format(nonce=g.nonce)
         response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains; preload'
         response.headers['X-Content-Type-Options'] = 'nosniff'

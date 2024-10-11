@@ -1170,6 +1170,7 @@ header {
     visibility: hidden;
     font-size: 13px;
     letter-spacing: 0.5px;
+    text-wrap: nowrap;
 }
 
 .sidebar-navigation .c-tooltip li .tooltip:before {
@@ -1607,4 +1608,8 @@ input[type=file] {
     width: 100%;
     height: 410px;
     overflow: auto;
+}
+#client_id_copy, #client_secret_key_copy {
+    margin-left: 0px !important;
+    margin-top: 15px;
 }

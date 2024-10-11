@@ -179,7 +179,7 @@ input {
   width: 100%;
   font-style: normal;
   font-weight: 400;
-  font-size: 1.5rem;
+  font-size: 15px;
   line-height: 2rem;
   color: #222B45;
 }
@@ -1700,7 +1700,47 @@ p.demos {
 .c-form-control:hover {
   border: .1rem solid #1C43B9;
 }
+
 .dd-flex {
   display: flex;
   justify-content: space-between;
+}
+
+
+.toast2.toast-body p {
+  color: #fff;
+  font-size: 14px;
+  text-align: left;
+}
+
+button.ml-2.mb-1.close {
+  color: #fff;
+  opacity: 1;
+  font-size: 20px;
+}
+
+.toast2.bg-success {
+  border-radius: 10px;
+  padding: 10px 10px;
+  background-color: #2b6639 !important; margin-bottom: 2rem;
+}
+
+.toast2.bg-success .toast-body {
+  display: flex;
+  padding: 0rem;
+  align-items: center;
+}
+
+.toast2 .icon-toast {
+  color: #fff;
+  font-size: 25px;
+  padding-right: 10px;
+}
+
+.toast2 p {
+  color: #fff;
+  text-align: left;
+}
+input::-ms-reveal, input::-ms-clear {        
+  display: none;
 }
