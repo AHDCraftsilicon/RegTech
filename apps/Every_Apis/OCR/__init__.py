@@ -18,7 +18,7 @@ from Headers_Verify import *
 
 
 # Aadhaar OCR
-from apps.Every_Apis.OCR.aadhaar_ocr_module import *
+from apps.Every_Apis.OCR.aadhaar_ocr_with_verification import *
 # Pancard OCR
 from apps.Every_Apis.OCR.pancard_ocr_module import *
 # Passport OCR
@@ -102,8 +102,15 @@ def Ocr_Api_route():
                 if check_user_id_in_db != None:
                     if check_user_id_in_db["total_test_credits"] > check_user_id_in_db["used_test_credits"]:
                         
+                        
                         # UniqueID Check in DB
-                        unique_id_check = User_test_Api_history_db.find_one({"user_id":check_user_id_in_db["_id"],"User_Unique_id":data["UniqueID"]})
+
+                        # If Tester Flag is true So don't check unique Id
+                        if check_user_id_in_db['tester_flag'] == True:
+                            unique_id_check = None
+                        else:
+                            unique_id_check = User_test_Api_history_db.find_one({"user_id":check_user_id_in_db["_id"],"User_Unique_id":data["UniqueID"]})
+                        
                         api_status = ""
                         
                         if unique_id_check == None:
@@ -122,10 +129,10 @@ def Ocr_Api_route():
                             if data["doc_type"] == "Aadhaarcard":
 
                                 img_decoded = base64.b64decode(ocr_image)
-                                aadhaar_responce = aadhar_ocr_image_read_main(img_decoded)
+                                aadhaar_responce = Aadhaar_main(img_decoded)
                                 api_status = "Aadhaar_OCR"
 
-                                if aadhaar_responce != {}:
+                                if len(aadhaar_responce) != 0:
                                     store_response = {"status_code": 200,
                                                 "status": "Success",
                                                 "response": aadhaar_responce}

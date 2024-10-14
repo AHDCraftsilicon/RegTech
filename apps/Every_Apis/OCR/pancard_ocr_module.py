@@ -9,10 +9,8 @@ from flask import Flask,jsonify
 from io import BytesIO
 import time , os , io
 
-
-pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract' 
-#os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
-
+# tessract path
+from tesseract_path import *
 
 def extract_pan_number(result):
     # Define regex pattern to extract PAN number

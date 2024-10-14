@@ -14,10 +14,8 @@ from werkzeug.utils import secure_filename
 # import xml.etree.ElementTree as ET
 
 
-# Tesseract exe path local
-pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract' 
-#os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
-
+# tessract path
+from tesseract_path import *
 
 
 

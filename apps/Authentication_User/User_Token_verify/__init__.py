@@ -55,7 +55,7 @@ def User_Token_Verification_main():
 
             
             
-            start_time = datetime.strptime(str((database_document["creadte_date"]).strftime("%Y-%m-%d %H:%M:%S.%f")), '%Y-%m-%d %H:%M:%S.%f').replace(tzinfo=timezone.utc)
+            start_time = datetime.strptime(str((database_document["created_date"]).strftime("%Y-%m-%d %H:%M:%S.%f")), '%Y-%m-%d %H:%M:%S.%f').replace(tzinfo=timezone.utc)
 
             current_time = datetime.now(timezone.utc)
 

@@ -9,14 +9,6 @@
 # from werkzeug.utils import secure_filename
 
 
-# try:
-#     os.environ['TESSDATA_PREFIX'] = r'C:\Program Files\Tesseract-OCR\tessdata'
-#     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-# except:
-#     # Linux Server
-#     #os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
-#     pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'  
-
 
 # multiplication_table = (
 #     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
@@ -276,9 +268,8 @@ import shutil , time
 from werkzeug.utils import secure_filename
 
 
-pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract' 
-#os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
-
+# tessract path
+from tesseract_path import *
 
 multiplication_table = (
     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9),

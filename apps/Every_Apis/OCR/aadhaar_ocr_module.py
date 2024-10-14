@@ -11,11 +11,8 @@ from flask_jwt_extended import JWTManager
 import time , os , io
 from werkzeug.utils import secure_filename
 
-
-# Tesseract exe path local
-pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract' 
-#os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
-
+# tessract path
+from tesseract_path import *
 
 
 def get_all_language_formate_string(image_path):

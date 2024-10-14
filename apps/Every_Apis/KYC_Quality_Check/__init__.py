@@ -11,6 +11,8 @@ import numpy as np
 import base64,os
 import pytesseract
 
+# tessract path
+from tesseract_path import *
 
 # DataBase
 from data_base_string import *
@@ -38,10 +40,7 @@ UUID_PATTERN = re.compile(
     re.IGNORECASE
 )
 
-# Tesseract exe path local
-pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract' 
-#os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
-    
+
 
 def quality_check_module(image_base64):
     # Decode the Base64 string to get the image

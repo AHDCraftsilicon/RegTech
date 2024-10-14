@@ -10,8 +10,8 @@ from werkzeug.utils import secure_filename
 import os , base64
 
  
-pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
-
+# tessract path
+from tesseract_path import *
 
 def get_all_language_formate_string(image_path):
     result = ''

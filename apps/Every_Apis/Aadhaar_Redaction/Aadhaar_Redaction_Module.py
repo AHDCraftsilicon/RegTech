@@ -8,9 +8,10 @@ from io import BytesIO
 import shutil , time
 from werkzeug.utils import secure_filename
 
+# tessract path
+from tesseract_path import *
 
-pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract' 
-#os.environ['TESSDATA_PREFIX'] = '/usr/share/tesseract-ocr/5/'
+
 
 
 multiplication_table = (

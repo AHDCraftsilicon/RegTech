@@ -174,7 +174,8 @@ def User_Admin_Signup_Main():
                         "total_test_credits":test_credit['total_credit'],
                         "used_test_credits": 0,
                         "unlimited_test_credits":False,
-                        "creadte_date":datetime.now(),
+                        "tester_flag":False,
+                        "created_date":datetime.now(),
                     })
 
                     flash("Verification link has been successfully sent on your registered email ID.")

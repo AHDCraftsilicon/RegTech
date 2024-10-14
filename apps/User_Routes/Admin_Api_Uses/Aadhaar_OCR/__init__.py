@@ -8,7 +8,7 @@ import uuid
 
 
 # Name Comparision Module
-from apps.User_Routes.Admin_Api_Uses.Aadhaar_OCR.aadhaar_ocr_module import *
+from apps.User_Routes.Admin_Api_Uses.Aadhaar_OCR.aadhaar_OCR_with_verify import *
 
 # DataBase
 from data_base_string import *
@@ -93,7 +93,7 @@ def Aadhaar_ocr_test_api():
                         img_base64 = base64.b64encode(img_bytes).decode('utf-8')
                         img_decoded = base64.b64decode(img_base64)
 
-                        addhar_Card = aadhar_ocr_image_read_main(img_decoded)
+                        addhar_Card = Aadhaar_main(img_decoded)
 
                         created_on = datetime.now(pytz.timezone('Asia/Kolkata'))
                         created_on = created_on.strftime('%Y-%m-%dT%H:%M:%S%z')

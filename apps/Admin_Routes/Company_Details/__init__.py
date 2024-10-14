@@ -52,9 +52,9 @@ def Admin_company_data_table():
 
     if request.form['order[0][column]'] == '4':
         if request.form['order[0][dir]'] == 'asc':
-            sort_quiry = {"creadte_date" : 1}
+            sort_quiry = {"created_date" : 1}
         else:
-            sort_quiry = {"creadte_date" : -1}
+            sort_quiry = {"created_date" : -1}
 
     try:
         skp = int(int(request.form['start']) / int(request.form['length'])) - int(request.form['length'])
@@ -83,7 +83,7 @@ def Admin_company_data_table():
                 "Company_Name":x["Company_Name"],
                 "Mobile_No":x["Mobile_No"],
                 "Email_Id":x["Email_Id"],
-                "creadte_date": str((x["creadte_date"]+timedelta(hours=5,minutes=30)).strftime("%d-%m-%Y %H:%M:%S")),
+                "created_date": str((x["created_date"]+timedelta(hours=5,minutes=30)).strftime("%d-%m-%Y %H:%M:%S")),
                 "objid":str(x["_id"]),
             }
         )
