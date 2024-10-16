@@ -7,11 +7,14 @@
     });
 
     $("#bank_statement_run").click(function () {
+        $(".c-loader").removeClass('d-none')
 
         const formdata = new FormData();
 
         const fileInput = document.getElementById('bank_Stat_input');
         const file = fileInput.files[0];
+
+        
 
         formdata.append("BankName", "ICICIBANK");
         formdata.append("PDF_File", file);
@@ -25,6 +28,7 @@
         fetch("/bank/test-api", requestOptions)
             .then((response) => response.json())
             .then((result) => {
+                $(".c-loader").addClass('d-none')
                 var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
                 $("#system_id_store").val(result.data.json_data["System_Generated_Unique_id"])
                 $("#bank_statment_json").text(formatteddata)
