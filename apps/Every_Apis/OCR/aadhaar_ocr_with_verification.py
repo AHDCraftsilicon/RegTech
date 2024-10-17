@@ -353,30 +353,36 @@ def clean_name(text):
 # Get Address From Aadhaar String
 def get_Address(address_image,degree,all_string=False):
 
+
     if all_string:
         address = ""
-        vic_pattern = r'VIC:\s*([A-Za-z ]+)'
-        po_pattern = r'PO:\s*([A-Za-z ]+)'
-        district_pattern = r'District:\s*([A-Za-z]+)'
-        state_pattern = r'State:\s*([A-Za-z]+):'
-        pin_pattern = r'PIN Code:\s*(\d{6})'
+        vic_pattern = r'VIC:\s*([\w\s]+),'
+        po_pattern = r'PO:\s*([\w\s]+),'
+        district_pattern = r'District:\s*([\w\s]+),'
+        state_pattern = r'State:\s*([\w\s]+),'
+        pincode_pattern = r'PIN Code:\s*(\d{6}),'
 
-        # Search for each component
-        vic_match = re.search(vic_pattern, address_image)
-        po_match = re.search(po_pattern, address_image)
-        district_match = re.search(district_pattern, address_image)
-        state_match = re.search(state_pattern, address_image)
-        pin_match = re.search(pin_pattern, address_image)
+        # Extract values using regex
+        vic = re.search(vic_pattern, address_image)
+        po = re.search(po_pattern, address_image)
+        district = re.search(district_pattern, address_image)
+        state = re.search(state_pattern, address_image)
+        pincode = re.search(pincode_pattern, address_image)
 
-        # Extract values if found
-        vic = vic_match.group(1).strip() if vic_match else None
-        po = po_match.group(1).strip() if po_match else None
-        district = district_match.group(1).strip() if district_match else None
-        state = state_match.group(1).strip() if state_match else None
-        pin = pin_match.group(1).strip() if pin_match else None
+        if vic:
+            address += vic.group(1).strip() + " "
 
-        # Format as address
-        address = f"{vic}, {po}, {district}, {state}, PIN Code {pin}"
+        if po:
+            address += po.group(1).strip() + " "
+        
+        if district:
+            address += district.group(1).strip() + " "
+        
+        if state:
+            address += state.group(1).strip() + " "
+
+        if pincode:
+            address += ",PIN Code " + pincode.group(1).strip()
 
         return address
 
