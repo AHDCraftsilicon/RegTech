@@ -20,7 +20,7 @@ from Headers_Verify import *
 # Aadhaar OCR
 from apps.Every_Apis.OCR.aadhaar_ocr_with_verification import *
 # Pancard OCR
-from apps.Every_Apis.OCR.pancard_ocr_module import *
+from apps.Every_Apis.OCR.pancard_ocr_with_verification import *
 # Passport OCR
 from apps.Every_Apis.OCR.passport_ocr_module import *
 # Voter OCR
@@ -147,7 +147,7 @@ def Ocr_Api_route():
                                 pan_responce = pancard_main(img_decoded)
                                 api_status = "PAN_OCR"
 
-                                if pan_responce != {}:
+                                if pan_responce != 0:
                                     store_response = {"status_code": 200,
                                                 "status": "Success",
                                                 "response": pan_responce}
