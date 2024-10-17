@@ -426,7 +426,7 @@ def image_rotate_and_check_number(image,grayscale=False):
 
 
 def automatic_brightness_and_contrast(image, clip_hist_percent=25):
-    image = cv2.imread(image)
+    # image = cv2.imread(image)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # Calculate grayscale histogram

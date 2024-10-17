@@ -147,7 +147,7 @@ def Ocr_Api_route():
                                 pan_responce = pancard_main(img_decoded)
                                 api_status = "PAN_OCR"
 
-                                if pan_responce != 0:
+                                if len(pan_responce) != 0:
                                     store_response = {"status_code": 200,
                                                 "status": "Success",
                                                 "response": pan_responce}
