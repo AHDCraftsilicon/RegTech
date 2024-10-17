@@ -760,14 +760,43 @@ def QR_code_data_Read(xml_string):
         Gender = root.attrib.get('gender')
         AadharID = root.attrib.get('uid')
 
+        father_name = ""
+        husband_name = ""
+        try:
+            cooo = root.attrib.get('co')
+
+            if "W/O" in cooo:
+                husband_name = root.attrib.get('gname')
+            elif "S/O" in cooo:
+                father_name = root.attrib.get('gname')
+        
+        except:
+            pass
+
+
+
+        uid = ""
+        try:
+            uid = root.attrib.get('uid')
+        except:
+            pass
+
+
+
+
+        if Gender == "M":
+            Gender = "Male"
+        elif Gender == "F":
+            Gender = "Female"
+
         
         aadhaar_details.append({"Address":Address,
                                 "DOB":DOB,
                                 "Gender":Gender,
-                                "Husband_name":"",
-                                "Father_name":"",
+                                "Husband_name":husband_name,
+                                "Father_name":father_name,
                                 "Name":Name,
-                                "VID" : "",
+                                "VID" : uid,
                                 "AadharID" : AadharID,
                                 })
         
