@@ -351,98 +351,148 @@ def clean_name(text):
     return cleaned_text
 
 # Get Address From Aadhaar String
-def get_Address(address_image,degree):
-   
-    np_arr = np.frombuffer(address_image, np.uint8)
-    address_image = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+def get_Address(address_image,degree,all_string=False):
 
-    gray = cv2.cvtColor(address_image, cv2.COLOR_BGR2GRAY)
-    sharpen_kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
-    sharpen = cv2.filter2D(gray, -1, sharpen_kernel)
+    if all_string:
+        address = ""
+        vic_pattern = r'VIC:\s*([A-Za-z ]+)'
+        po_pattern = r'PO:\s*([A-Za-z ]+)'
+        district_pattern = r'District:\s*([A-Za-z]+)'
+        state_pattern = r'State:\s*([A-Za-z]+):'
+        pin_pattern = r'PIN Code:\s*(\d{6})'
 
-    # 0 degree Image
-    angle = determine_skew(sharpen,angle_pm_90=True)    
-    rotated = rotate(address_image, angle, (0, 0, 0))
+        # Search for each component
+        vic_match = re.search(vic_pattern, address_image)
+        po_match = re.search(po_pattern, address_image)
+        district_match = re.search(district_pattern, address_image)
+        state_match = re.search(state_pattern, address_image)
+        pin_match = re.search(pin_pattern, address_image)
 
-    height, width = rotated.shape[:2]
-    if height > 1000 or width > 1000:
-        rotated = cv2.resize(rotated, (int(width/2), int(height/2)))
+        # Extract values if found
+        vic = vic_match.group(1).strip() if vic_match else None
+        po = po_match.group(1).strip() if po_match else None
+        district = district_match.group(1).strip() if district_match else None
+        state = state_match.group(1).strip() if state_match else None
+        pin = pin_match.group(1).strip() if pin_match else None
 
-    if degree == 180:
-        angle = determine_skew(sharpen,angle_pm_90=True)+180   
+        # Format as address
+        address = f"{vic}, {po}, {district}, {state}, PIN Code {pin}"
+
+        return address
+
+    else:
+        address_image = cv2.imread(address_image)
+
+        gray = cv2.cvtColor(address_image, cv2.COLOR_BGR2GRAY)
+        sharpen_kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
+        sharpen = cv2.filter2D(gray, -1, sharpen_kernel)
+
+        # img_pil = Image.fromarray(image_rgb)
+        # img_pil.show()
+
+        # 0 degree Image
+        angle = determine_skew(sharpen,angle_pm_90=True)    
         rotated = rotate(address_image, angle, (0, 0, 0))
+
         height, width = rotated.shape[:2]
         if height > 1000 or width > 1000:
             rotated = cv2.resize(rotated, (int(width/2), int(height/2)))
-    
 
-    if degree == 360:
-        angle = determine_skew(sharpen,angle_pm_90=True)+180   
-        rotated = rotate(address_image, angle, (0, 0, 0))
-        height, width = rotated.shape[:2]
-        if height > 1000 or width > 1000:
-            rotated = cv2.resize(rotated, (int(width/2), int(height/2)))
+            # img_pil = Image.fromarray(rotated)
+            # img_pil.show()
 
 
-
-    # Use pytesseract to get bounding boxes around text
-    data = pytesseract.image_to_data(rotated, output_type=pytesseract.Output.DICT)
-
-
-
-    left_margin = 15  # Increase this value to widen the left side
-    right_margin = 500  # Increase this value to widen the right side
-    top_margin = 10  # Increase this value to widen the top side
-    bottom_margin = 1000 
-
-    for i in range(len(data['text'])):
-        text = data['text'][i].strip()  # Get the text and remove extra spaces
-        confidence = data['conf'][i]
+        if degree == 180:
+            angle = determine_skew(sharpen,angle_pm_90=True)+180   
+            rotated = rotate(address_image, angle, (0, 0, 0))
+            height, width = rotated.shape[:2]
+            if height > 1000 or width > 1000:
+                rotated = cv2.resize(rotated, (int(width/2), int(height/2)))
         
+
+        if degree == 360:
+            angle = determine_skew(sharpen,angle_pm_90=True)+180   
+            rotated = rotate(address_image, angle, (0, 0, 0))
+            height, width = rotated.shape[:2]
+            if height > 1000 or width > 1000:
+                rotated = cv2.resize(rotated, (int(width/2), int(height/2)))
+
         
-        # Check if confidence is a valid number and greater than threshold
-        try:
-            # Check if the text matches any of the specified keywords
-            if "addr" in text.lower():
-                keyword_found = True
-                (x, y, w, h) = (data['left'][i], data['top'][i], data['width'][i], data['height'][i])
-                x_new = max(x - left_margin, 0)  # Ensure x does not go below 0
-                y_new = max(y - top_margin, 0)  # Ensure y does not go below 0
-                w_new = w + left_margin + right_margin  # Increase width
-                h_new = h + top_margin + bottom_margin  # Increase height
 
-                # Crop the image using the adjusted bounding box
-                cropped_image = rotated[y_new:y_new + h_new, x_new:x_new + w_new]
-                
-                # cropped_image = image[y:y + 500, x:x + 500]
-                cropped_image_pil = Image.fromarray(cv2.cvtColor(cropped_image, cv2.COLOR_BGR2RGB))
-                # cropped_image_pil.save(f'cropped_image_{i}.png')
 
-                enhancer = ImageEnhance.Sharpness(cropped_image_pil)
-                sharp_image = enhancer.enhance(2.0)
 
-                # Save and display the sharpened image
-                # cv2.imwrite('sharpened_image.jpg', sharpened_image)
-                string_aadhaar = pytesseract.image_to_string(sharp_image)
+        # Use pytesseract to get bounding boxes around text
+        data = pytesseract.image_to_data(rotated, output_type=pytesseract.Output.DICT)
 
-                # print(string_aadhaar)
 
-                # cropped_image_pil.show()
 
-                pattern = r'(?:Address|Addresst)[^A-Za-z0-9]*([\s\S]*?)(?=\n\n|$)'
+        left_margin = 15  # Increase this value to widen the left side
+        right_margin = 500  # Increase this value to widen the right side
+        top_margin = 10  # Increase this value to widen the top side
+        bottom_margin = 1000 
 
-                # Find all matches
-                addresses = re.findall(pattern, string_aadhaar)
+        for i in range(len(data['text'])):
+            text = data['text'][i].strip()  # Get the text and remove extra spaces
+            confidence = data['conf'][i]
+            
+            
+            # Check if confidence is a valid number and greater than threshold
+            try:
+                # print(text.lower())
+                # Check if the text matches any of the specified keywords
+                if "addr" in text.lower():
+                    keyword_found = True
+                    (x, y, w, h) = (data['left'][i], data['top'][i], data['width'][i], data['height'][i])
+                    x_new = max(x - left_margin, 0)  # Ensure x does not go below 0
+                    y_new = max(y - top_margin, 0)  # Ensure y does not go below 0
+                    w_new = w + left_margin + right_margin  # Increase width
+                    h_new = h + top_margin + bottom_margin  # Increase height
 
-                # Clean and display addresses
-                for address in addresses:
-                    addresss = re.sub(r'^\s?.\n', '', address.strip()).strip()
-                    return addresss
-                
-        
-        except ValueError:
-            # Handle cases where conversion to float fails (e.g., invalid confidence value)
-            return ""
+                    # Crop the image using the adjusted bounding box
+                    cropped_image = rotated[y_new:y_new + h_new, x_new:x_new + w_new]
+                    
+                    # cropped_image = image[y:y + 500, x:x + 500]
+                    cropped_image_pil = Image.fromarray(cv2.cvtColor(cropped_image, cv2.COLOR_BGR2RGB))
+                    # cropped_image_pil.save(f'cropped_image_{i}.png')
+
+                    enhancer = ImageEnhance.Sharpness(cropped_image_pil)
+                    sharp_image = enhancer.enhance(2.0)
+
+                    # Save and display the sharpened image
+                    # cv2.imwrite('sharpened_image.jpg', sharpened_image)
+                    string_aadhaar = pytesseract.image_to_string(sharp_image)
+
+
+                    # cropped_image_pil.show()
+
+                    # Address pattern
+                    # address_pattern = r"(?<=5/0:\s)(.*?)(\d{6})"
+                    # address_match = re.search(address_pattern, string_aadhaar, re.DOTALL)
+                    
+                    # address = ""
+                    # # Extracted address
+                    # if address_match:
+                    #     address = address_match.group().strip()
+                    #     return address
+                    # else:
+                    #     return address
+
+                    pattern = r'(?:Address|Addresst)[^A-Za-z0-9]*([\s\S]*?)(?=\n\n|$)'
+
+                    # Find all matches
+                    addresses = re.findall(pattern, string_aadhaar)
+
+                    # Clean and display addresses
+                    for address in addresses:
+                        addresss = re.sub(r'^\s?.\n', '', address.strip()).strip()
+                        return addresss
+                    
+
+
+            
+            except ValueError:
+                # Handle cases where conversion to float fails (e.g., invalid confidence value)
+                print(f"Invalid confidence value for index {i}: {confidence}")
 
 
 def get_another_details(aadhaar_string,orignal_img,degree,aadhaar_number):
@@ -486,7 +536,10 @@ def get_another_details(aadhaar_string,orignal_img,degree,aadhaar_number):
     
     if "addr" in aadhaar_string.lower():
         # Extracting the Address
-        address = get_Address(orignal_img,degree)
+        address = get_Address(orignal_img,degree,all_string=False)
+
+    if "State" in string_store_all_deggre:
+        address = get_Address(string_store_all_deggre,degree,all_string=True)
 
     if aadhaar_number[0] == 607268753311:
         if "Aadhaar i prootofidenty" in aadhaar_string:
