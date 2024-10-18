@@ -163,6 +163,13 @@ def Image_to_text(image_array):
     # masked_image_pil.save('aadhaar_address.jpg')
 
 
+    language_codes = ['eng']
+    languages = '+'.join(language_codes)
+    custom_config = f'--oem 3 --psm 6 -l {languages}'
+    aadhaar_string = pytesseract.image_to_string(masked_image_pil, config=custom_config)
+    string_store_all_deggre += aadhaar_string
+
+
     # With English Lan
     if len(possible_UIDs) == 0:
         language_codes = ['eng']
@@ -351,7 +358,18 @@ def clean_name(text):
     return cleaned_text
 
 # Get Address From Aadhaar String
-def get_Address(address_image,degree,all_string=False):
+def get_Address(address_image,degree,all_string=False,get_address_all_sting=False):
+
+    if get_address_all_sting:
+        address_pattern = r"(?:[A-Za-z0-9\s,.()/-]+(?:Street|St|Road|Raiway|Station|Flat|Floor|Apariment|M.C|Garden)[A-Za-z0-9\s,.()/-]*)+"
+
+        # Use re.search to find the address in the text
+        match = re.search(address_pattern, string_store_all_deggre)
+        # print(match)
+        if match:
+            address = match.group()
+
+            return address
 
 
     if all_string:
@@ -387,7 +405,7 @@ def get_Address(address_image,degree,all_string=False):
         return address
 
     else:
-        address_image = cv2.imread(address_image)
+        # address_image = cv2.imread(address_image)
 
         gray = cv2.cvtColor(address_image, cv2.COLOR_BGR2GRAY)
         sharpen_kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
@@ -509,7 +527,7 @@ def get_another_details(aadhaar_string,orignal_img,degree,aadhaar_number):
     Father_name = ""
     Name = ""
     address = ""
-    
+    VID_Info = ""
     
 
     # Extracting the DOB
@@ -519,7 +537,8 @@ def get_another_details(aadhaar_string,orignal_img,degree,aadhaar_number):
     gender = get_gender(aadhaar_string)
 
     # Extracting the VID
-    VID_Info = get_VID(aadhaar_string)
+    if "VID" in aadhaar_string:
+        VID_Info = get_VID(aadhaar_string)
     
 
     if "Father" in aadhaar_string:
@@ -542,10 +561,24 @@ def get_another_details(aadhaar_string,orignal_img,degree,aadhaar_number):
     
     if "addr" in aadhaar_string.lower():
         # Extracting the Address
-        address = get_Address(orignal_img,degree,all_string=False)
+        address = get_Address(orignal_img,degree,all_string=False,get_address_all_sting=False)
 
     if "State" in string_store_all_deggre:
-        address = get_Address(string_store_all_deggre,degree,all_string=True)
+        address = get_Address(string_store_all_deggre,degree,all_string=True,get_address_all_sting=False)
+
+    if address == "":
+        if "State" in string_store_all_deggre:
+            address = get_Address(string_store_all_deggre,degree,all_string=True,get_address_all_sting=False)
+    
+    if address == "":
+        # print(string_store_all_deggre)
+        if "S/O" in string_store_all_deggre:
+            # print("-------")
+            address = get_Address(orignal_img,degree,all_string=False,get_address_all_sting=True)
+
+
+
+    # if  address
 
     if aadhaar_number[0] == 607268753311:
         if "Aadhaar i prootofidenty" in aadhaar_string:
@@ -568,8 +601,8 @@ def get_another_details(aadhaar_string,orignal_img,degree,aadhaar_number):
             gender = "Male"
             DOB = "07/01/1996"
 
-    if aadhaar_number[0] == 579806935314:
-        Name = "Prasanta Kumar Saiba"
+    # if aadhaar_number[0] == 579806935314:
+    #     Name = "Prasanta Kumar Saiba"
 
     
     aadhaar_details = []
@@ -900,12 +933,12 @@ def Aadhaar_main(image_path):
         if len(qr_code_details) != 0:
             return qr_code_details
 
-    aadhaar_details =  image_rotate_and_check_number(image,target_image_path,grayscale=True)
+    aadhaar_details =  image_rotate_and_check_number(image,image,grayscale=True)
 
     # Improve Image Quality and also check Rotation
     if len(aadhaar_details) == 0:
         # print("Improve Quality")
-        aadhaar_details = improve_image_quality(image,target_image_path)
+        aadhaar_details = improve_image_quality(image,image)
         
     if len(aadhaar_details) == 0:
         return []
