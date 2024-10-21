@@ -18,7 +18,7 @@ from Headers_Verify import *
 
 
 # Aadhaar OCR
-from apps.Every_Apis.OCR.aadhaar_ocr_with_verification import *
+from apps.Every_Apis.OCR.aadhaar_ocr_without_degree import *
 # Pancard OCR
 from apps.Every_Apis.OCR.pancard_ocr_with_verification import *
 # Passport OCR
