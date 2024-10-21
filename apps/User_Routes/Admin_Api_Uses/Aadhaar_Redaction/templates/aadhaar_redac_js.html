@@ -32,6 +32,8 @@
             fetch("/aadhaar/redaction/test-api", requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
+                    // console.log(result);
+                    
                     $(".c-loader").addClass('d-none')
                     var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
                     $("#aadhaar_redaction_json").text(formatteddata)

@@ -19,6 +19,7 @@ from apps.User_Routes.User_admin_Api_Dashboard import User_Admin_Api_Dashboard_b
 # Dashboard Inner Routes
 from apps.User_Routes.Admin_Api_Uses.Name_Comparison import Admin_Api_Uses_Name_Comparison_bp
 from apps.User_Routes.Admin_Api_Uses.Aadhaar_OCR import Aadhaar_OCR_bp
+from apps.User_Routes.Admin_Api_Uses.PAN_OCR import PAN_OCR_bp
 from apps.User_Routes.Admin_Api_Uses.Aadhaar_Redaction import Aadhaar_Redaction_bp
 from apps.User_Routes.Admin_Api_Uses.Passport_OCR import Passport_OCR_bp
 from apps.User_Routes.Admin_Api_Uses.KYC_Quality_check import KYC_Quality_check_bp
@@ -55,6 +56,15 @@ from apps.Every_Apis.Language_Translator import Language_Translator_api_bp
 from apps.Every_Apis.KYC_Quality_Check import KYC_Quality_Check_api_bp
 from apps.Every_Apis.Aadhaar_Redaction import Aadhaar_Redaction_api_bp
 from apps.Every_Apis.OCR import OCR_all_api_bp
+from apps.Every_Apis.Bank_Statement import Bank_Statement_api_bp
+from apps.Every_Apis.ITR_Statement import ITR_Statement_api_bp
+from apps.Every_Apis.Voter_Redaction import Voter_Redaction_api_bp
+from apps.Every_Apis.Face_Matching import Face_matching_api_bp
+from apps.Every_Apis.Multiple_name_match import Multi_name_match_api_bp
+from apps.Every_Apis.Pennydrop import Pennydrop_api_bp
+from apps.Every_Apis.Aadhaar_mobile_link import Aadhaar_mobile_link_bp
+from apps.Every_Apis.Aadhaar_Authentication import Aadhaar_Auth_bp
+from apps.Every_Apis.Voter_Authentication import Voter_Auth_bp
 
 
 def crete_app():
@@ -174,6 +184,7 @@ def crete_app():
     # Api Dashboard Pages
     app.register_blueprint(Admin_Api_Uses_Name_Comparison_bp)
     app.register_blueprint(Aadhaar_OCR_bp)
+    app.register_blueprint(PAN_OCR_bp)
     app.register_blueprint(Aadhaar_Redaction_bp)
     app.register_blueprint(Passport_OCR_bp)
     app.register_blueprint(KYC_Quality_check_bp)
@@ -206,6 +217,15 @@ def crete_app():
     app.register_blueprint(KYC_Quality_Check_api_bp)
     app.register_blueprint(Aadhaar_Redaction_api_bp)
     app.register_blueprint(OCR_all_api_bp)
+    app.register_blueprint(Bank_Statement_api_bp)
+    app.register_blueprint(ITR_Statement_api_bp)
+    app.register_blueprint(Voter_Redaction_api_bp)
+    app.register_blueprint(Face_matching_api_bp)
+    app.register_blueprint(Multi_name_match_api_bp)
+    app.register_blueprint(Pennydrop_api_bp)
+    app.register_blueprint(Aadhaar_mobile_link_bp)
+    app.register_blueprint(Aadhaar_Auth_bp)
+    app.register_blueprint(Voter_Auth_bp)
 
 
 

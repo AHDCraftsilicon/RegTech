@@ -1,0 +1,73 @@
+<script nonce="{{ g.nonce }}">
+
+    $('#aadhaar_input').on('change', (event) => {
+        var output = document.getElementById('aadhaar_img');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    });
+
+
+    $("#sample_aadhaar_ocr").click(function () {
+        var output = document.getElementById('aadhaar_img');
+        output.src = "../../../../static/images/aadhaar_ocr.jpg"
+    })
+
+    $("#aadhaar_ocr_run").click(function () {
+        const fileInput = document.getElementById('aadhaar_input');
+        const file = fileInput.files[0];
+
+
+        if (file != undefined) {
+            $(".c-loader").removeClass('d-none')
+            const formdata = new FormData();
+            formdata.append("aadhaar_img", file);
+
+            const requestOptions = {
+                method: "POST",
+                body: formdata,
+                redirect: "follow"
+            };
+
+            fetch("/pan/test-api", requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+
+                    if (result.data.json_data != undefined) {
+                        $(".c-loader").addClass('d-none')
+                        var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
+                        $("#aadhaar_ocr_json").text(formatteddata)
+                        $('#eta').removeClass('d-none')
+                        document.getElementById("aadhaar_ocr_seconds").innerHTML = result.data.result_in_seconds
+                    }
+                    else {
+                        $(".c-loader").addClass('d-none')
+                        var formatteddata = JSON.stringify(result, null, '\t')
+                        $("#aadhaar_ocr_json").text(formatteddata)
+                        $('#eta').removeClass('d-none')
+                    }
+                })
+                .catch((error) => {
+                    console.log(error)
+                });
+        }
+        else {
+            alert("Please Choose File!")
+        }
+
+    })
+
+
+    $("#full_screen_view").click(function () {
+        enableFullScreen("aadhaar_ocr_json");
+    });
+
+    $("#aadhaar_ocr_copy").click(function () {
+        copyToClipboard('#aadhaar_ocr_json')
+    });
+
+    $("#aadhaar_ocr_download").click(function () {
+        Json_Download('aadhaar_ocr_json')
+    });
+</script>
