@@ -651,7 +651,7 @@ def Image_to_text(image_array,image):
         # print("---------------")
         Father_name = father_name_from_address(address)
     
-    Father_name = Father_name.replace("/","")
+    Father_name = Father_name.replace("S/O","").replace("S/0","")
 
     if 'W/O' in address:
         husband_name = husband_name_from_address(address)
