@@ -196,214 +196,208 @@ def QR_code_data_Read(xml_string):
 
 # Get Address From Aadhaar String
 def get_Address(address_image,get_address_all_sting):
+    try:
 
-    if get_address_all_sting:
-        address_pattern = r"(?:[A-Za-z0-9\s,.()/-]+(?:Street|St|Road|Raiway|Station|Flat|Floor|Apariment|M.C|Garden)[A-Za-z0-9\s,.()/-]*)+"
+        if get_address_all_sting:
+            address_pattern = r"(?:[A-Za-z0-9\s,.()/-]+(?:Street|St|Road|Raiway|Station|Flat|Floor|Apariment|M.C|Garden)[A-Za-z0-9\s,.()/-]*)+"
 
-        # Use re.search to find the address in the text
-        match = re.search(address_pattern, get_address_all_sting)
-        # print(match)
-        if match:
-            address = match.group()
+            # Use re.search to find the address in the text
+            match = re.search(address_pattern, get_address_all_sting)
+            # print(match)
+            if match:
+                address = match.group()
+
+                return address
+
+
+        if 'VIC' in get_address_all_sting:
+            address = ""
+            vic_pattern = r'VIC:\s*([\w\s]+),'
+            po_pattern = r'PO:\s*([\w\s]+),'
+            district_pattern = r'District:\s*([\w\s]+),'
+            state_pattern = r'State:\s*([\w\s]+),'
+            pincode_pattern = r'PIN Code:\s*(\d{6}),'
+
+            # Extract values using regex
+            vic = re.search(vic_pattern, get_address_all_sting)
+            po = re.search(po_pattern, get_address_all_sting)
+            district = re.search(district_pattern, get_address_all_sting)
+            state = re.search(state_pattern, get_address_all_sting)
+            pincode = re.search(pincode_pattern, get_address_all_sting)
+
+            if vic:
+                address += vic.group(1).strip() + " "
+
+            if po:
+                address += po.group(1).strip() + " "
+            
+            if district:
+                address += district.group(1).strip() + " "
+            
+            if state:
+                address += state.group(1).strip() + " "
+
+            if pincode:
+                address += ",PIN Code " + pincode.group(1).strip()
 
             return address
 
+        else:
+            # address_image = cv2.imread(address_image)
 
-    if 'VIC' in get_address_all_sting:
-        address = ""
-        vic_pattern = r'VIC:\s*([\w\s]+),'
-        po_pattern = r'PO:\s*([\w\s]+),'
-        district_pattern = r'District:\s*([\w\s]+),'
-        state_pattern = r'State:\s*([\w\s]+),'
-        pincode_pattern = r'PIN Code:\s*(\d{6}),'
+            gray = cv2.cvtColor(address_image, cv2.COLOR_BGR2GRAY)
+            sharpen_kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
+            sharpen = cv2.filter2D(gray, -1, sharpen_kernel)
 
-        # Extract values using regex
-        vic = re.search(vic_pattern, get_address_all_sting)
-        po = re.search(po_pattern, get_address_all_sting)
-        district = re.search(district_pattern, get_address_all_sting)
-        state = re.search(state_pattern, get_address_all_sting)
-        pincode = re.search(pincode_pattern, get_address_all_sting)
+            # img_pil = Image.fromarray(image_rgb)
+            # img_pil.show()
 
-        if vic:
-            address += vic.group(1).strip() + " "
+            # 0 degree Image
+            angle = determine_skew(sharpen,angle_pm_90=True)    
+            rotated = rotate(address_image, angle, (0, 0, 0))
 
-        if po:
-            address += po.group(1).strip() + " "
-        
-        if district:
-            address += district.group(1).strip() + " "
-        
-        if state:
-            address += state.group(1).strip() + " "
+            height, width = rotated.shape[:2]
+            if height > 1000 or width > 1000:
+                rotated = cv2.resize(rotated, (int(width/2), int(height/2)))
 
-        if pincode:
-            address += ",PIN Code " + pincode.group(1).strip()
-
-        return address
-
-    else:
-        # address_image = cv2.imread(address_image)
-
-        gray = cv2.cvtColor(address_image, cv2.COLOR_BGR2GRAY)
-        sharpen_kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
-        sharpen = cv2.filter2D(gray, -1, sharpen_kernel)
-
-        # img_pil = Image.fromarray(image_rgb)
-        # img_pil.show()
-
-        # 0 degree Image
-        angle = determine_skew(sharpen,angle_pm_90=True)    
-        rotated = rotate(address_image, angle, (0, 0, 0))
-
-        height, width = rotated.shape[:2]
-        if height > 1000 or width > 1000:
-            rotated = cv2.resize(rotated, (int(width/2), int(height/2)))
-
-        # Use pytesseract to get bounding boxes around text
-        data = pytesseract.image_to_data(rotated, output_type=pytesseract.Output.DICT)
+            # Use pytesseract to get bounding boxes around text
+            data = pytesseract.image_to_data(rotated, output_type=pytesseract.Output.DICT)
 
 
 
-        left_margin = 15  # Increase this value to widen the left side
-        right_margin = 500  # Increase this value to widen the right side
-        top_margin = 10  # Increase this value to widen the top side
-        bottom_margin = 1000 
+            left_margin = 15  # Increase this value to widen the left side
+            right_margin = 500  # Increase this value to widen the right side
+            top_margin = 10  # Increase this value to widen the top side
+            bottom_margin = 1000 
 
-        for i in range(len(data['text'])):
-            text = data['text'][i].strip()  # Get the text and remove extra spaces
-            confidence = data['conf'][i]
-            
-            
-            # Check if confidence is a valid number and greater than threshold
-            try:
-                if "enrol" in text.lower():
-                    left_margin = 150  # Increase this value to widen the left side
-                    right_margin = 500  # Increase this value to widen the right side
-                    top_margin = 200  # Increase this value to widen the top side
-                    bottom_margin = 400 
-
-                    keyword_found = True
-                    (x, y, w, h) = (data['left'][i], data['top'][i], data['width'][i], data['height'][i])
-                    x_new = max(x - left_margin, 0)  # Ensure x does not go below 0
-                    y_new = max(y - top_margin, 0)  # Ensure y does not go below 0
-                    w_new = w + left_margin + right_margin  # Increase width
-                    h_new = h + top_margin + bottom_margin  # Increase height
-
-                    # Crop the image using the adjusted bounding box
-                    cropped_image = rotated[y_new:y_new + h_new, x_new:x_new + w_new]
-                    
-                    # cropped_image = image[y:y + 500, x:x + 500]
-                    cropped_image_pil = Image.fromarray(cv2.cvtColor(cropped_image, cv2.COLOR_BGR2RGB))
-                    # cropped_image_pil.save(f'cropped_image_{i}.png')
-
-                    enhancer = ImageEnhance.Sharpness(cropped_image_pil)
-                    sharp_image = enhancer.enhance(2.0)
-
-                    # Save and display the sharpened image
-                    # cv2.imshow('sharpened_image.jpg', sharp_image)
-                    address = pytesseract.image_to_string(sharp_image)
-                    # print("****** ", address)
-
-                    # Optionally, display the cropped image
-                    # cropped_image_pil.show()
+            for i in range(len(data['text'])):
+                text = data['text'][i].strip()  # Get the text and remove extra spaces
+                confidence = data['conf'][i]
                 
-                    address_pattern = re.compile(r"(?:\$/O|S/O|S/0) [^\n]+\n([\s\S]+?)\n(?:Ty|\d{10})")
+                
+                # Check if confidence is a valid number and greater than threshold
+                try:
+                    if "enrol" in text.lower():
+                        left_margin = 150  # Increase this value to widen the left side
+                        right_margin = 500  # Increase this value to widen the right side
+                        top_margin = 200  # Increase this value to widen the top side
+                        bottom_margin = 400 
 
-                    match = address_pattern.search(address)
-                    if match:
-                        address = match.group(1)
-                        return address
-                    else:
-                        return address
-    
+                        keyword_found = True
+                        (x, y, w, h) = (data['left'][i], data['top'][i], data['width'][i], data['height'][i])
+                        x_new = max(x - left_margin, 0)  # Ensure x does not go below 0
+                        y_new = max(y - top_margin, 0)  # Ensure y does not go below 0
+                        w_new = w + left_margin + right_margin  # Increase width
+                        h_new = h + top_margin + bottom_margin  # Increase height
 
-                # print(text.lower())
-                # Check if the text matches any of the specified keywords
-                if "addr" in text.lower():
-                    keyword_found = True
-                    (x, y, w, h) = (data['left'][i], data['top'][i], data['width'][i], data['height'][i])
-                    x_new = max(x - left_margin, 0)  # Ensure x does not go below 0
-                    y_new = max(y - top_margin, 0)  # Ensure y does not go below 0
-                    w_new = w + left_margin + right_margin  # Increase width
-                    h_new = h + top_margin + bottom_margin  # Increase height
+                        # Crop the image using the adjusted bounding box
+                        cropped_image = rotated[y_new:y_new + h_new, x_new:x_new + w_new]
+                        
+                        # cropped_image = image[y:y + 500, x:x + 500]
+                        cropped_image_pil = Image.fromarray(cv2.cvtColor(cropped_image, cv2.COLOR_BGR2RGB))
+                        # cropped_image_pil.save(f'cropped_image_{i}.png')
 
-                    # Crop the image using the adjusted bounding box
-                    cropped_image = rotated[y_new:y_new + h_new, x_new:x_new + w_new]
+                        enhancer = ImageEnhance.Sharpness(cropped_image_pil)
+                        sharp_image = enhancer.enhance(2.0)
+
+                        # Save and display the sharpened image
+                        # cv2.imshow('sharpened_image.jpg', sharp_image)
+                        address = pytesseract.image_to_string(sharp_image)
+                        # print("****** ", address)
+
+                        # Optionally, display the cropped image
+                        # cropped_image_pil.show()
                     
-                    # cropped_image = image[y:y + 500, x:x + 500]
-                    cropped_image_pil = Image.fromarray(cv2.cvtColor(cropped_image, cv2.COLOR_BGR2RGB))
-                    # cropped_image_pil.save(f'cropped_image_{i}.png')
+                        address_pattern = re.compile(r"(?:\$/O|S/O|S/0) [^\n]+\n([\s\S]+?)\n(?:Ty|\d{10})")
 
-                    enhancer = ImageEnhance.Sharpness(cropped_image_pil)
-                    sharp_image = enhancer.enhance(2.0)
+                        match = address_pattern.search(address)
+                        if match:
+                            address = match.group(1)
+                            return address
+                        else:
+                            return address
+        
 
-                    # Save and display the sharpened image
-                    # cv2.imwrite('sharpened_image.jpg', sharpened_image)
-                    string_aadhaar = pytesseract.image_to_string(sharp_image)
+                    # print(text.lower())
+                    # Check if the text matches any of the specified keywords
+                    if "addr" in text.lower():
+                        keyword_found = True
+                        (x, y, w, h) = (data['left'][i], data['top'][i], data['width'][i], data['height'][i])
+                        x_new = max(x - left_margin, 0)  # Ensure x does not go below 0
+                        y_new = max(y - top_margin, 0)  # Ensure y does not go below 0
+                        w_new = w + left_margin + right_margin  # Increase width
+                        h_new = h + top_margin + bottom_margin  # Increase height
 
-                    pattern = r'(?:Address|Addresst|Adaress)[^A-Za-z0-9]*([\s\S]*?)(?=\n\n|$)'
+                        # Crop the image using the adjusted bounding box
+                        cropped_image = rotated[y_new:y_new + h_new, x_new:x_new + w_new]
+                        
+                        # cropped_image = image[y:y + 500, x:x + 500]
+                        cropped_image_pil = Image.fromarray(cv2.cvtColor(cropped_image, cv2.COLOR_BGR2RGB))
+                        # cropped_image_pil.save(f'cropped_image_{i}.png')
 
-                    # Find all matches
-                    addresses = re.findall(pattern, string_aadhaar)
+                        enhancer = ImageEnhance.Sharpness(cropped_image_pil)
+                        sharp_image = enhancer.enhance(2.0)
 
-                    # print("*****" , string_aadhaar)
+                        # Save and display the sharpened image
+                        # cv2.imwrite('sharpened_image.jpg', sharpened_image)
+                        string_aadhaar = pytesseract.image_to_string(sharp_image)
 
-                    # Clean and display addresses
-                    for address in addresses:
-                        addresss = re.sub(r'^\s?.\n', '', address.strip()).strip()
-                        return addresss
-                    
+                        pattern = r'(?:Address|Addresst|Adaress)[^A-Za-z0-9]*([\s\S]*?)(?=\n\n|$)'
 
-            
-            except ValueError:
-                # Handle cases where conversion to float fails (e.g., invalid confidence value)
-                print(f"Invalid confidence value for index {i}: {confidence}")
+                        # Find all matches
+                        addresses = re.findall(pattern, string_aadhaar)
 
+                        # print("*****" , string_aadhaar)
+
+                        # Clean and display addresses
+                        for address in addresses:
+                            addresss = re.sub(r'^\s?.\n', '', address.strip()).strip()
+                            return addresss
+                        
+
+                
+                except ValueError:
+                    # Handle cases where conversion to float fails (e.g., invalid confidence value)
+                    print(f"Invalid confidence value for index {i}: {confidence}")
+    except:
+        pass
 
 # Get Name From Aadhaar String
 def get_name(aadhaar_string):
-    cleaned_text = re.sub(r'\n\s*\n', '\n', aadhaar_string.strip())
-    lines_list = cleaned_text.splitlines()
+    try:
+        cleaned_text = re.sub(r'\n\s*\n', '\n', aadhaar_string.strip())
+        lines_list = cleaned_text.splitlines()
 
-    previous_line_text = ""
-    name = ""
-
-    # Iterate through the lines
-    for line in lines_list:
-        if "dob" in line.lower(): 
-            name =  re.sub(r'[^a-zA-Z\s]', '', previous_line_text.strip()).strip()
-            break 
-        previous_line_text = line 
-    else:
+        previous_line_text = ""
         name = ""
 
-    if name == "":
+        # Iterate through the lines
         for line in lines_list:
-            if "year" in line.lower(): 
+            if "dob" in line.lower(): 
                 name =  re.sub(r'[^a-zA-Z\s]', '', previous_line_text.strip()).strip()
                 break 
             previous_line_text = line 
         else:
             name = ""
 
-    return name
+        if name == "":
+            for line in lines_list:
+                if "year" in line.lower(): 
+                    name =  re.sub(r'[^a-zA-Z\s]', '', previous_line_text.strip()).strip()
+                    break 
+                previous_line_text = line 
+            else:
+                name = ""
+
+        return name
+    except:
+        pass
 
 
 
 # Get DOB From Aadhaar String
 def get_DOB(aadhaar_string):
-    dob_match = re.compile(r'\b\s*(\d{2}/\d{2}/\d{4})').search(aadhaar_string)
-    final_dob = ""
-
-    if dob_match != None:
-        final_dob = dob_match.group()
-    else:
-        if re.compile(r"Year of Birth\s*:\s*(\d{4})").findall(aadhaar_string) != []:
-            final_dob = re.compile(r"Year of Birth\s*:\s*(\d{4})").findall(aadhaar_string)[0]
-        else:
-            final_dob= ""
-
-    if final_dob == "":
+    try:
         dob_match = re.compile(r'\b\s*(\d{2}/\d{2}/\d{4})').search(aadhaar_string)
         final_dob = ""
 
@@ -415,35 +409,55 @@ def get_DOB(aadhaar_string):
             else:
                 final_dob= ""
 
-    
+        if final_dob == "":
+            dob_match = re.compile(r'\b\s*(\d{2}/\d{2}/\d{4})').search(aadhaar_string)
+            final_dob = ""
 
-    return final_dob
+            if dob_match != None:
+                final_dob = dob_match.group()
+            else:
+                if re.compile(r"Year of Birth\s*:\s*(\d{4})").findall(aadhaar_string) != []:
+                    final_dob = re.compile(r"Year of Birth\s*:\s*(\d{4})").findall(aadhaar_string)[0]
+                else:
+                    final_dob= ""
+
+        
+
+        return final_dob
+    except:
+        pass
 
 # Get Gender From Aadhaar String
 def get_gender(aadhaar_string):
-    gender_pattern = re.compile(r'\bFEMALE|FEMALE|male|female|Male|Female|Famale\b', re.IGNORECASE)
-    
-    gender = ""
-    if gender_pattern.search(aadhaar_string) != None:
-        gender = gender_pattern.search(aadhaar_string).group()
-
-
-    if gender == "":
+    try:
+        gender_pattern = re.compile(r'\bFEMALE|FEMALE|male|female|Male|Female|Famale\b', re.IGNORECASE)
+        
+        gender = ""
         if gender_pattern.search(aadhaar_string) != None:
             gender = gender_pattern.search(aadhaar_string).group()
 
-    return gender
+
+        if gender == "":
+            if gender_pattern.search(aadhaar_string) != None:
+                gender = gender_pattern.search(aadhaar_string).group()
+
+        return gender
+    except:
+        pass
 
 
 # Ger VID From Aadhaar String
 def get_VID(aadhaar_string):
-    vid_match = re.search(r'(\d{4}\s\d{4}\s\d{4}\s\d{4})', aadhaar_string)
+    try:
+        vid_match = re.search(r'(\d{4}\s\d{4}\s\d{4}\s\d{4})', aadhaar_string)
 
-    if vid_match:
-        vid_number = vid_match.group(1)
-        return vid_number
-    else:
-        return ""
+        if vid_match:
+            vid_number = vid_match.group(1)
+            return vid_number
+        else:
+            return ""
+    except:
+        pass
 
 def check_blur_and_clarity(image_path):
     # Read the image
@@ -467,77 +481,87 @@ def check_blur_and_clarity(image_path):
 
 # Gender through name get
 def keyword_name(aadhaar_string,keywords,genders=False,Father=False):
-    cleaned_text = re.sub(r'\n\s*\n', '\n', aadhaar_string.strip())
-    lines_list = cleaned_text.splitlines()
-    prev_prev_line_text = ""  # Variable to store the line before the previous one
-    prev_line_text = ""   
-    
-    name = ""
-    if genders:
-        for line in lines_list:
-            if str(keywords) in line: 
-                name =  re.sub(r'[^a-zA-Z\s]', '', prev_prev_line_text.strip()).strip()
-                break 
-            prev_prev_line_text = prev_line_text  # Move previous to two lines ago
-            prev_line_text = line
-        else:
-            name = "" 
-       
+    try:
+        cleaned_text = re.sub(r'\n\s*\n', '\n', aadhaar_string.strip())
+        lines_list = cleaned_text.splitlines()
+        prev_prev_line_text = ""  # Variable to store the line before the previous one
+        prev_line_text = ""   
+        
+        name = ""
+        if genders:
+            for line in lines_list:
+                if str(keywords) in line: 
+                    name =  re.sub(r'[^a-zA-Z\s]', '', prev_prev_line_text.strip()).strip()
+                    break 
+                prev_prev_line_text = prev_line_text  # Move previous to two lines ago
+                prev_line_text = line
+            else:
+                name = "" 
+        
 
-        return name
-    
-    if Father:
-        for line in lines_list:
-            if str(keywords).lower() in line.lower(): 
-                name =  re.sub(r'[^a-zA-Z\s]', '', prev_prev_line_text.strip()).strip()
-                break 
-            prev_prev_line_text = prev_line_text  # Move previous to two lines ago
-            prev_line_text = line
-        else:
-            name = "" 
-       
-        return name
-
+            return name
+        
+        if Father:
+            for line in lines_list:
+                if str(keywords).lower() in line.lower(): 
+                    name =  re.sub(r'[^a-zA-Z\s]', '', prev_prev_line_text.strip()).strip()
+                    break 
+                prev_prev_line_text = prev_line_text  # Move previous to two lines ago
+                prev_line_text = line
+            else:
+                name = "" 
+        
+            return name
+    except:
+        pass
 
 # Ger Father Name From Aadhaar String
 def Father_husband_name(aadhaar_string,keyword):
-    husband_keyword_check = ""
-    father_keyword_check = ""
-    if keyword == "husband":
-        match_husband_string = re.compile(r'Husband\s*[-:]\s*([A-Za-z\s]+)|Husband\s*:\s*([A-Z\s]+)', re.IGNORECASE).search(aadhaar_string)
-        
-        if match_husband_string:
-            husband_keyword_check = match_husband_string.group(1).strip()
 
-    
-    elif keyword == "father":
-        match = re.compile(r'Father\s*[-:]\s*([A-Za-z\s]+)', re.IGNORECASE).search(aadhaar_string)
+    try:
+        husband_keyword_check = ""
+        father_keyword_check = ""
+        if keyword == "husband":
+            match_husband_string = re.compile(r'Husband\s*[-:]\s*([A-Za-z\s]+)|Husband\s*:\s*([A-Z\s]+)', re.IGNORECASE).search(aadhaar_string)
+            
+            if match_husband_string:
+                husband_keyword_check = match_husband_string.group(1).strip()
 
-        if match:
-            father_keyword_check = match.group(1).strip()
         
-    return husband_keyword_check.strip(), father_keyword_check.strip()
+        elif keyword == "father":
+            match = re.compile(r'Father\s*[-:]\s*([A-Za-z\s]+)', re.IGNORECASE).search(aadhaar_string)
+
+            if match:
+                father_keyword_check = match.group(1).strip()
+            
+        return husband_keyword_check.strip(), father_keyword_check.strip()
+    except:
+        pass
 
 def father_name_from_address(address):
     # Regex pattern to find 'S/O' followed by the father's name
-    pattern = r"S/O\s*:\s*(.*?)(?:,|\n|$)|S/O\s+(.*?)(?:\.\s|,|$)|S/0 ([^\n]+)"
-    
-    match = re.search(pattern, address, re.IGNORECASE)
-    if match:
-        father_name = match.group(1).strip()  # Extract and clean the name
-        return father_name
-    return ""
+    try:
+        pattern = r"S/O\s*:\s*(.*?)(?:,|\n|$)|S/O\s+(.*?)(?:\.\s|,|$)|S/0 ([^\n]+)"
+        father_name = ""
+        match = re.search(pattern, address, re.IGNORECASE)
+        if match:
+            father_name = match.group()  # Extract and clean the name
+            return father_name
+        return ""
+    except:
+        pass
 
 def husband_name_from_address(address):
-    # Regex pattern to find 'S/O' followed by the father's name
-    pattern = r"W/O:\s*(.*?)(?:\n|,|$)"
-    
-    match = re.search(pattern, address, re.IGNORECASE)
-    if match:
-        father_name = match.group(1).strip()  # Extract and clean the name
-        return father_name
-    return ""
-
+    try:
+        pattern = r"W/O:\s*(.*?)(?:\n|,|$)"
+        
+        match = re.search(pattern, address, re.IGNORECASE)
+        if match:
+            father_name = match.group(1)  # Extract and clean the name
+            return father_name
+        return ""
+    except:
+        pass
 
 # Name Clean Extra Character remove
 def clean_name(text):
@@ -627,7 +651,7 @@ def Image_to_text(image_array,image):
         # print("---------------")
         Father_name = father_name_from_address(address)
     
-
+    Father_name = Father_name.replace("/","")
 
     if 'W/O' in address:
         husband_name = husband_name_from_address(address)
