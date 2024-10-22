@@ -198,16 +198,16 @@ def QR_code_data_Read(xml_string):
 def get_Address(address_image,get_address_all_sting):
     try:
 
-        if get_address_all_sting:
-            address_pattern = r"(?:[A-Za-z0-9\s,.()/-]+(?:Street|St|Road|Raiway|Station|Flat|Floor|Apariment|M.C|Garden)[A-Za-z0-9\s,.()/-]*)+"
+        # if get_address_all_sting:
+        #     address_pattern = r"(?:[A-Za-z0-9\s,.()/-]+(?:Street|St|Road|Raiway|Station|Flat|Floor|Apariment|M.C|Garden)[A-Za-z0-9\s,.()/-]*)+"
 
-            # Use re.search to find the address in the text
-            match = re.search(address_pattern, get_address_all_sting)
-            # print(match)
-            if match:
-                address = match.group()
+        #     # Use re.search to find the address in the text
+        #     match = re.search(address_pattern, get_address_all_sting)
+        #     # print(match)
+        #     if match:
+        #         address = match.group()
 
-                return address
+        #         return address
 
 
         if 'VIC' in get_address_all_sting:
@@ -314,8 +314,7 @@ def get_Address(address_image,get_address_all_sting):
                         if match:
                             address = match.group(1)
                             return address
-                        else:
-                            return address
+                       
         
 
                     # print(text.lower())
