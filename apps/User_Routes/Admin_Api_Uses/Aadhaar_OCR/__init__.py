@@ -8,7 +8,7 @@ import uuid
 
 
 # Name Comparision Module
-from apps.User_Routes.Admin_Api_Uses.Aadhaar_OCR.aadhaar_OCR_with_verify import *
+from apps.User_Routes.Admin_Api_Uses.Aadhaar_OCR.aadhaar_ocr_22_10 import *
 
 # DataBase
 from data_base_string import *

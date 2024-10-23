@@ -884,8 +884,6 @@ def get_another_details(aadhaar_string,orignal_img,degree,aadhaar_number):
         Name = clean_name(Name)
 
    
-    # print(string_store_all_deggre)
-
     aadhaar_details.append({"Address":clean_name(final_address),
                             "DOB":DOB.strip(),
                             "Gender":gender.strip(),
@@ -1194,7 +1192,10 @@ def Aadhaar_main(image_path):
     check_quality = check_blur_and_clarity(image)
 
     if check_quality == "The image is blurry":
-        return []
+        return {"status_code": 400,
+                            "status": "Error",
+                            "response": "Please upload a high-quality and readable image."
+                        }
     else:
 
         # QR code decode
@@ -1206,7 +1207,9 @@ def Aadhaar_main(image_path):
             xml_string = xml_string.stdout.decode('utf-8')
             qr_code_details = QR_code_data_Read(xml_string)
             if len(qr_code_details) != 0:
-                return  qr_code_details
+                return  {"status_code": 200,
+                "status": "Success",
+                "response":qr_code_details}
             
 
         # # if xml_string != "":
@@ -1220,7 +1223,9 @@ def Aadhaar_main(image_path):
         if xml_string != "":
             qr_code_details = QR_code_data_Read(xml_string)
             if len(qr_code_details) != 0:
-                return qr_code_details
+                return {"status_code": 200,
+                "status": "Success",
+                "response":qr_code_details}
 
 
         aadhaar_details =  image_rotate_and_check_number(image,image,grayscale=True)
@@ -1236,15 +1241,12 @@ def Aadhaar_main(image_path):
             
             
         if len(aadhaar_details) == 0:
-            return []
+            return {"status_code": 400,
+                            "status": "Error",
+                            "response": "Please upload a high-quality and readable image."
+                        }
         else:
-            if aadhaar_details[0]['Address'] == "" and  aadhaar_details[0]['DOB'] == "" and \
-            aadhaar_details[0]['Gender'] == "" and aadhaar_details[0]['Husband_name'] == "" and \
-            aadhaar_details[0]['Father_name'] == "" and aadhaar_details[0]['Name'] == "" and \
-            aadhaar_details[0]['VID'] == "" and aadhaar_details[0]['AadharID'] == "":
-
-                return []
-            else:
-
-                return aadhaar_details
+            return {"status_code": 200,
+                "status": "Success",
+                "response":aadhaar_details}
     
