@@ -10,7 +10,7 @@ import uuid
 from flask_socketio import emit, SocketIO
 # DataBase
 from data_base_string import *
-import requests
+import requests , json
 
 import threading
 # Headers Verification
@@ -196,7 +196,44 @@ def Ocr_Api_route():
                                                 "response": qr_Code_scan_response}
                                 else:
 
-                                    # inseted_objid = ML_kit_value_storage_db.insert_one({"status":"loading.......","json_data":""}).inserted_id
+                                    url = "http://103.206.57.30/image-api"
+
+                                    payload = json.dumps({"image": ocr_image })
+                                    headers = {'Content-Type': 'application/json'
+                                        }
+
+                                    response = requests.request("POST", url, headers=headers, data=payload)
+                                    if response.json() == {}:
+                                        return jsonify({"status_code": 521,
+                                        "status": "Error",
+                                        "response": "OCR server is down!"}) , 521 
+                                    
+                                    else:
+                                        response_Data = response.json()
+                                        # print(response_Data)
+                                        if response_Data['Objid_id'] != "":
+                                            check_db_log = ML_kit_value_storage_db.find_one({"_id":ObjectId(response_Data['Objid_id'])})
+                                            # print(check_db_log)
+                                            if check_db_log != None:
+                                                ml_kit_responce = aadhaar_details(check_db_log['message'])
+                                                
+                                                if ml_kit_responce == {}:
+                                                    store_response =  {"status_code": 400,
+                                                        "status": "Error",
+                                                        "response": "Please upload a high-quality and readable image."}
+                                                else:
+                                                    store_response = {"status_code": 200,
+                                                                    "status": "Success",
+                                                                    "response": ml_kit_responce}
+                                            else:
+                                                store_response = {"status_code": 521,
+                                                            "status": "Error",
+                                                            "response": "OCR server is down!"}
+                                        else:
+                                            store_response = {"status_code": 521,
+                                                        "status": "Error",
+                                                        "response": "OCR server is down!"}
+
                                     # OCR_all_api_bp.socketios.emit('image_updates', {'image_url': 
                                     #                                                 {"image": ocr_image,
                                     #                                                 "objid":str(inseted_objid)}},
@@ -212,9 +249,9 @@ def Ocr_Api_route():
                                     #         # print("Document found:", check_db_log['json_data'])
                                     #         store_response =  check_db_log['json_data'] 
                                     #     else:
-                                    store_response = {"status_code": 400,
-                                        "status": "Error",
-                                        "response": "Please upload a high-quality and readable image."}
+                                    # store_response = {"status_code": 400,
+                                    #     "status": "Error",
+                                    #     "response": "Please upload a high-quality and readable image."}
 
                                     # ML_kit_value_storage_db.delete_one({"_id":ObjectId(inseted_objid)})
 

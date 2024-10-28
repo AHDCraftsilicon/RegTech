@@ -10,7 +10,7 @@ from bson import ObjectId
 # Live DB
 database = MongoClient("mongodb://regtech-live:zwSZCkcoWOCRiN51pBzkBNpxRd2tJGQvEToLAHV2nxjfEDURRVDR4Ink8QKust4TXzSOn5yg2Fj6ACDbiqD4nw%3D%3D@regtech-live.mongo.cosmos.azure.com:10255/?ssl=true&retrywrites=false&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@regtech-live@")
 # Testing My Side
-Regtch_services_UAT = database['Regtech_UAT']
+Regtch_services_UAT = database['Regtech']
 
 ML_kit_value_storage_db = Regtch_services_UAT['Google_ml_kit_Storage']
 
@@ -52,7 +52,7 @@ def api_Calling():
                                                         "message":""}).inserted_id
     socketio.emit('image_updates', {'image_url': data,"objid":str(inseted_objid)})
 
-    socketio.sleep(4)
+    socketio.sleep(7)
 
 
 
