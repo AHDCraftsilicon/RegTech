@@ -3,7 +3,7 @@ from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from datetime import timedelta
 import os
-
+from flask_socketio import SocketIO, emit
 
 # Index Page(Landing Page)
 from apps.Index import Index_Page_bp
@@ -55,7 +55,7 @@ from apps.Every_Apis.Name_Matching import Name_Matching_api_bp
 from apps.Every_Apis.Language_Translator import Language_Translator_api_bp
 from apps.Every_Apis.KYC_Quality_Check import KYC_Quality_Check_api_bp
 from apps.Every_Apis.Aadhaar_Redaction import Aadhaar_Redaction_api_bp
-from apps.Every_Apis.OCR import OCR_all_api_bp
+from apps.Every_Apis.OCR import OCR_all_api_bp , init_socketio
 from apps.Every_Apis.Bank_Statement import Bank_Statement_api_bp
 from apps.Every_Apis.ITR_Statement import ITR_Statement_api_bp
 from apps.Every_Apis.Voter_Redaction import Voter_Redaction_api_bp
@@ -66,20 +66,32 @@ from apps.Every_Apis.Aadhaar_mobile_link import Aadhaar_mobile_link_bp
 from apps.Every_Apis.Aadhaar_Authentication import Aadhaar_Auth_bp
 from apps.Every_Apis.Voter_Authentication import Voter_Auth_bp
 
+# logger=True, engineio_logger=True
+
+socketios = SocketIO()
 
 def crete_app():
     app = Flask(__name__)
+    
+    socketios.init_app(app)
+
+    init_socketio(socketios)
+
+    
+    
     app.secret_key = "jnClOF0X4pzE2wHFdl0sjwFBR4CDiAcb2B13BDED3E63A69CD7F5F2A89A4FDDDF44"
     app.config['SESSION_PERMANENT'] = True
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
     app.config['SESSION_COOKIE_NAME'] = 'k_'
-    CORS(app , resources={r"/*": {"origins": "https://regtech.bluBeetle.ai/"}}) 
+    CORS(app , resources={r"/*": {"origins": "https://regtech.blubeetle.ai/"}}) 
 
     # JWT Secret key
     app.config["JWT_SECRET_KEY"] = "Craft_Silicon_Regtech_Makarba_Ahm"
     app.config['JWT_COOKIE_CSRF_PROTECT'] = False
     # app.config['JWT_TOKEN_LOCATION'] = ['cookies']
     # app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=15)
+
+
 
     
 
@@ -227,6 +239,12 @@ def crete_app():
     app.register_blueprint(Aadhaar_Auth_bp)
     app.register_blueprint(Voter_Auth_bp)
 
+    # Initialize the socketio instance for each blueprint
+    def register_socketio(blueprint, socketio_instance):
+        blueprint.socketios = socketio_instance
+
+    register_socketio(OCR_all_api_bp, socketios)
+
 
 
     # Landing Page URLS
@@ -294,5 +312,7 @@ def crete_app():
         response.headers['Cache-Control'] = 'public, max-age=3600'
         
         return response
+    
+
 
     return app

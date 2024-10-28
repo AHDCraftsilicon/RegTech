@@ -7,24 +7,29 @@ from bson import ObjectId
 import difflib 
 from datetime import datetime
 import uuid
-
-
+from flask_socketio import emit, SocketIO
 # DataBase
 from data_base_string import *
+import asyncio
 
-
+import threading
 # Headers Verification
 from Headers_Verify import *
 
 
 # Aadhaar OCR
-from apps.Every_Apis.OCR.aadhaar_ocr_22_10 import *
+from apps.Every_Apis.OCR.aadhaar_text_to_details_ml_kit import *
 # Pancard OCR
 from apps.Every_Apis.OCR.pancard_ocr_with_verification import *
 # Passport OCR
 from apps.Every_Apis.OCR.passport_ocr_module import *
 # Voter OCR
 from apps.Every_Apis.OCR.voter_ocr_module import *
+
+
+# Socket
+# socketio = SocketIO()
+
 
 # Blueprint
 OCR_all_api_bp = Blueprint("OCR_all_api_bp",
@@ -37,6 +42,7 @@ OCR_all_api_bp = Blueprint("OCR_all_api_bp",
 Authentication_db = Regtch_services_UAT["User_Authentication"]
 User_test_Api_history_db = Regtch_services_UAT['User_test_Api_history']
 Api_Informations_db = Regtch_services_UAT["Api_Informations"]
+ML_kit_value_storage_db = Regtch_services_UAT['Google_ml_kit_Storage']
 
 
 
@@ -47,13 +53,64 @@ UUID_PATTERN = re.compile(
 )
 
 
+
+# Connection check
+# @OCR_all_api_bp.route("/conn-check")
+# def connection_Check():
+
+#     return render_template('socket_connection_check.html')
+
+qer = ""
+
+
+
+def init_socketio(socketios):
+    print("+++++++++")
+    @socketios.on('trigger_api', namespace='/')
+    def handle_trigger_api(data):
+        print('Received trigger_api:', data)  
+        ml_kit_responce = aadhaar_details(data['message'])
+
+        # print(ml_kit_responce)
+        json_responce = ""
+        if ml_kit_responce == {}:
+            json_responce =  {"status_code": 400,
+                "status": "Error",
+                "response": "Please upload a high-quality and readable image."}
+        else:
+            json_responce = {"status_code": 200,
+                            "status": "Success",
+                            "response": ml_kit_responce}
+            
+        ML_kit_value_storage_db.update_one({"_id":ObjectId(data['objids'])},
+                                           {"$set": {"json_data":json_responce}})
+        
+
+# async def check_status(inseted_objid):
+#     while True:
+#         check_db_log = ML_kit_value_storage_db.find_one({"_id":ObjectId(inseted_objid)})
+#         if check_db_log != None:
+
+#             if check_db_log['json_data'] != "":
+#                 print("Document found:", check_db_log['json_data'])
+#                 return check_db_log['json_data'] 
+#             else:
+#                 print("Document not found. Retrying...")
+#                 await asyncio.sleep(1)
+
+
 @OCR_all_api_bp.route("/ocr",methods=['POST'])
 @jwt_required()
 #@check_headers
 def Ocr_Api_route():
     if request.method == 'POST':
         # try:
+            # ev = threading.Event()
             data = request.get_json()
+
+            
+                            
+                        
 
             # Json IS Empty Or Not
             if data == {}:
@@ -129,17 +186,42 @@ def Ocr_Api_route():
                             if data["doc_type"] == "Aadhaarcard":
 
                                 img_decoded = base64.b64decode(ocr_image)
-                                aadhaar_responce = Aadhaar_main(img_decoded)
+                                qr_Code_scan_response = aadhaar_Qr_scan(img_decoded)
                                 api_status = "Aadhaar_OCR"
 
-                                if len(aadhaar_responce) != 0:
+                                if len(qr_Code_scan_response) != 0:
                                     store_response = {"status_code": 200,
                                                 "status": "Success",
-                                                "response": aadhaar_responce}
+                                                "response": qr_Code_scan_response}
                                 else:
-                                    store_response = {"status_code": 400,
-                                    "status": "Error",
-                                    "response": "Please upload a high-quality and readable image."}
+
+                                    inseted_objid = ML_kit_value_storage_db.insert_one({"status":"loading.......","json_data":""}).inserted_id
+                                    OCR_all_api_bp.socketios.emit('image_updates', {'image_url': 
+                                                                                    {"image": ocr_image,
+                                                                                    "objid":str(inseted_objid)}},
+                                                                                    )
+                                    OCR_all_api_bp.socketios.sleep(8)
+
+                                    
+
+                                    check_db_log = ML_kit_value_storage_db.find_one({"_id":ObjectId(inseted_objid)})
+                                    if check_db_log != None:
+
+                                        if check_db_log['json_data'] != "":
+                                            # print("Document found:", check_db_log['json_data'])
+                                            store_response =  check_db_log['json_data'] 
+                                        else:
+                                            store_response = {"status_code": 200,
+                                                "status": "Success",
+                                                "response": qr_Code_scan_response}
+
+                                    ML_kit_value_storage_db.delete_one({"_id":ObjectId(inseted_objid)})
+
+                                    # ml_kit_responce = aadhaar_details(ocr_image)
+
+                                    # store_response = {"status_code": 400,
+                                    # "status": "Error",
+                                    # "response": "Please upload a high-quality and readable image."}
                             
                             
                             elif data["doc_type"] == "PANcard":
@@ -267,3 +349,34 @@ def Ocr_Api_route():
     #                     "response":"Something went wrong!"
     #                 }}), 400
         
+# def register_socketio(blueprint, socketio_instance):
+#     blueprint.socketio = socketio_instance
+
+# register_socketio(OCR_all_api_bp, OCR_all_api_bp.socketio)
+
+
+# @OCR_all_api_bp.socketios.on('trigger_api')  # Ensure namespace matches
+# def handle_trigger_api(data):
+#     print(f"Received data in blueprint: {data}")
+#     # emit('response_event', {'response': 'Data received!'})
+
+
+
+
+@OCR_all_api_bp.route("/textstoredb/ocr",methods=['POST'])
+def image_text_store():
+    try:
+        if request.method == 'POST':
+            objid_data = request.form['objid']
+            image_to_string = request.form['image_to_string']
+
+            if image_to_string != "" and objid_data !="":
+                ML_kit_value_storage_db.update_one({"_id":ObjectId(objid_data)},
+                                                {"$set":{"json_data":image_to_string}}
+                                                )
+                
+                return jsonify({"data":"Store data"}) 
+            
+        return jsonify({"data":"Something Wrong!"})
+    except:
+        return jsonify({"data":"Something Wrong!"})
