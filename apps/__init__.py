@@ -55,7 +55,7 @@ from apps.Every_Apis.Name_Matching import Name_Matching_api_bp
 from apps.Every_Apis.Language_Translator import Language_Translator_api_bp
 from apps.Every_Apis.KYC_Quality_Check import KYC_Quality_Check_api_bp
 from apps.Every_Apis.Aadhaar_Redaction import Aadhaar_Redaction_api_bp
-from apps.Every_Apis.OCR import OCR_all_api_bp , init_socketio
+from apps.Every_Apis.OCR import OCR_all_api_bp
 from apps.Every_Apis.Bank_Statement import Bank_Statement_api_bp
 from apps.Every_Apis.ITR_Statement import ITR_Statement_api_bp
 from apps.Every_Apis.Voter_Redaction import Voter_Redaction_api_bp
@@ -73,9 +73,9 @@ socketios = SocketIO(cors_allowed_origins='*')
 def crete_app():
     app = Flask(__name__)
     
-    socketios.init_app(app)
+    # socketios.init_app(app)
 
-    init_socketio(socketios)
+    # init_socketio(socketios)
 
     
     
@@ -240,10 +240,10 @@ def crete_app():
     app.register_blueprint(Voter_Auth_bp)
 
     # Initialize the socketio instance for each blueprint
-    def register_socketio(blueprint, socketio_instance):
-        blueprint.socketios = socketio_instance
+    # def register_socketio(blueprint, socketio_instance):
+    #     blueprint.socketios = socketio_instance
 
-    register_socketio(OCR_all_api_bp, socketios)
+    # register_socketio(OCR_all_api_bp, socketios)
 
 
 

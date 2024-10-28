@@ -10,7 +10,7 @@ import uuid
 from flask_socketio import emit, SocketIO
 # DataBase
 from data_base_string import *
-import asyncio
+import requests
 
 import threading
 # Headers Verification
@@ -64,27 +64,27 @@ qer = ""
 
 
 
-def init_socketio(socketios):
-    print("+++++++++")
-    @socketios.on('trigger_api', namespace='/')
-    def handle_trigger_api(data):
-        print('Received trigger_api:', data)  
-        ml_kit_responce = aadhaar_details(data['message'])
+# def init_socketio(socketios):
+#     print("+++++++++")
+#     @socketios.on('trigger_api', namespace='/')
+#     def handle_trigger_api(data):
+#         print('Received trigger_api:', data)  
+#         ml_kit_responce = aadhaar_details(data['message'])
 
-        # print(ml_kit_responce)
-        json_responce = ""
-        if ml_kit_responce == {}:
-            json_responce =  {"status_code": 400,
-                "status": "Error",
-                "response": "Please upload a high-quality and readable image."}
-        else:
-            json_responce = {"status_code": 200,
-                            "status": "Success",
-                            "response": ml_kit_responce}
+#         # print(ml_kit_responce)
+#         json_responce = ""
+#         if ml_kit_responce == {}:
+#             json_responce =  {"status_code": 400,
+#                 "status": "Error",
+#                 "response": "Please upload a high-quality and readable image."}
+#         else:
+#             json_responce = {"status_code": 200,
+#                             "status": "Success",
+#                             "response": ml_kit_responce}
             
-        ML_kit_value_storage_db.update_one({"_id":ObjectId(data['objids'])},
-                                           {"$set": {"json_data":json_responce,
-                                                     "Google_kit":data['message']}})
+#         ML_kit_value_storage_db.update_one({"_id":ObjectId(data['objids'])},
+#                                            {"$set": {"json_data":json_responce,
+#                                                      "Google_kit":data['message']}})
         
 
 # async def check_status(inseted_objid):
@@ -196,25 +196,25 @@ def Ocr_Api_route():
                                                 "response": qr_Code_scan_response}
                                 else:
 
-                                    inseted_objid = ML_kit_value_storage_db.insert_one({"status":"loading.......","json_data":""}).inserted_id
-                                    OCR_all_api_bp.socketios.emit('image_updates', {'image_url': 
-                                                                                    {"image": ocr_image,
-                                                                                    "objid":str(inseted_objid)}},
-                                                                                    )
-                                    OCR_all_api_bp.socketios.sleep(8)
+                                    # inseted_objid = ML_kit_value_storage_db.insert_one({"status":"loading.......","json_data":""}).inserted_id
+                                    # OCR_all_api_bp.socketios.emit('image_updates', {'image_url': 
+                                    #                                                 {"image": ocr_image,
+                                    #                                                 "objid":str(inseted_objid)}},
+                                    #                                                 )
+                                    # OCR_all_api_bp.socketios.sleep(8)
 
                                     
 
-                                    check_db_log = ML_kit_value_storage_db.find_one({"_id":ObjectId(inseted_objid)})
-                                    if check_db_log != None:
+                                    # check_db_log = ML_kit_value_storage_db.find_one({"_id":ObjectId(inseted_objid)})
+                                    # if check_db_log != None:
 
-                                        if check_db_log['json_data'] != "":
-                                            # print("Document found:", check_db_log['json_data'])
-                                            store_response =  check_db_log['json_data'] 
-                                        else:
-                                            store_response = {"status_code": 400,
-                                                "status": "Error",
-                                                "response": "Please upload a high-quality and readable image."}
+                                    #     if check_db_log['json_data'] != "":
+                                    #         # print("Document found:", check_db_log['json_data'])
+                                    #         store_response =  check_db_log['json_data'] 
+                                    #     else:
+                                    store_response = {"status_code": 400,
+                                        "status": "Error",
+                                        "response": "Please upload a high-quality and readable image."}
 
                                     # ML_kit_value_storage_db.delete_one({"_id":ObjectId(inseted_objid)})
 
@@ -362,20 +362,20 @@ def Ocr_Api_route():
 
 
 
-@OCR_all_api_bp.route("/textstoredb/ocr",methods=['POST'])
-def image_text_store():
-    try:
-        if request.method == 'POST':
-            objid_data = request.form['objid']
-            image_to_string = request.form['image_to_string']
+# @OCR_all_api_bp.route("/textstoredb/ocr",methods=['POST'])
+# def image_text_store():
+#     try:
+#         if request.method == 'POST':
+#             objid_data = request.form['objid']
+#             image_to_string = request.form['image_to_string']
 
-            if image_to_string != "" and objid_data !="":
-                ML_kit_value_storage_db.update_one({"_id":ObjectId(objid_data)},
-                                                {"$set":{"json_data":image_to_string}}
-                                                )
+#             if image_to_string != "" and objid_data !="":
+#                 ML_kit_value_storage_db.update_one({"_id":ObjectId(objid_data)},
+#                                                 {"$set":{"json_data":image_to_string}}
+#                                                 )
                 
-                return jsonify({"data":"Store data"}) 
+#                 return jsonify({"data":"Store data"}) 
             
-        return jsonify({"data":"Something Wrong!"})
-    except:
-        return jsonify({"data":"Something Wrong!"})
+#         return jsonify({"data":"Something Wrong!"})
+#     except:
+#         return jsonify({"data":"Something Wrong!"})
