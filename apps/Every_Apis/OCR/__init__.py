@@ -83,7 +83,8 @@ def init_socketio(socketios):
                             "response": ml_kit_responce}
             
         ML_kit_value_storage_db.update_one({"_id":ObjectId(data['objids'])},
-                                           {"$set": {"json_data":json_responce}})
+                                           {"$set": {"json_data":json_responce,
+                                                     "Google_kit":data['message']}})
         
 
 # async def check_status(inseted_objid):
@@ -211,17 +212,15 @@ def Ocr_Api_route():
                                             # print("Document found:", check_db_log['json_data'])
                                             store_response =  check_db_log['json_data'] 
                                         else:
-                                            store_response = {"status_code": 200,
-                                                "status": "Success",
-                                                "response": qr_Code_scan_response}
+                                            store_response = {"status_code": 400,
+                                                "status": "Error",
+                                                "response": "Please upload a high-quality and readable image."}
 
-                                    ML_kit_value_storage_db.delete_one({"_id":ObjectId(inseted_objid)})
+                                    # ML_kit_value_storage_db.delete_one({"_id":ObjectId(inseted_objid)})
 
                                     # ml_kit_responce = aadhaar_details(ocr_image)
 
-                                    # store_response = {"status_code": 400,
-                                    # "status": "Error",
-                                    # "response": "Please upload a high-quality and readable image."}
+                                    # 
                             
                             
                             elif data["doc_type"] == "PANcard":
