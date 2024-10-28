@@ -68,7 +68,7 @@ from apps.Every_Apis.Voter_Authentication import Voter_Auth_bp
 
 # logger=True, engineio_logger=True
 
-socketios = SocketIO()
+socketios = SocketIO(cors_allowed_origins='*')
 
 def crete_app():
     app = Flask(__name__)
