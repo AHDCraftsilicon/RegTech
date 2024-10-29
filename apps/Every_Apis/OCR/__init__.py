@@ -108,10 +108,7 @@ def Ocr_Api_route():
         # try:
             # ev = threading.Event()
             data = request.get_json()
-
-            
-                            
-                        
+         
 
             # Json IS Empty Or Not
             if data == {}:
@@ -210,6 +207,7 @@ def Ocr_Api_route():
                                     
                                     else:
                                         response_Data = response.json()
+                                        print(response_Data)
                                         # print(response_Data)
                                         if response_Data['Objid_id'] != "":
                                             check_db_log = ML_kit_value_storage_db.find_one({"_id":ObjectId(response_Data['Objid_id'])})

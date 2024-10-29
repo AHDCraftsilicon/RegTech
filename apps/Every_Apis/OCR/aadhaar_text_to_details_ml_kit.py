@@ -6,7 +6,11 @@ import os , re
 from deskew import determine_skew
 import subprocess
 import xml.etree.ElementTree as ET
+from spellchecker import SpellChecker
 
+
+# Initialize the spell checker
+spell = SpellChecker()
 
 
 # Get Aadhaar Number From Aadhaar String
@@ -14,10 +18,13 @@ def get_aadhaar_number(aadhaar_string):
     aadhaar_number = ""
 
     try:
-        aadhaar_pattern = r"\b\d{4}\s*\d{4}\s*\d{4}\b"
+        # \b\d{4}\s*\d{4}\s*\d{4}\b
+        aadhaar_pattern = r"\b\d{4} \d{4} \d{4}\b"
         matchs = re.search(aadhaar_pattern, aadhaar_string)
         if matchs:
             aadhaar_number = matchs.group(0)
+
+        print("-------- ", aadhaar_number)
         
         return aadhaar_number 
     except:
@@ -83,6 +90,7 @@ def get_name(aadhaar_string):
 
         previous_line_text = ""
         name = ""
+        prev_line_text = ""
 
         # Iterate through the lines
         for line in lines_list:
@@ -102,6 +110,22 @@ def get_name(aadhaar_string):
             else:
                 name = ""
 
+
+        if name == "TTR" or name == "YuMale":
+            for line in lines_list:
+                if "dob" in line.lower(): 
+                    name =  re.sub(r'[^a-zA-Z\s]', '', previous_line_text.strip()).strip()
+                    break 
+                previous_line_text = prev_line_text 
+                prev_line_text = line
+
+        if name == "YoH":
+            matches = re.findall(r'^\s*([A-Z][a-z]+(?:\s[A-Z][a-z]+)+)\s*$', aadhaar_string, re.MULTILINE)
+
+            if matches:
+                for names in matches:
+                    name = names
+                
         return name
     except:
         pass
@@ -248,6 +272,53 @@ def get_name_from_address(aadhaar_string):
         pass
 
 
+# Remove Extra Keywords from address
+def address_extra_keyword(aadhaar_address):
+    # Split the text into words
+    words = aadhaar_address.split()
+
+    results = []
+
+    for index, word in enumerate(words):
+        # Get candidates for the current word
+        candidates = spell.candidates(word)
+        
+        # If there are candidates, take the first one; otherwise, keep the original word
+        if candidates:
+            corrected_word = next(iter(candidates))
+        else:
+            corrected_word = word
+            
+
+        # Append a dictionary with original word, corrected word, and its position
+        results.append({
+            'old_word': word,
+            'corrected_word': corrected_word,
+            'position': index
+        })
+
+    # Output the results
+    headers_keyword = []
+    for result in results:
+        if result['corrected_word'] == "Unique":
+            headers_keyword.append(result['old_word'])
+
+        if result['corrected_word'] == "identification":
+            headers_keyword.append(result['old_word'])
+
+        if result['corrected_word'] == "Authority":
+            headers_keyword.append(result['old_word'])
+
+        if result['corrected_word'] == "of":
+            headers_keyword.append(result['old_word'])
+
+        if result['corrected_word'] == "india":
+            headers_keyword.append(result['old_word'])
+
+
+    return headers_keyword
+
+
 #  Aadhaar Details Final
 def aadhaar_details(aadhaar_string):
 
@@ -289,14 +360,24 @@ def aadhaar_details(aadhaar_string):
 
     if address != "":
         father_name = get_father_name_from_address(address)
+        address_test = address_extra_keyword(address)
+        # print(address_test)
+
+        for address_keyword in address_test:
+            address = address.replace(address_keyword,"")
+
         address = address.replace(name,"")
         address = address.replace("S/O","")
+        address = address.replace("C/O","")
         address = address.replace(father_name ,"")
         address = address.replace("3ITETR" ,"")
         address = address.replace(enrollment_number ,"")
         address = address.replace(":" ,"")
         address = address.replace("Enrolment No." ,"")
         address = re.sub(r'\s+', ' ', address).strip()
+        
+        
+
         # first_comma_index = address.find(',')
         # if first_comma_index != -1:
         #     address = address[:first_comma_index] + address[first_comma_index + 1:].strip()
