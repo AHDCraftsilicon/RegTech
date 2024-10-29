@@ -252,6 +252,12 @@ def get_father_name_from_address(aadhaar_string):
             father_match = re.search(father_pattern, aadhaar_string)
             if father_match:
                 father_name = father_match.group(1).strip()
+            
+            if father_name == "":
+                father_pattern = r'S/O:\s*([A-Za-z]+)'
+                father_match = re.search(father_pattern, aadhaar_string)
+                if father_match:
+                    father_name = father_match.group(1).strip()
 
         if 'C/O' in aadhaar_string:
             father_pattern = r'C/O\s+([A-Za-z\s]+?),'
@@ -282,7 +288,10 @@ def get_name_from_address(aadhaar_string):
 # Remove Extra Keywords from address
 def address_extra_keyword(aadhaar_address):
     # Split the text into words
+    print("---- ", aadhaar_address)
     words = aadhaar_address.split()
+
+    print("---------- ", words)
 
     results = []
 
@@ -304,6 +313,7 @@ def address_extra_keyword(aadhaar_address):
             'position': index
         })
 
+    print("--------- ", results)
     # Output the results
     headers_keyword = []
     for result in results:
@@ -322,6 +332,8 @@ def address_extra_keyword(aadhaar_address):
         if result['corrected_word'] == "india":
             headers_keyword.append(result['old_word'])
 
+    print("-------- ", headers_keyword)
+
 
     return headers_keyword
 
@@ -331,7 +343,7 @@ def aadhaar_details(aadhaar_string):
 
     aadhaar_strings = aadhaar_string.replace("VIO","VID").replace("wIO","W/O").replace("SIO","S/O")\
         .replace("1947","S/O").replace("S/Ó","S/O").replace("UNIOUE DENTTEICATION AUTHORIIY OFINDIA","")\
-        .replace("Unique ldentification Authority of India","").replace("Unique tdentification Authority of ndia","")\
+        .replace("Unique tdentification Authority of ndia","")\
         .replace("Unique ldentification Authority of fndia","").replace("SO",'S/O').replace("help@uidai.gov.in","")
     # aadhaar_strings = aadhaar_strings
 
@@ -366,12 +378,12 @@ def aadhaar_details(aadhaar_string):
         name = get_name_from_address(aadhaar_string)
 
     if address != "":
-        father_name = get_father_name_from_address(address)
         address_test = address_extra_keyword(address)
         # print(address_test)
 
         for address_keyword in address_test:
             address = address.replace(address_keyword,"")
+        father_name = get_father_name_from_address(address)
 
         address = address.replace(name,"")
         address = address.replace("S/O","")

@@ -198,40 +198,43 @@ def Ocr_Api_route():
                                     payload = json.dumps({"image": ocr_image })
                                     headers = {'Content-Type': 'application/json'
                                         }
-
-                                    response = requests.request("POST", url, headers=headers, data=payload)
-                                    if response.json() == {}:
-                                        return jsonify({"status_code": 521,
-                                        "status": "Error",
-                                        "response": "OCR server is down!"}) , 521 
-                                    
-                                    else:
-                                        response_Data = response.json()
-                                        print(response_Data)
-                                        # print(response_Data)
-                                        if response_Data['Objid_id'] != "":
-                                            check_db_log = ML_kit_value_storage_db.find_one({"_id":ObjectId(response_Data['Objid_id'])})
-                                            # print(check_db_log)
-                                            if check_db_log != None:
-                                                ml_kit_responce = aadhaar_details(check_db_log['message'])
-                                                
-                                                if ml_kit_responce == {}:
-                                                    store_response =  {"status_code": 400,
-                                                        "status": "Error",
-                                                        "response": "Please upload a high-quality and readable image."}
+                                    try:
+                                        response = requests.request("POST", url, headers=headers, data=payload)
+                                        if response.json() == {}:
+                                            return jsonify({"status_code": 521,
+                                            "status": "Error",
+                                            "response": "OCR server is down!"}) , 521 
+                                        
+                                        else:
+                                            response_Data = response.json()
+                                            print(response_Data)
+                                            # print(response_Data)
+                                            if response_Data['Objid_id'] != "":
+                                                check_db_log = ML_kit_value_storage_db.find_one({"_id":ObjectId(response_Data['Objid_id'])})
+                                                # print(check_db_log)
+                                                if check_db_log != None:
+                                                    ml_kit_responce = aadhaar_details(check_db_log['message'])
+                                                    
+                                                    if ml_kit_responce == {}:
+                                                        store_response =  {"status_code": 400,
+                                                            "status": "Error",
+                                                            "response": "Please upload a high-quality and readable image."}
+                                                    else:
+                                                        store_response = {"status_code": 200,
+                                                                        "status": "Success",
+                                                                        "response": ml_kit_responce}
                                                 else:
-                                                    store_response = {"status_code": 200,
-                                                                    "status": "Success",
-                                                                    "response": ml_kit_responce}
+                                                    store_response = {"status_code": 521,
+                                                                "status": "Error",
+                                                                "response": "OCR server is down!"}
                                             else:
                                                 store_response = {"status_code": 521,
                                                             "status": "Error",
                                                             "response": "OCR server is down!"}
-                                        else:
-                                            store_response = {"status_code": 521,
-                                                        "status": "Error",
-                                                        "response": "OCR server is down!"}
-
+                                    except:
+                                        return jsonify({"status_code": 521,
+                                        "status": "Error",
+                                        "response": "OCR server is down!"}) , 521     
                                     # OCR_all_api_bp.socketios.emit('image_updates', {'image_url': 
                                     #                                                 {"image": ocr_image,
                                     #                                                 "objid":str(inseted_objid)}},
