@@ -76,7 +76,8 @@ def get_DOB(aadhaar_string):
             if "Year of Birth" in aadhaar_string:
                 if re.compile(r"Year of Birth\s*:\s*(\d{4})").findall(aadhaar_string) != []:
                     dob_date = re.compile(r"Year of Birth\s*:\s*(\d{4})").findall(aadhaar_string)[0]
-
+        
+        print("-------- ", dob_date)
         return dob_date
     except:
         pass
@@ -216,11 +217,17 @@ def get_address(aadhaar_string):
                 address_match = re.search(r"S/O\s*:\s*(.*?\d{6})", aadhaar_string, re.DOTALL)
                 if address:
                     address = address_match.group(0).strip()
-                        
+
+        
+        if address == "":
+            if 'C/O' in aadhaar_string:
+                address_match = re.search(r"C/O\s*:\s*(.*?\d{6})", aadhaar_string, re.DOTALL)
+                if address:
+                    address = address_match.group(0).strip()              
 
         if address == "":
             if 'Addr' in aadhaar_string:
-                address_pattern = r'Address\s*:\s*(.*?)(\d{6})'
+                address_pattern = r'Address\s*:\s*(.*?)(\d{6})|AddresS\s*:\s*(.*?)(\d{6})'
                 address_match = re.search(address_pattern, aadhaar_string, re.DOTALL)
                 if address_match:
                     address = address_match.group(1).strip().replace('\n', ', ')  # Clean up newlines
