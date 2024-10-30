@@ -313,7 +313,7 @@ def address_extra_keyword(aadhaar_address):
             'position': index
         })
 
-    print("--------- ", results)
+    # print("--------- ", results)
     # Output the results
     headers_keyword = []
     for result in results:
@@ -376,6 +376,8 @@ def aadhaar_details(aadhaar_string):
 
     if name == "" and address != "":
         name = get_name_from_address(aadhaar_string)
+
+    print("**** ", address)
 
     if address != "":
         address_test = address_extra_keyword(address)

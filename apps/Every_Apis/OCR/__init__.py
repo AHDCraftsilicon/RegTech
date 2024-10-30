@@ -20,7 +20,7 @@ from Headers_Verify import *
 # Aadhaar OCR
 from apps.Every_Apis.OCR.aadhaar_text_to_details_ml_kit import *
 # Pancard OCR
-from apps.Every_Apis.OCR.pancard_ocr_with_verification import *
+from apps.Every_Apis.OCR.pan_text_to_details_ml_kit import *
 # Passport OCR
 from apps.Every_Apis.OCR.passport_ocr_module import *
 # Voter OCR
@@ -207,7 +207,6 @@ def Ocr_Api_route():
                                         
                                         else:
                                             response_Data = response.json()
-                                            print(response_Data)
                                             # print(response_Data)
                                             if response_Data['Objid_id'] != "":
                                                 check_db_log = ML_kit_value_storage_db.find_one({"_id":ObjectId(response_Data['Objid_id'])})
@@ -235,45 +234,49 @@ def Ocr_Api_route():
                                         return jsonify({"status_code": 521,
                                         "status": "Error",
                                         "response": "OCR server is down!"}) , 521     
-                                    # OCR_all_api_bp.socketios.emit('image_updates', {'image_url': 
-                                    #                                                 {"image": ocr_image,
-                                    #                                                 "objid":str(inseted_objid)}},
-                                    #                                                 )
-                                    # OCR_all_api_bp.socketios.sleep(8)
 
-                                    
-
-                                    # check_db_log = ML_kit_value_storage_db.find_one({"_id":ObjectId(inseted_objid)})
-                                    # if check_db_log != None:
-
-                                    #     if check_db_log['json_data'] != "":
-                                    #         # print("Document found:", check_db_log['json_data'])
-                                    #         store_response =  check_db_log['json_data'] 
-                                    #     else:
-                                    # store_response = {"status_code": 400,
-                                    #     "status": "Error",
-                                    #     "response": "Please upload a high-quality and readable image."}
-
-                                    # ML_kit_value_storage_db.delete_one({"_id":ObjectId(inseted_objid)})
-
-                                    # ml_kit_responce = aadhaar_details(ocr_image)
-
-                                    # 
                             
                             
                             elif data["doc_type"] == "PANcard":
-                                img_decoded = base64.b64decode(ocr_image)
-                                pan_responce = pancard_main(img_decoded)
+                                # img_decoded = base64.b64decode(ocr_image)
+
                                 api_status = "PAN_OCR"
 
-                                if len(pan_responce) != 0:
-                                    store_response = {"status_code": 200,
-                                                "status": "Success",
-                                                "response": pan_responce}
-                                else:
-                                    store_response = {"status_code": 400,
-                                    "status": "Error",
-                                    "response": "Please upload a high-quality and readable image."}
+                                url = "http://103.206.57.30/image-api"
+
+                                payload = json.dumps({"image": ocr_image })
+                                headers = {'Content-Type': 'application/json'
+                                    }
+                                try:
+                                    response = requests.request("POST", url, headers=headers, data=payload)
+                                    if response.json() == {}:
+                                        return jsonify({"status_code": 521,
+                                        "status": "Error",
+                                        "response": "OCR server is down!"}) , 521 
+                                    
+                                    else:
+                                        response_Data = response.json()
+                                        # print(response_Data)
+                                        if response_Data['Objid_id'] != "":
+                                            check_db_log = ML_kit_value_storage_db.find_one({"_id":ObjectId(response_Data['Objid_id'])})
+
+                                            if check_db_log != None:
+                                                pan_ml_responce = pan_details(check_db_log['message'])
+
+                                                if len(pan_ml_responce) == 0:
+                                                    store_response = {"status_code": 400,
+                                                                    "status": "Error",
+                                                                    "response": "Please upload a high-quality and readable image."}
+                                                else:
+                                                    store_response = {"status_code": 200,
+                                                                "status": "Success",
+                                                                "response": pan_ml_responce}
+
+                                except:
+                                        return jsonify({"status_code": 521,
+                                        "status": "Error",
+                                        "response": "OCR server is down!"}) , 521 
+                                
 
                             elif data["doc_type"] == "Passport":
                                 img_decoded = base64.b64decode(ocr_image)
@@ -371,6 +374,30 @@ def Ocr_Api_route():
                         "response":"Error! Please Validate the UniqueID format!"
                     }}), 400
             
+# OCR_all_api_bp.socketios.emit('image_updates', {'image_url': 
+#                                                 {"image": ocr_image,
+#                                                 "objid":str(inseted_objid)}},
+#                                                 )
+# OCR_all_api_bp.socketios.sleep(8)
+
+
+
+# check_db_log = ML_kit_value_storage_db.find_one({"_id":ObjectId(inseted_objid)})
+# if check_db_log != None:
+
+#     if check_db_log['json_data'] != "":
+#         # print("Document found:", check_db_log['json_data'])
+#         store_response =  check_db_log['json_data'] 
+#     else:
+# store_response = {"status_code": 400,
+#     "status": "Error",
+#     "response": "Please upload a high-quality and readable image."}
+
+# ML_kit_value_storage_db.delete_one({"_id":ObjectId(inseted_objid)})
+
+# ml_kit_responce = aadhaar_details(ocr_image)
+
+# 
 
     #     except:
     #         return jsonify({"data":{
