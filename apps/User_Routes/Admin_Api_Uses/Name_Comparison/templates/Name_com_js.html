@@ -4,55 +4,175 @@
     $("#sample_name_comp").click(function () {
         $("#name1").val("Monika Jain")
         $("#name2").val("Jain Monika")
-        $("#name_comp_run").removeClass("disabled")
-        $("#name_comp_run").removeAttr("disabled")
+        $("#name_match_run").removeClass("disabled")
+        $("#name_match_run").removeAttr("disabled")
     })
 
 
     $("#name1").on('change keyup copy paste cut', function () {
         if (this.value != "") {
-            $("#name_comp_run").removeClass("disabled")
-            $("#name_comp_run").removeAttr("disabled")
+            $("#name_match_run").removeClass("disabled")
+            $("#name_match_run").removeAttr("disabled")
         }
         else {
-            $("#name_comp_run").addClass("disabled")
-            $('#name_comp_run').prop("disabled", true);
+            $("#name_match_run").addClass("disabled")
+            $('#name_match_run').prop("disabled", true);
         }
     });
 
     $("#name2").on('change keyup copy paste cut', function () {
         if (this.value != "") {
-            $("#name_comp_run").removeClass("disabled")
-            $("#name_comp_run").removeAttr("disabled")
+            $("#name_match_run").removeClass("disabled")
+            $("#name_match_run").removeAttr("disabled")
         }
         else {
-            $("#name_comp_run").addClass("disabled")
-            $('#name_comp_run').prop("disabled", true);
+            $("#name_match_run").addClass("disabled")
+            $('#name_match_run').prop("disabled", true);
         }
     });
 
 
-    $("#name_comp_run").click(function () {
-        const formdata = new FormData();
-        formdata.append("name1", $("#name1").val());
-        formdata.append("name2", $("#name2").val());
+    $("#name_match_run").click(function () {
 
-        const requestOptions = {
-            method: "POST",
-            body: formdata,
-            redirect: "follow"
-        };
+        $("#name_match_run").text("Loading....")
 
-        fetch("/name/test-api", requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
+        if ($("#name1").val() != "" && $("#name2").val() != "") {
 
-                var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
-                $("#name_comp_json").text(formatteddata)
-                $('#eta').removeClass('d-none')
-                document.getElementById("name_comp_seconds").innerHTML = result.data.result_in_seconds
-            })
-            .catch((error) => console.error(error));
+            $(".c-loader").removeClass('d-none')
+
+            const formdata = new FormData();
+            formdata.append("name1", $("#name1").val());
+            formdata.append("name2", $("#name2").val());
+
+            const requestOptions = {
+                method: "POST",
+                body: formdata,
+                redirect: "follow"
+            };
+
+            fetch("/name/test-api", requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                    $("#name_match_run").text("Run Api")
+
+                    if (result['data']['status_code'] == 200) {
+                        $(".c-loader").addClass('d-none')
+
+                        request_id = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            request_id = result['data']['basic_response']['request_id']
+                        }
+
+                        request_on = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            request_on = result['data']['basic_response']['request_on']
+                        }
+
+                        response_on = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            response_on = result['data']['basic_response']['response_on']
+                        }
+
+                        api_name = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            api_name = result['data']['basic_response']['api_name']
+                        }
+
+                        duration = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            duration = result['data']['basic_response']['duration']
+                        }
+
+                        abc = {
+                            "data": {
+                                "response": result['data']['response'],
+                                "request_id": request_id,
+                                "request_on": request_on,
+                                "response_on": response_on,
+                                "api_name": api_name,
+                                "duration": duration,
+                            }
+                        }
+                        // Name Com Json preview
+                        var formatteddata = JSON.stringify(abc, null, '\t')
+                        document.getElementById('name_comp_json').innerHTML = formatteddata
+                        //    Result in second
+                        if (result['data']['basic_response'] != undefined) {
+                            $('#eta').removeClass('d-none')
+                            document.getElementById("name_comp_seconds").innerHTML = result['data']['basic_response']['duration']
+                        }
+                        // Api Status Show
+                        $("#api_status").removeClass('d-none')
+                        $("#status_code").addClass("success")
+                        document.getElementById('status_code').innerHTML = result['data']['status_code']
+                        // Used Credits set
+                        if (result['data']['basic_response'] != undefined) {
+                            $("#uds_crdts").text(result['data']['basic_response']['test_credits'])
+                        }
+                    }
+                    else {
+                        $(".c-loader").addClass('d-none')
+
+                        request_id = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            request_id = result['data']['basic_response']['request_id']
+                        }
+
+                        request_on = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            request_on = result['data']['basic_response']['request_on']
+                        }
+
+                        response_on = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            response_on = result['data']['basic_response']['response_on']
+                        }
+
+                        api_name = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            api_name = result['data']['basic_response']['api_name']
+                        }
+
+                        duration = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            duration = result['data']['basic_response']['duration']
+                        }
+
+                        abc = {
+                            "data": {
+                                "response": result['data']['response'],
+                                "request_id": request_id,
+                                "request_on": request_on,
+                                "response_on": response_on,
+                                "api_name": api_name,
+                                "duration": duration,
+                            }
+                        }
+                        // Name Com Json preview
+                        var formatteddata = JSON.stringify(abc, null, '\t')
+                        document.getElementById('name_comp_json').innerHTML = formatteddata
+                        //    Result in second
+                        if (result['data']['basic_response'] != undefined) {
+                            $('#eta').removeClass('d-none')
+                            document.getElementById("name_comp_seconds").innerHTML = result['data']['basic_response']['duration']
+                        }
+                        // Api Status Show
+                        $("#api_status").removeClass('d-none')
+                        $("#status_code").addClass("success")
+                        document.getElementById('status_code').innerHTML = result['data']['status_code']
+                        // Used Credits set
+                        if (result['data']['basic_response'] != undefined) {
+                            $("#uds_crdts").text(result['data']['basic_response']['test_credits'])
+                        }
+                    }
+
+
+                })
+                .catch((error) => console.error(error));
+        }
+        else {
+            alert("Name1 & Name2 both required!")
+        }
     })
 
 

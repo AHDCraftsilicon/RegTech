@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - bluBeetle.ai</title>
+
+    {% set Admin_Portal_urls = Admin_Portal_urls() %}
+    {% if Admin_Portal_urls %}
+    {{ Admin_Portal_urls | safe }}
+    {% endif %}
+
+</head>
+
+<body>
+    <div class="main">
+        <!-- Common Topbar -->
+        {% set Admin_Portal_topbar = Admin_Portal_topbar(name) %}
+        {% if Admin_Portal_topbar %}
+        {{ Admin_Portal_topbar | safe }}
+        {% endif %}
+
+        <!-- Main Contant -->
+        <div class="main-section">
+            <!-- SideBar -->
+            {% set Admin_Portal_sidebar = Admin_Portal_sidebar() %}
+            {% if Admin_Portal_sidebar %}
+            {{ Admin_Portal_sidebar | safe }}
+            {% endif %}
+
+            <div class="contain-main-part">
+                <div class="c-contain-padding">
+                    <div class="username_part">
+                        <div class="username-text">
+                            <h2>User List</h2>
+                        </div>
+                    </div>
+
+
+                    <div class="c-box mt-3">
+                        <div class="c-box-padding">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table id="basic-datatable"
+                                            class="table table-bordered dataTable no-footer dtr-inline text-center">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-wrap text-center">
+                                                        UserName</th>
+                                                    <th class="text-wrap text-center">
+                                                        Mobile No</th>
+                                                    <th class="text-wrap text-center">
+                                                        Email</th>
+                                                    <th class="text-wrap text-center">
+                                                        User Type</th>
+                                                    <th class="text-wrap text-center">
+                                                        Created On</th>
+                                                    <th class="text-wrap text-center">
+                                                        Action</th>
+                                                </tr>
+                                                <tr class="filters">
+                                                    <th class="text-wrap">
+                                                        <select class="form-select select2" id="user_name">
+                                                            <option value="" selected>Select</option>
+                                                            {% for item in user_list %}
+                                                            <option value="{{item['objid']}}">{{item['Company_Name']}}</option>
+                                                            {% endfor %}
+
+                                                        </select>
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        <input type="number" class="form-control">
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        <input type="text" class="form-control">
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        <select class="form-select select2" id="user_type">
+                                                            <option value="" selected>Select</option>
+                                                            <option value="Test User">Test User</option>
+                                                            <option value="Production User">Production User</option>
+                                                        </select>
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        <input type="text" name="created_on" class="form-control">
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        &#8203;
+                                                    </th>
+                                                </tr>
+                                            </thead>
+
+
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    {% include 'user_type_confirmation_modal.html' %}
+
+
+    <!-- Page Javascript -->
+    {% include 'User_info_js.html' %}
+
+</body>
+
+</html>

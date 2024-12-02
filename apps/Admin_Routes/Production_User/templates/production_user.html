@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production User - bluBeetle.ai</title>
+
+    {% set Admin_Portal_urls = Admin_Portal_urls() %}
+    {% if Admin_Portal_urls %}
+    {{ Admin_Portal_urls | safe }}
+    {% endif %}
+
+    <div class="c-content">
+        <div class="c-content-main-part">
+            <div id="toastContainer" class="toast-container">
+            </div>
+        </div>
+    </div>
+
+</head>
+
+<body>
+    <div class="main">
+        <!-- Common Topbar -->
+        {% set Admin_Portal_topbar = Admin_Portal_topbar(name) %}
+        {% if Admin_Portal_topbar %}
+        {{ Admin_Portal_topbar | safe }}
+        {% endif %}
+
+        <!-- Main Contant -->
+        <div class="main-section">
+            <!-- SideBar -->
+            {% set Admin_Portal_sidebar = Admin_Portal_sidebar() %}
+            {% if Admin_Portal_sidebar %}
+            {{ Admin_Portal_sidebar | safe }}
+            {% endif %}
+
+            <div class="contain-main-part">
+                <div class="c-contain-padding">
+                    <div class="username_part">
+                        <div class="username-text">
+                            <h2>Production User</h2>
+                        </div>
+                    </div>
+
+
+                    <div class="c-box mt-3">
+                        <div class="c-box-padding">
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button class="btn btn-primary" id="show_credits_history" data-toggle="modal"
+                                    data-target="#add_modal">Add Pro User</button>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table id="basic-datatable"
+                                            class="table table-bordered dataTable no-footer dtr-inline text-center">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-wrap text-center">
+                                                        Production User</th>
+                                                    <th class="text-wrap text-center">
+                                                        Production Email</th>
+                                                    <th class="text-wrap text-center">
+                                                        Service</th>
+                                                    <th class="text-wrap text-center">
+                                                        Business</th>
+                                                    <th class="text-wrap text-center">
+                                                        Contact Person</th>
+                                                    <th class="text-wrap text-center">
+                                                        Api Count</th>
+                                                    <th class="text-wrap text-center">
+                                                        Created On</th>
+                                                    <th class="text-wrap text-center">
+                                                        Updated On</th>
+                                                    <th class="text-wrap text-center">
+                                                        Action</th>
+                                                </tr>
+                                                <tr class="filters">
+                                                    <th class="text-wrap">
+                                                        &#8203;
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        <select class="form-select select2" id="user_name">
+                                                            <option value="" selected>Select</option>
+                                                            {% for item in user_list %}
+                                                            <span>{{item}}</span>
+                                                            <option value="{{item['objid']}}">{{item['Email_Id']}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        <select class="form-select select2" id="service">
+                                                            <option value="" selected>Select</option>
+                                                            <option value="Enable">Enable</option>
+                                                            <option value="Disable">Disable</option>
+                                                        </select>
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        <input type="text" class="form-control">
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        &#8203;
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        &#8203;
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        <input type="text" name="created_on" class="form-control">
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        &#8203;
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        &#8203;
+                                                    </th>
+                                                </tr>
+                                            </thead>
+
+
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    {% include 'production_modals.html' %}
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+
+    <!-- Verify Message -->
+    {% if message == "Data Add SuccessFully!" or message == "Data Edit SuccessFully!" %}
+
+    <script nonce="{{ g.nonce }}">
+        NotifyMessage({ message: "{{message}}", type: "bg-success" });
+    </script>
+
+    {% else %}
+    <script nonce="{{ g.nonce }}">
+        NotifyMessage({ message: "{{message}}", type: "bg-danger" });
+    </script>
+    {% endif %}
+
+    {% endfor %}
+    {% endif%}
+    {% endwith %}
+
+
+
+    <!-- Page Javascript -->
+    {% include 'production_user_js.html' %}
+
+</body>
+
+</html>

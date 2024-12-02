@@ -39,27 +39,38 @@
                         </a>
                         <div class="login-box">
                             <div class="login-content">
-                                <h1>Create Account</h1>
+                                <h1>Set New Password</h1>
                                 <div class="create-pass-field">
-                                    <div class="group mb-0">
+                                    <div class="input-groups">
                                         <label for="create password" class="">Create Password</label>
-                                        <input class="input-margin" type="password" id="Create_Password">
                                         <i class="toggle-password ri-eye-line"></i>
+                                        <input type="password" id="Create_Password">
+                                        <div class="error" id="errorMessage_Create_Password"></div>
                                     </div>
-                                    <div id="Create_Password_tooltip"></div>
+                                    <!-- <div id="Create_Password_tooltip"></div> -->
                                 </div>
                                 <div class="create-pass-field">
-                                    <div class="group mb-0">
+                                    <div class="input-groups">
                                         <label for="create password" class="">Confirm Password</label>
-                                        <input class="input-margin" type="password" id="Confirm_Password">
                                         <i class="toggle-password ri-eye-line"></i>
+                                        <input type="password" id="Confirm_Password">
+                                        <div class="error" id="errorMessage_Confirm_Password"></div>
                                     </div>
-                                    <div id="Confirm_Password_tooltip"></div>
+                                    <!-- <div id="Confirm_Password_tooltip"></div> -->
                                 </div>
                                 <div class="group">
                                     <button class="btn c-btn" id="set_pass">Set Password</button>
                                 </div>
+                                <div id="message">
 
+                                    <p id="letter" class="invalid">A <b>Lowercase</b> Letter!</p>
+                                    <p id="capital" class="invalid">A <b>Capital (Uppercase)</b> Letter!</p>
+                                    <p id="number" class="invalid">A <b>Number!</b></p>
+                                    <p id="special_cha" class="invalid">A <b>Special Characters!</b></p>
+                                    <p id="length" class="invalid">Minimum <b>8 Characters!</b></p>
+                                    <p id="match_pass" class="invalid"><b>Create & Confirm Password </b> Does Not
+                                        Match!</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -84,134 +95,359 @@
             });
         });
 
+        var myInput = document.getElementById("Create_Password");
+        var confirm_pass = document.getElementById("Confirm_Password")
 
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const passwordInput = document.getElementById('Create_Password');
-            const confirmPasswordInput = document.getElementById('Confirm_Password');
-            const passwordValidation = document.getElementById('Create_Password_tooltip');
-            const confirmPasswordValidation = document.getElementById('Confirm_Password_tooltip');
+        var letter = document.getElementById("letter");
+        var capital = document.getElementById("capital");
+        var number = document.getElementById("number");
+        var length = document.getElementById("length");
+        var match_pass = document.getElementById("match_pass")
+        var special_cha = document.getElementById("special_cha")
+        // When the user starts to type something inside the password field
 
-            function validatePassword() {
-                const password = passwordInput.value;
-                const hasUpperCase = /[A-Z]/.test(password);
-                const hasLowerCase = /[a-z]/.test(password);
-                const hasNumber = /\d/.test(password);
-
-                let message = '';
-
-                if (!hasUpperCase) message += "<p class='c-tooltip' ><i class='ri-information-line'></i>Password must contain at least one uppercase letter.</p>";
-                if (!hasLowerCase) message += "<p class='c-tooltip' ><i class='ri-information-line'></i>Password must contain at least one lowercase letter.</p>";
-                if (!hasNumber) message += "<p class='c-tooltip' ><i class='ri-information-line'></i>Password must contain at least one number.</p>";
-
-                if (message === '') {
-                    passwordValidation.innerHTML = "<p class='c-tooltip'><i class='ri-information-line'></i>Password is valid.</p>";
-                    passwordValidation.className = 'valid';
-                    $("#Create_Password").addClass("input-margin");
-                    $("#Create_Password").removeClass("input-margin");
-                } else {
-                    passwordValidation.innerHTML = message.trim();
-                    passwordValidation.className = 'invalid';
-                    $("#Create_Password").removeClass("input-margin");
-
+        confirm_pass.onkeyup = function () {
+            if ($("#Create_Password").val() != "" && $("#Confirm_Password").val() != "") {
+                if ($("#Create_Password").val() == $("#Confirm_Password").val()) {
+                    match_pass.classList.remove("invalid");
+                    match_pass.classList.add("valid");
+                }
+                else {
+                    match_pass.classList.remove("valid");
+                    match_pass.classList.add("invalid");
                 }
             }
+        }
 
-            function validateConfirmPassword() {
-                if (confirmPasswordInput.value === passwordInput.value) {
-                    confirmPasswordValidation.innerHTML = "<p class='c-tooltip'><i class='ri-information-line'></i>Passwords match.</p>";
-                    confirmPasswordValidation.className = 'valid';
-                    $("#Confirm_Password").addClass("input-margin");
-                    $("#Confirm_Password").removeClass("input-margin");
-                } else {
-                    confirmPasswordValidation.innerHTML = "<p class='c-tooltip'><i class='ri-information-line'></i>Passwords do not match. Please ensure that both fields contain the same password.</p>";
-                    confirmPasswordValidation.className = 'invalid';
-                    $("#Confirm_Password").removeClass("input-margin");
-                }
+
+        myInput.onkeyup = function () {
+
+            // Validate lowercase letters
+            var lowerCaseLetters = /[a-z]/g;
+            if (myInput.value.match(lowerCaseLetters)) {
+                letter.classList.remove("invalid");
+                letter.classList.add("valid");
+            } else {
+                letter.classList.remove("valid");
+                letter.classList.add("invalid");
             }
 
-            passwordInput.addEventListener('keyup', validatePassword);
-            confirmPasswordInput.addEventListener('keyup', validateConfirmPassword);
-        });
-
-        function validatePassword(password) {
-            const hasUpperCase = /[A-Z]/.test(password);
-            const hasLowerCase = /[a-z]/.test(password);
-            const hasNumber = /\d/.test(password);
-            // const minLength = password.length >= 8;
-
-            let errors = [];
-
-            if (!hasUpperCase) {
-                errors.push("Password must contain at least one uppercase letter.");
-            }
-            if (!hasLowerCase) {
-                errors.push("Password must contain at least one lowercase letter.");
-            }
-            if (!hasNumber) {
-                errors.push("Password must contain at least one number.");
-            }
-            // if (!minLength) {
-            //     errors.push("Password must be at least 8 characters long.");
-            // }
-
-            if (errors.length > 0) {
-                return { isValid: false, errors };
+            // Validate capital letters
+            var upperCaseLetters = /[A-Z]/g;
+            if (myInput.value.match(upperCaseLetters)) {
+                capital.classList.remove("invalid");
+                capital.classList.add("valid");
+            } else {
+                capital.classList.remove("valid");
+                capital.classList.add("invalid");
             }
 
-            return { isValid: true, message: "Password is valid." };
+            // Validate numbers
+            var numbers = /[0-9]/g;
+            if (myInput.value.match(numbers)) {
+                number.classList.remove("invalid");
+                number.classList.add("valid");
+            } else {
+                number.classList.remove("valid");
+                number.classList.add("invalid");
+            }
+
+            var specialCharacterPatter = /([-+=_!@#$%^&*.,;:'\"<>/?`~\[\]\(\)\{\}\\\|\s])/;
+            if (specialCharacterPatter.test(myInput.value)) {
+                special_cha.classList.remove("invalid");
+                special_cha.classList.add("valid");
+            } else {
+                special_cha.classList.remove("valid");
+                special_cha.classList.add("invalid");
+            }
+
+
+            // Validate length
+            if (myInput.value.length >= 8) {
+                length.classList.remove("invalid");
+                length.classList.add("valid");
+            } else {
+                length.classList.remove("valid");
+                length.classList.add("invalid");
+            }
+
+            if ($("#Create_Password").val() == $("#Confirm_Password").val()) {
+                match_pass.classList.remove("invalid");
+                match_pass.classList.add("valid");
+            }
+            else {
+                match_pass.classList.remove("valid");
+                match_pass.classList.add("invalid");
+            }
         }
 
 
 
+        // Password Set
         $("#set_pass").click(function () {
 
+            // Create Password Doesn't have empty
             if ($("#Create_Password").val() == "") {
-                NotifyMessage({ message: "Create Password Does Not Empty!", type: "bg-danger" });
-            }
-
-            else if ($("#Confirm_Password").val() == "") {
-                NotifyMessage({ message: "Confirm Password Does Not Empty!", type: "bg-danger" });
-            }
-
-
-            else if ($("#Create_Password").val() == $("#Confirm_Password").val()) {
-                validate_create_pass = validatePassword($("#Create_Password").val())
-                if (validate_create_pass["isValid"] == true) {
-
-                    const url = new URL(window.location.href);
-                    const token = url.searchParams.get('token');
-
-                    const formdata = new FormData();
-                    formdata.append("Create_Password", $("#Create_Password").val());
-                    formdata.append("Confirm_Password", $("#Confirm_Password").val());
-                    formdata.append("token", token);
-
-                    const requestOptions = {
-                        method: "POST",
-                        body: formdata,
-                        redirect: "follow"
-                    };
-
-                    fetch("/auth/pass/create", requestOptions)
-                        .then((response) => response.json())
-                        .then((result) => {
-                            if (result["redirect"] == "/verify/expired") {
-                                window.location.replace("/verify/expired");
-                            }
-                            else {
-                                window.location.replace(result["redirect"]);
-                            }
-                        })
-                        .catch((error) => {
-                            console.error(error)
-                        });
-                }
+                $("#Create_Password").attr("class", function (i, origValue) {
+                    return origValue + " error-text";
+                });
+                $('#errorMessage_Create_Password').html("<i class='ri-information-line'></i> Create Password Is Required!");
             }
             else {
-                NotifyMessage({ message: "Passwords do not match. Please ensure that both fields contain the same password. Please ensure that both fields contain the same password.", type: "bg-danger" });
+                $('#errorMessage_Create_Password').html("");
+                $("#Create_Password").removeClass("error-text");
             }
+
+            // Confirm Password Doesn't have empty
+            if ($("#Confirm_Password").val() == "") {
+                $("#Confirm_Password").attr("class", function (i, origValue) {
+                    return origValue + " error-text";
+                });
+                $('#errorMessage_Confirm_Password').html("<i class='ri-information-line'></i> Confirm Password Is Required!");
+            }
+            else {
+                $('#errorMessage_Confirm_Password').html("");
+                $("#Confirm_Password").removeClass("error-text");
+            }
+
+            var lower_case = false
+            var upper_case = false
+            var number_check = false
+            var special_check = false
+            var length_check = false
+            var match_check = false
+
+            var lowerCaseLetters = /[a-z]/g;
+            if (myInput.value.match(lowerCaseLetters)) {
+                letter.classList.remove("invalid");
+                letter.classList.add("valid");
+                lower_case = true
+            } else {
+                letter.classList.remove("valid");
+                letter.classList.add("invalid");
+            }
+
+            // Validate capital letters
+            var upperCaseLetters = /[A-Z]/g;
+            if (myInput.value.match(upperCaseLetters)) {
+                capital.classList.remove("invalid");
+                capital.classList.add("valid");
+                upper_case = true
+            } else {
+                capital.classList.remove("valid");
+                capital.classList.add("invalid");
+            }
+
+            // Validate numbers
+            var numbers = /[0-9]/g;
+            if (myInput.value.match(numbers)) {
+                number.classList.remove("invalid");
+                number.classList.add("valid");
+                number_check = true
+            } else {
+                number.classList.remove("valid");
+                number.classList.add("invalid");
+            }
+
+            var specialCharacterPatter = /([-+=_!@#$%^&*.,;:'\"<>/?`~\[\]\(\)\{\}\\\|\s])/;
+            if (specialCharacterPatter.test(myInput.value)) {
+                special_cha.classList.remove("invalid");
+                special_cha.classList.add("valid");
+                special_check = true
+            } else {
+                special_cha.classList.remove("valid");
+                special_cha.classList.add("invalid");
+            }
+
+
+            // Validate length
+            if (myInput.value.length >= 8) {
+                length.classList.remove("invalid");
+                length.classList.add("valid");
+                length_check = true
+            } else {
+                length.classList.remove("valid");
+                length.classList.add("invalid");
+            }
+
+            if ($("#Create_Password").val() == "" && $("#Confirm_Password").val() == "") {
+                match_pass.classList.remove("valid");
+                match_pass.classList.add("invalid");
+            }
+
+            if ($("#Create_Password").val() != "" && $("#Confirm_Password").val() != "") {
+                if ($("#Create_Password").val() == $("#Confirm_Password").val()) {
+                    match_pass.classList.remove("invalid");
+                    match_pass.classList.add("valid");
+                    match_check = true
+                }
+                else {
+                    match_pass.classList.remove("valid");
+                    match_pass.classList.add("invalid");
+                }
+            }
+
+            if (lower_case == true && upper_case == true && number_check == true &&
+                special_check == true && length_check == true && match_check == true) {
+                console.log("yessss");
+                const url = new URL(window.location.href);
+                const token = url.searchParams.get('token');
+
+                const formdata = new FormData();
+                formdata.append("Create_Password", $("#Create_Password").val());
+                formdata.append("Confirm_Password", $("#Confirm_Password").val());
+                formdata.append("token", token);
+
+                const requestOptions = {
+                    method: "POST",
+                    body: formdata,
+                    redirect: "follow"
+                };
+
+                fetch("/auth/pass/create", requestOptions)
+                    .then((response) => response.json())
+                    .then((result) => {
+                        if (result["redirect"] == "/verify/expired") {
+                            window.location.replace("/verify/expired");
+                        }
+                        else {
+                            window.location.replace(result["redirect"]);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error(error)
+                    });
+            }
+
         })
+
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     const passwordInput = document.getElementById('Create_Password');
+        //     const confirmPasswordInput = document.getElementById('Confirm_Password');
+        //     const passwordValidation = document.getElementById('Create_Password_tooltip');
+        //     const confirmPasswordValidation = document.getElementById('Confirm_Password_tooltip');
+
+        //     function validatePassword() {
+        //         const password = passwordInput.value;
+        //         const hasUpperCase = /[A-Z]/.test(password);
+        //         const hasLowerCase = /[a-z]/.test(password);
+        //         const hasNumber = /\d/.test(password);
+
+        //         let message = '';
+
+        //         if (!hasUpperCase) message += "<p class='c-tooltip' ><i class='ri-information-line'></i>Password must contain at least one uppercase letter.</p>";
+        //         if (!hasLowerCase) message += "<p class='c-tooltip' ><i class='ri-information-line'></i>Password must contain at least one lowercase letter.</p>";
+        //         if (!hasNumber) message += "<p class='c-tooltip' ><i class='ri-information-line'></i>Password must contain at least one number.</p>";
+
+        //         if (message === '') {
+        //             passwordValidation.innerHTML = "<p class='c-tooltip'><i class='ri-information-line'></i>Password is valid.</p>";
+        //             passwordValidation.className = 'valid';
+        //             $("#Create_Password").addClass("input-margin");
+        //             $("#Create_Password").removeClass("input-margin");
+        //         } else {
+        //             passwordValidation.innerHTML = message.trim();
+        //             passwordValidation.className = 'invalid';
+        //             $("#Create_Password").removeClass("input-margin");
+
+        //         }
+        //     }
+
+        //     function validateConfirmPassword() {
+        //         if (confirmPasswordInput.value === passwordInput.value) {
+        //             confirmPasswordValidation.innerHTML = "<p class='c-tooltip'><i class='ri-information-line'></i>Passwords match.</p>";
+        //             confirmPasswordValidation.className = 'valid';
+        //             $("#Confirm_Password").addClass("input-margin");
+        //             $("#Confirm_Password").removeClass("input-margin");
+        //         } else {
+        //             confirmPasswordValidation.innerHTML = "<p class='c-tooltip'><i class='ri-information-line'></i>Passwords do not match. Please ensure that both fields contain the same password.</p>";
+        //             confirmPasswordValidation.className = 'invalid';
+        //             $("#Confirm_Password").removeClass("input-margin");
+        //         }
+        //     }
+
+        //     passwordInput.addEventListener('keyup', validatePassword);
+        //     confirmPasswordInput.addEventListener('keyup', validateConfirmPassword);
+        // });
+
+        // function validatePassword(password) {
+        //     const hasUpperCase = /[A-Z]/.test(password);
+        //     const hasLowerCase = /[a-z]/.test(password);
+        //     const hasNumber = /\d/.test(password);
+        //     // const minLength = password.length >= 8;
+
+        //     let errors = [];
+
+        //     if (!hasUpperCase) {
+        //         errors.push("Password must contain at least one uppercase letter.");
+        //     }
+        //     if (!hasLowerCase) {
+        //         errors.push("Password must contain at least one lowercase letter.");
+        //     }
+        //     if (!hasNumber) {
+        //         errors.push("Password must contain at least one number.");
+        //     }
+        //     // if (!minLength) {
+        //     //     errors.push("Password must be at least 8 characters long.");
+        //     // }
+
+        //     if (errors.length > 0) {
+        //         return { isValid: false, errors };
+        //     }
+
+        //     return { isValid: true, message: "Password is valid." };
+        // }
+
+
+
+        // $("#set_pass").click(function () {
+
+        //     if ($("#Create_Password").val() == "") {
+        //         NotifyMessage({ message: "Create Password Does Not Empty!", type: "bg-danger" });
+        //     }
+
+        //     else if ($("#Confirm_Password").val() == "") {
+        //         NotifyMessage({ message: "Confirm Password Does Not Empty!", type: "bg-danger" });
+        //     }
+
+
+        //     else if ($("#Create_Password").val() == $("#Confirm_Password").val()) {
+        //         validate_create_pass = validatePassword($("#Create_Password").val())
+        //         if (validate_create_pass["isValid"] == true) {
+
+        //             const url = new URL(window.location.href);
+        //             const token = url.searchParams.get('token');
+
+        //             const formdata = new FormData();
+        //             formdata.append("Create_Password", $("#Create_Password").val());
+        //             formdata.append("Confirm_Password", $("#Confirm_Password").val());
+        //             formdata.append("token", token);
+
+        //             const requestOptions = {
+        //                 method: "POST",
+        //                 body: formdata,
+        //                 redirect: "follow"
+        //             };
+
+        //             fetch("/auth/pass/create", requestOptions)
+        //                 .then((response) => response.json())
+        //                 .then((result) => {
+        //                     if (result["redirect"] == "/verify/expired") {
+        //                         window.location.replace("/verify/expired");
+        //                     }
+        //                     else {
+        //                         window.location.replace(result["redirect"]);
+        //                     }
+        //                 })
+        //                 .catch((error) => {
+        //                     console.error(error)
+        //                 });
+        //         }
+        //     }
+        //     else {
+        //         NotifyMessage({ message: "Passwords do not match. Please ensure that both fields contain the same password. Please ensure that both fields contain the same password.", type: "bg-danger" });
+        //     }
+        // })
 
     </script>
 

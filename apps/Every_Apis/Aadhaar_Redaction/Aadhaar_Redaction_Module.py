@@ -8,11 +8,12 @@ from io import BytesIO
 import shutil , time
 from werkzeug.utils import secure_filename
 
+
 # tessract path
 from tesseract_path import *
 
-
-
+invalid_keywords = ['INCOMETAXDEPARTMENT','TAX','INCOME','DEPARTMENT','election','elector',
+                    'commission','identity','elecr']
 
 multiplication_table = (
     (0, 1, 2, 3, 4, 5, 6, 7, 8, 9),
@@ -55,6 +56,7 @@ def compute_checksum(number):
     return checksum
 
 
+
 def Regex_Search(bounding_boxes):
     possible_UIDs = []
     Result = ""
@@ -65,7 +67,14 @@ def Regex_Search(bounding_boxes):
         else:
             Result += '?'
 
+    Result = Result.lower()
     # print(Result)
+
+    
+    if any(keyword.lower() in Result for keyword in invalid_keywords):
+        return "Invalid image. Please upload a valid Aadhaar image."
+
+
 
     matches = [match.span() for match in re.finditer(r'\d{12}', Result)]
     for match in matches:
@@ -79,6 +88,8 @@ def Regex_Search(bounding_boxes):
     return possible_UIDs
 
 
+
+# Image to base64 convert
 def image_to_base64(image_path):
     # Open the image file
     with Image.open(image_path) as img:
@@ -91,70 +102,7 @@ def image_to_base64(image_path):
     return img_str
 
 
-def Simple_way_Quality_Mask(image_path, SR=False, sr_image_path=None, SR_Ratio=[1, 1]):
-    masked_image_pil = Image.open(image_path)
-    masked_image_cv = cv2.cvtColor(np.array(masked_image_pil), cv2.COLOR_RGB2BGR)
-
-
-    bounding_boxes = pytesseract.image_to_boxes(masked_image_pil ,config='-c tessedit_create_boxfile=1').split(" 0\n")
-
-    possible_UIDs = Regex_Search(bounding_boxes)
-
-
-    for uid, start_index in possible_UIDs:
-        for i in range(8):  # Mask only the first 8 characters
-            char_box = bounding_boxes[start_index + i].split()
-
-            x1 = int(char_box[1])
-            y1 = int(char_box[2])
-            x2 = int(char_box[3])
-            y2 = int(char_box[4])
-
-            cv2.rectangle(masked_image_cv, (x1, masked_image_cv.shape[0] - y1), (x2, masked_image_cv.shape[0] - y2), (255, 255, 255), -1)
-
-    masked_image_path = 'apps/static/Aadhaar_Masking/Aadhar_Rotate_images/Simple_way_masked.jpg'
-    cv2.imwrite(masked_image_path, masked_image_cv)
-
-    return masked_image_path, possible_UIDs
-
-
-
-def is_image_dark(image, threshold=50):
-    """
-    Check if the image is dark based on a threshold.
-    Convert the image to grayscale and calculate the mean brightness.
-    """
-    gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    mean_brightness = np.mean(gray_image)
-    return mean_brightness < threshold
-
-
-def map_coordinates_back_to_original(coords, resized_shape, original_shape, angle):
-    """ Maps bounding box coordinates from the resized/rotated image back to the original image. """
-    x1, y1, x2, y2 = coords
-    scale_x = original_shape[1] / resized_shape[1]
-    scale_y = original_shape[0] / resized_shape[0]
-    
-    # Rescale the coordinates back to the original size
-    orig_x1 = int(x1 * scale_x)
-    orig_y1 = int(y1 * scale_y)
-    orig_x2 = int(x2 * scale_x)
-    orig_y2 = int(y2 * scale_y)
-
-    # Apply rotation adjustment if necessary
-    if angle == 90:
-        orig_x1, orig_y1 = original_shape[1] - orig_y1, orig_x1
-        orig_x2, orig_y2 = original_shape[1] - orig_y2, orig_x2
-    elif angle == 180:
-        orig_x1, orig_y1 = original_shape[1] - orig_x1, original_shape[0] - orig_y1
-        orig_x2, orig_y2 = original_shape[1] - orig_x2, original_shape[0] - orig_y2
-    elif angle == 270:
-        orig_x1, orig_y1 = orig_y1, original_shape[0] - orig_x1
-        orig_x2, orig_y2 = orig_y2, original_shape[0] - orig_x2
-
-    return orig_x1, orig_y1, orig_x2, orig_y2
-
-
+# Rotate Image on angle wise
 def map_coords_to_original(coords, scaled_shape, original_shape, angle):
     """ Maps bounding box coordinates from scaled/rotated image back to original image. """
     x1, y1, x2, y2 = coords
@@ -181,90 +129,53 @@ def map_coords_to_original(coords, scaled_shape, original_shape, angle):
     return orig_x1, orig_y1, orig_x2, orig_y2
 
 
-def Extract_Law_Quality_Mask_UIDS(image_path, counts):
-    with open(image_path, 'rb') as f:
-        image_bytes = f.read()
+# Normal add mask
+def Simple_way_Quality_Mask(base64_image):
 
-    language_codes = ['eng']
-    # languages = '+'.join(language_codes)
-    # custom_config = f'--oem 3 --psm 6 -l {languages}'
+    # Base64 image decode
+    image_data = base64.b64decode(base64_image)
 
-    # Decode image from bytes
-    nparr = np.frombuffer(image_bytes, np.uint8)
-    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
-    original_img = img.copy()  # Keep a copy of the original image
-
-    # Rotation angles to check
-    rotation_angles = [0, 90, 180, 270, 360]
-
-    check_addhar_status = False
-    return_image_number = None
-    final_masked_image_path = None
-    
-    # Loop through each angle
-    for angle in rotation_angles:
-        rotated_image = img
-
-        # Apply rotation based on the angle
-        if angle == 90:
-            rotated_image = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
-        elif angle == 180:
-            rotated_image = cv2.rotate(img, cv2.ROTATE_180)
-        elif angle == 270:
-            rotated_image = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
-        # No need to rotate for 0 and 360 degrees
-
-        # Resize by x2 using LANCZOS4 interpolation method
-        img2 = cv2.resize(rotated_image, (rotated_image.shape[1] * 2, rotated_image.shape[0] * 2), interpolation=cv2.INTER_LANCZOS4)
-
-        # Extract bounding boxes using Tesseract
-  
-
-        bounding_boxes = pytesseract.image_to_boxes(img2,lang='eng',config='-c tessedit_create_boxfile=1').split(" 0\n")
-        possible_UIDs = Regex_Search(bounding_boxes)
-
-        # If no UIDs found, retry without custom config
-        if len(possible_UIDs) == 0:
-            bounding_boxes = pytesseract.image_to_boxes(img2,config='-c tessedit_create_boxfile=1').split(" 0\n")
-            possible_UIDs = Regex_Search(bounding_boxes)
-
-        # Mask possible UIDs on the original image using the transformed coordinates
-        for uid, start_index in possible_UIDs:
-            for i in range(8):  # Mask only the first 8 characters
-                char_box = bounding_boxes[start_index + i].split()
-
-                if char_box[1] != "0":
-                    check_addhar_status = True
-                    return_image_number = str(counts)
-
-                x1 = int(char_box[1])
-                y1 = int(char_box[2])
-                x2 = int(char_box[3])
-                y2 = int(char_box[4])
-
-                # Map the bounding box back to the original image using rotation
-                orig_x1, orig_y1, orig_x2, orig_y2 = map_coordinates_back_to_original(
-                    (x1, y1, x2, y2), img2.shape, rotated_image.shape, angle
-                )
-
-                # Apply the mask on the original image (not the rotated image)
-                cv2.rectangle(original_img, (orig_x1, original_img.shape[0] - orig_y1), (orig_x2, original_img.shape[0] - orig_y2), (255, 255, 255), -1)
-
-        # Save the masked original image for the current rotation angle
-        final_masked_image_path = f"apps/static/Aadhaar_Masking/Aadhar_Rotate_images/rotate_masked_image_{counts}_angle_{angle}.jpg"
-        cv2.imwrite(final_masked_image_path, original_img)
-
-        # Check if Aadhar number is found and break the loop
-        if check_addhar_status:
-            print(f"Aadhar number found and masked at angle {angle}. Exiting loop.")
-            break  # Exit the loop when an Aadhar number is found and masked
-
-    return final_masked_image_path, possible_UIDs, check_addhar_status, return_image_number
+    # after decode open image for masking
+    pil_image = Image.open(BytesIO(image_data))
+    masked_image_cv = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
 
 
-def Extract_and_Mask_UIDs(image_path, counts, SR=False, sr_image_path=None, SR_Ratio=[1, 1]):
+    bounding_boxes = pytesseract.image_to_boxes(pil_image ,config='-c tessedit_create_boxfile=1').split(" 0\n")
+
+    possible_UIDs = Regex_Search(bounding_boxes)
+
+    if isinstance(possible_UIDs, str):  # This checks if it's the error message, not a list of UIDs
+        return possible_UIDs ,[]
+
+    for uid, start_index in possible_UIDs:
+        for i in range(8):  # Mask only the first 8 characters
+            char_box = bounding_boxes[start_index + i].split()
+
+            x1 = int(char_box[1])
+            y1 = int(char_box[2])
+            x2 = int(char_box[3])
+            y2 = int(char_box[4])
+
+            cv2.rectangle(masked_image_cv, (x1, masked_image_cv.shape[0] - y1), 
+                          (x2, masked_image_cv.shape[0] - y2), (255, 255, 255), -1)
+
+    masked_image_path = 'Simple_way_masked.jpg'
+    cv2.imwrite(masked_image_path, masked_image_cv)
+
+    _, buffer = cv2.imencode('.jpg', masked_image_cv)
+    masked_image_base64 = base64.b64encode(buffer).decode('utf-8')
+
+    return masked_image_base64, possible_UIDs
+
+
+# Rotate without any lan
+def Extract_and_Mask_UIDs(base64_image, counts, SR=False, sr_image_path=None, SR_Ratio=[1, 1]):
+
+    # Base64 image decode
+    image_data = base64.b64decode(base64_image)
+
     # Load and preprocess the original image (unmodified)
-    original_image_pil = Image.open(image_path)
+    original_image_pil = Image.open(BytesIO(image_data))
     original_image_cv = cv2.cvtColor(np.array(original_image_pil), cv2.COLOR_RGB2BGR)
     
     # Rotation angles to check
@@ -306,6 +217,9 @@ def Extract_and_Mask_UIDs(image_path, counts, SR=False, sr_image_path=None, SR_R
     
         # Step 4: Find possible UIDs using regex
         possible_UIDs = Regex_Search(bounding_boxes)
+
+        if isinstance(possible_UIDs, str):  # This checks if it's the error message, not a list of UIDs
+            return possible_UIDs, [], False, None
         
         # Step 5: Mask the original image based on bounding boxes from rotated image
         for uid, start_index in possible_UIDs:
@@ -330,179 +244,247 @@ def Extract_and_Mask_UIDs(image_path, counts, SR=False, sr_image_path=None, SR_R
                 cv2.rectangle(original_image_cv, (orig_x1, original_image_cv.shape[0] - orig_y1), 
                               (orig_x2, original_image_cv.shape[0] - orig_y2), (255, 255, 255), -1)
 
-        # Save the final masked image for the current rotation angle
-        final_masked_image_path = f"apps/static/Aadhaar_Masking/Aadhar_Rotate_images/original_masked_image_{counts}_angle_{angle}.jpg"
-        cv2.imwrite(final_masked_image_path, original_image_cv)
+        # store in buffer the final masked image for the current rotation angle
+
+        _, buffer = cv2.imencode('.jpg', original_image_cv)
+        masked_image_base64 = base64.b64encode(buffer).decode('utf-8')
 
         # Check if Aadhar number is found and exit if true
         if check_aadhar_status:
-            print(f"Aadhar number found and masked at angle {angle}. Exiting loop.")
+            # print(f"Aadhar number found and masked at angle {angle}. Exiting loop.")
             break  # Exit the loop if an Aadhar number is found and masked
     
-    return final_masked_image_path, possible_UIDs, check_aadhar_status, return_image_number
+    return masked_image_base64, possible_UIDs, check_aadhar_status, return_image_number
+
+# Rotate with lan
+def Extract_Law_Quality_Mask_UIDS(base64_image, counts):
+
+    # Base64 image decode
+    image_data = base64.b64decode(base64_image)
+
+    language_codes = ['eng']
+    languages = '+'.join(language_codes)
+    custom_config = f'--oem 3 --psm 6 -l {languages}'
+
+    # Decode image from bytes
+    nparr = np.frombuffer(image_data, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    original_img = img.copy()  # Keep a copy of the original image
+
+    # Rotation angles to check
+    rotation_angles = [0, 90, 180, 270, 360]
+
+    check_addhar_status = False
+    return_image_number = None
+    final_masked_image_path = None
+    
+    # Loop through each angle
+    for angle in rotation_angles:
+        rotated_image = img
+
+        # Apply rotation based on the angle
+        if angle == 90:
+            rotated_image = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
+        elif angle == 180:
+            rotated_image = cv2.rotate(img, cv2.ROTATE_180)
+        elif angle == 270:
+            rotated_image = cv2.rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE)
+        # No need to rotate for 0 and 360 degrees
+
+        # Resize by x2 using LANCZOS4 interpolation method
+        img2 = cv2.resize(rotated_image, (rotated_image.shape[1] * 2, rotated_image.shape[0] * 2), interpolation=cv2.INTER_LANCZOS4)
+
+        # Extract bounding boxes using Tesseract
+        bounding_boxes = pytesseract.image_to_boxes(img2,lang='eng',config='-c tessedit_create_boxfile=1').split(" 0\n")
+        possible_UIDs = Regex_Search(bounding_boxes)
+
+        if isinstance(possible_UIDs, str):  # This checks if it's the error message, not a list of UIDs
+            return possible_UIDs, [], False, None
+
+        # If no UIDs found, retry without custom config
+        if len(possible_UIDs) == 0:
+            bounding_boxes = pytesseract.image_to_boxes(img2,config='-c tessedit_create_boxfile=1').split(" 0\n")
+            possible_UIDs = Regex_Search(bounding_boxes)
+
+            if isinstance(possible_UIDs, str):  # This checks if it's the error message, not a list of UIDs
+                return possible_UIDs, [], False, None
+
+        # Mask possible UIDs on the original image using the transformed coordinates
+        for uid, start_index in possible_UIDs:
+            for i in range(8):  # Mask only the first 8 characters
+                char_box = bounding_boxes[start_index + i].split()
+
+                if char_box[1] != "0":
+                    check_addhar_status = True
+                    return_image_number = str(counts)
+
+                x1 = int(char_box[1])
+                y1 = int(char_box[2])
+                x2 = int(char_box[3])
+                y2 = int(char_box[4])
+
+                # Map the bounding box back to the original image using rotation
+                orig_x1, orig_y1, orig_x2, orig_y2 = map_coords_to_original(
+                    (x1, y1, x2, y2), img2.shape, rotated_image.shape, angle
+                )
+
+                # Apply the mask on the original image (not the rotated image)
+                cv2.rectangle(original_img, (orig_x1, original_img.shape[0] - orig_y1), (orig_x2, original_img.shape[0] - orig_y2), (255, 255, 255), -1)
+
+        # Save the masked original image for the current rotation angle
+        # final_masked_image_path = f"./apps/static/Aadhaar_Masking/Aadhar_Rotate_images/rotate_masked_image_{counts}_angle_{angle}.jpg"
+        # cv2.imwrite(final_masked_image_path, original_img)
+
+        _, buffer = cv2.imencode('.jpg', original_img)
+        masked_image_base64 = base64.b64encode(buffer).decode('utf-8')
+
+        # Check if Aadhar number is found and break the loop
+        if check_addhar_status:
+            print(f"Aadhar number found and masked at angle {angle}. Exiting loop.")
+            break  # Exit the loop when an Aadhar number is found and masked
+
+    return masked_image_base64, possible_UIDs, check_addhar_status, return_image_number
 
 
-# Bright & Contrast Add
-def convertScale(img, alpha, beta):
-    new_img = img * alpha + beta
-    new_img[new_img < 0] = 0
-    new_img[new_img > 255] = 255
-    return new_img.astype(np.uint8)
 
-# Automatic brightness and contrast optimization with optional histogram clipping
-def automatic_brightness_and_contrast(image, clip_hist_percent=25):
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+def addhar_mask(image_path, SR=False, SR_Ratio=[1, 1]):
 
-    # Calculate grayscale histogram
-    hist = cv2.calcHist([gray],[0],None,[256],[0,256])
-    hist_size = len(hist)
+    base64_string = image_to_base64(image_path)
 
-    # Calculate cumulative distribution from the histogram
-    accumulator = []
-    accumulator.append(float(hist[0]))
-    for index in range(1, hist_size):
-        accumulator.append(accumulator[index -1] + float(hist[index]))
-
-    # Locate points to clip
-    maximum = accumulator[-1]
-    clip_hist_percent *= (maximum/100.0)
-    clip_hist_percent /= 2.0
-
-    # Locate left cut
-    minimum_gray = 0
-    while accumulator[minimum_gray] < clip_hist_percent:
-        minimum_gray += 1
-
-    # Locate right cut
-    maximum_gray = hist_size -1
-    while accumulator[maximum_gray] >= (maximum - clip_hist_percent):
-        maximum_gray -= 1
-
-    # Calculate alpha and beta values
-    alpha = 255 / (maximum_gray - minimum_gray)
-    beta = -minimum_gray * alpha
-
-
-    auto_result = convertScale(image, alpha=alpha, beta=beta)
-    return (auto_result, alpha, beta)
-
-
-def addhar_mask(input_path, SR=False, SR_Ratio=[1, 1]):
     counts = 0
-    
-    image = cv2.imread(input_path)
 
+    # simple way to mask
+    masked_image, possible_UIDs = Simple_way_Quality_Mask(base64_string)
+    # print(masked_image)
 
-    # Normal Image 
-
-    masked_img, possible_UIDs = Simple_way_Quality_Mask(input_path)
-
-    # 4 Angle Wise Images
-    if len(possible_UIDs) == 0:
-        print("Without Lan")
-
-        masked_img, possible_UIDs ,status_check , image_count = Extract_and_Mask_UIDs(input_path,counts, SR, SR_Ratio)
-    
-    # 4 Angle Wise Images English Lang
-    if len(possible_UIDs) == 0:
-        print("With Lan")
-        masked_img, possible_UIDs , status_check , image_count= Extract_Law_Quality_Mask_UIDS(input_path , counts)
-    
-    if len(possible_UIDs) == 0:
-        image = cv2.imread(input_path)
-
-        # Contrast and brightness control
-        alpha = 1.95 # Contrast control (1.0-3.0)
-        beta = 0 # Brightness control (0-100)
-
-        # Apply contrast and brightness
-        manual_result = cv2.convertScaleAbs(image, alpha=alpha, beta=beta)
-
-        # Save the images
-        # cv2.imwrite('original_image.jpg', image)
-        cv2.imwrite('apps/static/Aadhaar_Masking/Aadhar_Rotate_images/ConvertScaleAble.jpg', manual_result)
-
-        masked_img, possible_UIDs , status_check , image_count= Extract_Law_Quality_Mask_UIDS('apps/static/Aadhaar_Masking/Aadhar_Rotate_images/ConvertScaleAble.jpg' , counts)
-
-
-    if len(possible_UIDs) == 0:
-        auto_result, alpha, beta = automatic_brightness_and_contrast(image)
-        cv2.imwrite('apps/static/Aadhaar_Masking/Aadhar_Rotate_images/auto_brightness_contrast.jpg', auto_result)
-        auto_brightness_contras = cv2.imread('apps/static/Aadhaar_Masking/Aadhar_Rotate_images/auto_brightness_contrast.jpg')
-
-        # Contrast and brightness control
-        alpha = 1.95 # Contrast control (1.0-3.0)
-        beta = 0 # Brightness control (0-100)
-
-        # Apply contrast and brightness
-        auto_brightness_contras_scale_Add = cv2.convertScaleAbs(auto_brightness_contras, alpha=alpha, beta=beta)
-
-        # Save the images
-        # cv2.imwrite('original_image.jpg', image)
-        cv2.imwrite('apps/static/Aadhaar_Masking/Aadhar_Rotate_images/Scable_Brightness_Contras.jpg', auto_brightness_contras_scale_Add)
-
-        masked_img, possible_UIDs , status_check , image_count= Extract_Law_Quality_Mask_UIDS('apps/static/Aadhaar_Masking/Aadhar_Rotate_images/Scable_Brightness_Contras.jpg' , counts)
-    
-    
-
-    # Image Rotate
-    if len(possible_UIDs) == 0:
-        print("Image Rotate")
-        image = cv2.imread(input_path)
-
-        # Convert to grayscale
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        sharpen_kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
-        sharpen = cv2.filter2D(gray, -1, sharpen_kernel)
-
-        
-
-        # Apply edge detection
-        edges = cv2.Canny(sharpen, 50, 150, apertureSize=3)
-
-        # Detect lines using Hough Transform to find skew angle
-        lines = cv2.HoughLinesP(edges, 1, np.pi / 180, 100, minLineLength=100, maxLineGap=10)
-        angles = []
-
-        for line in lines:
-            x1, y1, x2, y2 = line[0]
-            angle = np.degrees(np.arctan2(y2 - y1, x2 - x1))
-            angles.append(angle)
-
-        # Compute the median angle
-        median_angle = np.median(angles)
-
-        # Rotate the image to correct the skew
-        (h, w) = image.shape[:2]
-        center = (w // 2, h // 2)
-        M = cv2.getRotationMatrix2D(center, median_angle, 1.0)
-        rotated = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
-        
-        
-    
-        # Save the rotated image if needed
-        cv2.imwrite('apps/static/Aadhaar_Masking/Aadhar_Rotate_images/Rotated_image.jpg', rotated)
-
-        masked_img, possible_UIDs , status_check , image_count= Extract_Law_Quality_Mask_UIDS('apps/static/Aadhaar_Masking/Aadhar_Rotate_images/Rotated_image.jpg' , counts)
-
-
-    # if len(possible_UIDs) == 0:
-
-    if len(possible_UIDs) != 0:
-        # print(masked_img)
-        
-        base64_string = image_to_base64(masked_img)
-        
-        return {"response": "200",
-                "Image_path":masked_img,
-                "base64_string":"data:image/png;base64,"+base64_string}
-    
+    if isinstance(masked_image, str) and "Invalid image" in masked_image:
+        return { "status_code": 400,
+                        "status": "Error",
+                        "response": "Invalid Aadhaar image. Please upload a clear and valid Aadhaar card image!"}
     else:
+        if len(possible_UIDs) != 0:
+            return {"status_code": 200,
+                "status": "Success",
+                "response":"data:image/png;base64,"+masked_image}
 
-        return { "message": "Error",
-                "response": "400",
-                "responseValue": "Please upload a clear and legible image of the entire document in JPEG, PNG format."}
-    
+        # Rotate without any lan
+        else:
+            masked_image, possible_UIDs ,status_check , image_count = Extract_and_Mask_UIDs(base64_string,counts, SR, SR_Ratio)
 
+            if isinstance(masked_image, str) and "Invalid image" in masked_image:
+                return { "status_code": 400,
+                                "status": "Error",
+                                "response": "Invalid Aadhaar image. Please upload a clear and valid Aadhaar card image!"}
+            else:
+                if len(possible_UIDs) != 0:
+                    return {"status_code": 200,
+                        "status": "Success",
+                        "response":"data:image/png;base64,"+masked_image}
+                
+                # Rotate with eng lan
+                else:
+                    masked_image, possible_UIDs , status_check , image_count= Extract_Law_Quality_Mask_UIDS(base64_string , counts)
+                    
+                    if isinstance(masked_image, str) and "Invalid image" in masked_image:
+                        return { "status_code": 400,
+                                "status": "Error",
+                                "response": "Invalid Aadhaar image. Please upload a clear and valid Aadhaar card image!"}
+                    else:
+                        if len(possible_UIDs) != 0:
+                            return {"status_code": 200,
+                                "status": "Success",
+                                "response":"data:image/png;base64,"+masked_image}
+                        
+                        # image inside add alpha
+                        else:
+                            # Base64 image decode
+                            image_data = base64.b64decode(base64_string)
+                            
+                            # Step 2: Convert the binary data to a NumPy array
+                            nparr = np.frombuffer(image_data, np.uint8)
+                            
+                            # Step 3: Decode the NumPy array to an OpenCV image
+                            image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+                            alpha = 1.95  # Contrast control (1.0-3.0)
+                            beta = 0      # Brightness control (0-100)
 
+                            # Apply contrast and brightness
+                            manual_result = cv2.convertScaleAbs(image, alpha=alpha, beta=beta)
+                            
+                            # Convert into base64 that's why store in buffer
+                            _, buffer = cv2.imencode('.jpg', manual_result)
+                            # Convert the buffer to Base64
+                            base64_result = base64.b64encode(buffer).decode('utf-8')
+
+                            # base64 image add on masked func
+                            masked_image, possible_UIDs , status_check , image_count= Extract_Law_Quality_Mask_UIDS(base64_result , counts)
+                            
+                            if isinstance(masked_image, str) and "Invalid image" in masked_image:
+                                return { "status_code": 400,
+                                        "status": "Error",
+                                        "response": "Invalid Aadhaar image. Please upload a clear and valid Aadhaar card image!"}
+                            else:
+                                if len(possible_UIDs) != 0:
+                                    return {"status_code": 200,
+                                        "status": "Success",
+                                        "response":"data:image/png;base64,"+masked_image}
+                                
+                                # apply on image greyscale
+                                else:
+
+                                    # Base64 image decode
+                                    image_data = base64.b64decode(base64_string)
+                                    # Convert bytes to a NumPy array
+                                    nparr = np.frombuffer(image_data, np.uint8)
+
+                                    # Decode the NumPy array to an image
+                                    image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+                                    # Convert to grayscale
+                                    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+                                    sharpen_kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
+                                    sharpen = cv2.filter2D(gray, -1, sharpen_kernel)
+                                    # Apply edge detection
+                                    edges = cv2.Canny(sharpen, 50, 150, apertureSize=3)
+
+                                    # Detect lines using Hough Transform to find skew angle
+                                    lines = cv2.HoughLinesP(edges, 1, np.pi / 180, 100, minLineLength=100, maxLineGap=10)
+                                    angles = []
+
+                                    for line in lines:
+                                        x1, y1, x2, y2 = line[0]
+                                        angle = np.degrees(np.arctan2(y2 - y1, x2 - x1))
+                                        angles.append(angle)
+
+                                    # Compute the median angle
+                                    median_angle = np.median(angles)
+
+                                    # Rotate the image to correct the skew
+                                    (h, w) = image.shape[:2]
+                                    center = (w // 2, h // 2)
+                                    M = cv2.getRotationMatrix2D(center, median_angle, 1.0)
+                                    rotated = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+                                    
+                                    # Convert into base64 that's why store in buffer
+                                    _, buffer = cv2.imencode('.jpg', rotated)
+                                    # Convert the buffer to Base64
+                                    base64_result = base64.b64encode(buffer).decode('utf-8')
+                                    
+                                    # base64 image add on masked func
+                                    masked_image, possible_UIDs , status_check , image_count= Extract_Law_Quality_Mask_UIDS(base64_result , counts)
+
+                                    if isinstance(masked_image, str) and "Invalid image" in masked_image:
+                                        return { "status_code": 400,
+                                                "status": "Error",
+                                                "response": "Invalid Aadhaar image. Please upload a clear and valid Aadhaar card image!"}
+                                    else:
+                                        if len(possible_UIDs) != 0:
+                                            return {"status_code": 200,
+                                                "status": "Success",
+                                                "response":"data:image/png;base64,"+masked_image}
+
+                                        else:
+                                            return { "status_code": 400,
+                                                    "status": "Error",
+                                                    "response": "Please upload a clear and legible image of the entire document in JPEG, PNG format."}
 

@@ -2,7 +2,7 @@ from flask import Blueprint, render_template,request,jsonify,Response , g
 from flask_jwt_extended import create_access_token
 from datetime import timedelta
 from bleach import clean
-
+import json
 
 
 # DataBase
@@ -33,7 +33,7 @@ def Token_access_main_api():
         if data == {}:
             return jsonify({"data" : {"status_code": 400,
                                     "status": "Error",
-                                    "response":"Invalid or missing JSON data!"
+                                    "response":"Invalid or missing JSON data. Please ensure that the request contains valid JSON!"
                                     }}) , 400
         
         key_of_request = ['client_id','client_secret_key','grant_type']
@@ -45,7 +45,7 @@ def Token_access_main_api():
             return jsonify({"data":{
                 "status_code": 400,
                 "status": "Error",
-                "response":"Please Validate Your Data!"
+                "response":"Please validate your data. Some fields are missing or incorrect!"
             }}), 400
 
 
@@ -60,11 +60,12 @@ def Token_access_main_api():
         if verify_auth != None:
             if verify_auth["client_secret_key"] == data["client_secret_key"]:
 
-                duration = timedelta(minutes=30)
+                duration = timedelta(minutes=20)
 
-                indentity_dict = {'api_user':True ,"client_id":str(verify_auth["_id"]) }
+                indentity_dict = {'api_user':True ,"client_id":str(verify_auth["_id"]),"user_type":str(verify_auth['user_type']) }
 
-                access_token = create_access_token(expires_delta=duration,identity=indentity_dict,
+                access_token = create_access_token(expires_delta=duration,
+                                                   identity=json.dumps(indentity_dict),
                                                        additional_claims={"is_api": True})
                 
                 return jsonify({"data" :{"status_code": 200,
@@ -74,21 +75,21 @@ def Token_access_main_api():
                                         "expires_in": 120}
                         }})
               
-
-            return jsonify({"data" : {"status_code": 400,
-                                    "status": "Error",
-                                    "response":"The credentials provided are incorrect! Please verify and re-enter them!"
-                                    }}) , 400
+            else:
+                return jsonify({"data" : {"status_code": 401,
+                                        "status": "Error",
+                                        "response":"The credentials provided are incorrect! Please verify and re-enter them!"
+                                        }}) , 401
+        else:
+            return jsonify({"data" : {"status_code": 401,
+                                        "status": "Error",
+                                        "response":"The credentials provided are incorrect! Please verify and re-enter them!"
+                                        }}) , 401
         
-        return jsonify({"data" : {"status_code": 400,
+    else:
+        if request.method != 'POST':
+            return jsonify({"data" : {"status_code": 405,
                                     "status": "Error",
-                                    "response":"The credentials provided are incorrect! Please verify and re-enter them!"
-                                    }}) , 400
-        
-
-
-        return jsonify({"data":"yes"})
-    
-    return jsonify({})
-
+                                    "response":"POST method expected. Please use POST to submit data!"
+                                    }}) , 405
 

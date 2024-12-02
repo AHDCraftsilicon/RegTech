@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template,request,redirect,flash,jsonify,send_file,make_response
+from flask import Blueprint, render_template,request,redirect,session
 from flask_jwt_extended import jwt_required ,get_jwt
 from datetime import timedelta
 from cryptography.fernet import Fernet
@@ -21,22 +21,24 @@ Admin_Authentication_db = Regtch_services_UAT["Admin_Authentication"]
 
 
 @Admin_Dashboard_bp.route("/dashboard")
-@jwt_required(locations=['cookies'])
 def admin_dashboard_main():
 
-    claims = get_jwt()
+    try:
+        am_bd_name = session.get('am_bd_name')
+        admin_objid = session.get('am_bjde')
+        print("------- ", am_bd_name)
 
-    name = ""
-    if claims["sub"]["db_name"] == "Admin_Authentication":
-        if claims["sub"]["objid"] != "":
-            print(claims["sub"]["objid"])
-            admin_details = Admin_Authentication_db.find_one({"_id":ObjectId(claims["sub"]["objid"])})
+        name = ""
+        if am_bd_name == "Admin_Authentication" and admin_objid != "":
+                
+            admin_details = Admin_Authentication_db.find_one({"_id":ObjectId(admin_objid)})
 
             if admin_details != None:
                 name = admin_details["name"]
 
-
-
-
-    return render_template("admin_dashboard.html" , 
-                           name=name)
+            return render_template("admin_dashboard.html" , 
+                                name=name)
+            
+        return redirect("/BBRgt/admin-login-RRtggR")
+    except:
+        return redirect("/error")

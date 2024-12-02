@@ -1,0 +1,242 @@
+<!-- Add Modal -->
+<div class="modal fade" id="add_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="exampleModalLabel">Add User Production</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <form method="post" class="needs-validation" action="/BBRgt/production-user/add" novalidate>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">User Name <span class="text-danger dt">*</span></label>
+                                    <select class="form-select select2" name="user_objid" required>
+                                        <option value="" selected>Select</option>
+                                        {% for item in user_list %}
+                                        <option value="{{item['objid']}}">{{item['Email_Id']}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">Business Name <span class="text-danger dt">*</span></label>
+                                    <input type="text" name="bussiness_name" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">Name of the Contact Person <span
+                                            class="text-danger dt">*</span></label>
+                                    <input type="text" name="name_of_contact_person" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">Designation of the Contact Person <span
+                                            class="text-danger dt">*</span></label>
+                                    <input type="text" name="designation_of_contact_person" class="form-control"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">Email ID <span class="text-danger dt">*</span></label>
+                                    <input type="email" name="email_id" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">Contact Number <span class="text-danger dt">*</span></label>
+                                    <input type="number" name="contact_number" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">PAN Number of the Organization <span
+                                            class="text-danger dt">*</span></label>
+                                    <input type="text" name="PAN_number" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">TAN Number of the Organization <span
+                                            class="text-danger dt">*</span></label>
+                                    <input type="text" name="TAN_number" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">Registered Address <span
+                                            class="text-danger dt">*</span></label>
+                                    <textarea class="form-control" rows="3" name="registered_address"
+                                        required></textarea>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">Correspondence Address <span
+                                            class="text-danger dt">*</span></label>
+                                    <textarea class="form-control" rows="3" name="correspondence_address"
+                                        required></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-primary mb-1">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Edit Modal -->
+<div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="exampleModalLabel">Edit User Production</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <form method="post" class="needs-validation" id="edit_info" novalidate>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">User Name <span class="text-danger dt">*</span></label>
+                                    <select class="form-select" name="user_objid" id="user_objid" disabled>
+                                        <option value="" selected>Select</option>
+                                        {% for item in user_list %}
+                                        <option value="{{item['objid']}}">{{item['Email_Id']}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">Business Name <span class="text-danger dt">*</span></label>
+                                    <input type="text" name="bussiness_name" id="bussiness_name" class="form-control"
+                                        required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">Name of the Contact Person <span
+                                            class="text-danger dt">*</span></label>
+                                    <input type="text" name="name_of_contact_person" id="name_of_contact_person"
+                                        class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">Designation of the Contact Person <span
+                                            class="text-danger dt">*</span></label>
+                                    <input type="text" name="designation_of_contact_person"
+                                        id="designation_of_contact_person" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">Email ID <span class="text-danger dt">*</span></label>
+                                    <input type="email" name="email_id" class="form-control" id="email_id" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">Contact Number <span class="text-danger dt">*</span></label>
+                                    <input type="number" name="contact_number" class="form-control" id="contact_number"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">PAN Number of the Organization <span
+                                            class="text-danger dt">*</span></label>
+                                    <input type="text" name="PAN_number" class="form-control" id="PAN_number" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">TAN Number of the Organization <span
+                                            class="text-danger dt">*</span></label>
+                                    <input type="text" name="TAN_number" class="form-control" id="TAN_number" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">Registered Address <span
+                                            class="text-danger dt">*</span></label>
+                                    <textarea class="form-control" rows="3" name="registered_address"
+                                        id="registered_address" required></textarea>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">Correspondence Address <span
+                                            class="text-danger dt">*</span></label>
+                                    <textarea class="form-control" rows="3" name="correspondence_address"
+                                        id="correspondence_address" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-muted font-14">
+                            Api Details
+                        </p>
+                        <div class="row">
+                            <div class="col-2 text-center mt-4">
+                                <div class="btn btn-primary add-btn">+</div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">Api Name <span class="text-danger dt">*</span></label>
+                                    <select class="form-control" name="name_of_api" id="user_objid">
+                                        <option value="" selected>Select</option>
+                                        {% for item in list_of_api %}
+                                        <option value="{{item['objid']}}">{{item['api_name']}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label class="d-flex">Pricing </label>
+                                    <input type="text" name="api_pricing" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-primary mb-1">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

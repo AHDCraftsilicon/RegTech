@@ -40,27 +40,36 @@ def Api_Credentials_main():
             if encrypted_token and ip_address:
                 token = decrypt_token(encrypted_token)
 
-                test_credit = User_Testing_Credits_db.find_one({"_id":ObjectId("66ecfbff621502ccf8852429")})["total_credit"]
+                page_name = "Credentials"
 
-                if get_objid != "":
-                    access_credential = User_Authentication_db.find_one({"_id":ObjectId(get_objid)})
+                user_type = "Test Credits"
 
-                    if access_credential != None:
-                        sccess_id_key = [{"client_id":access_credential['client_id'],
-                                        "client_secret_key" :access_credential["client_secret_key"]
-                                        }]
-                        user_name = check_user_in_db["Company_Name"]
-                        test_credits = [{"Test_Credit": check_user_in_db["total_test_credits"],
-                                    "Used_Credits":check_user_in_db["used_test_credits"]}]
+                if check_user_in_db['user_flag'] == "0":
+                    user_type = "Live Credits"
 
-                        return render_template('api_credentials.html',
-                                                test_credit=test_credits,
-                                                sccess_id_key=sccess_id_key,
-                                                user_name=user_name)
-                        
-                    return redirect("/")
+
+                user_name = check_user_in_db["Company_Name"]
+                page_info = [{"Test_Credit": check_user_in_db["total_test_credits"],
+                            "Used_Credits":check_user_in_db["used_test_credits"] ,
+                            "user_type" : user_type,
+                            "page_name":page_name,
+                            "user_name": user_name
+                            }]
                 
-                return redirect("/")
+
+                # Credentials
+                sccess_id_key = [{"client_id":check_user_in_db['client_id'],
+                                "client_secret_key" :check_user_in_db["client_secret_key"]}]
+                
+
+                return render_template('api_credentials.html',
+                                        sccess_id_key=sccess_id_key,
+                                        page_info=page_info,
+                                        user_details={"user_name": user_name,
+                                                        "user_type" :user_type})
+                        
+                
+            return redirect("/")
             
         return redirect("/")
     

@@ -1,12 +1,12 @@
 from flask import Blueprint, render_template,request,redirect,flash,jsonify,send_file,make_response
 from flask_jwt_extended import JWTManager, jwt_required,get_jwt
 from datetime import timedelta
-from bleach import clean
 import re
 from bson import ObjectId
 import difflib 
 from datetime import datetime
-import uuid
+import uuid , json
+import requests
 
 
 # DataBase
@@ -25,9 +25,9 @@ Name_Matching_api_bp = Blueprint("Name_Matching_api_bp",
 
 # DB
 Authentication_db = Regtch_services_UAT["User_Authentication"]
-User_test_Api_history_db = Regtch_services_UAT['User_test_Api_history']
 Api_Informations_db = Regtch_services_UAT["Api_Informations"]
-
+Prod_user_api_history_db = Regtch_services_UAT['Prod_user_api_history']
+Test_user_api_history_db = Regtch_services_UAT['Test_user_api_history']
 
 # Name Matching Api Logic
 def calculate_similarity(s1, s2):
@@ -64,7 +64,6 @@ UUID_PATTERN = re.compile(
 
 @Name_Matching_api_bp.route("/name/matching",methods=['POST'])
 @jwt_required()
-#@check_headers
 def Name_Matching_Api_route():
     if request.method == 'POST':
         try:
@@ -73,21 +72,21 @@ def Name_Matching_Api_route():
             # Json IS Empty Or Not
             if data == {}:
                 return jsonify({"data" : {"status_code": 400,
-                                        "status": "Error",
-                                        "response":"Invalid or missing JSON data!"
-                                        }}) , 400
+                                    "status": "Error",
+                                    "response":"Invalid or missing JSON data. Please ensure that the request contains valid JSON!"
+                                    }}) , 400
             
-            key_of_request = ['UniqueID','name1','name2']
+            key_of_request = ['UniqueID','name1','name2','env']
             
             # Extra Key Remove
             extra_keys = [key for key in data if key not in key_of_request]
         
             if extra_keys:
                 return jsonify({"data":{
-                    "status_code": 400,
-                    "status": "Error",
-                    "response":"Please Validate Your Data!"
-                }}), 400
+                        "status_code": 400,
+                        "status": "Error",
+                        "response":"Please validate your data. Some fields are missing or incorrect!"
+                    }}), 400
 
 
             # HTML Injection & Also Verify Key is Empy Or Null
@@ -101,89 +100,218 @@ def Name_Matching_Api_route():
             uuid_to_check = data['UniqueID']
             # Check if the UUID matches the pattern
             if UUID_PATTERN.match(uuid_to_check):
-
-                modify_request_data = {
-                    "UniqueID" : data["UniqueID"],
-                    "name1" : data["name1"],
-                    "name2" : data["name2"],
-                }
-                
-                # Api Calling Time Start
-                api_call_start_time = datetime.now()
                 
                 check_user = get_jwt()
+                print("-------- ", check_user['sub'])
 
-                check_user_id_in_db = Authentication_db.find_one({"_id":ObjectId(check_user['sub']['client_id'])})
+                jwt_store_details = json.loads(check_user['sub'])
+
+                check_user_id_in_db = Authentication_db.find_one({"_id":ObjectId(jwt_store_details['client_id'])})
 
                 if check_user_id_in_db != None:
-                    if check_user_id_in_db["total_test_credits"] > check_user_id_in_db["used_test_credits"]:
-                        
-                        # UniqueID Check in DB
-                        unique_id_check = User_test_Api_history_db.find_one({"user_id":check_user_id_in_db["_id"],"User_Unique_id":data["UniqueID"]})
+                    # name of api
+                    about_api_details = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3b9ce1846511541497")})
 
-                        if unique_id_check == None:
+                    # Check Env with db
+                    if data['env'].lower() in check_user_id_in_db['user_type'].lower():
+                        # Test Enviroment 
+                        if data['env'] == "test":
+                            # Check User Api Status
+                            if check_user_id_in_db['api_status'] == "Enable":
+                            #     # Check Credit Limit
+                                if int(check_user_id_in_db["used_test_credits"]) > 0:
+                                    # Api Start Time
+                                    start_time = datetime.utcnow()
+                                    # UniqueID Check in DB
+                                    unique_id_check = Test_user_api_history_db.find_one({"user_id":check_user_id_in_db["_id"],
+                                                                                         "unique_id":data["UniqueID"]})
+
+                                    if unique_id_check == None or check_user_id_in_db['tester_flag'] ==  True:
+                                        
+                                        # Name Match Function
+                                        Name_match_percantage = calculate_similarity(data['name1'],data['name2'])
+
+                                        # Api End Time
+                                        end_time = datetime.utcnow()
+                                        duration = (end_time - start_time).total_seconds() * 1000
+
+                                        # Client Ip address
+                                        response = requests.get('https://ifconfig.me')
+                                        
+                                        # Request Id
+                                        request_id = generate_random_id()
+
+                                        http_status = 200
+                                        json_msg = {"data":{
+                                                    "status_code": 200,
+                                                    "status": "Success",
+                                                    "response": {"match_percentage": Name_match_percantage},
+                                                    "basic_response":{ "request_id" : request_id,
+                                                                "request_on" : start_time,
+                                                                "response_on":end_time,
+                                                                "api_name":about_api_details['api'],
+                                                                "duration":round(duration, 2),
+                                                                }
+                                                    }}
+                                        
+                                        # Log store in db
+                                        Test_user_api_history_db.insert_one({
+                                                # aadhaar redaction objid
+                                                "api_name": about_api_details['_id'],
+                                                # Enviroment Set
+                                                'env':'Test',
+                                                # ip address
+                                                "ip_address":response.text.strip(),
+                                                # user id
+                                                "user_id":check_user_id_in_db['_id'],
+                                                # Api call Status
+                                                'api_call_status' : "Api_status",
+                                                # Request id
+                                                "request_id" : request_id,
+                                                # Unique id
+                                                "unique_id":data["UniqueID"],
+                                                # Request time
+                                                "request_on" : start_time,
+                                                # Response time
+                                                "response_on":end_time,
+                                                # Time Duration of api taken time
+                                                "time_duration":round(duration, 2),
+                                                # http status
+                                                'http_status':http_status,
+                                                # date store
+                                                'created_on':datetime.now()})
+
+                                        # user Cut credits
+                                        if check_user_id_in_db['tester_flag'] == False:
+                                            if int(check_user_id_in_db['used_test_credits']) >=  int(about_api_details['credits_per_use']):
+                                                # Reduce total credit to used credits
+                                                update_total_credit = int(check_user_id_in_db['used_test_credits']) - int(about_api_details['credits_per_use'])
+                                                Authentication_db.update_one({"_id":check_user_id_in_db["_id"]},{"$set":{
+                                                                "used_test_credits":update_total_credit}})
+                                                json_msg['data']['basic_response'] ['test_credits'] = update_total_credit
+                                            else:
+                                                return jsonify({"data":{
+                                                    "status_code": 402,
+                                                    "status": "Error",
+                                                    "response":"Not sufficient credit to use this API. Please contact our support team to purchase more credits!"
+                                                }}), 402
+
+                                        return jsonify(json_msg)
+
+                                    else:
+                                        return jsonify({"data":{
+                                                    "status_code": 409,
+                                                    "status": "Error",
+                                                    "response":"This ID has already been used. Verify Your UniqueID and try again!"
+                                                }}), 409
+
+                                else:
+                                    return jsonify({"data":{
+                                            "status_code": 402,
+                                            "status": "Error",
+                                            "response":"You have zero credits left, please pay for more credits to continue using this service!"
+                                        }}), 402
+                            else:
+                                return jsonify({"data":{
+                                            "status_code": 403,
+                                            "status": "Error",
+                                            "response":"You are not eligible for this API. Please contact support for access!"
+                                        }}), 403
                             
-                            str1 = data['name1']
-                            str2 = data['name2']
-
-                            similarity = calculate_similarity(str1, str2)
-
-                            api_call_end_time = datetime.now()
-                            duration = api_call_end_time - api_call_start_time
-                            duration_seconds = duration.total_seconds()
-                            store_response = {
-                                            "status_code": 200,
-                                            "status": "Success",
-                                            "response": {"String": str2,
-                                                        "SimilarityPercentage": similarity}}
-                            
-                            # DataBase Log
-                            User_test_Api_history_db.insert_one({
-                                    "user_id":check_user_id_in_db["_id"],
-                                    "User_Unique_id":data['UniqueID'],
-                                    "api_name":"Name_Match",
-                                    "api_start_time":api_call_start_time,
-                                    "api_end_time":datetime.now(),
-                                    "api_status": "Success",
-                                    "response_duration":str(duration),
-                                    "response_time":duration_seconds,
-                                    "request_data":str(modify_request_data),
-                                    "response_data" :str(store_response),
-                                    "creadted_on":datetime.now(),
-                                    "System_Generated_Unique_id" : str(uuid.uuid4()),
-                                    })
-
-                            # Check Api Using Credits
-                            api_use_credit_info = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3b9ce1846511541497")})
-                            
-                            if check_user_id_in_db["unlimited_test_credits"] == False:
-                                # Credit 
-                                Authentication_db.update_one({"_id":check_user_id_in_db["_id"]},{"$set":{
-                                    "used_test_credits": check_user_id_in_db["used_test_credits"] + api_use_credit_info["credits_per_use"]
-                                }})
-                            
-                            return jsonify({"data":store_response})
-
                         else:
-                            return jsonify({"data":{
-                                        "status_code": 400,
-                                        "status": "Error",
-                                        "response":"This ID has already been used. Verify Your UniqueID and try again!"
-                                    }}), 400
+                            # Check User Api Status
+                            if check_user_id_in_db['api_status'] == "Enable":
+                                # Api Start Time
+                                start_time = datetime.utcnow()
+
+                                # UniqueID Check in DB
+                                unique_id_check = Prod_user_api_history_db.find_one({"user_id":check_user_id_in_db["_id"],
+                                                                                     "unique_id":data["UniqueID"]})
+                                if unique_id_check == None:
+                                    # Name Match Function
+                                    Name_match_percantage = calculate_similarity(data['name1'],data['name2'])
+
+                                    # Api End Time
+                                    end_time = datetime.utcnow()
+                                    duration = (end_time - start_time).total_seconds() * 1000
+
+                                    # Client Ip address
+                                    response = requests.get('https://ifconfig.me')
+                                    
+                                    # Request Id
+                                    request_id = generate_random_id()
+
+                                    http_status = 200
+                                    json_msg = {"data":{
+                                                "status_code": 200,
+                                                "status": "Success",
+                                                "response": {"match_percentage": Name_match_percantage},
+                                                "basic_response":{ "request_id" : request_id,
+                                                            "request_on" : start_time,
+                                                            "response_on":end_time,
+                                                            "api_name":about_api_details['api'],
+                                                            "duration":round(duration, 2),
+                                                            }
+                                                }}
+                                    
+                                    # Log store in db
+                                    Prod_user_api_history_db.insert_one({
+                                        # Name Match objid
+                                        "api_name": about_api_details['_id'],
+                                        # Enviroment Set
+                                        'env':'Test',
+                                        # ip address
+                                        "ip_address":response.text.strip(),
+                                        # user id
+                                        "user_id":check_user_id_in_db['_id'],
+                                        # Api call Status
+                                        'api_call_status' : "Api_status",
+                                        # Request id
+                                        "request_id" : request_id,
+                                        # Unique id
+                                        "unique_id":data["UniqueID"],
+                                        # Request time
+                                        "request_on" : start_time,
+                                        # Response time
+                                        "response_on":end_time,
+                                        # Time Duration of api taken time
+                                        "time_duration":round(duration, 2),
+                                        # http status
+                                        'http_status':http_status,
+                                        # date store
+                                        'created_on':datetime.now()})
+                                    
+                                    return jsonify(json_msg)
+                                    
+                                
+                                else:
+                                    return jsonify({"data":{
+                                                "status_code": 409,
+                                                "status": "Error",
+                                                "response":"This ID has already been used. Verify Your UniqueID and try again!"
+                                            }}), 409
+                            
+                            else:
+                                return jsonify({"data":{
+                                            "status_code": 403,
+                                            "status": "Error",
+                                            "response":"You are not eligible for this API. Please contact support for access!"
+                                        }}), 403
+
                     else:
                         return jsonify({"data":{
-                                "status_code": 400,
-                                "status": "Error",
-                                "response":"You have zero credits left, please pay for more credits!"
-                            }}), 400
-                    
+                                    "status_code": 500,
+                                    "status": "Error",
+                                    "response":"Please check your environment configuration and ensure all required settings are properly define!"
+                                }}), 500
+
                 else:
                     return jsonify({"data":{
                         "status_code": 400,
                         "status": "Error",
                         "response":"Invalid user, Please Register Your User!"
                     }}), 400
-
+            
             else:
                 return jsonify({"data":{
                         "status_code": 400,
@@ -194,17 +322,16 @@ def Name_Matching_Api_route():
 
         except:
             return jsonify({"data":{
-                        "status_code": 400,
-                        "status": "Error",
-                        "response":"Something went wrong!"
-                    }}), 400
+                                    "status_code": 400,
+                                    "status": "Error",
+                                    "response":"Something went wrong!"
+                                }}), 400 
         
-    else:
-        return jsonify({"data":{
-                        "status_code": 400,
-                        "status": "Error",
-                        "response":"Something went wrong!"
-                    }}), 400
+    return jsonify({"data":{
+                            "status_code": 405,
+                            "status": "Error",
+                            "response":"Request method not allowed. Please use the correct HTTP method."
+                        }}), 405
         
         
         

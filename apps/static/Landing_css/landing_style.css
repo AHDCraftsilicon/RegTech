@@ -1894,3 +1894,37 @@ iframe {
         display: none;
     }
 }
+
+.flag-width {
+    width: 25px;
+}
+
+.select2-container .select2-selection--single {
+    height: 35px;
+    line-height: 35px;
+}
+
+.select2-selection__rendered {
+    display: flex;
+    align-items: center;
+}
+
+.select2-selection__rendered img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+.select2-search--dropdown {
+    display: block;
+    padding: 4px;
+    display: none;
+}
+
+.select2-results__option--selectable {
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.select2-container {
+    width: 95px !important;
+}

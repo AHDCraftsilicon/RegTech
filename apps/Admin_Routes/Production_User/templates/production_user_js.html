@@ -1,0 +1,250 @@
+<script nonce="{{ g.nonce }}">
+
+
+
+    var table = $('#basic-datatable').DataTable({
+        'processing': true,
+        'serverSide': true,
+        'serverMethod': 'post',
+        "autoWidth": false,
+        'ajax': {
+            'url': '/BBRgt/production-user/data-table'
+        },
+        'lengthMenu': [[10, 20, 50, 100, 500], [10, 20, 50, 100, 500]],
+        searching: true,
+        sort: true,
+        // "aaSorting": [[5, "desc"]],
+        'columns': [
+            { data: "production_user" },
+            { data: "Email_Id" },
+            {
+                data: 'service',
+                'render': function (service) {
+                    if (service == 'Enable') {
+                        return `<span class="badge bg-success text-light">` + service + `</span>`;
+                    }
+                    else {
+                        return `<span class="badge bg-danger text-light">` + service + `</span>`;
+                    }
+                }
+            },
+            { data: 'bussiness_name' },
+            { data: 'name_of_contact_person' },
+            { data: "api_count" },
+            {
+                data: "created_on",
+                'render': function (created_date) {
+                    if (!created_date) {
+                        return 'N/A';
+                    } else {
+                        return `<div>` + created_date + `</div>`;
+                    }
+                }
+            },
+            {
+                data: "updated_on",
+                'render': function (created_date) {
+                    if (!created_date) {
+                        return 'N/A';
+                    } else {
+                        return `<div>` + created_date + `</div>`;
+                    }
+                }
+            },
+            {
+                data: "objid",
+                'sortable': false,
+                'searchable': false,
+                'render': function (objid) {
+                    if (!objid) {
+                        return 'N/A';
+                    } else {
+                        return `<button class="btn btn-primary all_de_get" value="` + objid + `"  data-toggle="modal"
+                                        data-target="#edit_modal"><i class="ri-edit-circle-fill"></i></buton>`;
+                    }
+                }
+            },
+        ],
+
+        orderCellsTop: true,
+        fixedHeader: true,
+        columnDefs: [
+            // { orderable: true, className: 'line_texts', targets: [5, 6] },
+            { orderable: false, className: 'text-center', targets: [0, 1, 2, 3, 4, 5, 6, 7] },
+        ],
+
+        createdRow: function (row, data, dataIndex) {
+            $(row).addClass('text-center');
+        },
+
+        initComplete: function () {
+            var api = this.api();
+            // For each column
+
+            $('#user_name').on('change', function () {
+                var regexr = '{search}';
+                api
+                    .column(0)
+                    .search(
+                        this.value != ''
+                            ? regexr.replace('{search}', this.value)
+                            : '',
+                        this.value != '',
+                        this.value == ''
+                    )
+                    .draw();
+            })
+
+            $('#service').on('change', function () {
+                var regexr = '{search}';
+                api
+                    .column(1)
+                    .search(
+                        this.value != ''
+                            ? regexr.replace('{search}', this.value)
+                            : '',
+                        this.value != '',
+                        this.value == ''
+                    )
+                    .draw();
+            })
+
+
+            // $('input[name="request_date"]').on('apply.daterangepicker', function () {
+            //     var regexr = '{search}';
+            //     api
+            //         .column(4)
+            //         .search(
+            //             this.value != ''
+            //                 ? regexr.replace('{search}', $(this)[0].value)
+            //                 : '',
+            //             this.value != '',
+            //             this.value == '',
+
+            //         )
+            //         .draw();
+            // });
+
+            api
+                .columns()
+                .eq(0)
+                .each(function (colIdx) {
+                    // Set the header cell to contain the input element
+                    var cell = $('.filters th').eq(
+                        $(api.column(colIdx).header()).index()
+                    );
+
+                    $(
+                        'input',
+                        $('.filters th').eq($(api.column(colIdx).header()).index())
+                    )
+                        .off('keyup change')
+                        .on('change', function (e) {
+                            // Get the search value
+                            $(this).attr('title', $(this).val());
+                            var regexr = '{search}'; //$(this).parents('th').find('select').val();
+
+                            var cursorPosition = this.selectionStart;
+                            // Search the column for that value
+                            api
+                                .column(colIdx)
+                                .search(
+                                    this.value != ''
+                                        ? regexr.replace('{search}', this.value).replace(/\\/g, "")
+                                        : '',
+                                    this.value != '',
+                                    this.value == ''
+                                )
+                                .draw();
+                        })
+                        .on('keyup', function (e) {
+                            e.stopPropagation();
+                            $(this).trigger('change');
+                            $(this)
+                                .focus()[0]
+                            // .setSelectionRange(cursorPosition, cursorPosition);
+                        });
+                });
+
+        },
+
+
+    });
+
+    $(document).on("click", ".add-btn", function () {
+        console.log("jsadghsdag");
+        
+    })
+
+
+
+    $(document).on("click", ".all_de_get", function () {
+        if ($(this).val() != "") {
+            const requestOptions = {
+                method: "GET",
+                redirect: "follow"
+            };
+
+            fetch("/BBRgt/get/production-user/" + $(this).val(), requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                    if (result['response'] != []) {
+                        $("#user_objid").val(result['response'][0]['production_user'])
+                        $("#bussiness_name").val(result['response'][0]['bussiness_name'])
+                        $("#name_of_contact_person").val(result['response'][0]['name_of_contact_person'])
+                        $("#designation_of_contact_person").val(result['response'][0]['designation_of_contact_person'])
+                        $("#email_id").val(result['response'][0]['email_id'])
+                        $("#contact_number").val(result['response'][0]['contact_number'])
+                        $("#PAN_number").val(result['response'][0]['PAN_number'])
+                        $("#TAN_number").val(result['response'][0]['TAN_number'])
+                        $("#registered_address").val(result['response'][0]['registered_address'])
+                        $("#correspondence_address").val(result['response'][0]['correspondence_address'])
+
+
+                        // Form Action 
+                        $('#edit_info').attr('action', '/BBRgt/api-info/edit/' + result['response'][0]['objid']);
+                    }
+                })
+                .catch((error) => console.error(error));
+
+        }
+
+    })
+
+
+    // Created Date
+    $(function () {
+
+        $('input[name="created_on"]').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear'
+            },
+            "showWeekNumbers": true,
+            "showISOWeekNumbers": true,
+            "alwaysShowCalendars": true,
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        });
+
+
+        $('input[name="created_on"]').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
+        });
+
+        $('input[name="created_on"]').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
+
+    });
+
+
+
+
+</script>

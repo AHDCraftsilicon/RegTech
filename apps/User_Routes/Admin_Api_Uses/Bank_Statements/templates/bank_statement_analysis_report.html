@@ -14,7 +14,7 @@
 
 <body>
     <!-- Topbar -->
-    {% set User_portal_topbar = User_portal_topbar(user_name) %}
+    {% set User_portal_topbar = User_portal_topbar(user_details) %}
     {% if User_portal_topbar %}
     {{ User_portal_topbar | safe }}
     {% endif %}

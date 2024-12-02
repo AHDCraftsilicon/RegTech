@@ -5,17 +5,22 @@ from bson import ObjectId
 import random
 import pytz
 import base64,io
-import uuid
+import uuid ,os
+import requests
+from flask_socketio import SocketIO, emit
 
 
 # Aadhaar Redaction Module
-from apps.User_Routes.Admin_Api_Uses.Aadhaar_Redaction.aadhaar_redaction_module import *
+from apps.User_Routes.Admin_Api_Uses.Aadhaar_Redaction.aadhaar_redaction_with_validation import *
 
 # DataBase
 from data_base_string import *
 
 # Token
 from token_generation import *
+
+# Headers Verification
+from Headers_Verify import *
 
 # Blueprint
 Aadhaar_Redaction_bp = Blueprint("Aadhaar_Redaction_bp",
@@ -26,10 +31,13 @@ Aadhaar_Redaction_bp = Blueprint("Aadhaar_Redaction_bp",
 
 User_Testing_Credits_db = Regtch_services_UAT["User_Testing_Credits"]
 User_Authentication_db = Regtch_services_UAT["User_Authentication"]
-User_test_Api_history_db = Regtch_services_UAT['User_test_Api_history']
 Api_Informations_db = Regtch_services_UAT["Api_Informations"]
+Prod_user_api_history_db = Regtch_services_UAT['Prod_user_api_history']
+Test_user_api_history_db = Regtch_services_UAT['Test_user_api_history']
 
+# response = requests.get('https://ifconfig.me')
 
+# print("---- ", response.text.strip())
 
 
 @Aadhaar_Redaction_bp.route("/redaction")
@@ -37,34 +45,64 @@ def Aadhaar_Redaction_main():
 
     encrypted_token = session.get('QtSld')
     ip_address = session.get('KLpi')
+
     if session.get('bkjid') != "":
 
         check_user_in_db = User_Authentication_db.find_one({"_id":ObjectId(session.get('bkjid'))})
 
+        # User Check in DB
         if check_user_in_db != None:
             if encrypted_token and ip_address:
-                # token = decrypt_token(encrypted_token)
+                # Check User Api Status
+                if check_user_in_db['api_status'] == "Enable":
+                    token = decrypt_token(encrypted_token)
 
-                about_api_details = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3a9ce1846511541492")})
+                    page_name = "Aadhaar Redaction"
 
-                user_name = check_user_in_db["Company_Name"]
-                test_credits = [{"Test_Credit": check_user_in_db["total_test_credits"],
-                                 "Used_Credits":check_user_in_db["used_test_credits"]}]
+                    user_type = "Test Credits"
 
-                return render_template("aadhaar_redaction_modal.html",
-                                    test_credit=test_credits , 
-                                    about_api_details = about_api_details['long_api_description'],
-                                    user_name=user_name)
+                    if check_user_in_db['user_flag'] == "0":
+                        user_type = "Live Credits"
+
+                    user_name = check_user_in_db["Company_Name"]
+                    page_info = [{"Test_Credit": check_user_in_db["total_test_credits"],
+                                "Used_Credits":check_user_in_db["used_test_credits"] ,
+                                "user_type" : user_type ,
+                                "page_name":page_name,
+                                "user_name": user_name
+                                }]
+
+                    about_api_details = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3a9ce1846511541492")})
+
+
+                    return render_template("aadhaar_redaction.html",
+                                        page_info=page_info , 
+                                        about_api_details = {"long_api_description": about_api_details['long_api_description'],
+                                                            "credits_per_use": about_api_details['credits_per_use']
+                                                            },
+                                        user_details={"user_name": user_name,
+                                                    "user_type" :user_type})
+                else:
+                    return redirect("/dashboard")
         
         return redirect("/")
     
     return redirect("/")
 
 
-# Random request id generate
-def generate_random_id():
-    return '-'.join(''.join(random.choices('0123456789abcdef', k=4)) for _ in range(5))
 
+# Image Extensions
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg','jfif'}
+ALLOWED_MIME_TYPES = {'image/jpeg', 'image/png'}
+
+def allowed_file(file):
+    # Check the file extension
+    filename = file.filename
+    if not '.' in filename:
+        return False
+    ext = filename.rsplit('.', 1)[1].lower()
+    # Check if extension and MIME type are valid
+    return ext in ALLOWED_EXTENSIONS and file.mimetype in ALLOWED_MIME_TYPES
 
 
 # Testing Apis
@@ -78,95 +116,168 @@ def Aadhaar_redaction_api_test():
             if session.get('bkjid') != "":
 
                 check_user_in_db = User_Authentication_db.find_one({"_id":ObjectId(session.get('bkjid'))})
+                
+                # User Check in DB
                 if check_user_in_db != None:
-                    if check_user_in_db["total_test_credits"] > check_user_in_db["used_test_credits"]:
-                        
-                        completed_on_ = datetime.now()
-                        completed_on = datetime.now(pytz.timezone('Asia/Kolkata'))
-                        completed_on = completed_on.strftime('%Y-%m-%dT%H:%M:%S%z')
-                        completed_on = completed_on[:-2] + ':' + completed_on[-2:]
-                        
-
-                        aadhaar_redac_img = request.files['aadhaar_redac_img']
-
-                        if aadhaar_redac_img.filename != "":
-                            # Convert image to Base64
-                            img_bytes = aadhaar_redac_img.read()  # Read the image file as bytes
-                            img_base64 = base64.b64encode(img_bytes).decode('utf-8')
-                            img_decoded = base64.b64decode(img_base64)
-
-                            image = Image.open(io.BytesIO(img_decoded))
-
-                            filename_img = str(time.time()).replace(".", "")
-
-
-                            static_file_name = filename_img+".png"
-                            image.save(os.path.join('apps/static/Aadhaar_Masking/Aadhaar_Masking_Inputs', secure_filename(static_file_name)))
+                    # Check User Api Status
+                    if check_user_in_db['api_status'] == "Enable":
+                        # Check Credit Limit
+                        if int(check_user_in_db["used_test_credits"]) > 0:
                             
-                            store_image = "apps/static/Aadhaar_Masking/Aadhaar_Masking_Inputs/" +static_file_name
-
-
-                            aadhaar_Red_res = addhar_mask(store_image)      
-
-                            created_on = datetime.now(pytz.timezone('Asia/Kolkata'))
-                            created_on = created_on.strftime('%Y-%m-%dT%H:%M:%S%z')
-                            created_on = created_on[:-2] + ':' + created_on[-2:]
-
-
-                            duration = datetime.now()- completed_on_ 
-                            duration_seconds = duration.total_seconds()
-
-                            store_response = {"status_code": 200,
-                                                "status": "Success",
-                                                "response":{"Image" : aadhaar_Red_res["base64_string"]},
-                                                "created_on" : created_on,
-                                                "completed_on":completed_on,
-                                                "request_id":generate_random_id(),
-                                                }
+                            # Api Start Time
+                            start_time = datetime.utcnow()
                             
-
-                            # DataBase Log
-                            User_test_Api_history_db.insert_one({
-                                        "user_id":check_user_in_db["_id"],
-                                        "User_Unique_id":"Api Call From Dashboard",
-                                        "api_name":"Aadhaar_Redaction",
-                                        "api_start_time":completed_on_,
-                                        "api_end_time":datetime.now(),
-                                        "api_status": "Success",
-                                        "response_duration":str(duration),
-                                        "response_time":duration_seconds,
-                                        "request_data":str({}),
-                                        "response_data" :str(store_response),
-                                        "creadted_on":datetime.now(),
-                                        "System_Generated_Unique_id" : str(uuid.uuid4()),
-                                        })
+                            aadhaar_redac_img = request.files['aadhaar_redac_img']
+                            if aadhaar_redac_img.filename == '':
+                                return jsonify({"data":{
+                                        "status_code": 400,
+                                        "status": "Error",
+                                        "response":"Please select file!"
+                                    }}), 400
                             
-                            # Check Api Using Credits
-                            api_use_credit_info = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3a9ce1846511541492")})
+                            if aadhaar_redac_img and allowed_file(aadhaar_redac_img):
+
+                                img_bytes = aadhaar_redac_img.read()  # Read the image file as bytes
+                                img_base64 = base64.b64encode(img_bytes).decode('utf-8')
+                                img_decoded = base64.b64decode(img_base64)
+
+                                # Image Open
+                                image = Image.open(io.BytesIO(img_decoded))
+                                # File save
+                                filename_img = str(time.time()).replace(".", "")
+                                static_file_name = filename_img+".png"
+                                image.save(os.path.join('apps/static/Aadhaar_Masking/Aadhaar_Masking_Inputs', secure_filename(static_file_name)))
+                                store_image = "apps/static/Aadhaar_Masking/Aadhaar_Masking_Inputs/" +static_file_name
+
+                                # Aadhaar Masking Function
+                                aadhaar_Red_res = addhar_mask(store_image)
+
+                                # Api End Time
+                                end_time = datetime.utcnow()
+                                duration = (end_time - start_time).total_seconds() * 1000
+
+                                # Remove File
+                                os.remove(store_image)
+
+                                # Client Ip address
+                                response = requests.get('https://ifconfig.me')
                                 
-                            if check_user_in_db["unlimited_test_credits"] == False:
-                                # Credit 
-                                User_Authentication_db.update_one({"_id":check_user_in_db["_id"]},{"$set":{
-                                    "used_test_credits": check_user_in_db["used_test_credits"] + api_use_credit_info["credits_per_use"]
-                                }})
+                                # Request Id
+                                request_id = generate_random_id()
 
+                                # name of api
+                                about_api_details = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3a9ce1846511541492")})
 
-                            return jsonify({"data":
-                                            {"json_data": store_response,
-                                            "result_in_seconds":duration_seconds}})
-                    
-                    
+                                if aadhaar_Red_res['status_code'] == 200:
+                                    http_status = 200
+
+                                    json_msg = {"data":{
+                                        "status_code": 200,
+                                        "status": "Success",
+                                        "response": {"Image": aadhaar_Red_res['response']},
+                                        "basic_response":{ "request_id" : request_id,
+                                                    "request_on" : start_time,
+                                                    "response_on":end_time,
+                                                    "api_name":about_api_details['api'],
+                                                    "duration":round(duration, 2),
+                                                    }
+                                        }}
+                                    
+                                else:
+                                    http_status = 400
+
+                                    json_msg = {"data":{
+                                        "status_code": 400,
+                                        "status": "Error",
+                                        "response": {"Image": aadhaar_Red_res['response']},
+                                        "basic_response":{ "request_id" : request_id,
+                                                    "request_on" : start_time,
+                                                    "response_on":end_time,
+                                                    "api_name":about_api_details['api'],
+                                                    "duration":round(duration, 2),
+                                                    }
+                                        }}
+
+                                
+                                # Log store in db
+                                Test_user_api_history_db.insert_one({
+                                        # aadhaar redaction objid
+                                        "api_name": about_api_details['_id'],
+                                        # Enviroment Set
+                                        'env':'Test',
+                                        # ip address
+                                        "ip_address":response.text.strip(),
+                                        # user id
+                                        "user_id":check_user_in_db['_id'],
+                                        # Api call Status
+                                        'api_call_status' : "Dashboard_status",
+                                        # Request id
+                                        "request_id" : request_id,
+                                        # Unique id
+                                        "unique_id":"Dashboard",
+                                        # Request time
+                                        "request_on" : start_time,
+                                        # Response time
+                                        "response_on":end_time,
+                                        # Time Duration of api taken time
+                                        "time_duration":round(duration, 2),
+                                        # http status
+                                        'http_status':http_status,
+                                        # date store
+                                        'created_on':datetime.now()})
+
+                                # user Cut credits
+                                if check_user_in_db['tester_flag'] == False:
+                                    if int(check_user_in_db['used_test_credits']) >=  int(about_api_details['credits_per_use']):
+                                        # Reduce total credit to used credits
+                                        update_total_credit = int(check_user_in_db['used_test_credits']) - int(about_api_details['credits_per_use'])
+                                        User_Authentication_db.update_one({"_id":check_user_in_db["_id"]},{"$set":{
+                                                        "used_test_credits":update_total_credit}})
+                                        
+                                        json_msg['data']['basic_response'] ['test_credits'] = update_total_credit
+
+                                    else:
+                                        return jsonify({"data":{
+                                                        "status_code": 402,
+                                                        "status": "Error",
+                                                        "response":"Not sufficient credit to use this API. Please contact our support team to purchase more credits!"
+                                                    }}), 402
+                                   
+                                return jsonify(json_msg)
+                            
+                            else:
+                                return jsonify({"data":{
+                                        "status_code": 400,
+                                        "status": "Error",
+                                        "response":"Invalid file format. Only JPG and PNG are allowed!"
+                                    }}), 400
+
+                        
+                        else:
+                            return jsonify({"data":{
+                                    "status_code": 400,
+                                    "status": "Error",
+                                    "response":"You have zero credits left, please pay for more credits!"
+                                }}), 400
+                        
                     else:
-                        return jsonify({"data":{
-                                "status_code": 400,
-                                "status": "Error",
-                                "response":"You have zero credits left, please pay for more credits!"
-                            }}), 400
-
-                return jsonify({"data":{"json_data":"Something went wrong!"}})
+                        return redirect("/dashboard")
+                    
             
-            return jsonify({"data":{"json_data":"Something went wrong!"}})
+            return jsonify({"data":{
+                                    "status_code": 400,
+                                    "status": "Error",
+                                    "response":"Something went wrong!"
+                                }}), 400
         except:
-            return redirect("/")
+            return jsonify({"data":{
+                                    "status_code": 400,
+                                    "status": "Error",
+                                    "response":"Something went wrong!"
+                                }}), 400
         
-    return jsonify({"msg":"method Not allowed!"})
+    return jsonify({"data":{
+                            "status_code": 405,
+                            "status": "Error",
+                            "response":"Request method not allowed. Please use the correct HTTP method."
+                        }}), 405

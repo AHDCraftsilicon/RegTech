@@ -21,7 +21,6 @@ User_Admin_SignIn_bp = Blueprint("User_Admin_SignIn_bp",
 Authentication_db = Regtch_services_UAT["User_Authentication"]
 
 
-
 @User_Admin_SignIn_bp.route("/user")
 def User_Admin_SignIn_Main():
 
@@ -66,17 +65,34 @@ def User_Admin_validate_check():
                         session['lmin'] = False
                         session['bkjid'] = str(email_check_db['_id'])
 
-                        return redirect("/dashboard")
+                        # return redirect("/dashboard")
+                        return jsonify({"data":{"response":"Login Successfully!",
+                                                "redirect":"/dashboard",
+                                                "status":"Success",
+                                                "status_code":200
+                                                }})
                     else:
-                        flash('Incorrect email or password. Please try again.')
-                        return redirect("/login/user")
+                        return jsonify({"data":{"response":"Incorrect email or password. Please try again!",
+                                                "status":"Success",
+                                                "status_code":400
+                                                }})
                 except:
-                    flash('Incorrect email or password. Please try again.')
-                    return redirect("/login/user")
+                    return jsonify({"data":{"response":"Incorrect email or password. Please try again!",
+                                                "status":"Success",
+                                                "status_code":400
+                                                }})
 
             else:
-                flash('Incorrect email or password. Please try again.')
-                return redirect("/login/user")
+                return jsonify({"data":{"response":"Incorrect email or password. Please try again!",
+                                                "status":"Success",
+                                                "status_code":400
+                                                }})
+            
+        else:
+            return jsonify({"data":{"response":"Email or Password empty!",
+                                                "status":"Success",
+                                                "status_code":400
+                                                }})
 
 
 

@@ -169,7 +169,9 @@ def pan_details(pan_string):
     details_list = []
 
     if pan_number == "" and dob_date == "" and father_name == "" and holder_name == "":
-        details_list = []
+        return { "status_code": 400,
+            "status": "Error",
+            "response": "No Data Found!"}
     else:
         details_list.append({
         "PAN_no" : pan_number,
@@ -178,7 +180,9 @@ def pan_details(pan_string):
         "Name" : holder_name,
             })
 
-    return details_list
+        return {"status_code": 200,
+                "status": "Success",
+                "response":details_list}
 
 
 

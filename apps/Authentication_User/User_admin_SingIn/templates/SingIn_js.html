@@ -1,0 +1,100 @@
+<script nonce="{{ g.nonce }}">
+
+    $("#singin_btn").click(function () {
+        var email_id_check = false
+        var password_check = false
+
+        // Email Id Doesn't have empty
+        if ($("#Email_ID").val() == "") {
+            $("#Email_ID").attr("class", function (i, origValue) {
+                return origValue + " error-text";
+            });
+            $('#errorMessage_Email_ID').html("<i class='ri-information-line'></i> Work Email Is Required!");
+        }
+        else {
+            $('#errorMessage_Email_ID').html("");
+            $("#Email_ID").removeClass("error-text");
+            // email_id_check = true
+        }
+
+
+        // Password Doesn't have empty
+        if ($("#Password").val() == "") {
+            $("#Password").attr("class", function (i, origValue) {
+                return origValue + " error-text";
+            });
+            $('#errorMessage_Password').html("<i class='ri-information-line'></i> Password Is Required!");
+        }
+        else {
+            $('#errorMessage_Password').html("");
+            $("#Password").removeClass("error-text");
+            password_check = true
+        }
+
+        // Email Id Varification
+        if (document.getElementById("Email_ID").value != "") {
+            var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+            result = pattern.test(document.getElementById("Email_ID").value);
+
+            if (result == true) {
+                $('#errorMessage_Email_Id').html("")
+                $("#Email_Id").removeClass("error-text");
+                email_id_check = true
+            }
+            else {
+                $("#Email_ID").attr("class", function (i, origValue) {
+                    return origValue + " error-text";
+                });
+                $('#errorMessage_Email_ID').html("<i class='ri-information-line'></i> Enter a valid Work Email!");
+            }
+
+        }
+
+        if (email_id_check == true && password_check == true) {
+            $("#singin_btn").html('Loading...');
+            const formdata = new FormData();
+            formdata.append("Email_ID", document.getElementById("Email_ID").value);
+            formdata.append("Password", $("#Password").val());
+
+            const requestOptions = {
+                method: "POST",
+                body: formdata,
+                redirect: "follow"
+            };
+
+            fetch("/login/auth/singin", requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                    $("#singin_btn").html('Login');
+                    if (result.data.status_code != 200) {
+                        $('#validate-toast').html(`<div class="toast2 bg-danger color-white" role="alert" aria-live="assertive"
+                                    aria-atomic="true">
+                                    <div class="toast-body">
+                                        <div class="icon-toast">
+                                            <i class="ri-information-line"></i>
+                                        </div>
+                                        <div>
+                                            <p>`+ result.data.response + `</p>
+                                        </div>
+                                        <button type="button" class="ml-2 mb-1 close toast_close" data-dismiss="toast"
+                                            aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>`);
+                    }
+                    else {
+                        if (result.data.redirect != undefined) {
+                            window.location.replace(result.data.redirect);
+                        }
+                    }
+                })
+
+        }
+    })
+
+    $(document).on('click', '.toast_close', function (event) {
+        $('#validate-toast').html("")
+    })
+
+</script>

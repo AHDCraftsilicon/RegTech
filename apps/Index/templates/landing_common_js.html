@@ -1,0 +1,20 @@
+<script nonce="{{ g.nonce }}">
+    $(document).ready(function () {
+        // Initialize Select2 on the country dropdown
+        $('#country-dropdown').select2({
+            templateResult: function (state) {
+                if (!state.id) { return state.text; }
+                var countryFlag = $(state.element).data('flag');
+                var $state = $(
+                    '<span><img src="../../static/images/flags/' + countryFlag + '.svg" class="mr-2 flag-width">' + state.text + '</span>'
+                );
+                return $state;
+            },
+            templateSelection: function (state) {
+                if (!state.id) { return state.text; }
+                var countryFlag = $(state.element).data('flag');
+                return $('<span><img src="../../static/images/flags/' + countryFlag + '.svg" class="mr-2 flag-width">' + state.text + '</span>');
+            }
+        });
+    });
+</script>

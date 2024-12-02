@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Api Information - bluBeetle.ai</title>
+
+    {% set Admin_Portal_urls = Admin_Portal_urls() %}
+    {% if Admin_Portal_urls %}
+    {{ Admin_Portal_urls | safe }}
+    {% endif %}
+
+    <div class="c-content">
+        <div class="c-content-main-part">
+            <div id="toastContainer" class="toast-container">
+            </div>
+        </div>
+    </div>
+
+</head>
+
+<body>
+    <div class="main">
+        <!-- Common Topbar -->
+        {% set Admin_Portal_topbar = Admin_Portal_topbar(name) %}
+        {% if Admin_Portal_topbar %}
+        {{ Admin_Portal_topbar | safe }}
+        {% endif %}
+
+        <!-- Main Contant -->
+        <div class="main-section">
+            <!-- SideBar -->
+            {% set Admin_Portal_sidebar = Admin_Portal_sidebar() %}
+            {% if Admin_Portal_sidebar %}
+            {{ Admin_Portal_sidebar | safe }}
+            {% endif %}
+
+            <div class="contain-main-part">
+                <div class="c-contain-padding">
+                    <div class="username_part">
+                        <div class="username-text">
+                            <h2>Api Information For Test User</h2>
+                        </div>
+                    </div>
+
+
+                    <div class="c-box mt-3">
+                        <div class="c-box-padding">
+                            <div class="row">
+                                <div class="col-12">
+                                    <button class="btn btn-primary mb-1" data-toggle="modal"
+                                        data-target="#api_info_add_modal">Add</button>
+                                    <div class="table-responsive">
+                                        <table id="basic-datatable"
+                                            class="table table-bordered dataTable no-footer dtr-inline text-center">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-wrap">
+                                                        Name of api</th>
+                                                    <th class="text-wrap">
+                                                        Api</th>
+                                                    <th class="text-wrap">
+                                                        Page URL</th>
+                                                    <th class="text-wrap">
+                                                        Credit per use</th>
+                                                    <th class="text-wrap">
+                                                        Status</th>
+                                                    <th class="text-wrap">
+                                                        Created On</th>
+                                                    <th class="text-wrap">
+                                                        Updated On</th>
+                                                    <th class="text-wrap">
+                                                        Action</th>
+                                                </tr>
+                                            </thead>
+
+
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {% include 'api_info_add.html' %}
+
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+
+    <!-- Verify Message -->
+    {% if message == "Data Add SuccessFully!" or message == "Data Edit SuccessFully!" %}
+
+    <script nonce="{{ g.nonce }}">
+        NotifyMessage({ message: "{{message}}", type: "bg-success" });
+    </script>
+
+    {% else %}
+    <script nonce="{{ g.nonce }}">
+        NotifyMessage({ message: "{{message}}", type: "bg-danger" });
+    </script>
+    {% endif %}
+
+    {% endfor %}
+    {% endif%}
+    {% endwith %}
+
+    <!-- Page Javascript -->
+    {% include 'api_info_js.html' %}
+
+</body>
+
+</html>

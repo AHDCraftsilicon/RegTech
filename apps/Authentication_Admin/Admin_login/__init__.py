@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template,request,redirect,flash,jsonify,send_file,make_response
-from flask_jwt_extended import JWTManager, verify_jwt_in_request, get_jwt,create_access_token,set_access_cookies
+from flask import Blueprint, render_template,request,redirect,flash,jsonify,session
+from flask_jwt_extended import JWTManager
 from datetime import timedelta
 from cryptography.fernet import Fernet
 import base64
@@ -38,25 +38,32 @@ def Admin_validation_check():
 
                 if db_details_get["password"] == request.form["Password"]:
 
-                    duration = timedelta(hours=3)
-                    access_token = create_access_token(expires_delta=duration, identity={'data':'Admin Login SuccessFully!',
-                                                                "db_name":"Admin_Authentication",
-                                                                'objid':str(db_details_get['_id'])}
-                                                        )
-                        
-                    resp = redirect("/BBRgt/dashboard")
+                    resp = jsonify({"data":{"response":"Admin Login Successful",
+                                                "redirect":"/BBRgt/dashboard",
+                                                "status":"Success",
+                                                "status_code":200
+                                                }})
 
-                    set_access_cookies(resp, access_token)
+                    session['am_bd_name'] = "Admin_Authentication"
+                    session['am_bjde'] = str(db_details_get['_id'])
+                    session['dir_direct'] = "/BBRgt/dashboard"
+
                     return resp
                 else:
-                    flash('Incorrect email or password. Please try again.')
-                    return redirect("/BBRgt/admin-login-RRtggR")
+                    return jsonify({"data":{"response":"Incorrect email or password. Please try again!",
+                                                "status":"Success",
+                                                "status_code":400
+                                                }})
             else:
-                flash('Incorrect email or password. Please try again.')
-                return redirect("/BBRgt/admin-login-RRtggR")
+                return jsonify({"data":{"response":"Incorrect email or password. Please try again!",
+                                                "status":"Success",
+                                                "status_code":400
+                                                }})
         else:
-            flash('Incorrect email or password. Please try again.')
-            return redirect("/BBRgt/admin-login-RRtggR")
+            return jsonify({"data":{"response":"Incorrect email or password. Please try again!",
+                                                "status":"Success",
+                                                "status_code":400
+                                                }})
 
     return redirect("/BBRgt/admin-login-RRtggR")
 

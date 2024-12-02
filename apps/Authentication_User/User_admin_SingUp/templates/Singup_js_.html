@@ -1,0 +1,151 @@
+<script nonce="{{ g.nonce }}">
+
+    // error-text
+
+    $("#signup_btn").click(function () {
+        var company_name = false
+        var mobile_no = false
+        var email_id = false
+
+        // Company Name Doesn't have empty
+        if ($("#Company_Name").val() == "") {
+            $("#Company_Name").attr("class", function (i, origValue) {
+                return origValue + " error-text";
+            });
+            $('#errorMessage_Company_Name').html("<i class='ri-information-line'></i> Company Name Is Required!");
+        }
+        else {
+            $('#errorMessage_Company_Name').html("");
+            $("#Company_Name").removeClass("error-text");
+            company_name = true
+        }
+
+        // Mobile Number Doesn't have empty
+        if ($("#Mobile_No").val() == "") {
+            $("#Mobile_No").attr("class", function (i, origValue) {
+                return origValue + " error-text";
+            });
+            $('#errorMessage_Mobile_No').html("<i class='ri-information-line'></i> Mobile Number Is Required!");
+        }
+        else {
+            $('#errorMessage_Mobile_No').html("");
+            $("#Mobile_No").removeClass("error-text");
+        }
+
+        // Email ID Doesn't have empty
+        if ($("#Email_Id").val() == "") {
+            $("#Email_Id").attr("class", function (i, origValue) {
+                return origValue + " error-text";
+            });
+            $('#errorMessage_Email_Id').html("<i class='ri-information-line'></i> Work Email Is Required!");
+        }
+        else {
+            $('#errorMessage_Email_Id').html("")
+            $("#Email_Id").removeClass("error-text");
+        }
+
+        // Mobile Number Length Check
+        if ($("#Mobile_No").val() != "") {
+            if ($("#Mobile_No").val().length == 10) {
+                $('#errorMessage_Mobile_No').html("");
+                $("#Mobile_No").removeClass("error-text");
+                mobile_no = true
+            }
+            else {
+                $("#Mobile_No").attr("class", function (i, origValue) {
+                    return origValue + " error-text";
+                });
+                $('#errorMessage_Mobile_No').html("<i class='ri-information-line'></i> Mobile Number should be atmost 10 digits!");
+            }
+        }
+
+
+        // Email Id Varification
+        if ($("#Email_Id").val() != "") {
+
+            var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+            result = pattern.test($("#Email_Id").val());
+
+            if (result == true) {
+                $('#errorMessage_Email_Id').html("")
+                $("#Email_Id").removeClass("error-text");
+                email_id = true
+            }
+            else {
+                $("#Email_Id").attr("class", function (i, origValue) {
+                    return origValue + " error-text";
+                });
+                $('#errorMessage_Email_Id').html("<i class='ri-information-line'></i> Enter a valid Work Email!");
+            }
+
+        }
+
+
+        if (company_name == true && mobile_no == true && email_id == true) {
+            $("#signup_btn").html('Loading...');
+            const formdata = new FormData();
+            formdata.append("Company_Name", $("#Company_Name").val());
+            formdata.append("Mobile_No", $("#Mobile_No").val());
+            formdata.append("Email_Id", $("#Email_Id").val());
+
+
+            const requestOptions = {
+                method: "POST",
+                body: formdata,
+                redirect: "follow"
+            };
+
+            fetch("/register/usr/signup", requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                    $("#signup_btn").html('Sign Up');
+                    if (result.data.status_code != 200) {
+                        $('#validate-toast').html(`<div class="toast2 bg-danger color-white" role="alert" aria-live="assertive"
+                                    aria-atomic="true">
+                                    <div class="toast-body">
+                                        <div class="icon-toast">
+                                            <i class="ri-information-line"></i>
+                                        </div>
+                                        <div>
+                                            <p>`+ result.data.response + `</p>
+                                        </div>
+                                        <button type="button" class="ml-2 mb-1 close toast_close" data-dismiss="toast"
+                                            aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>`);
+                    }
+                    else {
+                        $('#validate-toast').html(`<div class="toast2 bg-success color-white" role="alert" aria-live="assertive"
+                                    aria-atomic="true">
+                                    <div class="toast-body">
+                                        <div class="icon-toast">
+                                            <i class="ri-information-line"></i>
+                                        </div>
+                                        <div>
+                                            <p>`+ result.data.response + `</p>
+                                        </div>
+                                        <button type="button" class="ml-2 mb-1 close toast_close" data-dismiss="toast"
+                                            aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>`);
+                    }
+
+
+                    // setTimeout(function () {
+                    //     $('#validate-toast').html("")
+                    // }, 7000);
+                })
+                .catch((error) => console.error(error));
+        }
+
+    })
+
+    $(document).on('click', '.toast_close', function (event) {
+        $('#validate-toast').html("")
+    })
+
+</script>

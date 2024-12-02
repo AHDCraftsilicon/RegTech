@@ -1,0 +1,119 @@
+<div class="modal fade" id="creditsMailModal" tabindex="-1" role="dialog" aria-labelledby="creditsMailModalTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                    <div class="d-flex align-items-content justify-content-between">
+                        <div class="model-icon">
+                            <i class="ri-function-add-line"></i>
+                        </div>
+                        <div class="d-block ml-3">
+                            <h6>credit icrease Request</h6>
+                            <p>Unlock your Finacial Potential</p>
+                        </div>
+                    </div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+
+            <div class="modal-body">
+                <div class="model-header">
+                    <div class="c-body-content">
+                        <h5>Subject</h5>
+                        <div>Request For Credit increase</div>
+                    </div>
+                    <div class="body-content-details">
+                        <div class="mb-3">Dear bluBeetle.ai,</div>
+                        <p>I hope you are doing well. I am writing to request an increase in my account's credit limit
+                            to [desired limit]. This will help me manage [brief reason, e.g., increased usage or
+                            requirements] more effectively.</p>
+                        <p>Please let me know if you need any additional details. Thank you for your
+                            support!</p>
+
+                        <div class="mt-3">Best regards,</div>
+                        <div class="mb-2">{{page_info[0]['user_name']}}</div>
+                    </div>
+                    <button class="btn c-btn float-right mt-3" id="mail_triger">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="RevertMailModal" tabindex="-1" role="dialog" aria-labelledby="RevertMailModal"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                    <div class="d-flex align-items-content justify-content-between">
+                        <div class="model-icon">
+                            <i class="ri-check-line"></i>
+                        </div>
+                        <div class="d-block ml-3">
+                            <h6>Request Sent</h6>
+                            <p>Your message is on its way!</p>
+                        </div>
+                    </div>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+
+            <div class="modal-body">
+                <div class="model-header">
+                    <div class="c-body-content">
+                        <h5>Thank you for your request.</h5>
+                        <div>We have received it and will update you shortly.</div>
+                    </div>
+                    <button class="btn c-btn float-right" data-dismiss="modal" aria-label="Close">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script nonce="{{ g.nonce }}">
+
+    var RevertMailModal = new bootstrap.Modal(document.getElementById('RevertMailModal'));
+    var creditsMailModal = document.getElementById('creditsMailModal')
+
+    $(document).on("click", "#mail_triger", function () {
+        $("#creditsMailModal").removeClass("show")
+        $(".modal-backdrop").removeClass("show")
+        $(".modal-backdrop").removeClass("modal-backdrop fade")
+
+      
+        const requestOptions = {
+            method: "GET",
+            redirect: "follow"
+        };
+
+        fetch("/request-for-more/credits", requestOptions)
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(result)
+            })
+            .catch((error) => console.error(error));
+
+        RevertMailModal.show()
+    })
+
+
+    // ChatBot
+    $(".ChatBot-iCon").click(function () {
+        $(".ChatBot-iCon").toggleClass("expanded")
+        setTimeout(() => {
+            $(".messenger").toggleClass("expanded");
+        }, 100);
+
+    })
+
+</script>

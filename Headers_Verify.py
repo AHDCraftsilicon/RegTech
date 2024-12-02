@@ -2,6 +2,14 @@
 
 from flask import request,jsonify
 import bleach
+import random
+
+
+# DataBase
+from data_base_string import *
+
+
+Test_user_api_history_db = Regtch_services_UAT['Test_user_api_history']
 
 
 # Expected headers
@@ -50,12 +58,28 @@ def check_html_injection(data, keys_to_check):
     for key in keys_to_check:
         if key in data:
             # Check if the value is empty
+            if key == 'binary_img' and not data[key]:
+                continue
+
+            if key == 'base64_img' and not data[key]:
+                continue
+
+            if key == "env":
+                if data[key] not in ["test", "prod"]:
+                    return jsonify({
+                        "data": {
+                            "status_code": 400,
+                            "status": "Error",
+                            "response": "Invalid value for 'env'. Allowed values are 'test' or 'prod'!"
+                        }
+                    }), 400
+            
             if not data[key]:  # This checks for empty strings or None
                 return jsonify({
                     "data": {
                         "status_code": 400,
                         "status": "Error",
-                        "response": f"The value for '{key}' cannot be empty."
+                        "response": f"The value for '{key}' cannot be empty! Please provide a valid value!"
                     }
                 }), 400
             
@@ -66,7 +90,7 @@ def check_html_injection(data, keys_to_check):
                     "data": {
                         "status_code": 400,
                         "status": "Error",
-                        "response": "The input contains disallowed HTML tags or attributes!"
+                        "response": "The input contains disallowed HTML tags or attributes! Please remove any unsafe HTML!"
                     }
                 }), 400
         else:
@@ -74,7 +98,20 @@ def check_html_injection(data, keys_to_check):
                 "data": {
                     "status_code": 400,
                     "status": "Error",
-                    "response": f"Please Verify Your Key!"
+                    "response": f"Please verify your key! The provided key is missing or invalid!"
                 }
             }), 400
     return None
+
+
+# Random request id generate
+def generate_random_id():
+    request_id ='-'.join(''.join(random.choices('0123456789abcdef', k=4)) for _ in range(5))
+
+    # id already exist in system
+    check_db =  Test_user_api_history_db.find_one({"request_id":request_id})
+    
+    if check_db != None:
+        generate_random_id()
+    
+    return request_id

@@ -1,0 +1,114 @@
+<script nonce="{{ g.nonce }}">
+
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+
+    var table = $('#basic-datatable').DataTable({
+        "processing": true,
+        "serverSide": false,
+        "ajax": {
+            "url": "/BBRgt/count-credit-given/api",
+            "type": "GET"
+        },
+        "columns": [
+            { "data": "total_credit" },
+            {
+                data: "created_on",
+                'render': function (created_on) {
+                    if (!created_on) {
+                        return 'N/A';
+                    } else {
+                        return `<div style="text-wrap: wrap;text-align: center;">` + created_on + `</div>`;
+                    }
+                }
+            },
+            {
+                data: "updated_on",
+                'render': function (updated_on) {
+                    if (!updated_on) {
+                        return 'N/A';
+                    } else {
+                        return `<div style="text-wrap: wrap;text-align: center;">` + updated_on + `</div>`;
+                    }
+                }
+            },
+            {
+                data: "objid",
+                'sortable': false,
+                'searchable': false,
+                'render': function (objid) {
+                    if (!objid) {
+                        return 'N/A';
+                    } else {
+                        return `<button class="btn btn-primary all_de_get" value="` + objid + `"  data-toggle="modal"
+                                    data-target="#edit_credits"><i class="ri-edit-circle-fill"></i></buton>`;
+                    }
+                }
+            },
+        ]
+        , columnDefs: [
+            { orderable: true, className: 'line_texts', targets: [0, 1, 2, 3] },
+        ],
+        orderCellsTop: true,
+        fixedHeader: true,
+        createdRow: function (row, data, dataIndex) {
+            $(row).addClass('centerele');
+        },
+
+    })
+
+
+    $("#show_credits_history").click(function () {
+        document.getElementById("show_history").innerHTML = ""
+        fetch("/BBRgt/credit-history/api")
+            .then((response) => response.json())
+            .then((result) => {
+                for (x = 0; x < result.data.length; x++) {
+                    document.getElementById("show_history").innerHTML += `<tr>
+                            <th scope="row">`+ x + `</th>
+                            <td>`+ result.data[x]['credit'] + `</td>
+                            <td>`+ result.data[x]['created_on'] + `</td>
+                        </tr>`
+                }
+
+            })
+    })
+
+
+    $(document).on("click", ".all_de_get", function () {
+        if ($(this).val() != "") {
+            const requestOptions = {
+                method: "GET",
+                redirect: "follow"
+            };
+
+            fetch("/BBRgt/get-credit-details/" + $(this).val(), requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                    if (result.data != []) {
+                        $("#total_credit").val(result.data[0].total_credit)
+
+                        // Form Action 
+                        $('#edit_info').attr('action', '/BBRgt/given-credit/edit/' + $(this).val());
+                    }
+
+                })
+        }
+    })
+</script>

@@ -111,29 +111,29 @@ def Aadhaar_ocr_test_api():
                                             "request_id":generate_random_id(),
                                             }
                         # DataBase Log
-                        User_test_Api_history_db.insert_one({
-                                    "user_id":check_user_in_db["_id"],
-                                    "User_Unique_id":"Api Call From Dashboard",
-                                    "api_name":"Aadhaar_OCR",
-                                    "api_start_time":completed_on_,
-                                    "api_end_time":datetime.now(),
-                                    "api_status": "Success",
-                                    "response_duration":str(duration),
-                                    "response_time":duration_seconds,
-                                    "request_data":str({}),
-                                    "response_data" :str(store_response),
-                                    "creadted_on":datetime.now(),
-                                    "System_Generated_Unique_id" : str(uuid.uuid4()),
-                                    })
+                        # User_test_Api_history_db.insert_one({
+                        #             "user_id":check_user_in_db["_id"],
+                        #             "User_Unique_id":"Api Call From Dashboard",
+                        #             "api_name":"Aadhaar_OCR",
+                        #             "api_start_time":completed_on_,
+                        #             "api_end_time":datetime.now(),
+                        #             "api_status": "Success",
+                        #             "response_duration":str(duration),
+                        #             "response_time":duration_seconds,
+                        #             "request_data":str({}),
+                        #             "response_data" :str(store_response),
+                        #             "creadted_on":datetime.now(),
+                        #             "System_Generated_Unique_id" : str(uuid.uuid4()),
+                        #             })
                         
-                        # Check Api Using Credits
-                        api_use_credit_info = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3a9ce1846511541492")})
+                        # # Check Api Using Credits
+                        # api_use_credit_info = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3a9ce1846511541492")})
                             
-                        if check_user_in_db["unlimited_test_credits"] == False:
-                            # Credit 
-                            User_Authentication_db.update_one({"_id":check_user_in_db["_id"]},{"$set":{
-                                "used_test_credits": check_user_in_db["used_test_credits"] + api_use_credit_info["credits_per_use"]
-                            }})
+                        # if check_user_in_db["unlimited_test_credits"] == False:
+                        #     # Credit 
+                        #     User_Authentication_db.update_one({"_id":check_user_in_db["_id"]},{"$set":{
+                        #         "used_test_credits": check_user_in_db["used_test_credits"] + api_use_credit_info["credits_per_use"]
+                        #     }})
 
                         return jsonify({"data":
                                         {"json_data": store_response,

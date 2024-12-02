@@ -1,0 +1,266 @@
+<script nonce="{{ g.nonce }}">
+
+    var table = $('#basic-datatable').DataTable({
+        'processing': true,
+        'serverSide': true,
+        'serverMethod': 'post',
+        "autoWidth": false,
+        'ajax': {
+            'url': '/BBRgt/api-info/data-table'
+        },
+        'lengthMenu': [[10, 20, 50, 100, 500], [10, 20, 50, 100, 500]],
+        searching: true,
+        sort: true,
+        "aaSorting": [[5, "desc"]],
+        'columns': [
+            { data: "api_name" },
+            { data: "api" },
+            {
+                data: 'view_permission',
+                'render': function (view_permission) {
+                    if (view_permission == true) {
+                        return `<span class="badge bg-success text-light">True</span>`;
+                    }
+                    else {
+                        return `<span class="badge bg-danger text-light">False</span>`;
+                    }
+                }
+            },
+            { data: 'credits_per_use' },
+            {
+                data: "status",
+                'render': function (status) {
+                    if (!status) {
+                        return 'N/A';
+                    } else {
+                        if (status == "Enable") {
+                            return `<span class="badge bg-success text-light">` + status + `</span>`;
+                        }
+                        else {
+                            return `<span class="badge bg-danger text-light">` + status + `</span>`;
+                        }
+                    }
+                }
+            },
+            {
+                data: "created_on",
+                'render': function (created_date) {
+                    if (!created_date) {
+                        return 'N/A';
+                    } else {
+                        return `<div>` + created_date + `</div>`;
+                    }
+                }
+            },
+            {
+                data: "updated_on",
+                'render': function (created_date) {
+                    if (!created_date) {
+                        return 'N/A';
+                    } else {
+                        return `<div>` + created_date + `</div>`;
+                    }
+                }
+            },
+            {
+                data: "objid",
+                'sortable': false,
+                'searchable': false,
+                'render': function (objid) {
+                    if (!objid) {
+                        return 'N/A';
+                    } else {
+                        return `<button class="btn btn-primary all_de_get" value="` + objid + `"  data-toggle="modal"
+                                        data-target="#api_info_edit_modal"><i class="ri-edit-circle-fill"></i></buton>`;
+                    }
+                }
+            },
+        ],
+
+        orderCellsTop: true,
+        fixedHeader: true,
+        columnDefs: [
+            { orderable: true, className: 'line_texts', targets: [5, 6] },
+            { orderable: false, className: 'text-center', targets: [0, 1, 2, 3, 4] },
+        ],
+
+        createdRow: function (row, data, dataIndex) {
+            $(row).addClass('text-center');
+        },
+        initComplete: function () {
+            var api = this.api();
+            // For each column
+
+            // $('#company_name').on('change', function () {
+            //     var regexr = '{search}';
+            //     api
+            //         .column(0)
+            //         .search(
+            //             this.value != ''
+            //                 ? regexr.replace('{search}', this.value)
+            //                 : '',
+            //             this.value != '',
+            //             this.value == ''
+            //         )
+            //         .draw();
+            // })
+
+            // $('#api_service').on('change', function () {
+            //     var regexr = '{search}';
+            //     api
+            //         .column(1)
+            //         .search(
+            //             this.value != ''
+            //                 ? regexr.replace('{search}', this.value)
+            //                 : '',
+            //             this.value != '',
+            //             this.value == ''
+            //         )
+            //         .draw();
+            // })
+
+            // $('#api_status').on('change', function () {
+            //     var regexr = '{search}';
+            //     api
+            //         .column(3)
+            //         .search(
+            //             this.value != ''
+            //                 ? regexr.replace('{search}', this.value)
+            //                 : '',
+            //             this.value != '',
+            //             this.value == ''
+            //         )
+            //         .draw();
+            // })
+
+            // $('input[name="request_date"]').on('apply.daterangepicker', function () {
+            //     var regexr = '{search}';
+            //     api
+            //         .column(4)
+            //         .search(
+            //             this.value != ''
+            //                 ? regexr.replace('{search}', $(this)[0].value)
+            //                 : '',
+            //             this.value != '',
+            //             this.value == '',
+
+            //         )
+            //         .draw();
+            // });
+
+            // $('input[name="response_date"]').on('apply.daterangepicker', function () {
+            //     var regexr = '{search}';
+            //     api
+            //         .column(5)
+            //         .search(
+            //             this.value != ''
+            //                 ? regexr.replace('{search}', $(this)[0].value)
+            //                 : '',
+            //             this.value != '',
+            //             this.value == '',
+
+            //         )
+            //         .draw();
+            // });
+
+            // $('input[name="created_date"]').on('apply.daterangepicker', function () {
+            //     var regexr = '{search}';
+            //     api
+            //         .column(7)
+            //         .search(
+            //             this.value != ''
+            //                 ? regexr.replace('{search}', $(this)[0].value)
+            //                 : '',
+            //             this.value != '',
+            //             this.value == '',
+
+            //         )
+            //         .draw();
+            // });
+
+            api
+                .columns()
+                .eq(0)
+                .each(function (colIdx) {
+                    // Set the header cell to contain the input element
+                    var cell = $('.filters th').eq(
+                        $(api.column(colIdx).header()).index()
+                    );
+
+                    $(
+                        'input',
+                        $('.filters th').eq($(api.column(colIdx).header()).index())
+                    )
+                        .off('keyup change')
+                        .on('change', function (e) {
+                            // Get the search value
+                            $(this).attr('title', $(this).val());
+                            var regexr = '{search}'; //$(this).parents('th').find('select').val();
+
+                            var cursorPosition = this.selectionStart;
+                            // Search the column for that value
+                            api
+                                .column(colIdx)
+                                .search(
+                                    this.value != ''
+                                        ? regexr.replace('{search}', this.value).replace(/\\/g, "")
+                                        : '',
+                                    this.value != '',
+                                    this.value == ''
+                                )
+                                .draw();
+                        })
+                        .on('keyup', function (e) {
+                            e.stopPropagation();
+                            $(this).trigger('change');
+                            $(this)
+                                .focus()[0]
+                            // .setSelectionRange(cursorPosition, cursorPosition);
+                        });
+                });
+
+        },
+
+
+    });
+
+
+    $(document).on("click", ".all_de_get", function () {
+        if ($(this).val() != "") {
+            const requestOptions = {
+                method: "GET",
+                redirect: "follow"
+            };
+
+            fetch("/BBRgt/get/apinfo/details/" + $(this).val(), requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                    if (result['response'] != []) {
+                        // console.log(result['response'][0]);
+                        $("#api").val(result['response'][0]['api'])
+                        $("#api_name").val(result['response'][0]['api_name'])
+                        $("#page_url").val(result['response'][0]['page_url'])
+                        $("#api_logo").val(result['response'][0]['api_logo'])
+                        $("#long_api_description").val(result['response'][0]['long_api_description'])
+                        $("#sort_api_description").val(result['response'][0]['sort_api_description'])
+                        $("#credits_per_use").val(result['response'][0]['credits_per_use'])
+                        $("#status").val(result['response'][0]['status'])
+                        if (result['response'][0]['view_permission'] == true) {
+                            $("#view_permission").val("True")
+                        } else {
+                            $("#view_permission").val("False")
+                        }
+
+                        // Form Action 
+                        $('#edit_info').attr('action', '/BBRgt/api-info/edit/' + result['response'][0]['objid']);
+                    }
+                })
+                .catch((error) => console.error(error));
+
+        }
+
+    })
+
+
+
+</script>

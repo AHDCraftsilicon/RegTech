@@ -26,41 +26,47 @@ Api_Informations_db = Regtch_services_UAT["Api_Informations"]
 @User_Api_Usage_bp.route("/usage-insights")
 def User_Api_Usage_insights():
 
-    encrypted_token = session.get('QtSld')
-    ip_address = session.get('KLpi')
-    get_objid = session.get('bkjid')
+    try:
 
-    if session.get('bkjid') != "":
+        encrypted_token = session.get('QtSld')
+        ip_address = session.get('KLpi')
+        get_objid = session.get('bkjid')
 
-        check_user_in_db = User_Authentication_db.find_one({"_id":ObjectId(session.get('bkjid'))})
-        
-        if check_user_in_db != None:
+        if session.get('bkjid') != "":
 
-            if encrypted_token and ip_address:
-                token = decrypt_token(encrypted_token)
-
-                test_credit = User_Testing_Credits_db.find_one({"_id":ObjectId("66ecfbff621502ccf8852429")})["total_credit"]
-
-                if get_objid != "":
-                    access_credential = User_Authentication_db.find_one({"_id":ObjectId(get_objid)})
-
-                    if access_credential != None:
-                        sccess_id_key = [{"client_id":access_credential['client_id'],
-                                        "client_secret_key" :access_credential["client_secret_key"]
-                                        }]
-                        user_name = check_user_in_db["Company_Name"]
-                        test_credits = [{"Test_Credit": check_user_in_db["total_test_credits"],
-                                    "Used_Credits":check_user_in_db["used_test_credits"]}]
-
-                        return render_template('Usage_insights.html',
-                                                test_credit=test_credits,
-                                                sccess_id_key=sccess_id_key,
-                                                user_name=user_name)
-                        
-                    return redirect("/")
-                
-                return redirect("/")
+            check_user_in_db = User_Authentication_db.find_one({"_id":ObjectId(session.get('bkjid'))})
             
+            if check_user_in_db != None:
+
+                if encrypted_token and ip_address:
+                    token = decrypt_token(encrypted_token)
+
+                    page_name = "Usage Insights"
+
+                    user_type = "Test Credits"
+
+                    if check_user_in_db['user_flag'] == "0":
+                        user_type = "Live Credits"
+
+
+                    user_name = check_user_in_db["Company_Name"]
+                    page_info = [{"Test_Credit": check_user_in_db["total_test_credits"],
+                                "Used_Credits":check_user_in_db["used_test_credits"] ,
+                                "user_type" : user_type ,
+                                "page_name":page_name,
+                                "user_name": user_name
+                                }]
+
+                    return render_template('Usage_insights.html',
+                                            page_info=page_info,
+                                            user_details={"user_name": user_name,
+                                                            "user_type" :user_type})
+                            
+                    
+                return redirect("/")
+                
+            return redirect("/")
+        
         return redirect("/")
-    
-    return redirect("/")
+    except:
+        return redirect("/error")

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Test User Details - bluBeetle.ai</title>
+
+    {% set Admin_Portal_urls = Admin_Portal_urls() %}
+    {% if Admin_Portal_urls %}
+    {{ Admin_Portal_urls | safe }}
+    {% endif %}
+
+</head>
+
+<body>
+    <div class="main">
+        <!-- Common Topbar -->
+        {% set Admin_Portal_topbar = Admin_Portal_topbar(name) %}
+        {% if Admin_Portal_topbar %}
+        {{ Admin_Portal_topbar | safe }}
+        {% endif %}
+
+        <!-- Main Contant -->
+        <div class="main-section">
+            <!-- SideBar -->
+            {% set Admin_Portal_sidebar = Admin_Portal_sidebar() %}
+            {% if Admin_Portal_sidebar %}
+            {{ Admin_Portal_sidebar | safe }}
+            {% endif %}
+
+            <div class="contain-main-part">
+                <div class="c-contain-padding">
+                    <div class="username_part">
+                        <div class="username-text">
+                            <h2>Update Test User List</h2>
+                        </div>
+                    </div>
+
+
+                    <div class="c-box mt-3">
+                        <div class="c-box-padding">
+                            <div class="container">
+                               
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</body>
+
+</html>

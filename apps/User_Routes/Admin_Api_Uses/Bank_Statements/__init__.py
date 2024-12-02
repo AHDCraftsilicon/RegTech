@@ -115,6 +115,8 @@ def Bank_Statment_test_api():
                                 duration = datetime.now()- completed_on_ 
                                 duration_seconds = duration.total_seconds()
 
+                                os.remove(pdf_store_file)
+
                                 store_response = {"status_code": 200,
                                                     "status": "Success",
                                                     "response": icici_response,
@@ -190,25 +192,48 @@ def Bank_statement_analysis_report_page():
     print("---------- " ,request.args.get("_id"))
 
     if request.args.get("_id") != "":
-    
-        check_system_id = User_test_Api_history_db.find_one({"System_Generated_Unique_id":request.args.get("_id")})
 
-        if check_system_id != None:
-            satement_details = check_system_id["response_data"]
-            # satement_details = json.loads(satement_details)
+        encrypted_token = session.get('QtSld')
+        ip_address = session.get('KLpi')
 
-            data_dict = ast.literal_eval(satement_details)
-            print(data_dict['status_code'])
+        if session.get('bkjid') != "":
 
-
-            return render_template("bank_statement_analysis_report.html",
-                                   satement_details = data_dict
-                                   )
+            check_user_in_db = User_Authentication_db.find_one({"_id":ObjectId(session.get('bkjid'))})
         
+            check_system_id = User_test_Api_history_db.find_one({"System_Generated_Unique_id":request.args.get("_id")})
+            page_name = "Bank Statement Analysis Report"
+
+            user_type = "Test Credits"
+
+            if check_user_in_db['user_flag'] == "0":
+                user_type = "Live Credits"
+
+            user_name = check_user_in_db["Company_Name"]
+            page_info = [{"Test_Credit": check_user_in_db["total_test_credits"],
+                        "Used_Credits":check_user_in_db["used_test_credits"] ,
+                        "user_type" : user_type ,
+                        "page_name":page_name
+                        }]
+            
+            if check_system_id != None:
+                satement_details = check_system_id["response_data"]
+                # satement_details = json.loads(satement_details)
+
+                data_dict = ast.literal_eval(satement_details)
+                print(data_dict['status_code'])
+
+
+                return render_template("bank_statement_analysis_report.html",
+                                    satement_details = data_dict,
+                                    page_info=page_info,
+                                    user_details={"user_name": user_name,
+                                                    "user_type" :user_type}
+                                    )
+            
+            else:
+                return redirect("/")
         else:
             return redirect("/")
-    else:
-        return redirect("/")
 
 
 

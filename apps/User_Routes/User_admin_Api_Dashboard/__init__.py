@@ -26,7 +26,7 @@ Api_Informations_db = Regtch_services_UAT["Api_Informations"]
 @User_Admin_Api_Dashboard_bp.route("/dashboard")
 def User_Api_Dashboard_main():
 
-    # try:
+    try:
         encrypted_token = session.get('QtSld')
         ip_address = session.get('KLpi')
 
@@ -35,8 +35,17 @@ def User_Api_Dashboard_main():
             check_user_in_db = User_Authentication_db.find_one({"_id":ObjectId(session.get('bkjid'))})
 
             if check_user_in_db != None:
+                
+
                 if encrypted_token and ip_address:
                     token = decrypt_token(encrypted_token)
+
+                    page_name = "Home"
+
+                    user_type = "Test Credits"
+
+                    if check_user_in_db['user_flag'] == "0":
+                        user_type = "Live Credits"
                     
                     api_info = Api_Informations_db.find()
                         
@@ -51,6 +60,7 @@ def User_Api_Dashboard_main():
                             "api_logo": x["api_logo"],
                             "page_url":x["page_url"],
                             "status":x["status"],
+                            "view_permission":x["view_permission"],
                             "created_on":str((x["created_on"]).strftime("%d-%m-%Y %H:%M:%S")),
                             "objid":str(x["_id"])
                         })
@@ -60,16 +70,56 @@ def User_Api_Dashboard_main():
                         })
 
                     user_name = check_user_in_db["Company_Name"]
-                    test_credits = [{"Test_Credit": check_user_in_db["total_test_credits"],
-                                                        "Used_Credits":check_user_in_db["used_test_credits"]}]
+                    page_info = [{"Test_Credit": check_user_in_db["total_test_credits"],
+                                "Used_Credits":check_user_in_db["used_test_credits"] ,
+                                "user_type" : user_type ,
+                                "page_name":page_name,
+                                "user_name": user_name
+                                }]
                     return render_template("Api_dashboard.html",
                                 api_list=api_list,api_count = objid_list,
-                                test_credit=test_credits,
-                                user_name=user_name)
+                                page_info=page_info,
+                                user_details={"user_name": user_name,"user_type" :user_type})
             
             return redirect("/")
         
         return redirect("/")
+    
+    except:
+        return redirect("/error")
+    
+
+@User_Admin_Api_Dashboard_bp.route("/request-for-more/credits")
+def more_credits_email_sent():
+
+    try:
+        encrypted_token = session.get('QtSld')
+        ip_address = session.get('KLpi')
+
+        if session.get('bkjid') != "":
+
+            check_user_in_db = User_Authentication_db.find_one({"_id":ObjectId(session.get('bkjid'))})
+
+            if check_user_in_db != None:
+                
+
+                if encrypted_token and ip_address:
+                    token = decrypt_token(encrypted_token)
+
+                    print(check_user_in_db['Email_Id'])
+
+                    return jsonify({"status_code": 200,
+                            "status": "Success",
+                            "response": "Thank you for your request!"}),200
+
+            return redirect("/")
+        return redirect("/")
+    except:
+        return redirect("/error")
+
+    
+
+
        
     
 

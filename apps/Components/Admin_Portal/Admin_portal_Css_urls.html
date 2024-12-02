@@ -10,21 +10,31 @@
 <!-- Icons -->
 <link href="../../static/vendor/Icons/remixicon.css" rel="stylesheet">
 
-<!-- DataTables -->
-<link rel="stylesheet" href="../../static/vendor/DataTable/dataTables.min.css">
-<script src="../../static/vendor/DataTable/jquery.dataTables.min.js"></script>
+<!-- Toaster -->
+<script src="../../static/vendor/Toaster/toaster-min.js"></script>
 
+<!-- DataTables -->
+<script src="../../static/vendor/DataTable/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="../../static/vendor/DataTable/dataTables.min.css">
+<script src="../../static/vendor/DataTable/datatable.bootsrap.js"></script>
+
+
+<!-- Select2 -->
+<link rel="stylesheet" href="../../static/vendor/Select2/select2.min.css">
+<script src="../../static/vendor/Select2/select2.min.js"></script>
+
+<!-- date range picker -->
+<link rel="stylesheet" href="../../static/vendor/daterange_picker/daterangepicker.css">
+<script src="../../static/vendor/daterange_picker/moment.min.js"></script>
+<script src="../../static/vendor/daterange_picker/daterangepicker.js"></script>
+
+<!-- Jquery Mask -->
+<script src="../../static/vendor/JQuery/JQuery.mask.min.js"></script>
+
+<!-- Soket io -->
+<script src="../../static/vendor/socket/socket.js"></script>
 
 <!-- Common css -->
-<link rel="stylesheet" href="../../static/Admin_portal_css/admin-style.css">
+<link href="../../static/Admin_portal_css/admin-style.css" rel="stylesheet">
 
-
-
-<script nonce="{{ g.nonce }}">
-    $(document).ready(function () {
-        $(".c-toggle").click(function () {
-            $(".side-bar").toggleClass("showmenu");
-            $(".contain-main-part").toggleClass("full-contain-main-part");
-        });
-    });
-</script>
+<script src="../../static/Admin_portal_css/admin_common_js.js"></script>

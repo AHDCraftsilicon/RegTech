@@ -22,7 +22,7 @@
 
 <body>
     <!-- Topbar -->
-    {% set User_portal_topbar =  User_portal_topbar(user_name) %}
+    {% set User_portal_topbar = User_portal_topbar(user_details) %}
     {% if User_portal_topbar %}
     {{ User_portal_topbar | safe }}
     {% endif %}
@@ -38,21 +38,23 @@
         <div class="page-content">
             <div class="c-page-padding">
                 <div>
-                    <div class="row">
-                        <div class="col-12 c-heading-common">
-                            <h1 class="main-heading">Language Translator</h1>
-                            <div class="testing-credit">
-                                <p class="testing-credit-text">Test Credits</p>
-                                <p class="testing-credit-digit"><i class="ri-task-line"></i>
-                                    <span>{{test_credit[0]["Used_Credits"]}} / {{test_credit[0]["Test_Credit"]}} </span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+
+                    <!-- Route Headers -->
+                    {% set User_portal_headers = User_portal_headers(page_info) %}
+                    {% if User_portal_headers %}
+                    {{ User_portal_headers | safe }}
+                    {% endif %}
+
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="cc-box">
                                 <div class="cc-box-padding">
+                                    <div class="d-flex justify-content-between text-center">
+                                        <p class="dash-box-heading-blue">Input</p>
+                                        <span class="highlighted_text">
+                                            {{about_api_details['credits_per_use']}} credits per usage
+                                        </span>
+                                    </div>
 
                                     <div class="form-group c-form-group">
                                         <label>Select Language <span class="required">*</span></label>
@@ -77,6 +79,22 @@
                             <div class="cc-box">
                                 <div class="cc-box-padding">
 
+                                    <p class="dash-box-heading-blue">Output <span id="eta" class="result d-none">🚀
+                                            Results in
+                                            <span class="seconds" id="lang_tras_seconds"> 0 </span> seconds!</span>
+                                    </p>
+
+                                    <div class="c-loader mb-2 d-none">
+                                        <img src="../../../../static/images/api-loader.gif" class="api-loader" alt=""
+                                            srcset="">
+                                        <p>✨ We are doing our magic!</p>
+                                    </div>
+
+                                    <div class="form-group c-form-group d-none" id="api_status">
+                                        <label>Status:
+                                            <span id="status_code">200</span> </label>
+                                    </div>
+
                                     <div class="form-group c-form-group">
                                         <label>Translate Language <span class="required">*</span></label>
                                         <select class="form-control select2" id="ToLanguage">
@@ -89,12 +107,14 @@
 
                                     <div class="form-group c-form-group">
                                         <textarea rows="10" cols="12" class="form-control c-form-control"
-                                            id="translate_lang"></textarea>
+                                            id="translate_lang" disabled></textarea>
 
                                     </div>
-                                    <button class="btn c-btn" id="lan_trans_copy">Copy</button>
+                                    <button class="btn c-btn" id="lan_trans_copy"><i class="ri-file-copy-line"></i>
+                                        Copy</button>
 
-                                    <button class="btn c-btn2 ml-4" id="lan_trans_download">Download</button>
+                                    <button class="btn c-btn2 ml-4" id="lan_trans_download"><i
+                                            class="ri-download-2-line"></i> Download</button>
 
 
                                     <div class="right-bottom-part">
@@ -112,7 +132,7 @@
                                             </div>
                                         </div>
                                         <p class="dash-box-heading-blue pt-4">More about this API </p>
-                                        <p>{{about_api_details}}</p>
+                                        <p>{{about_api_details['long_api_description']}}</p>
                                     </div>
 
                                 </div>
@@ -125,6 +145,12 @@
             </div>
         </div>
     </section>
+
+    <!-- Credit Pop-up -->
+    {% set User_portal_credits_modal = User_portal_credits_modal(page_info) %}
+    {% if User_portal_credits_modal %}
+    {{ User_portal_credits_modal | safe }}
+    {% endif %}
 
     <!-- Page Javascript -->
     {% include 'language_translate_js.html' %}

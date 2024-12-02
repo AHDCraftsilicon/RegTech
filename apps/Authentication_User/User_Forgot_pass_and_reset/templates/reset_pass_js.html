@@ -1,12 +1,27 @@
 <script nonce="{{ g.nonce }}">
     $("#send_reset_link").click(function () {
+        
+
         var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        var Email_id_check = false
+
+        if ($("#Email_Id").val() == "") {
+            $('#errorMessage_Email_Id').removeClass('info')
+            $('#errorMessage_Email_Id').addClass('error')
+            $('#errorMessage_Email_Id').html("<i class='ri-information-line'></i> Work Email Is Required!");
+        }
 
         if ($("#Email_Id").val().match(validRegex)) {
+            $("#send_reset_link").html('Loading...');
+            $('#errorMessage_Email_Id').addClass('info')
+            $('#errorMessage_Email_Id').removeClass('error')
+            $('#errorMessage_Email_Id').html("<i class='ri-information-line'></i>You'll receive password reset link on this Email!");
+
+
             const myHeaders = new Headers();
 
             const formdata = new FormData();
-            formdata.append("Email_Id", $("#Email_Id"));
+            formdata.append("Email_Id", $("#Email_Id").val());
 
             const requestOptions = {
                 method: "POST",
@@ -18,27 +33,54 @@
             fetch("/email-verification", requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
-                    $("#alert_msg").removeClass("d-none")
-                    $("#alert_msg").text(result.data)
+                    $("#send_reset_link").html('Send Reset Link');
+                    if (result.data.status_code != 200) {
+                        $('#validate-toast').html(`<div class="toast2 bg-danger color-white" role="alert" aria-live="assertive"
+                                    aria-atomic="true">
+                                    <div class="toast-body">
+                                        <div class="icon-toast">
+                                            <i class="ri-information-line"></i>
+                                        </div>
+                                        <div>
+                                            <p>`+ result.data.response + `</p>
+                                        </div>
+                                        <button type="button" class="ml-2 mb-1 close toast_close" data-dismiss="toast"
+                                            aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>`);
+                    }
+                    else {
+                        $('#validate-toast').html(`<div class="toast2 bg-success color-white" role="alert" aria-live="assertive"
+                                    aria-atomic="true">
+                                    <div class="toast-body">
+                                        <div class="icon-toast">
+                                            <i class="ri-information-line"></i>
+                                        </div>
+                                        <div>
+                                            <p>`+ result.data.response + `</p>
+                                        </div>
+                                        <button type="button" class="ml-2 mb-1 close toast_close" data-dismiss="toast"
+                                            aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>`);
+                    }
+
                 })
                 .catch((error) => console.error(error));
 
         } else {
-            alert("Invalid email address!");
+            $('#errorMessage_Email_Id').removeClass('info')
+            $('#errorMessage_Email_Id').addClass('error')
+            $('#errorMessage_Email_Id').html("<i class='ri-information-line'></i> Enter a valid Work Email!");
         }
 
     })
 
-
-    $('#Email_Id').keyup(function () {
-        var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-
-        if ($("#Email_Id").val().match(validRegex)) {
-            $("#send_reset_link").prop('disabled', false);
-
-        } else {
-            $("#send_reset_link").prop('disabled', true);
-        }
-
+    $(document).on('click', '.toast_close', function (event) {
+        $('#validate-toast').html("")
     })
 </script>

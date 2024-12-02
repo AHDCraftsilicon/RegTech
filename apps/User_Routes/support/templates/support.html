@@ -21,7 +21,7 @@
 
 <body>
     <!-- Topbar -->
-    {% set User_portal_topbar = User_portal_topbar(user_name) %}
+    {% set User_portal_topbar = User_portal_topbar(user_details) %}
     {% if User_portal_topbar %}
     {{ User_portal_topbar | safe }}
     {% endif %}
@@ -37,17 +37,13 @@
         <div class="page-content">
             <div class="c-page-padding">
                 <div>
-                    <div class="row">
-                        <div class="col-12 c-heading-common">
-                            <h1 class="main-heading">Customer Support</h1>
-                            <div class="testing-credit">
-                                <p class="testing-credit-text">Test Credits</p>
-                                <p class="testing-credit-digit"><i class="ri-task-line"></i>
-                                    <span>{{test_credit[0]["Used_Credits"]}} / {{test_credit[0]["Test_Credit"]}} </span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                   
+                    <!-- Route Headers -->
+                    {% set User_portal_headers = User_portal_headers(page_info) %}
+                    {% if User_portal_headers %}
+                    {{ User_portal_headers | safe }}
+                    {% endif %}
+                    
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                             <div class="cc-box">

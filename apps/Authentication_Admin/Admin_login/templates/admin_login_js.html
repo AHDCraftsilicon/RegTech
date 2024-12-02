@@ -1,0 +1,81 @@
+<script nonce="{{ g.nonce }}">
+    $("#admin-login-btn").click(function () {
+
+        var User_Name_check = false
+        var password_check = false
+
+        // Email Id Doesn't have empty
+        if ($("#User_Name").val() == "") {
+            $("#User_Name").attr("class", function (i, origValue) {
+                return origValue + " error-text";
+            });
+            $('#errorMessage_User_Name').html("<i class='ri-information-line'></i> UserName / Email Is Required!");
+        }
+        else {
+            $('#errorMessage_User_Name').html("");
+            $("#User_Name").removeClass("error-text");
+            User_Name_check = true
+        }
+
+
+        // Password Doesn't have empty
+        if ($("#Password").val() == "") {
+            $("#Password").attr("class", function (i, origValue) {
+                return origValue + " error-text";
+            });
+            $('#errorMessage_Password').html("<i class='ri-information-line'></i> Password Is Required!");
+        }
+        else {
+            $('#errorMessage_Password').html("");
+            $("#Password").removeClass("error-text");
+            password_check = true
+        }
+
+        if (User_Name_check == true && password_check == true) {
+            $("#admin-login-btn").html('Loading...');
+
+            const formdata = new FormData();
+            formdata.append("User_Name", document.getElementById("User_Name").value);
+            formdata.append("Password", $("#Password").val());
+
+            const requestOptions = {
+                method: "POST",
+                body: formdata,
+                redirect: "follow"
+            };
+
+            fetch("/BBRgt/gdo/i/RmRngoaa/lgnRl", requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                    $("#admin-login-btn").html('Login');
+                    if (result.data.status_code != 200) {
+                        $('#validate-toast').html(`<div class="toast2 bg-danger color-white" role="alert" aria-live="assertive"
+                                    aria-atomic="true">
+                                    <div class="toast-body">
+                                        <div class="icon-toast">
+                                            <i class="ri-information-line"></i>
+                                        </div>
+                                        <div>
+                                            <p>`+ result.data.response + `</p>
+                                        </div>
+                                        <button type="button" class="ml-2 mb-1 close toast_close" data-dismiss="toast"
+                                            aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>`);
+                    }
+                    else {
+                        if (result.data.redirect != undefined) {
+                            window.location.replace(result.data.redirect);
+                        }
+                    }
+
+                })
+        }
+    })
+
+    $(document).on('click', '.toast_close', function (event) {
+        $('#validate-toast').html("")
+    })
+</script>

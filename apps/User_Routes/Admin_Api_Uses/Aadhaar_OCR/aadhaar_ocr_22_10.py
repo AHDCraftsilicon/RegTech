@@ -790,6 +790,8 @@ def get_another_details(aadhaar_string,orignal_img,degree,aadhaar_number):
 
             Name = keyword_name(aadhaar_string,gender,genders=True,Father=False)
 
+    if Name != "":
+        Name = Name.replace("el","").replace("i ","")
 
     # Get Aadhaar Address
 

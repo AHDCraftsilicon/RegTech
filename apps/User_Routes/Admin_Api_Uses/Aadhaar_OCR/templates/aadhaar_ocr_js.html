@@ -15,11 +15,14 @@
     })
 
     $("#aadhaar_ocr_run").click(function () {
+        $("#aadhaar_ocr_run").text("Loading....")
         const fileInput = document.getElementById('aadhaar_input');
         const file = fileInput.files[0];
 
 
         if (file != undefined) {
+            console.log("jhsgjsagdjgsa");
+
             $(".c-loader").removeClass('d-none')
             const formdata = new FormData();
             formdata.append("aadhaar_img", file);
@@ -33,20 +36,92 @@
             fetch("/aadhaar/test-api", requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
+                    $("#aadhaar_ocr_run").text("Run Api")
 
-                    if (result.data.json_data != undefined) {
+                    if (result['data']['status_code'] == 200) {
                         $(".c-loader").addClass('d-none')
-                        var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
-                        $("#aadhaar_ocr_json").text(formatteddata)
+                        abc = {
+                            "data": {
+                                "response": result['data']['response'],
+                                "request_id": result['data']['basic_response']['request_id'],
+                                "request_on": result['data']['basic_response']['request_on'],
+                                "response_on": result['data']['basic_response']['response_on'],
+                                "api_name": result['data']['basic_response']['api_name'],
+                                "duration": result['data']['basic_response']['duration'],
+                            }
+                        }
+                        // Aadhaar Json preview
+                        var formatteddata = JSON.stringify(abc, null, '\t')
+                        document.getElementById('aadhaar_ocr_json').innerHTML = formatteddata
+                        //    Result in second
                         $('#eta').removeClass('d-none')
-                        document.getElementById("aadhaar_ocr_seconds").innerHTML = result.data.result_in_seconds
+                        document.getElementById("aadhaar_ocr_seconds").innerHTML = result['data']['basic_response']['duration']
+                        // Api Status Show
+                        $("#api_status").removeClass('d-none')
+                        $("#status_code").addClass("success")
+                        document.getElementById('status_code').innerHTML = result['data']['status_code']
+                        // Used Credits set
+                        $("#uds_crdts").text(result['data']['basic_response']['test_credits'])
                     }
                     else {
                         $(".c-loader").addClass('d-none')
-                        var formatteddata = JSON.stringify(result, null, '\t')
-                        $("#aadhaar_ocr_json").text(formatteddata)
-                        $('#eta').removeClass('d-none')
+                        request_id = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            request_id = result['data']['basic_response']['request_id']
+                        }
+
+                        request_on = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            request_on = result['data']['basic_response']['request_on']
+                        }
+
+                        response_on = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            response_on = result['data']['basic_response']['response_on']
+                        }
+
+                        api_name = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            api_name = result['data']['basic_response']['api_name']
+                        }
+
+                        duration = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            duration = result['data']['basic_response']['duration']
+                        }
+
+                        abc = {
+                            "data": {
+                                "response": result['data']['response'],
+                                "request_id": request_id,
+                                "request_on": request_on,
+                                "response_on": response_on,
+                                "api_name": api_name,
+                                "duration": duration,
+                            }
+                        }
+                        // Aadhaar Json preview
+                        var formatteddata = JSON.stringify(abc, null, '\t')
+                        document.getElementById('aadhaar_ocr_json').innerHTML = formatteddata
+                        //    Result in second
+                        if(result['data']['basic_response'] != undefined){
+                            $('#eta').removeClass('d-none')
+                            document.getElementById("aadhaar_ocr_seconds").innerHTML = result['data']['basic_response']['duration']
+                        }
+
+                        // Api Status Show
+                        $("#api_status").removeClass('d-none')
+                        $("#status_code").addClass("text-danger")
+                        if (result['data']['status_code'] != undefined) {
+                            document.getElementById('status_code').innerHTML = result['data']['status_code']
+                        }
+                        // Used Credits set
+                        if (result['data']['basic_response'] != undefined) {
+                            $("#uds_crdts").text(result['data']['basic_response']['test_credits'])
+                        }
                     }
+
+
                 })
                 .catch((error) => {
                     console.log(error)

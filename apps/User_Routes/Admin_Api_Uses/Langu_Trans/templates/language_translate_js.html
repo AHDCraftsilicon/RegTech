@@ -6,7 +6,8 @@
 
 
     $("#translate_run").click(function () {
-        console.log($('#translate_textarea').val());
+
+        $("#translate_run").text("Loading....")
 
         if ($('#translate_textarea').val() == "") {
             NotifyMessage({ message: "Enter Text!", type: "bg-danger" });
@@ -15,6 +16,9 @@
         else {
             if ($('#FromLanguage').val() != "" && $('#ToLanguage').val() != "") {
 
+                $(".c-loader").removeClass('d-none')
+
+                $("#translate_lang").val("")
                 const formdata = new FormData();
 
                 formdata.append("translate_textarea", $("#translate_textarea").val());
@@ -30,10 +34,128 @@
                 fetch("/translate/test-api", requestOptions)
                     .then((response) => response.json())
                     .then((result) => {
-                        $("#translate_lang").val(result.data.json_data.response)
+                        $("#translate_run").text("Run Api")
 
-                        var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
-                        $("#lang_translate_json_temp").text(formatteddata)
+                        if (result['data']['status_code'] == 200) {
+
+                            $(".c-loader").addClass('d-none')
+
+                            request_id = ""
+                            if (result['data']['basic_response'] != undefined) {
+                                request_id = result['data']['basic_response']['request_id']
+                            }
+
+                            request_on = ""
+                            if (result['data']['basic_response'] != undefined) {
+                                request_on = result['data']['basic_response']['request_on']
+                            }
+
+                            response_on = ""
+                            if (result['data']['basic_response'] != undefined) {
+                                response_on = result['data']['basic_response']['response_on']
+                            }
+
+                            api_name = ""
+                            if (result['data']['basic_response'] != undefined) {
+                                api_name = result['data']['basic_response']['api_name']
+                            }
+
+                            duration = ""
+                            if (result['data']['basic_response'] != undefined) {
+                                duration = result['data']['basic_response']['duration']
+                            }
+
+                            abc = {
+                                "data": {
+                                    "response": result['data']['response'],
+                                    "request_id": request_id,
+                                    "request_on": request_on,
+                                    "response_on": response_on,
+                                    "api_name": api_name,
+                                    "duration": duration,
+                                }
+                            }
+                            // Translate Textarea
+                            if (result['data']['response']['translate_string'] != undefined) {
+                                $("#translate_lang").val(result['data']['response']['translate_string'])
+                            }
+                            // Lang Trans Json preview
+                            var formatteddata = JSON.stringify(abc, null, '\t')
+                            document.getElementById('lang_translate_json_temp').innerHTML = formatteddata
+                            //    Result in second
+                            if (result['data']['basic_response'] != undefined) {
+                                $('#eta').removeClass('d-none')
+                                document.getElementById("lang_tras_seconds").innerHTML = result['data']['basic_response']['duration']
+                            }
+                            // Api Status Show
+                            $("#api_status").removeClass('d-none')
+                            $("#status_code").addClass("success")
+                            document.getElementById('status_code').innerHTML = result['data']['status_code']
+                            // Used Credits set
+                            if (result['data']['basic_response'] != undefined) {
+                                $("#uds_crdts").text(result['data']['basic_response']['test_credits'])
+                            }
+                        }
+                        else {
+                            $(".c-loader").addClass('d-none')
+
+                            request_id = ""
+                            if (result['data']['basic_response'] != undefined) {
+                                request_id = result['data']['basic_response']['request_id']
+                            }
+
+                            request_on = ""
+                            if (result['data']['basic_response'] != undefined) {
+                                request_on = result['data']['basic_response']['request_on']
+                            }
+
+                            response_on = ""
+                            if (result['data']['basic_response'] != undefined) {
+                                response_on = result['data']['basic_response']['response_on']
+                            }
+
+                            api_name = ""
+                            if (result['data']['basic_response'] != undefined) {
+                                api_name = result['data']['basic_response']['api_name']
+                            }
+
+                            duration = ""
+                            if (result['data']['basic_response'] != undefined) {
+                                duration = result['data']['basic_response']['duration']
+                            }
+
+                            abc = {
+                                "data": {
+                                    "response": result['data']['response'],
+                                    "request_id": request_id,
+                                    "request_on": request_on,
+                                    "response_on": response_on,
+                                    "api_name": api_name,
+                                    "duration": duration,
+                                }
+                            }
+                            // Lang Trans Json preview
+                            var formatteddata = JSON.stringify(abc, null, '\t')
+                            document.getElementById('lang_translate_json_temp').innerHTML = formatteddata
+                            // Translate Textarea
+                            if (result['data']['response'] != undefined) {
+                                $("#translate_lang").val(result['data']['response'])
+                            }
+
+                            //    Result in second
+                            if (result['data']['basic_response'] != undefined) {
+                                $('#eta').removeClass('d-none')
+                                document.getElementById("lang_tras_seconds").innerHTML = result['data']['basic_response']['duration']
+                            }
+                            // Api Status Show
+                            $("#api_status").removeClass('d-none')
+                            $("#status_code").addClass("success")
+                            document.getElementById('status_code').innerHTML = result['data']['status_code']
+                            // Used Credits set
+                            if (result['data']['basic_response'] != undefined) {
+                                $("#uds_crdts").text(result['data']['basic_response']['test_credits'])
+                            }
+                        }
                     })
                     .catch((error) => console.error(error));
             }

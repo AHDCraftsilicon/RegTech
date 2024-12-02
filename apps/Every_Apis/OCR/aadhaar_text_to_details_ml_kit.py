@@ -77,7 +77,12 @@ def get_DOB(aadhaar_string):
                 if re.compile(r"Year of Birth\s*:\s*(\d{4})").findall(aadhaar_string) != []:
                     dob_date = re.compile(r"Year of Birth\s*:\s*(\d{4})").findall(aadhaar_string)[0]
         
-        print("-------- ", dob_date)
+        if dob_date == "":
+             match = re.search(r'DOB:\s*([^\s]+)', aadhaar_string)
+             if match:
+                dob = match.group(1)  # Extract the DOB part
+                dob_date = dob.replace('O', '0')
+
         return dob_date
     except:
         pass
@@ -217,6 +222,16 @@ def get_address(aadhaar_string):
                 address_match = re.search(r"S/O\s*:\s*(.*?\d{6})", aadhaar_string, re.DOTALL)
                 if address:
                     address = address_match.group(0).strip()
+                
+                if address == "":
+                    pattern = r"(S/O\s*.*?\d{6})"
+
+                    # Searching the pattern in the text
+                    match = re.search(pattern, aadhaar_string,re.DOTALL)
+
+                    if match:
+                        address = match.group(1).strip()
+
 
         
         if address == "":
@@ -237,6 +252,8 @@ def get_address(aadhaar_string):
         if address != "":
             address = ' '.join(address.splitlines())
             address = address.replace("Government of India", "")
+
+        print("address .. " , address)
         
         return address
     except:
@@ -288,10 +305,10 @@ def get_name_from_address(aadhaar_string):
 # Remove Extra Keywords from address
 def address_extra_keyword(aadhaar_address):
     # Split the text into words
-    print("---- ", aadhaar_address)
+    # print("---- ", aadhaar_address)
     words = aadhaar_address.split()
 
-    print("---------- ", words)
+    # print("---------- ", words)
 
     results = []
 
@@ -332,7 +349,7 @@ def address_extra_keyword(aadhaar_address):
         if result['corrected_word'] == "india":
             headers_keyword.append(result['old_word'])
 
-    print("-------- ", headers_keyword)
+    # print("-------- ", headers_keyword)
 
 
     return headers_keyword
@@ -340,12 +357,17 @@ def address_extra_keyword(aadhaar_address):
 
 #  Aadhaar Details Final
 def aadhaar_details(aadhaar_string):
+    print("----" , aadhaar_string)
+
+    aadhaar_strings = aadhaar_string.replace("SO",'S/O')
 
     aadhaar_strings = aadhaar_string.replace("VIO","VID").replace("wIO","W/O").replace("SIO","S/O")\
         .replace("1947","S/O").replace("S/Ó","S/O").replace("UNIOUE DENTTEICATION AUTHORIIY OFINDIA","")\
         .replace("Unique tdentification Authority of ndia","")\
         .replace("Unique ldentification Authority of fndia","").replace("SO",'S/O').replace("help@uidai.gov.in","")
     # aadhaar_strings = aadhaar_strings
+
+    print("***** ", aadhaar_strings)
 
     # if 'government of' in aadhaar_string.lower():
     #     print("Document is Aadhaar Card")
@@ -375,9 +397,9 @@ def aadhaar_details(aadhaar_string):
         name = get_name(aadhaar_strings)
 
     if name == "" and address != "":
-        name = get_name_from_address(aadhaar_string)
+        name = get_name_from_address(aadhaar_strings)
 
-    print("**** ", address)
+    # print("**** ", address)
 
     if address != "":
         address_test = address_extra_keyword(address)
@@ -416,7 +438,9 @@ def aadhaar_details(aadhaar_string):
 
     if address == "" and DOB == "" and gender == "" and husband_name == "" and \
         father_name == "" and name == "" and VID == "" and aadhaar_number == "":
-        return []
+        return { "status_code": 400,
+            "status": "Error",
+            "response": "No Data Found!"}
     else:
 
 
@@ -431,7 +455,9 @@ def aadhaar_details(aadhaar_string):
                             "AadharID" : aadhaar_number,
                             })
 
-        return aadhaar_details
+        return {"status_code": 200,
+                "status": "Success",
+                "response":aadhaar_details}
 
 
 # QR COde read
@@ -439,14 +465,21 @@ def QR_code_data_Read(xml_string):
     try:
         xml_string = xml_string.replace('</?xml', '<?xml').strip()
         root = ET.fromstring(xml_string)
-        # print(root.attrib)
 
-
+        Father_name = ""
+        Husband_name = ""
 
         address_merge = ""
 
+        address_mergess = ""
+
         try:
-            address_merge +=root.attrib.get('co') + ","
+            address_mergess = root.attrib.get('co') + ","
+            if 'W/O' in address_mergess:
+                Husband_name = address_mergess.replace("W/O: ","").replace(",","")
+            if 'S/O' in address_merge:
+                Father_name = address_mergess.replace("S/O: ","").replace(",","")
+
         except:
             pass
 
@@ -500,12 +533,26 @@ def QR_code_data_Read(xml_string):
         except:
             pass
         
+        
         aadhaar_details = []
         Address = address_merge
-        Name = root.attrib.get('name')
-        DOB = root.attrib.get('dob')
-        Gender = root.attrib.get('gender')
-        AadharID = root.attrib.get('uid')
+        Name = ""
+        DOB = ""
+        Gender = ""
+        AadharID = ""
+
+        if root.attrib.get('name') != None:
+            Name = root.attrib.get('name')
+
+        if root.attrib.get('dob') != None:
+            DOB = root.attrib.get('dob')
+
+        if root.attrib.get('gender') != None:
+            Gender = root.attrib.get('gender')
+
+        if root.attrib.get('uid') != None:
+            AadharID = root.attrib.get('uid')
+
         if Gender == 'M':
             Gender = "Male"
         elif Gender == 'F':
@@ -515,8 +562,8 @@ def QR_code_data_Read(xml_string):
         aadhaar_details.append({"Address":Address,
                                 "DOB":DOB,
                                 "Gender":Gender,
-                                "Husband_name":"",
-                                "Father_name":"",
+                                "Husband_name":Husband_name,
+                                "Father_name":Father_name,
                                 "Name":Name,
                                 "VID" : "",
                                 "AadharID" : AadharID,
@@ -542,7 +589,9 @@ def aadhaar_Qr_scan(image_path):
         xml_string = xml_string.stdout.decode('utf-8')
         qr_code_details = QR_code_data_Read(xml_string)
         if len(qr_code_details) != 0:
-            return  qr_code_details
+            return {"status_code": 200,
+                "status": "Success",
+                "response":qr_code_details}
         
 
     # # if xml_string != "":
@@ -556,7 +605,11 @@ def aadhaar_Qr_scan(image_path):
     if xml_string != "":
         qr_code_details = QR_code_data_Read(xml_string)
         if len(qr_code_details) != 0:
-            return qr_code_details
+            return {"status_code": 200,
+                "status": "Success",
+                "response":qr_code_details}
         
-    return {}
+    return { "status_code": 400,
+            "status": "Error",
+            "response": "No QR code found on the image!"}
 

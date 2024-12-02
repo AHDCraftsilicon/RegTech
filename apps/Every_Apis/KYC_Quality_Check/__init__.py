@@ -185,30 +185,30 @@ def KYC_Quality_Check_Api_route():
                                             "status": "Success",
                                             "response": image_quality_module}
                             
-                            # DataBase Log
-                            User_test_Api_history_db.insert_one({
-                                    "user_id":check_user_id_in_db["_id"],
-                                    "User_Unique_id":data['UniqueID'],
-                                    "api_name":"KYC_Image_Quality",
-                                    "api_start_time":api_call_start_time,
-                                    "api_end_time":datetime.now(),
-                                    "api_status": "Success",
-                                    "response_duration":str(duration),
-                                    "response_time":duration_seconds,
-                                    "request_data":str(modify_request_data),
-                                    "response_data" :str(store_response),
-                                    "creadted_on":datetime.now(),
-                                    "System_Generated_Unique_id" : str(uuid.uuid4()),
-                                    })
+                            # # DataBase Log
+                            # User_test_Api_history_db.insert_one({
+                            #         "user_id":check_user_id_in_db["_id"],
+                            #         "User_Unique_id":data['UniqueID'],
+                            #         "api_name":"KYC_Image_Quality",
+                            #         "api_start_time":api_call_start_time,
+                            #         "api_end_time":datetime.now(),
+                            #         "api_status": "Success",
+                            #         "response_duration":str(duration),
+                            #         "response_time":duration_seconds,
+                            #         "request_data":str(modify_request_data),
+                            #         "response_data" :str(store_response),
+                            #         "creadted_on":datetime.now(),
+                            #         "System_Generated_Unique_id" : str(uuid.uuid4()),
+                            #         })
 
-                            # Check Api Using Credits
-                            api_use_credit_info = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3b9ce1846511541499")})
+                            # # Check Api Using Credits
+                            # api_use_credit_info = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3b9ce1846511541499")})
                             
-                            if check_user_id_in_db["unlimited_test_credits"] == False:
-                                # Credit 
-                                Authentication_db.update_one({"_id":check_user_id_in_db["_id"]},{"$set":{
-                                    "used_test_credits": check_user_id_in_db["used_test_credits"] + api_use_credit_info["credits_per_use"]
-                                }})
+                            # if check_user_id_in_db["unlimited_test_credits"] == False:
+                            #     # Credit 
+                            #     Authentication_db.update_one({"_id":check_user_id_in_db["_id"]},{"$set":{
+                            #         "used_test_credits": check_user_id_in_db["used_test_credits"] + api_use_credit_info["credits_per_use"]
+                            #     }})
                             
                             return jsonify({"data":store_response})
 

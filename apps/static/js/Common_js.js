@@ -91,6 +91,7 @@ $(document).ready(function () {
 
 // Function to remove all HTML tags from a string
 function stripHtmlTags(input) {
+    
     return input.replace(/<\/?[^>]+(>|$)/g, "");  // Regular expression to match and remove HTML tags
 }
 
@@ -102,8 +103,13 @@ function onInputEvent(event) {
     // Remove any HTML tags from the input value
     const cleanValue = stripHtmlTags(inputElement.value);
 
-    // Update the input value without HTML tags
-    inputElement.value = cleanValue;
+    try{
+        // Update the input value without HTML tags
+        inputElement.value = cleanValue;
+    }
+    catch{
+        
+    }
 
 }
 
@@ -117,3 +123,22 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('input', onInputEvent);
     });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const currentPath = window.location.pathname;
+
+    // Select all sidebar links
+    const menuLinks = document.querySelectorAll('#side-main-menu .c-menu a');
+
+    // Loop through each link
+    menuLinks.forEach(link => {
+        // Check if link's href matches the current path
+        if (link.getAttribute('href') === currentPath) {
+            // Add 'active' class to the parent <li> element
+            link.parentElement.classList.add('active');
+        }
+    });
+});
+
+
+

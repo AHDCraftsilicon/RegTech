@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Prod User Details - bluBeetle.ai</title>
+
+    {% set Admin_Portal_urls = Admin_Portal_urls() %}
+    {% if Admin_Portal_urls %}
+    {{ Admin_Portal_urls | safe }}
+    {% endif %}
+
+    <div class="c-content">
+        <div class="c-content-main-part">
+            <div id="toastContainer" class="toast-container">
+            </div>
+        </div>
+    </div>
+
+</head>
+
+<body>
+    <div class="main">
+        <!-- Common Topbar -->
+        {% set Admin_Portal_topbar = Admin_Portal_topbar(name) %}
+        {% if Admin_Portal_topbar %}
+        {{ Admin_Portal_topbar | safe }}
+        {% endif %}
+
+        <!-- Main Contant -->
+        <div class="main-section">
+            <!-- SideBar -->
+            {% set Admin_Portal_sidebar = Admin_Portal_sidebar() %}
+            {% if Admin_Portal_sidebar %}
+            {{ Admin_Portal_sidebar | safe }}
+            {% endif %}
+
+            <div class="contain-main-part">
+                <div class="c-contain-padding">
+                    <div class="username_part">
+                        <div class="username-text">
+                            <h2>Update Prod User List</h2>
+                        </div>
+                    </div>
+
+
+                    <div class="c-box mt-3">
+                        <div class="c-box-padding">
+                            <div class="container">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="nav-tabs-1" data-toggle="tab" href="#tabs-1"
+                                            role="tab">Basic
+                                            Info</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="nav-tabs-2" data-toggle="tab" href="#tabs-2" role="tab">
+                                            Address</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="nav-tabs-3" data-toggle="tab" href="#tabs-3"
+                                            role="tab">Api Details</a>
+                                    </li>
+                                </ul><!-- Tab panes -->
+                                <form method="post" action="/BBRgt/edit-prod-user/form/{{objid}}"
+                                    class="needs-validation" novalidate>
+                                    <div class="tab-content">
+                                        <div class="tab-pane p-3 active" id="tabs-1" role="tabpanel">
+                                            <b>
+                                                <p class="text-muted mb-1">User Information</p>
+                                            </b>
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <h6 class="h6">User Name</h6>
+                                                        <p>{{user_info_details['Company_Name']}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <h6 class="h6">Email</h6>
+                                                        <p>{{user_info_details['Email_Id']}}</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <h6 class="h6">Mobile Number</h6>
+                                                        <p>{{user_info_details['Mobile_No']}}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <b>
+                                                <p class="text-muted mb-1">Organization Information</p>
+                                            </b>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label class="d-flex">Business Name <span
+                                                                class="text-danger dt">*</span></label>
+                                                        <input type="text" name="bussiness_name" id="bussiness_name"
+                                                            class="form-control"
+                                                            value="{{prod_user_dic['bussiness_name']}}" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label class="d-flex">PAN Number<span
+                                                                class="text-danger dt">*</span></label>
+                                                        <input type="text" name="PAN_number"
+                                                            class="form-control text-uppercase" id="PAN_number"
+                                                            data-toggle="input-mask" data-mask-format="AAAAA9999A"
+                                                            value="{{prod_user_dic['PAN_number']}}" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label class="d-flex">TAN Number<span
+                                                                class="text-danger dt">*</span></label>
+                                                        <input type="text" name="TAN_number" class="form-control"
+                                                            id="TAN_number" value="{{prod_user_dic['TAN_number']}}"
+                                                            required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <b>
+                                                <p class="text-muted mb-1">Contact Information</p>
+                                            </b>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label class="d-flex">Name<span
+                                                                class="text-danger dt">*</span></label>
+                                                        <input type="text" name="name_of_contact_person"
+                                                            class="form-control"
+                                                            value="{{prod_user_dic['name_of_contact_person']}}"
+                                                            required>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label class="d-flex">Designation<span
+                                                                class="text-danger dt">*</span></label>
+                                                        <input type="text" name="designation_of_contact_person"
+                                                            id="designation_of_contact_person" class="form-control"
+                                                            value="{{prod_user_dic['designation_of_contact_person']}}"
+                                                            required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label class="d-flex">Email ID <span
+                                                                class="text-danger dt">*</span></label>
+                                                        <input type="email" name="email_id" class="form-control"
+                                                            id="email_id" value="{{prod_user_dic['email_id']}}"
+                                                            required>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label class="d-flex">Contact Number <span
+                                                                class="text-danger dt">*</span></label>
+                                                        <input type="text" name="contact_number" class="form-control"
+                                                            id="contact_number" data-toggle="input-mask"
+                                                            data-mask-format="00000 00000"
+                                                            value="{{prod_user_dic['contact_number']}}" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <a class="btn btn-info" id="add_more_basic_info">Next <i
+                                                        class="ri-arrow-right-line"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane p-3" id="tabs-2" role="tabpanel">
+                                            <b>
+                                                <p class="text-muted mb-1">Register Address</p>
+                                            </b>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label class="d-flex">Flat, House no., Building, Company,
+                                                            Apartment<span class="text-danger dt">*</span></label>
+
+                                                        {% set register_address = prod_user_dic.get('register_address',
+                                                        []) %}
+                                                        {% if register_address and
+                                                        register_address[0].get('register_address1') %}
+                                                        <input type="text" name="register_address1" class="form-control"
+                                                            value="{{prod_user_dic['register_address'][0]['register_address1']}}"
+                                                            required>
+
+                                                        {% else %}
+                                                        <input type="text" name="register_address1" class="form-control"
+                                                            required>
+                                                        {% endif %}
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label class="d-flex">Area, Street, Sector, Village</label>
+
+                                                        {% set register_address = prod_user_dic.get('register_address',
+                                                        []) %}
+                                                        {% if register_address and
+                                                        register_address[0].get('register_address2') %}
+                                                        <input type="text" name="register_address2" class="form-control"
+                                                            value="{{prod_user_dic['register_address'][0]['register_address2']}}">
+
+                                                        {% else %}
+                                                        <input type="text" name="register_address2" class="form-control"
+                                                            required>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label class="d-flex">Landmark</label>
+
+                                                        {% set register_address = prod_user_dic.get('register_address',
+                                                        []) %}
+                                                        {% if register_address and
+                                                        register_address[0].get('register_address3') %}
+                                                        <input type="text" name="register_address3" class="form-control"
+                                                            value="{{prod_user_dic['register_address'][0]['register_address3']}}">
+
+                                                        {% else %}
+                                                        <input type="text" name="register_address3" class="form-control"
+                                                            required>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label class="d-flex">Country<span
+                                                                class="text-danger dt">*</span></label>
+                                                        <select class="form-select select2" name="register_country"
+                                                            required>
+                                                            <option value="India">India</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label class="d-flex">Pincode<span
+                                                                class="text-danger dt">*</span></label>
+
+
+                                                        {% set register_address = prod_user_dic.get('register_address',
+                                                        []) %}
+                                                        {% if register_address and
+                                                        register_address[0].get('register_pincode') %}
+                                                        <input type="text" name="register_pincode" id="pincode"
+                                                            class="form-control" data-toggle="input-mask"
+                                                            data-mask-format="000000"
+                                                            value="{{prod_user_dic['register_address'][0]['register_pincode']}}"
+                                                            required>
+
+                                                        {% else %}
+                                                        <input type="text" name="register_pincode" id="pincode"
+                                                            class="form-control" data-toggle="input-mask"
+                                                            data-mask-format="000000" required>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label class="d-flex">State<span
+                                                                class="text-danger dt">*</span></label>
+
+                                                        {% set register_address = prod_user_dic.get('register_address',
+                                                        []) %}
+                                                        {% if register_address and
+                                                        register_address[0].get('register_state') %}
+                                                        <select class="form-select select2" name="register_state"
+                                                            id="state" required>
+                                                            <option value="" selected>Select</option>
+                                                            {% for item in state_list %}
+                                                            <option value="{{ item['state'] }}" {% if
+                                                                item['state']==prod_user_dic['register_address'][0]['register_state']
+                                                                %} selected {% endif %}>
+                                                                {{ item['state'] }}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+
+                                                        {% else %}
+                                                        <select class="form-select select2" name="register_state"
+                                                            id="state" required>
+                                                            <option value="" selected>Select</option>
+                                                            {% for item in state_list %}
+                                                            <option value="{{ item['state'] }}">
+                                                                {{ item['state'] }}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        {% endif %}
+
+
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="form-group">
+                                                        <label class="d-flex">Town / City<span
+                                                                class="text-danger dt">*</span></label>
+                                                        {% set register_address = prod_user_dic.get('register_address',
+                                                        []) %}
+                                                        {% if register_address and
+                                                        register_address[0].get('register_city') %}
+                                                        <input type="text" name="register_city" id="city"
+                                                            class="form-control"
+                                                            value="{{prod_user_dic['register_address'][0]['register_city']}}"
+                                                            required>
+
+                                                        {% else %}
+                                                        <input type="text" name="register_city" id="city"
+                                                            class="form-control" required>
+                                                        {% endif %}
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+
+                                            <b>
+                                                <p class="text-muted mb-1">Correspondence
+                                                    Address
+                                                </p>
+                                            </b>
+
+                                            <div class="mb-3">
+                                                <div class="form-check d-inline-block text-info">
+                                                    <input type="checkbox" class="form-check-input"
+                                                        id="same_to_registered_address"
+                                                        name="same_to_registered_address" {% if
+                                                        prod_user_dic['same_to_registered_address'] %}checked{% endif
+                                                        %}>
+                                                    <label class="form-check-label ">Same as above</label>
+                                                </div>
+                                            </div>
+                                            <div id="correspondence_address">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <label class="d-flex">Flat, House no., Building, Company,
+                                                                Apartment<span class="text-danger dt">*</span></label>
+
+                                                            {% set correspondence_address =
+                                                            prod_user_dic.get('correspondence_address',
+                                                            []) %}
+                                                            {% if correspondence_address and
+                                                            correspondence_address[0].get('correspond_address1') %}
+                                                            <input type="text" name="correspond_address1"
+                                                                class="form-control"
+                                                                value="{{prod_user_dic['correspondence_address'][0]['correspond_address1']}}">
+
+                                                            {% else %}
+                                                            <input type="text" name="correspond_address1"
+                                                                class="form-control">
+                                                            {% endif %}
+
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label class="d-flex">Area, Street, Sector, Village</label>
+
+                                                            {% set correspondence_address =
+                                                            prod_user_dic.get('correspondence_address',
+                                                            []) %}
+                                                            {% if correspondence_address and
+                                                            correspondence_address[0].get('correspond_address2') %}
+                                                            <input type="text" name="correspond_address2"
+                                                                class="form-control"
+                                                                value="{{prod_user_dic['correspondence_address'][0]['correspond_address2']}}">
+
+                                                            {% else %}
+                                                            <input type="text" name="correspond_address2"
+                                                                class="form-control">
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-group">
+                                                            <label class="d-flex">Landmark</label>
+
+                                                            {% set correspondence_address =
+                                                            prod_user_dic.get('correspondence_address',
+                                                            []) %}
+                                                            {% if correspondence_address and
+                                                            correspondence_address[0].get('correspond_address3') %}
+                                                            <input type="text" name="correspond_address3"
+                                                                class="form-control"
+                                                                value="{{prod_user_dic['correspondence_address'][0]['correspond_address3']}}">
+
+                                                            {% else %}
+                                                            <input type="text" name="correspond_address3"
+                                                                class="form-control">
+                                                            {% endif %}
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label class="d-flex">Country<span
+                                                                    class="text-danger dt">*</span></label>
+                                                            <select class="form-select select2"
+                                                                name="correspond_country">
+                                                                <option value="India">India</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label class="d-flex">Pincode<span
+                                                                    class="text-danger dt">*</span></label>
+
+                                                            {% set correspondence_address =
+                                                            prod_user_dic.get('correspondence_address',
+                                                            []) %}
+                                                            {% if correspondence_address and
+                                                            correspondence_address[0].get('correspond_pincode') %}
+                                                            <input type="number" name="correspond_pincode" id="pincode1"
+                                                                class="form-control" data-toggle="input-mask"
+                                                                data-mask-format="000000"
+                                                                value="{{prod_user_dic['correspondence_address'][0]['correspond_pincode']}}">
+
+                                                            {% else %}
+                                                            <input type="number" name="correspond_pincode" id="pincode1"
+                                                                class="form-control" data-toggle="input-mask"
+                                                                data-mask-format="000000">
+                                                            {% endif %}
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label class="d-flex">State<span
+                                                                    class="text-danger dt">*</span></label>
+
+                                                            {% set correspondence_address =
+                                                            prod_user_dic.get('correspondence_address',
+                                                            []) %}
+                                                            {% if correspondence_address and
+                                                            correspondence_address[0].get('correspond_state') %}
+                                                            <select class="form-select select2" name="correspond_state"
+                                                                id="state1">
+                                                                <option value="" selected>Select</option>
+                                                                {% for item in state_list %}
+                                                                <option value="{{ item['state'] }}" {% if
+                                                                    item['state']==prod_user_dic['correspondence_address'][0]['correspond_state']
+                                                                    %} selected {% endif %}>
+                                                                    {{ item['state'] }}
+                                                                </option>
+                                                                {% endfor %}
+                                                            </select>
+
+                                                            {% else %}
+                                                            <select class="form-select select2" name="correspond_state"
+                                                                id="state1">
+                                                                <option value="" selected>Select</option>
+                                                                {% for item in state_list %}
+                                                                <option value="{{ item['state'] }}">
+                                                                    {{ item['state'] }}
+                                                                </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                            {% endif %}
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="form-group">
+                                                            <label class="d-flex">Town / City<span
+                                                                    class="text-danger dt">*</span></label>
+
+                                                            {% set correspondence_address =
+                                                            prod_user_dic.get('correspondence_address',
+                                                            []) %}
+                                                            {% if correspondence_address and
+                                                            correspondence_address[0].get('correspond_city') %}
+                                                            <input type="text" name="correspond_city" id="city1"
+                                                                class="form-control"
+                                                                value="{{prod_user_dic['correspondence_address'][0]['correspond_city']}}">
+
+                                                            {% else %}
+                                                            <input type="text" name="correspond_city" id="city1"
+                                                                class="form-control">
+                                                            {% endif %}
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <a class="btn btn-light" id="back_to_basic_info"><i
+                                                        class="ri-arrow-left-line"></i> Previous</a>
+                                                <a class="btn btn-info" id="add_more_registered_address">Next <i
+                                                        class="ri-arrow-right-line"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane p-3" id="tabs-3" role="tabpanel">
+                                            <div class="add_api_info">
+                                                {% for i in prod_user_dic['api_retails'] %}
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <label class="d-flex">Api Name<span
+                                                                    class="text-danger dt">*</span></label>
+                                                            <select class="form-select" name="name_of_api">
+                                                                <option value="" selected>Select</option>
+
+                                                                {% for item in list_of_api %}
+                                                                <option value="{{ item['objid'] }}" {% if
+                                                                    item['objid']==i['name_of_api'] %} selected {% endif
+                                                                    %}>
+                                                                    {{item['api_name']}}
+                                                                </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <div class="form-group">
+                                                            <label class="d-flex">Pricing </label>
+                                                            <input type="number" name="api_pricing"
+                                                                value="{{i['api_pricing']}}" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-1 text-center ml-1 add-btn-top">
+                                                        <div class="btn btn-primary add-btn">+</div>
+                                                    </div>
+                                                </div>
+                                                {% endfor %}
+
+
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <div class="form-group">
+                                                            <label class="d-flex">Api Name<span
+                                                                    class="text-danger dt">*</span></label>
+                                                            <select class="form-select" name="name_of_api">
+                                                                <option value="" selected>Select</option>
+                                                                {% for item in list_of_api %}
+                                                                <option value="{{item['objid']}}">{{item['api_name']}}
+                                                                </option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <div class="form-group">
+                                                            <label class="d-flex">Pricing </label>
+                                                            <input type="number" name="api_pricing"
+                                                                class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-1 text-center ml-1 add-btn-top">
+                                                        <div class="btn btn-primary add-btn">+</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <a class="btn btn-light" id="back_to_address"><i
+                                                        class="ri-arrow-left-line"></i> Previous</a>
+                                                <button class="btn btn-primary mb-1">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Page Javascript -->
+    {% include 'prod_user_js.html' %}
+
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+
+    <!-- Verify Message -->
+    {% if message == "Production Details Update Successfully!" %}
+
+    <script nonce="{{ g.nonce }}">
+        NotifyMessage({ message: "{{message}}", type: "bg-success" });
+    </script>
+
+    {% else %}
+    <script nonce="{{ g.nonce }}">
+        NotifyMessage({ message: "{{message}}", type: "bg-danger" });
+    </script>
+    {% endif %}
+
+    {% endfor %}
+    {% endif%}
+    {% endwith %}
+
+</body>
+
+</html>

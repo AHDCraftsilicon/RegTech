@@ -14,7 +14,7 @@
 
 <body>
     <!-- Topbar -->
-    {% set User_portal_topbar =  User_portal_topbar(user_name) %}
+    {% set User_portal_topbar = User_portal_topbar(user_details) %}
     {% if User_portal_topbar %}
     {{ User_portal_topbar | safe }}
     {% endif %}
@@ -30,42 +30,36 @@
         <div class="page-content">
             <div class="c-page-padding">
                 <div>
-                    <div class="row">
-                        <div class="col-12 c-heading-common">
-                            <h1 class="main-heading">Aadhaar OCR</h1>
-                            <div class="testing-credit">
-                                <p class="testing-credit-text">Test Credits</p>
-                                <p class="testing-credit-digit"><i class="ri-task-line"></i>
-                                    <span>{{test_credit[0]["Used_Credits"]}} / {{test_credit[0]["Test_Credit"]}} </span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+
+                    <!-- Route Headers -->
+                    {% set User_portal_headers = User_portal_headers(page_info) %}
+                    {% if User_portal_headers %}
+                    {{ User_portal_headers | safe }}
+                    {% endif %}
+
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="cc-box">
                                 <div class="cc-box-padding">
-                                    <p class="dash-box-heading-blue">Input</p>
-
+                                    <div class="d-flex justify-content-between text-center">
+                                        <p class="dash-box-heading-blue">Input</p>
+                                        <span class="highlighted_text">
+                                            {{about_api_details['credits_per_use']}} credits per usage
+                                        </span>
+                                    </div>
                                     <div class="d-flex">
                                         <div class="form-group c-form-group mr-4">
                                             <label>Image </label>
                                             <div class="img-capure">
                                                 <div class="captureimg">
-                                                    <img src="../../../../static/images/n-images.jpg" id="aadhaar_img"
-                                                        alt="">
+                                                    <img src="../../../../static/images/placeholder-img.svg"
+                                                        id="aadhaar_img" alt="">
                                                 </div>
                                                 <input type='file' id="aadhaar_input" accept="image/*">
                                             </div>
                                         </div>
                                     </div>
                                     <button id="aadhaar_ocr_run" class="btn c-btn">Run API</button>
-
-                                    <!-- <div class="or"><span>or</span></div>
-                                    <div class="form-group c-form-group">
-                                        <label class="d-block">Samples</label>
-                                        <button id="sample_aadhaar_ocr" class="btn c-btn2">Samples</button>
-                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -83,6 +77,11 @@
                                         <p>✨ We are doing our magic!</p>
                                     </div>
 
+                                    <div class="form-group c-form-group d-none" id="api_status">
+                                        <label>Status:
+                                            <span id="status_code">200</span> </label>
+                                    </div>
+
                                     <div class="form-group c-form-group">
                                         <div class="dc-flex">
                                             <label>Json </label>
@@ -92,8 +91,10 @@
                                         </pre>
                                     </div>
 
-                                    <button class="btn c-btn" id="aadhaar_ocr_copy">Copy Json</button>
-                                    <button class="btn c-btn2 ml-4" id="aadhaar_ocr_download">Download</button>
+                                    <button class="btn c-btn" id="aadhaar_ocr_copy"><i class="ri-file-copy-line"></i>
+                                        Copy Json</button>
+                                    <button class="btn c-btn2 ml-4" id="aadhaar_ocr_download"><i
+                                            class="ri-download-2-line"></i> Download</button>
 
 
                                     <div class="right-bottom-part">
@@ -111,7 +112,7 @@
                                             </div>
                                         </div>
                                         <p class="dash-box-heading-blue pt-4">More about this API </p>
-                                        <p>{{about_api_details}}</p>
+                                        <p>{{about_api_details['long_api_description']}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -123,6 +124,12 @@
             </div>
         </div>
     </section>
+
+    <!-- Credit Pop-up -->
+    {% set User_portal_credits_modal = User_portal_credits_modal(page_info) %}
+    {% if User_portal_credits_modal %}
+    {{ User_portal_credits_modal | safe }}
+    {% endif %}
 
     <!-- Page Javascript -->
     {% include 'aadhaar_ocr_js.html' %}

@@ -40,34 +40,35 @@
                         <div class="login-box">
                             <div class="login-content">
                                 <h1>Create Account</h1>
-                                <form method="post">
-
-                                    <div>
-                                        <div class="group mb-0">
-                                            <label class="">Company Name</label>
-                                            <input class="input-margin" type="text" name="Company_Name" required>
-
-                                        </div>
-                                        <div class="group mb-0">
-                                            <label class="">Mobile Number</label>
-                                            <input class="input-margin" type="number" min="1000000000" max="9999999999"
-                                                name="Mobile_No" required>
-
-                                        </div>
-                                        <div class="group mb-0">
-                                            <label class="">Work Email</label>
-                                            <input class="input-margin" type="email" name="Email_Id" required>
-
-                                        </div>
-                                        <div class="group">
-                                            <button class="btn c-btn">Sign Up</button>
-                                        </div>
-                                        <div class="group text-center">
-                                            <p class="c-signUp"> Already have an account? <a href="/login/user"
-                                                    class="c-link">Login</a></p>
-                                        </div>
+                                <!-- <form method="post"> -->
+                                <div id="validate-toast"></div>
+                                
+                                <div>
+                                    <div class="input-groups">
+                                        <label> Company Name</label>
+                                        <input type="text" name="Company_Name" id="Company_Name" required>
+                                        <div class="error" id="errorMessage_Company_Name"></div>
                                     </div>
-                                </form>
+                                    <div class="input-groups">
+                                        <label>Mobile Number</label>
+                                        <input type="number" min="1000000000" max="9999999999" name="Mobile_No"
+                                            id="Mobile_No" required>
+                                        <div class="error" id="errorMessage_Mobile_No"></div>
+                                    </div>
+                                    <div class="input-groups">
+                                        <label>Work Email</label>
+                                        <input type="email" name="Email_Id" id="Email_Id" required>
+                                        <div class="error" id="errorMessage_Email_Id"></div>
+                                    </div>
+                                    <div class="group">
+                                        <button class="btn c-btn" id="signup_btn">Sign Up</button>
+                                    </div>
+                                    <div class="group text-center">
+                                        <p class="c-signUp"> Already have an account? <a href="/login/user"
+                                                class="c-link">Login</a></p>
+                                    </div>
+                                </div>
+                                <!-- </form> -->
                             </div>
                         </div>
                     </div>
@@ -77,26 +78,8 @@
     </section>
 
 
-    <!-- Authentication Toasty -->
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    {% for message in messages %}
-
-    <!-- Verify Message -->
-    {% if message == "Verification link has been successfully sent on your registered email ID." %}
-    <script nonce="{{ g.nonce }}">
-        NotifyMessage({ message: "{{message}}", type: "bg-success" });
-    </script>
-    {% else %}
-    <script nonce="{{ g.nonce }}">
-        NotifyMessage({ message: "{{message}}", type: "bg-danger" });
-    </script>
-    {% endif %}
-
-
-    {% endfor %}
-    {% endif%}
-    {% endwith %}
+    <!-- Page Javascript -->
+    {% include 'Singup_js_.html' %}
 
 
 </body>

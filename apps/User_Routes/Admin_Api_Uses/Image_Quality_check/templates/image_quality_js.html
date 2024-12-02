@@ -1,0 +1,141 @@
+<script nonce="{{ g.nonce }}">
+
+
+    $('#image_quality_input').on('change', (event) => {
+        var output = document.getElementById('quality_check_img');
+        output.src = URL.createObjectURL(event.target.files[0]);
+        output.onload = function () {
+            URL.revokeObjectURL(output.src) // free memory
+        }
+    });
+
+
+    $("#image_quality_run").click(function () {
+        $("#image_quality_run").text("Loading....")
+
+        const fileInput = document.getElementById('image_quality_input');
+        const file = fileInput.files[0];
+
+        if (file != undefined) {
+            $(".c-loader").removeClass('d-none')
+            const formdata = new FormData();
+            formdata.append("image_quality_img", file);
+
+            const requestOptions = {
+                method: "POST",
+                body: formdata,
+                redirect: "follow"
+            };
+
+            fetch("/image_quality/checks/test-api", requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+                    $("#image_quality_run").text("Run Api");
+
+                    if (result['data']['status_code'] == 200) {
+                        $(".c-loader").addClass('d-none')
+                        abc = {
+                            "data": {
+                                "Image": result['data']['response'],
+                                "request_id": result['data']['basic_response']['request_id'],
+                                "request_on": result['data']['basic_response']['request_on'],
+                                "response_on": result['data']['basic_response']['response_on'],
+                                "api_name": result['data']['basic_response']['api_name'],
+                                "duration": result['data']['basic_response']['duration'],
+                            }
+                        }
+                        // Image Quality check Json preview
+                        var formatteddata = JSON.stringify(abc, null, '\t')
+                        document.getElementById('image_quality_json').innerHTML = formatteddata
+                        //    Result in second 
+                        $('#eta').removeClass('d-none')
+                        document.getElementById("common_seconds").innerHTML = result['data']['basic_response']['duration']
+                        // Api Status Show
+                        $("#api_status").removeClass('d-none')
+                        $("#status_code").addClass("success")
+                        document.getElementById('status_code').innerHTML = result['data']['status_code']
+                        // Used Credits set
+                        $("#uds_crdts").text(result['data']['basic_response']['test_credits'])
+                    }
+                    else {
+                        $(".c-loader").addClass('d-none')
+
+                        request_id = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            request_id = result['data']['basic_response']['request_id']
+                        }
+
+                        request_on = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            request_on = result['data']['basic_response']['request_on']
+                        }
+
+                        response_on = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            response_on = result['data']['basic_response']['response_on']
+                        }
+
+                        api_name = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            api_name = result['data']['basic_response']['api_name']
+                        }
+
+                        duration = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            duration = result['data']['basic_response']['duration']
+                        }
+
+                        abc = {
+                            "data": {
+                                "Image": result['data']['response'],
+                                "request_id": request_id,
+                                "request_on": request_on,
+                                "response_on": response_on,
+                                "api_name": api_name,
+                                "duration": duration,
+                            }
+                        }
+
+                        // Image Quality check Json preview
+                        var formatteddata = JSON.stringify(abc, null, '\t')
+                        document.getElementById('image_quality_json').innerHTML = formatteddata
+                        //    Result in second 
+                        if (result['data']['basic_response'] != undefined) {
+                            $('#eta').removeClass('d-none')
+                            document.getElementById("common_seconds").innerHTML = result['data']['basic_response']['duration']
+                        }
+                        // Api Status Show
+                        $("#api_status").removeClass('d-none')
+                        $("#status_code").addClass("success")
+                        document.getElementById('status_code').innerHTML = result['data']['status_code']
+                        // Used Credits set
+                        if (result['data']['basic_response'] != undefined) {
+                            $("#uds_crdts").text(result['data']['basic_response']['test_credits'])
+                        }
+                    }
+
+
+                })
+                .catch((error) => console.error(error));
+        } else {
+            alert("Please Choose File!")
+        }
+
+
+    })
+
+
+    $("#full_screen_view").click(function () {
+        enableFullScreen("image_quality_json");
+    });
+
+    $("#image_quality_copy_json").click(function () {
+        copyToClipboard('#image_quality_json')
+    });
+
+    $("#image_quality_download").click(function () {
+        Json_Download('image_quality_json')
+    });
+
+
+</script>

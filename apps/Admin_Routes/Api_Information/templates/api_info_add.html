@@ -1,0 +1,212 @@
+<!-- Add Modal -->
+<div class="modal fade" id="api_info_add_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="exampleModalLabel">Add Api Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <form method="post" class="needs-validation" action="/BBRgt/api-info/add" novalidate>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Api <span class="text-danger dt">*</span></label>
+                                    <input type="text" class="form-control" name="api" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Name of api <span class="text-danger dt">*</span></label>
+                                    <input type="text" class="form-control" name="api_name" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Page URL <span class="text-danger dt">*</span></label>
+                                    <input type="text" class="form-control" name="page_url" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Api logo <span class="text-muted">(SVG)</span> <span
+                                            class="text-danger dt">*</span></label>
+                                    <textarea class="form-control" rows="3" name="api_logo" required></textarea>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Long api description <span class="text-danger dt">*</span></label>
+                                    <textarea class="form-control" rows="3" name="long_api_description"
+                                        required></textarea>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Short api description <span class="text-danger dt">*</span></label>
+                                    <textarea class="form-control" rows="3" name="sort_api_description"
+                                        required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Credit per use <span class="text-danger dt">*</span></label>
+                                    <input type="number" class="form-control" name="credits_per_use" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Status <span class="text-danger dt">*</span></label>
+                                    <select class="form-control" name="status" required>
+                                        <option value="Enable">Enable</option>
+                                        <option value="Disable">Disable</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>View Permission <span class="text-danger dt">*</span></label>
+                                    <select class="form-control" name="view_permission" required>
+                                        <option value="True">True</option>
+                                        <option value="False">False</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-primary mb-1">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Edit Modal -->
+<div class="modal fade" id="api_info_edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="exampleModalLabel">Edit Api Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <form method="post" class="needs-validation" id="edit_info" novalidate>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Api <span class="text-danger dt">*</span></label>
+                                    <input type="text" class="form-control" name="api" id="api" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Name of api <span class="text-danger dt">*</span></label>
+                                    <input type="text" class="form-control" name="api_name" id="api_name" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Page URL <span class="text-danger dt">*</span></label>
+                                    <input type="text" class="form-control" name="page_url" id="page_url" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Api logo <span class="text-muted">(SVG)</span> <span
+                                            class="text-danger dt">*</span></label>
+                                    <textarea class="form-control" rows="3" name="api_logo" id="api_logo"
+                                        required></textarea>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Long api description <span class="text-danger dt">*</span></label>
+                                    <textarea class="form-control" rows="3" name="long_api_description"
+                                        id="long_api_description" required></textarea>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Short api description <span class="text-danger dt">*</span></label>
+                                    <textarea class="form-control" rows="3" name="sort_api_description"
+                                        id="sort_api_description" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Credit per use <span class="text-danger dt">*</span></label>
+                                    <input type="number" class="form-control" name="credits_per_use"
+                                        id="credits_per_use" required>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Status <span class="text-danger dt">*</span></label>
+                                    <select class="form-control" name="status" id="status" required>
+                                        <option value="Enable">Enable</option>
+                                        <option value="Disable">Disable</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>View Permission <span class="text-danger dt">*</span></label>
+                                    <select class="form-control" name="view_permission" id="view_permission" required>
+                                        <option value="True">True</option>
+                                        <option value="False">False</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button class="btn btn-primary mb-1">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script nonce="{{ g.nonce }}">
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+
+
+</script>

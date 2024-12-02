@@ -1,0 +1,292 @@
+<script nonce="{{ g.nonce }}">
+
+    var table = $('#basic-datatable').DataTable({
+        'processing': true,
+        'serverSide': true,
+        'serverMethod': 'post',
+        "autoWidth": false,
+        'ajax': {
+            'url': '/BBRgt/user-details/data-table'
+        },
+        'lengthMenu': [[10, 20, 50, 100, 500], [10, 20, 50, 100, 500]],
+        searching: true,
+        sort: true,
+        // "aaSorting": [[3, "desc"]],
+        'columns': [
+            { data: "Company_Name" },
+            { data: 'Mobile_No' },
+            { data: 'Email_Id' },
+            {
+                data: "user_type",
+                'render': function (user_type) {
+                    if (!user_type) {
+                        return 'N/A';
+                    } else {
+                        if (user_type == "Test User") {
+                            return `<span class="badge bg-info text-light">Test User</span>`;
+                        }
+                        else {
+                            return `<span class="badge bg-success text-light">` + user_type + `</span>`;
+                        }
+                    }
+                }
+            },
+            {
+                data: "created_date",
+                'render': function (created_date) {
+                    if (!created_date) {
+                        return 'N/A';
+                    } else {
+                        return `<div style="text-wrap: wrap;text-align: center;">` + created_date + `</div>`;
+                    }
+                }
+            },
+            {
+                data: "objid",
+                'sortable': false,
+                'searchable': false,
+                'render': function (objid) {
+                    if (!objid) {
+                        return 'N/A';
+                    } else {
+                        return `<div class="d-flex"><button class="btn btn-primary mr-2 edit_user_details" value="` + objid + `" ><i class="ri-edit-circle-fill"></i></buton>
+                                        
+                                <button class="btn btn-primary" value="` + objid + `" ><i class="ri-eye-close-line"></i></buton>
+                                        </div>
+                                        `;
+                    }
+                }
+            },
+        ],
+
+        orderCellsTop: true,
+        fixedHeader: true,
+        columnDefs: [
+            // { orderable: true, className: 'line_texts', targets: [3] },
+            { orderable: false, className: 'line_texts', targets: [0, 1, 2, 3, 4] },
+        ],
+
+        createdRow: function (row, data, dataIndex) {
+            $(row).addClass('centerele');
+        },
+
+        initComplete: function () {
+            var api = this.api();
+
+            // For each column
+
+            $('#user_name').on('change', function () {
+                var regexr = '{search}';
+                api
+                    .column(0)
+                    .search(
+                        this.value != ''
+                            ? regexr.replace('{search}', this.value)
+                            : '',
+                        this.value != '',
+                        this.value == ''
+                    )
+                    .draw();
+            })
+
+            $('#user_type').on('change', function () {
+                var regexr = '{search}';
+                api
+                    .column(3)
+                    .search(
+                        this.value != ''
+                            ? regexr.replace('{search}', this.value)
+                            : '',
+                        this.value != '',
+                        this.value == ''
+                    )
+                    .draw();
+            })
+
+
+            $('input[name="created_on"]').on('apply.daterangepicker', function () {
+                var regexr = '{search}';
+                api
+                    .column(4)
+                    .search(
+                        this.value != ''
+                            ? regexr.replace('{search}', $(this)[0].value)
+                            : '',
+                        this.value != '',
+                        this.value == '',
+
+                    )
+                    .draw();
+            });
+
+
+            api
+                .columns()
+                .eq(0)
+                .each(function (colIdx) {
+                    // Set the header cell to contain the input element
+                    var cell = $('.filters th').eq(
+                        $(api.column(colIdx).header()).index()
+                    );
+
+                    $(
+                        'input',
+                        $('.filters th').eq($(api.column(colIdx).header()).index())
+                    )
+                        .off('keyup change')
+                        .on('change', function (e) {
+                            // Get the search value
+                            $(this).attr('title', $(this).val());
+                            var regexr = '{search}'; //$(this).parents('th').find('select').val();
+
+                            var cursorPosition = this.selectionStart;
+                            // Search the column for that value
+                            api
+                                .column(colIdx)
+                                .search(
+                                    this.value != ''
+                                        ? regexr.replace('{search}', this.value).replace(/\\/g, "")
+                                        : '',
+                                    this.value != '',
+                                    this.value == ''
+                                )
+                                .draw();
+                        })
+                        .on('keyup', function (e) {
+                            e.stopPropagation();
+                            $(this).trigger('change');
+                            $(this)
+                                .focus()[0]
+                            // .setSelectionRange(cursorPosition, cursorPosition);
+                        });
+                });
+
+        },
+
+
+    });
+
+    var objid = ""
+
+    const socket = io.connect();
+
+    // Update Mode 
+    $(document).on("click", ".edit_user_details", function () {
+        if (this.value != "") {
+
+            objid = this.value
+            socket.emit('user_objid', { data: this.value });
+
+            socket.on('flag_info', (data) => {
+                console.log(data);
+                
+                if (data['data']['user_flag'] == 2) {
+                    $("#user_names").text(data['data']['Company_Name'])
+                    $("#user_email").html(data['data']['Email_Id'])
+                    $("#user_mobile_no").html(data['data']['Mobile_No'])
+
+                    var myModal = new bootstrap.Modal(document.getElementById('user_type_conformation'));
+                    myModal.show();
+                }
+                else if (data['data']['user_flag'] == 1) {
+                    window.location.replace("/BBRgt/edit-test-user/" + this.value);
+                }
+                else if (data['data']['user_flag'] == 0) {
+                    window.location.replace("/BBRgt/edit-prod-user/" + this.value);
+                }
+            })
+        }
+        // window.location.replace("/BBRgt/edit-user-details/" + this.value);
+    })
+
+
+    // System Set User Type
+    $("#set_user_type").on("click", function () {
+        if ($("#customRadio1").is(":checked") == true) {
+            console.log($("#customRadio1").val());
+
+            if (objid != "") {
+                socket.emit('set_user_flag', {
+                    data: {
+                        "user_objid": objid,
+                        'user_flag': $("#customRadio1").val()
+                    }
+                });
+
+                socket.emit('user_objid', { data: objid });
+                socket.on('flag_info', (data) => {
+                    if (data['data']['user_flag'] == 2) {
+                        $("#user_names").text(data['data']['Company_Name'])
+                        $("#user_email").html(data['data']['Email_Id'])
+                        $("#user_mobile_no").html(data['data']['Mobile_No'])
+                        var myModal = new bootstrap.Modal(document.getElementById('user_type_conformation'));
+                        myModal.show();
+                    }
+                    else if (data['data']['user_flag'] == 1) {
+                        window.location.replace("/BBRgt/edit-test-user/" + objid);
+                    }
+                    else if (data['data']['user_flag'] == 0) {
+                        window.location.replace("/BBRgt/edit-prod-user/" + objid);
+                    }
+                })
+            }
+        }
+        if ($("#customRadio2").is(":checked") == true) {
+            console.log($("#customRadio2").val());
+            socket.emit('set_user_flag', {
+                data: {
+                    "user_objid": objid,
+                    'user_flag': $("#customRadio2").val()
+                }
+            });
+
+            socket.emit('user_objid', { data: objid });
+            socket.on('flag_info', (data) => {
+                if (data['data'] == 2) {
+                    var myModal = new bootstrap.Modal(document.getElementById('user_type_conformation'));
+                    myModal.show();
+                }
+                else if (data['data'] == 1) {
+                    window.location.replace("/BBRgt/edit-test-user/" + objid);
+                }
+                else if (data['data'] == 2) {
+                    window.location.replace("/BBRgt/edit-prod-user/" + objid);
+                }
+            })
+        }
+    })
+
+
+    // Created Date
+    $(function () {
+
+        $('input[name="created_on"]').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear'
+            },
+            "showWeekNumbers": true,
+            "showISOWeekNumbers": true,
+            "alwaysShowCalendars": true,
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        });
+
+
+        $('input[name="created_on"]').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
+        });
+
+        $('input[name="created_on"]').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
+
+    });
+
+</script>

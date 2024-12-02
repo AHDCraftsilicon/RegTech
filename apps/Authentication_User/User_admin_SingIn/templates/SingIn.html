@@ -40,33 +40,33 @@
                         <div class="login-box">
                             <div class="login-content">
                                 <h1>Login</h1>
-                                <form action="/login/auth/singin" method="post">
-                                    <div>
-                                        <div class="group mb-0">
-                                            <label class="">Work Email</label>
-                                            <input class="input-margin" type="email" id="Email_ID" name="Email_ID"
-                                                required>
-
-                                        </div>
-                                        <div class="group mb-0">
-                                            <div class="dd-flex">
-                                                <label class=""> Password</label>
-                                                <!-- <a href="/password_reset" class="c-link">Forgot Password</a> -->
-                                            </div>
-                                            <input class="input-margin" type="password" id="Password" name="Password"
-                                                required>
-                                            <i class="toggle-password ri-eye-line"></i>
-                                        </div>
-                                        <div class="group">
-                                            <button class="btn c-btn">Login</button>
-                                        </div>
-                                        <div class="group text-center">
-                                            <p class="c-signUp"> Don't have an Account? <a href="/register/user/new"
-                                                    class="c-link">Sign
-                                                    Up</a></p>
-                                        </div>
+                                <div id="validate-toast"></div>
+                                <div>
+                                    <div class="input-groups">
+                                        <label>Work Email</label>
+                                        <input type="email" id="Email_ID" name="Email_ID" required>
+                                        <div class="error" id="errorMessage_Email_ID"></div>
                                     </div>
-                                </form>
+                                    <div class="input-groups">
+                                        <div class="d-flex justify-content-between">
+                                            <label>Password</label>
+                                            <div>
+                                                <a href="/password_reset" class="c-link">Forgot Password</a>
+                                            </div>
+                                        </div>
+                                        <i class="toggle-password ri-eye-line"></i>
+                                        <input type="password" id="Password" name="Password" required>
+                                        <div class="error" id="errorMessage_Password"></div>
+                                    </div>
+                                    <div class="group">
+                                        <button class="btn c-btn" id="singin_btn">Login</button>
+                                    </div>
+                                    <div class="group text-center">
+                                        <p class="c-signUp"> Don't have an Account? <a href="/register/user/new"
+                                                class="c-link">Sign
+                                                Up</a></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -75,19 +75,10 @@
         </div>
     </section>
 
-    <!-- Authentication Toasty -->
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    {% for message in messages %}
+    <!-- Page Javascript -->
+    {% include 'SingIn_js.html' %}
 
-    <!-- Verify Message -->
-    <script nonce="{{ g.nonce }}">
-        NotifyMessage({ message: "{{message}}", type: "bg-danger" });
-    </script>
 
-    {% endfor %}
-    {% endif%}
-    {% endwith %}
     <script nonce="{{ g.nonce }}">
 
         $(document).ready(function () {
