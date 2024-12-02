@@ -110,7 +110,7 @@ def allowed_file(file):
 def Aadhaar_redaction_api_test():
     if request.method == "POST":
 
-        try:
+        # try:
             encrypted_token = session.get('QtSld')
             ip_address = session.get('KLpi')
             if session.get('bkjid') != "":
@@ -269,12 +269,12 @@ def Aadhaar_redaction_api_test():
                                     "status": "Error",
                                     "response":"Something went wrong!"
                                 }}), 400
-        except:
-            return jsonify({"data":{
-                                    "status_code": 400,
-                                    "status": "Error",
-                                    "response":"Something went wrong!"
-                                }}), 400
+        # except:
+        #     return jsonify({"data":{
+        #                             "status_code": 400,
+        #                             "status": "Error",
+        #                             "response":"Something went wrong!"
+        #                         }}), 400
         
     return jsonify({"data":{
                             "status_code": 405,
