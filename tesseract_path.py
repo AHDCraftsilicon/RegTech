@@ -7,6 +7,6 @@ import pytesseract
 # pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 # Live Tesseract
-# os.environ["TESSDATA_PREFIX"] = "/usr/share/tesseract-ocr/5/"
+os.environ["TESSDATA_PREFIX"] = "/home/RegtechLive/"
 # pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
-pytesseract.pytesseract.tesseract_cmd = r'/home/RegtechLive/'
+pytesseract.pytesseract.tesseract_cmd = r'/usr/bin/tesseract'
