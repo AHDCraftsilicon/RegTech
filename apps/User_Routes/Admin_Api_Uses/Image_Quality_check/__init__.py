@@ -109,6 +109,7 @@ def quality_check_module(image_base64):
     brightness_level = ""
     noise_level = ""
     noise_status = ""
+    sharpness_score = ""
 
     
     # Get the image dimensions (height, width)
@@ -119,6 +120,7 @@ def quality_check_module(image_base64):
     
     # Calculate the variance of the Laplacian(Sharpness)
     variance_of_laplacian = cv2.Laplacian(image, cv2.CV_64F).var()
+    sharpness_score = variance_of_laplacian
 
     # Check brightness
     mean_brightness = np.mean(image)
@@ -150,36 +152,119 @@ def quality_check_module(image_base64):
     file_size_bytes = len(image_data)
     file_size_kb = file_size_bytes / 1024
     file_size_mb = file_size_kb / 1024
+
+    # Confidence Score Calculation
+    weights = {
+        "sharpness": 0.4,  # Sharpness is 40% of the score
+        "brightness": 0.2,  # Brightness is 20%
+        "contrast": 0.3,  # Contrast is 30%
+        "noise": 0.1       # Noise is 10%
+    }
+
+
+    # Normalize each metric (set ranges based on example thresholds)
+    sharpness_norm = min(1, max(0, (sharpness_score - 50) / (200 - 50)))  # Normalize sharpness
+    brightness_norm = min(1, max(0, (mean_brightness - 50) / (200 - 50)))  # Normalize brightness
+    contrast_norm = min(1, max(0, (contrast - 50) / (255 - 50)))  # Normalize contrast
+    noise_norm = 1 - min(1, max(0, (noise - 5) / (20 - 5)))  # Inverse normalization for noise
+
+    # Calculate confidence score
+    confidence_score = (
+        weights["sharpness"] * sharpness_norm +
+        weights["brightness"] * brightness_norm +
+        weights["contrast"] * contrast_norm +
+        weights["noise"] * noise_norm
+    ) * 100  # Convert to percentage
+
+    # Determine overall quality verdict
+    quality_verdict = "Good" if confidence_score > 75 else "Average" if confidence_score > 50 else "Poor"
     
     
     if variance_of_laplacian < 100:
-        return { 
-            "Resolution" : resolution,
-            "Sharpness":f"{variance_of_laplacian:.2f}",
-            # "Contrast_status":Contrast_status,
-            "Contrast_score":contrast_scrore,
-            # "Brightness_status":brightness_status,
-            "Brightness_level":brightness_level,            
-            "Noise_level":noise_level,            
-            # "Noise_status":noise_status, 
-            "File_Size_KB" : f"{file_size_kb:.2f}",           
-            "File_Size_MB" : f"{file_size_mb:.2f}",           
-            "Overall_Quality": "Image quality is poor!"
-        }
+        return [
+            {
+                "score" : resolution,
+                "type" : "Resolution",
+            },
+            {
+                "score" : f"{variance_of_laplacian:.2f}",
+                "flag":"Law",
+                "type" : "Sharpness",
+            },
+            {
+                "score" : contrast_scrore,
+                "flag":Contrast_status,
+                "type" : "Contrast",
+            },
+            {
+                "score" : brightness_level,
+                "flag":brightness_status,
+                "type" : "Brightness",
+            },
+            {
+                "score" : noise_level,
+                "flag":noise_status,
+                "type" : "Noise Level",
+            },
+            {
+                "score" : f"{confidence_score:.2f}",
+                "type" : "Confidence Score",
+            },
+            {
+                "score" : "Fail",
+                "type" : "Overall Quality",
+            }
+        ]
     else:
-        return { 
-            "Resolution" : resolution,
-            "Sharpness":f"{variance_of_laplacian:.2f}",
-            # "Contrast_status":Contrast_status,
-            "Contrast_score":contrast_scrore,
-            # "Brightness_status":brightness_status,
-            "Brightness_level":brightness_level,            
-            "Noise_level":noise_level,            
-            # "Noise_status":noise_status, 
-            "File_Size_KB" : file_size_kb,           
-            "File_Size_MB" : file_size_mb, 
-            "Overall_Quality": "Image quality is good!"
-        }
+        # return { 
+        #     "Resolution" : resolution,
+        #     "Sharpness":f"{variance_of_laplacian:.2f}",
+        #     # "Contrast_status":Contrast_status,
+        #     "Contrast_score":contrast_scrore,
+        #     # "Brightness_status":brightness_status,
+        #     "Brightness_level":brightness_level,            
+        #     "Noise_level":noise_level,     
+        #     "Confidence Score (%)": f"{confidence_score:.2f}",       
+        #     # "Noise_status":noise_status, 
+        #     # "File_Size_KB" : file_size_kb,           
+        #     # "File_Size_MB" : file_size_mb, 
+        #     "Overall_Quality": "Image quality is good!"
+        # }
+
+        return [
+            {
+                "score" : resolution,
+                "type" : "Resolution",
+            },
+            {
+                "score" : f"{variance_of_laplacian:.2f}",
+                "flag":"High",
+                "type" : "Sharpness",
+            },
+            {
+                "score" : contrast_scrore,
+                "flag":Contrast_status,
+                "type" : "Contrast",
+            },
+            {
+                "score" : brightness_level,
+                "flag":brightness_status,
+                "type" : "Brightness",
+            },
+            {
+                "score" : noise_level,
+                "flag":noise_status,
+                "type" : "Noise Level",
+            },
+            {
+                "score" : f"{confidence_score:.2f}",
+                "type" : "Confidence Score",
+            },
+            {
+                "score" : "Pass",
+                "type" : "Overall Quality",
+            }
+        ]
 
 
 # Image Extensions

@@ -88,7 +88,7 @@ def generate_random_id():
 @Admin_Api_Uses_Name_Comparison_bp.route("/test-api",methods=["POST"])
 def Name_compare_testing_api():
     if request.method == "POST":
-        try:
+        # try:
             encrypted_token = session.get('QtSld')
             ip_address = session.get('KLpi')
             if session.get('bkjid') != "":
@@ -105,6 +105,9 @@ def Name_compare_testing_api():
                             start_time = datetime.utcnow()
                             # Name Match Function
                             Name_match_percantage = calculate_similarity(request.form['name1'],request.form['name2'])
+                            flag = "Pass"
+                            if 50 >= float(Name_match_percantage):
+                                flag = "Fail"
 
                             # Api End Time
                             end_time = datetime.utcnow()
@@ -123,7 +126,9 @@ def Name_compare_testing_api():
                             json_msg = {"data":{
                                 "status_code": 200,
                                 "status": "Success",
-                                "response": {"match_percentage": Name_match_percantage},
+                                "response": {"match_percentage": Name_match_percantage,
+                                             "match_flag" : flag
+                                             },
                                 "basic_response":{ "request_id" : request_id,
                                             "request_on" : start_time,
                                             "response_on":end_time,
@@ -194,12 +199,12 @@ def Name_compare_testing_api():
                                     "response":"Something went wrong!"
                                 }}), 400
         
-        except:
-            return jsonify({"data":{
-                                    "status_code": 400,
-                                    "status": "Error",
-                                    "response":"Something went wrong!"
-                                }}), 400
+        # except:
+        #     return jsonify({"data":{
+        #                             "status_code": 400,
+        #                             "status": "Error",
+        #                             "response":"Something went wrong!"
+        #                         }}), 400
         
     return jsonify({"data":{
                             "status_code": 405,

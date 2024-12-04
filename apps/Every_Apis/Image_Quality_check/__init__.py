@@ -110,8 +110,8 @@ def quality_check_module(image_base64):
             "Brightness_level":brightness_level,            
             "Noise_level":noise_level,            
             # "Noise_status":noise_status, 
-            "File_Size_KB" : f"{file_size_kb:.2f}",           
-            "File_Size_MB" : f"{file_size_mb:.2f}",           
+            # "File_Size_KB" : f"{file_size_kb:.2f}",           
+            # "File_Size_MB" : f"{file_size_mb:.2f}",           
             "Overall_Quality": "Image quality is poor!"
         }
     else:
@@ -124,8 +124,8 @@ def quality_check_module(image_base64):
             "Brightness_level":brightness_level,            
             "Noise_level":noise_level,            
             # "Noise_status":noise_status, 
-            "File_Size_KB" : file_size_kb,           
-            "File_Size_MB" : file_size_mb, 
+            # "File_Size_KB" : file_size_kb,           
+            # "File_Size_MB" : file_size_mb, 
             "Overall_Quality": "Image quality is good!"
         }
 
