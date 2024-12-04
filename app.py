@@ -1,4 +1,5 @@
 from apps import crete_app ,socketios
+import ssl
 
 app = crete_app()
 
@@ -8,4 +9,8 @@ if __name__ == "__main__":
 
     cert_path = "/etc/letsencrypt/live/regtech.blubeetle.ai/fullchain.pem"
     key_path = "/etc/letsencrypt/live/regtech.blubeetle.ai/privkey.pem"
-    socketios.run(app, debug=True,port=8000, ssl_context=(cert_path, key_path))
+
+    ssl_context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+    ssl_context.load_cert_chain(certfile=cert_path, keyfile=key_path)
+
+    socketios.run(app, debug=True,port=8000, ssl_context=ssl_context)
