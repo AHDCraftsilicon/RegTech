@@ -73,6 +73,8 @@ from apps.Every_Apis.Aadhaar_mobile_link import Aadhaar_mobile_link_bp
 from apps.Every_Apis.Aadhaar_Authentication import Aadhaar_Auth_bp
 from apps.Every_Apis.Voter_Authentication import Voter_Auth_bp
 from apps.Every_Apis.Image_Quality_check import Image_Quality_Check_api_bp
+from apps.Every_Apis.AML_check import AML_check_api_bp
+from apps.Every_Apis.CKYC_check import CKYC_check_api_bp
 
 # Web Socket connection with flutter
 from apps.socket_with_AML import websocket_bp_for_AML
@@ -278,6 +280,8 @@ def crete_app():
     app.register_blueprint(Aadhaar_Auth_bp)
     app.register_blueprint(Voter_Auth_bp)
     app.register_blueprint(Image_Quality_Check_api_bp)
+    app.register_blueprint(AML_check_api_bp)
+    app.register_blueprint(CKYC_check_api_bp)
 
     # WEbsocket with AML
     app.register_blueprint(websocket_bp_for_AML)

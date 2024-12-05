@@ -2,15 +2,10 @@ from flask import Blueprint, render_template,request,session
 from flask_jwt_extended import JWTManager, jwt_required,get_jwt
 from datetime import timedelta
 from bleach import clean
-import re
 from bson import ObjectId
 from datetime import datetime
-import uuid
-import cv2
 import numpy as np
-import base64,os
-import pytesseract
-import time , requests , json
+import re , json , requests
 
 # tessract path
 from tesseract_path import *
@@ -24,16 +19,17 @@ from Headers_Verify import *
 
 
 # Blueprint
-Face_matching_api_bp = Blueprint("Face_matching_api_bp",
+CKYC_check_api_bp = Blueprint("CKYC_check_api_bp",
                         __name__,
                         url_prefix="/api/v1/",
                         template_folder="templates")
 
-
 # DB
 Authentication_db = Regtch_services_UAT["User_Authentication"]
-User_test_Api_history_db = Regtch_services_UAT['User_test_Api_history']
 Api_Informations_db = Regtch_services_UAT["Api_Informations"]
+Prod_user_api_history_db = Regtch_services_UAT['Prod_user_api_history']
+Test_user_api_history_db = Regtch_services_UAT['Test_user_api_history']
+
 
 
 # User Unique Id pettern
@@ -43,9 +39,9 @@ UUID_PATTERN = re.compile(
 )
 
 
-@Face_matching_api_bp.route("/face/match",methods=['POST'])
+@CKYC_check_api_bp.route("/CKYC/check",methods=['POST'])
 @jwt_required()
-def Face_matching_Api_route():
+def CKYC_check_Api_route():
     if request.method == 'POST':
         try:
             data = request.get_json()
@@ -57,27 +53,30 @@ def Face_matching_Api_route():
                                     "response":"Invalid or missing JSON data. Please ensure that the request contains valid JSON!"
                                     }}) , 400
             
-            key_of_request = ['UniqueID','image','env']
+            key_of_request = ['UniqueID','first_name','last_name','dob','transactionId','ckycNumber','env']
             
             # Extra Key Remove
             extra_keys = [key for key in data if key not in key_of_request]
-        
+
             if extra_keys:
                 return jsonify({"data":{
                         "status_code": 400,
                         "status": "Error",
                         "response":"Please validate your data. Some fields are missing or incorrect!"
                     }}), 400
-
-
+            
             # HTML Injection & Also Verify Key is Empy Or Null
             injection_error = check_html_injection(data, key_of_request)
             if injection_error:
                 return injection_error
             
+
+            # Check Unique Id
+
             uuid_to_check = data['UniqueID']
             # Check if the UUID matches the pattern
             if UUID_PATTERN.match(uuid_to_check):
+
                 check_user = get_jwt()
                 print("-------- ", check_user['sub'])
                 jwt_store_details = json.loads(check_user['sub'])
@@ -114,13 +113,14 @@ def Face_matching_Api_route():
                                         json_msg = {"data":{
                                                         "status_code": 200,
                                                         "status": "Success",
-                                                        "response": {"message": "Check completed successfully.",
-                                                                    "result": "Match Found",
-                                                                    "Score": 85,},
+                                                        "response": {"transactionId": data['transactionId'],
+                                                                    "status": "Failure",
+                                                                    "message": "CKYC record not found.",
+                                                                    "reason": "CKYC number does not exist in the database."},
                                                         "basic_response":{ "request_id" : request_id,
                                                                     "request_on" : start_time,
                                                                     "response_on":end_time,
-                                                                    "api_name":"Face_Match",
+                                                                    "api_name":"CKYC_check",
                                                                     "duration":round(duration, 2),
                                                                     }
                                                         }}
@@ -166,19 +166,21 @@ def Face_matching_Api_route():
                                 json_msg = {"data":{
                                                 "status_code": 200,
                                                 "status": "Success",
-                                                "response": {"message": "Check completed successfully.",
-                                                            "result": "Match Found",
-                                                            "riskScore": 85,},
+                                                "response": {"transactionId": data['transactionId'],
+                                                            "status": "Failure",
+                                                            "message": "CKYC record not found.",
+                                                            "reason": "CKYC number does not exist in the database."},
                                                 "basic_response":{ "request_id" : request_id,
                                                             "request_on" : start_time,
                                                             "response_on":end_time,
-                                                            "api_name":"Face_Match",
+                                                            "api_name":"CKYC_check",
                                                             "duration":round(duration, 2),
                                                             }
                                                 }}
                                 
                                 return jsonify(json_msg)
                             
+
                     else:
                         return jsonify({"data":{
                                     "status_code": 500,
@@ -192,25 +194,21 @@ def Face_matching_Api_route():
                         "response":"Invalid user, Please Register Your User!"
                     }}), 400
                 
-                
             else:
                 return jsonify({"data":{
                         "status_code": 400,
                         "status": "Error",
                         "response":"Error! Please Validate the UniqueID format!"
                     }}), 400
+            
         except:
             return jsonify({"data":{
-                        "status_code": 400,
-                        "status": "Error",
-                        "response":"Something went wrong!"
-                    }}), 400
-
-    else:
-        return jsonify({"data":{
-                        "status_code": 400,
-                        "status": "Error",
-                        "response":"Something went wrong!"
-                    }}), 400
-
-                        
+                                    "status_code": 400,
+                                    "status": "Error",
+                                    "response":"Something went wrong!"
+                                }}), 400    
+    return jsonify({"data":{
+                            "status_code": 405,
+                            "status": "Error",
+                            "response":"Request method not allowed. Please use the correct HTTP method."
+                        }}), 405

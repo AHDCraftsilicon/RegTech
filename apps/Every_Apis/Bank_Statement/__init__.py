@@ -30,6 +30,13 @@ Bank_Statement_api_bp = Blueprint("Bank_Statement_api_bp",
                         template_folder="templates")
 
 
+# User Unique Id pettern
+UUID_PATTERN = re.compile(
+    r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
+    re.IGNORECASE
+)
+
+
 @Bank_Statement_api_bp.route("/bank-statement/analyser",methods=['POST'])
 @jwt_required()
 def BANK_statement_analyser_Api_route():
@@ -39,23 +46,66 @@ def BANK_statement_analyser_Api_route():
             ip_address = session.get('KLpi')
             if session.get('bkjid') != "":
 
+                # Sanitize the value
+                sanitized_value = clean(request.form["BankName"], strip=True)
+                if request.form["BankName"] != sanitized_value:
+                    return jsonify({
+                        "data": {
+                            "status_code": 400,
+                            "status": "Error",
+                            "response": "The input contains disallowed HTML tags or attributes! Please remove any unsafe HTML!"
+                        }
+                    }), 400
+                
+                sanitized_value = clean(request.form["UniqueID"], strip=True)
+                if request.form["UniqueID"] != sanitized_value:
+                    return jsonify({
+                        "data": {
+                            "status_code": 400,
+                            "status": "Error",
+                            "response": "The input contains disallowed HTML tags or attributes! Please remove any unsafe HTML!"
+                        }
+                    }), 400
+                
+
                 pdf_file = request.files["PDF_File"]
                 filename_ipdf = str(time.time()).replace(".", "")
-                if pdf_file.filename != "":
-                    if request.form["BankName"] == "ICICIBANK":
-                    
-                        return jsonify({"data":{
-                                    "status_code": 200,
-                                    "status": "Success",
-                                    "response":{"bank_name":"ICICI"}
-                                }})
+
+                # Check Unique Id
+
+                uuid_to_check = request.form['UniqueID']
+                # Check if the UUID matches the pattern
+                if UUID_PATTERN.match(str(uuid_to_check)):
+
+                    if pdf_file.filename != "":
+                        
+                        if request.form["BankName"] == "ICICIBANK":
+                        
+                            return jsonify({"data":{
+                                        "status_code": 200,
+                                        "status": "Success",
+                                        "response":{"bank_name":"ICICI"}
+                                    }})
+                        else:
+                            return jsonify({"data":{
+                                "status_code": 400,
+                                "status": "Error",
+                                "response":"Error! Please Enter Valid Bank!"
+                            }}), 400
+
+                        
+                else:
+                    return jsonify({"data":{
+                            "status_code": 400,
+                            "status": "Error",
+                            "response":"Error! Please Validate the UniqueID format!"
+                        }}), 400
 
         except:
-            return jsonify({"data":{
-                        "status_code": 400,
-                        "status": "Error",
-                        "response":"Something went wrong!"
-                    }}), 400
+            return jsonify({"data" : {"status_code": 400,
+                                    "status": "Error",
+                                    "response":"Invalid or missing form data. Please ensure that the request contains valid data!"
+                                    }}) , 400
 
     else:
         return jsonify({"data":{

@@ -30,6 +30,13 @@ ITR_Statement_api_bp = Blueprint("ITR_Statement_api_bp",
                         template_folder="templates")
 
 
+# User Unique Id pettern
+UUID_PATTERN = re.compile(
+    r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
+    re.IGNORECASE
+)
+
+
 @ITR_Statement_api_bp.route("/itr/analyser",methods=['POST'])
 @jwt_required()
 def ITR_analyser_Api_route():
@@ -39,14 +46,37 @@ def ITR_analyser_Api_route():
             ip_address = session.get('KLpi')
             if session.get('bkjid') != "":
 
+                sanitized_value = clean(request.form["UniqueID"], strip=True)
+                if request.form["UniqueID"] != sanitized_value:
+                    return jsonify({
+                        "data": {
+                            "status_code": 400,
+                            "status": "Error",
+                            "response": "The input contains disallowed HTML tags or attributes! Please remove any unsafe HTML!"
+                        }
+                    }), 400
+
                 pdf_file = request.files["PDF_File"]
                 filename_ipdf = str(time.time()).replace(".", "")
-                if pdf_file.filename != "":
+
+                # Check Unique Id
+
+                uuid_to_check = request.form['UniqueID']
+                # Check if the UUID matches the pattern
+                if UUID_PATTERN.match(str(uuid_to_check)):
+                    if pdf_file.filename != "":
+                        return jsonify({"data":{
+                                        "status_code": 200,
+                                        "status": "Success",
+                                        "response":{"ITR_statement":"ITR-1"}
+                                    }})
+                    
+                else:
                     return jsonify({"data":{
-                                    "status_code": 200,
-                                    "status": "Success",
-                                    "response":{"ITR_statement":"ITR-1"}
-                                }})
+                            "status_code": 400,
+                            "status": "Error",
+                            "response":"Error! Please Validate the UniqueID format!"
+                        }}), 400
 
         except:
             return jsonify({"data":{

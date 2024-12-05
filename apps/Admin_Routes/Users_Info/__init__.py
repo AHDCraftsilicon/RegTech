@@ -165,69 +165,74 @@ def Admin_usersinfo_data_table():
 # Edit prod User Details 
 @Admin_Users_Info_bp.route("/edit-prod-user/<objid>",methods=["GET","POST"])
 def edit_prod_user_details(objid):
-    # try:
+    try:
 
-        # User Information
-        user_info = User_Authentication_db.find_one({"_id":ObjectId(objid)})
+        am_bd_name = session.get('am_bd_name')
+        admin_objid = session.get('am_bjde')
 
-        if user_info != None:
-            user_info_details= { "Company_Name":user_info['Company_Name'],
-                                                    "Mobile_No":user_info['Mobile_No'],
-                                                    "Email_Id":user_info['Email_Id']}
-
-            state_info = pincodes_db.aggregate([{
-                '$group': {
-                    '_id': {
-                        'STATE': '$STATE'
-                    }}}])
-            state_list = []
-            for x in state_info:
-                state_list.append({"state":x['_id']['STATE']})
-
-
-            list_of_api = []
-            api_list = Api_Informations_db.aggregate([{
-                                        '$project': {
-                                            'api_name': -1, 
-                                            'id_str': {
-                                                '$toString': '$_id'
-                                            }}}])
-            
-            for x in list(api_list):
-                list_of_api.append({"api_name":x['api_name'],"objid":x['id_str']})
-
-            prod_user = Production_User_db.find_one({"production_user":user_info['_id']})
-            prod_user_dic = {}
-            print("---------- ", prod_user)
-            if prod_user != None:
-                prod_user_dic['bussiness_name'] = prod_user['bussiness_name']
-                prod_user_dic['PAN_number'] = prod_user['PAN_number']
-                prod_user_dic['TAN_number'] = prod_user['TAN_number']
-                prod_user_dic['name_of_contact_person'] = prod_user['name_of_contact_person']
-                prod_user_dic['designation_of_contact_person'] = prod_user['designation_of_contact_person']
-                prod_user_dic['email_id'] = prod_user['email_id']
-                prod_user_dic['contact_number'] = prod_user['contact_number']
-                prod_user_dic['register_address'] = prod_user['register_address']
-                prod_user_dic['correspondence_address'] = prod_user['correspondence_address']
-                prod_user_dic['api_retails'] = prod_user['api_retails']
-                prod_user_dic['same_to_registered_address'] = prod_user['same_to_registered_address']
+        name = ""
+        if am_bd_name == "Admin_Authentication" and admin_objid != "":
                 
-                # print(prod_user)
-            
+            admin_details = Admin_Authentication_db.find_one({"_id":ObjectId(admin_objid)})
+            user_info = User_Authentication_db.find_one({"_id":ObjectId(objid)})
+
+            if user_info != None:
+                user_info_details= { "Company_Name":user_info['Company_Name'],
+                                                        "Mobile_No":user_info['Mobile_No'],
+                                                        "Email_Id":user_info['Email_Id']}
+
+                state_info = pincodes_db.aggregate([{
+                    '$group': {
+                        '_id': {
+                            'STATE': '$STATE'
+                        }}}])
+                state_list = []
+                for x in state_info:
+                    state_list.append({"state":x['_id']['STATE']})
+
+
+                list_of_api = []
+                api_list = Api_Informations_db.aggregate([{
+                                            '$project': {
+                                                'api_name': -1, 
+                                                'id_str': {
+                                                    '$toString': '$_id'
+                                                }}}])
+                
+                for x in list(api_list):
+                    list_of_api.append({"api_name":x['api_name'],"objid":x['id_str']})
+
+                prod_user = Production_User_db.find_one({"production_user":user_info['_id']})
+                prod_user_dic = {}
+                print("---------- ", prod_user)
+                if prod_user != None:
+                    prod_user_dic['bussiness_name'] = prod_user['bussiness_name']
+                    prod_user_dic['PAN_number'] = prod_user['PAN_number']
+                    prod_user_dic['TAN_number'] = prod_user['TAN_number']
+                    prod_user_dic['name_of_contact_person'] = prod_user['name_of_contact_person']
+                    prod_user_dic['designation_of_contact_person'] = prod_user['designation_of_contact_person']
+                    prod_user_dic['email_id'] = prod_user['email_id']
+                    prod_user_dic['contact_number'] = prod_user['contact_number']
+                    prod_user_dic['register_address'] = prod_user['register_address']
+                    prod_user_dic['correspondence_address'] = prod_user['correspondence_address']
+                    prod_user_dic['api_retails'] = prod_user['api_retails']
+                    prod_user_dic['same_to_registered_address'] = prod_user['same_to_registered_address']
+                    
+                    # print(prod_user)
+                
+                else:
+                    pass
+                return render_template("Prod_user_edit_details.html",
+                                    state_list=state_list , list_of_api=list_of_api ,
+                                    user_info_details=user_info_details,
+                                    prod_user_dic=prod_user_dic,objid=objid)
             else:
-                pass
-            return render_template("Prod_user_edit_details.html",
-                                state_list=state_list , list_of_api=list_of_api ,
-                                user_info_details=user_info_details,
-                                prod_user_dic=prod_user_dic,objid=objid)
-        else:
-            return jsonify({"status_code": 404,
-                                    "status": "Error",
-                                    "response": "The requested resource or endpoint doesn’t exist!"}) , 404 
-    # except:
-    #     return jsonify({"status_code": 400,
-    #                         "status": "Error",
-    #                         "response": "An issue with the request syntax or parameters!"}) , 400 
+                return jsonify({"status_code": 404,
+                                        "status": "Error",
+                                        "response": "The requested resource or endpoint doesn’t exist!"}) , 404 
+        return redirect("/BBRgt/admin-login-RRtggR")
+    except:
+        return redirect("/error")
 
 
 
@@ -368,6 +373,28 @@ def edit_prod_user_form_details(objid):
         return jsonify({"status_code": 400,
                             "status": "Error",
                             "response": "An issue with the request syntax or parameters!"}) , 400 
+
+
+# View prod User Details
+@Admin_Users_Info_bp.route("/view-prod-user/<objid>",methods=["GET","POST"])
+def view_prod_user_details(objid):
+    try:
+        am_bd_name = session.get('am_bd_name')
+        admin_objid = session.get('am_bjde')
+
+        name = ""
+        if am_bd_name == "Admin_Authentication" and admin_objid != "":
+                
+            admin_details = Admin_Authentication_db.find_one({"_id":ObjectId(admin_objid)})
+
+            return render_template('Prod_user_view_details.html')
+        
+        return redirect("/BBRgt/admin-login-RRtggR")
+    except:
+        return redirect("/error")
+
+    
+
 
 # Edit test User Details
 @Admin_Users_Info_bp.route("/edit-test-user/<objid>",methods=["GET","POST"])

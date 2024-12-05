@@ -4,12 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Test User Details - bluBeetle.ai</title>
+    <title>View Prod User Details - bluBeetle.ai</title>
 
     {% set Admin_Portal_urls = Admin_Portal_urls() %}
     {% if Admin_Portal_urls %}
     {{ Admin_Portal_urls | safe }}
     {% endif %}
+
+    <div class="c-content">
+        <div class="c-content-main-part">
+            <div id="toastContainer" class="toast-container">
+            </div>
+        </div>
+    </div>
 
 </head>
 
@@ -33,7 +40,7 @@
                 <div class="c-contain-padding">
                     <div class="username_part">
                         <div class="username-text">
-                            <h2>Update Test User List</h2>
+                            <h2>Prod User View</h2>
                         </div>
                     </div>
 
@@ -41,9 +48,7 @@
                     <div class="c-box mt-3">
                         <div class="c-box-padding">
                             <div class="container">
-                                <h4>increase credit request</h4>
-                                <h4>credit history</h4>
-                                <h4>api use data-table</h4>
+
                             </div>
                         </div>
                     </div>
@@ -54,6 +59,9 @@
         </div>
     </div>
 
+
+    <!-- Page Javascript -->
+    {% include 'prod_user_js.html' %}
 
 </body>
 

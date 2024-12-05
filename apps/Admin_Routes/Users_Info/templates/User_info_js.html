@@ -51,7 +51,7 @@
                     } else {
                         return `<div class="d-flex"><button class="btn btn-primary mr-2 edit_user_details" value="` + objid + `" ><i class="ri-edit-circle-fill"></i></buton>
                                         
-                                <button class="btn btn-primary" value="` + objid + `" ><i class="ri-eye-close-line"></i></buton>
+                                <button class="btn btn-primary view_user_details" value="` + objid + `" ><i class="ri-eye-fill"></i></buton>
                                         </div>
                                         `;
                     }
@@ -178,8 +178,6 @@
             socket.emit('user_objid', { data: this.value });
 
             socket.on('flag_info', (data) => {
-                console.log(data);
-                
                 if (data['data']['user_flag'] == 2) {
                     $("#user_names").text(data['data']['Company_Name'])
                     $("#user_email").html(data['data']['Email_Id'])
@@ -198,6 +196,36 @@
         }
         // window.location.replace("/BBRgt/edit-user-details/" + this.value);
     })
+
+
+    //View User details
+    $(document).on("click", ".view_user_details", function () {
+        if (this.value != "") {
+            objid = this.value
+            socket.emit('user_objid', { data: this.value });
+
+            socket.on('flag_info', (data) => {
+                if (data['data']['user_flag'] == 2) {
+                    $("#user_names").text(data['data']['Company_Name'])
+                    $("#user_email").html(data['data']['Email_Id'])
+                    $("#user_mobile_no").html(data['data']['Mobile_No'])
+
+                    var myModal = new bootstrap.Modal(document.getElementById('user_type_conformation'));
+                    myModal.show();
+                }
+                else if (data['data']['user_flag'] == 1) {
+                    console.log("flag 1 ",  objid);
+                    window.location.replace("/BBRgt/view-prod-user/" + this.value);
+                    
+                }
+                else if (data['data']['user_flag'] == 0) {
+                    console.log("flag 2 ", objid);
+                    
+                }
+            })
+        }
+    })
+
 
 
     // System Set User Type
