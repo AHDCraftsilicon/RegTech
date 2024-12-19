@@ -26,7 +26,7 @@ from apps.User_Routes.Admin_Api_Uses.Image_Quality_check import Image_Quality_ch
 from apps.User_Routes.Admin_Api_Uses.Langu_Trans import Language_translate_bp
 from apps.User_Routes.Admin_Api_Uses.Bank_Statements import Bank_Statments_bp
 from apps.User_Routes.Admin_Api_Uses.ITR_Analysis import ITR_analysis_bp
-from apps.User_Routes.Admin_Api_Uses.Document_validation import Document_validation_bp
+# from apps.User_Routes.Admin_Api_Uses.Document_validation import Document_validation_bp
 
 # User Api Credentials
 from apps.User_Routes.Api_Credentials import User_Admin_Api_Credentials_bp , api_Cred_socketio
@@ -252,7 +252,7 @@ def crete_app():
     app.register_blueprint(Language_translate_bp)
     app.register_blueprint(Bank_Statments_bp)
     app.register_blueprint(ITR_analysis_bp)
-    app.register_blueprint(Document_validation_bp)
+    # app.register_blueprint(Document_validation_bp)
     # Api Credentials
     app.register_blueprint(User_Admin_Api_Credentials_bp)
     app.register_blueprint(User_Support_bp)
