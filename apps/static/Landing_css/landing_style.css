@@ -622,11 +622,11 @@ ul.menu li {
 }
 
 .focus-heading {
-    font-size: 45px;
+    font-size: 38px;
     color: var(--common-gray);
     text-transform: capitalize;
     padding-right: 30px;
-    line-height: 55px;
+    /* line-height: 55px; */
 }
 
 .focus-part {
@@ -889,11 +889,15 @@ ul.menu li {
     isolation: isolate;
     border-color: transparent;
     border-bottom: none;
-    color: var(--main-bg-color);
+    color: #41a1ff;
     font-weight: 600;
-    transform: scale(1.1);
+    /* transform: scale(1.1); */
 }
-
+.nav-tabs .nav-link:hover {
+    text-shadow: 0 0 12px #FFFFFF;
+    transition: all ease-in-out .2s;
+    /* font-weight: normal; */
+}
 .tab-content {
     background-color: #fff;
 
@@ -908,7 +912,7 @@ ul.menu li {
 .nav-tabs .nav-link.active {
     color: var(--main-bg-color) !important;
     font-weight: 600 !important;
-    transform: scale(1.1);
+    /* transform: scale(1.1); */
 }
 
 .success-stories {
@@ -1012,7 +1016,7 @@ footer {
 }
 
 .api-info-headers {
-    text-align: center;
+    /* text-align: center; */
     font-size: 2.5rem;
     color: #025295;
     margin-bottom: 1.4rem;
@@ -1473,13 +1477,13 @@ only screen and (min-resolution: 2dppx) {
     padding-bottom: 20px;
 }
 
-.ad-text1 p {
+/* .ad-text1 p {
     height: 72px;
-}
+} */
 
 .ad-text1 h3 {
     font-size: 22px;
-    height: 50px;
+    /* height: 50px; */
 }
 
 .ad-text1 p {
@@ -1927,4 +1931,7 @@ iframe {
 
 .select2-container {
     width: 95px !important;
+}
+.flex-100 {
+    flex: 1;
 }

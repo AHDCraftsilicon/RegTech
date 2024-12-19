@@ -14,122 +14,139 @@
 </head>
 
 <body>
-    <!-- Topbar -->
-    {% set User_portal_topbar = User_portal_topbar(user_details) %}
-    {% if User_portal_topbar %}
-    {{ User_portal_topbar | safe }}
+
+    <!-- Side-Bar -->
+    {% set User_portal_sidebar = User_portal_sidebar() %}
+    {% if User_portal_sidebar %}
+    {{ User_portal_sidebar | safe }}
     {% endif %}
 
-    <section class="main-part">
-        <!-- Side-Bar -->
-        {% set User_portal_sidebar = User_portal_sidebar() %}
-        {% if User_portal_sidebar %}
-        {{ User_portal_sidebar | safe }}
+
+    <section class="home-section">
+        <!-- Topbar -->
+        {% set User_portal_topbar = User_portal_topbar(user_details) %}
+        {% if User_portal_topbar %}
+        {{ User_portal_topbar | safe }}
         {% endif %}
 
-        <!-- Page Content -->
-        <div class="page-content">
-            <div class="c-page-padding">
-                <div>
 
-                    <!-- Route Headers -->
-                    {% set User_portal_headers = User_portal_headers(page_info) %}
-                    {% if User_portal_headers %}
-                    {{ User_portal_headers | safe }}
-                    {% endif %}
+        <!-- Page Contante -->
+        <div class="main">
+            <div>
 
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="cc-box">
-                                <div class="cc-box-padding">
-                                    <div class="d-flex justify-content-between text-center">
-                                        <p class="dash-box-heading-blue">Input</p>
-                                        <span class="highlighted_text">
-                                            {{about_api_details['credits_per_use']}} credits per usage
-                                        </span>
-                                    </div>
-                                    <div class="form-group c-form-group">
-                                        <!-- <label>Image <span class="required">*</span></label> -->
-                                        <label class="text-danger">Supported document types: JPEG, JPG, PNG                                        </label>
-                                        <div class="img-capure">
-                                            <div class="captureimg">
-                                                <img src="../../../../static/images/placeholder-img.svg"
-                                                    id="aadhaar_red_img" alt="">
-                                            </div>
-                                            <input type='file' id="redaction_input" accept="image/png,  image/jpeg">
+                <!-- Route Headers -->
+                {% set User_portal_headers = User_portal_headers(page_info) %}
+                {% if User_portal_headers %}
+                {{ User_portal_headers | safe }}
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="">
+                            <div class="product-detail-box">
+                                <div class="d-flex justify-content-between text-center">
+                                    <h4 class="sub-heading mb-4">Input</h4>
+                                    <span class="highlighted_text">
+                                        {{about_api_details['credits_per_use']}} credits per usage
+                                    </span>
+                                </div>
+                                <div class="form-group w-100 c-form-group mr-4">
+                                    <label class="text-danger">Supported document types: JPEG, JPG, PNG </label>
+                                    <div class="img-capure">
+                                        <div class="captureimg">
+                                            <img src="../../../../static/images/placeholder-img.svg"
+                                                id="aadhaar_red_img" alt="">
+                                            <i class="ri-close-line d-none" id="close_input"></i>
                                         </div>
+                                        <label for="redaction_input" class="custom-primary-btn mt-2"><i
+                                                class="ri-upload-2-line mr-1"></i> Upload</label>
+                                        <input type="file" id="redaction_input" class="d-none"
+                                            accept="image/png,  image/jpeg">
                                     </div>
-                                    <button class="btn c-btn" id="aadhaar_redaction_run">Run API</button>
-
-                                    <!-- <div class="or"><span>or</span></div>
-                                    <div class="form-group c-form-group">
-                                        <label class="d-block">Samples</label>
-                                        <button class="btn c-btn2" id="readct_sample_click">Samples</button>
-                                    </div> -->
+                                </div>
+                                <div class="text-right">
+                                    <button class="custom-primary-btn" id="run_api">Run API</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="cc-box">
-                                <div class="cc-box-padding">
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12 mb-7">
+                        <div class="product-detail-box">
+                            <h4 class="sub-heading mb-4">Output <span id="eta" class="result d-none">🚀
+                                    Results in
+                                    <span class="seconds" id="show_second"> 0 </span>ms!</span>
+                            </h4>
 
-                                    <p class="dash-box-heading-blue">Output <span id="eta" class="result d-none">🚀
-                                            Results in
-                                            <span class="seconds" id="aadhaar_redaction_seconds"> 0 </span>ms!</span></p>
+                            <div class="c-loader mb-2 d-none">
+                                <img src="../../../../static/images/api-loader.gif" class="api-loader" alt="" srcset="">
+                                <p>✨ We are doing our magic!</p>
+                            </div>
 
-                                    <div class="c-loader mb-2 d-none">
-                                        <img src="../../../../static/images/api-loader.gif" class="api-loader" alt=""
-                                            srcset="">
-                                        <p>✨ We are doing our magic!</p>
-                                    </div>
+                            <div class="form-group c-form-group d-none" id="api_status">
+                                <label>Status:
+                                    <span id="status_code">200</span> </label>
+                            </div>
 
-                                    <div class="form-group c-form-group d-none" id="api_status">
-                                        <label>Status:
-                                            <span id="status_code">200</span> </label>
-                                    </div>
-                                    <div class="form-group c-form-group">
-                                        <div class="dc-flex">
-                                            <label>Json </label>
-                                            <i class="ri-fullscreen-line" id="full_screen_view"></i>
+                            <ul class="nav nav-tabs custom-nav-tabs" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#Tabular" role="tab">Tabular</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link " data-toggle="tab" href="#Json" role="tab">Json</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="Tabular" role="Tabular">
+                                    <div class="p-5 tab-table-height">
+                                        <div id="tabluar_responce" class="table-responsive">
+
                                         </div>
-                                        <pre class="form-control c-form-control json-div" id="aadhaar_redaction_json">
+                                    </div>
+                                </div>
+                                <div class="tab-pane " id="Json" role="Json">
+                                    <div class="form-group p-3 c-form-group">
+                                        <div class="text-right">
+                                            <i class="ri-fullscreen-line font-weight-bold" title="Full Screen View"
+                                                id="full_screen_view"></i>
+                                        </div>
+                                        <pre class="form-control c-form-control json-div" id="json_view">
 
                                         </pre>
                                     </div>
+                                </div>
+                                <button class="custom-primary-btn" id="copy_json"><i class="ri-file-copy-line"></i>
+                                    Copy Json</button>
+                                <button class="custom-secondry-btn ml-4" id="json_download"><i
+                                        class="ri-download-2-line"></i> Download</button>
+                                <img src="" id="preview_img" class="img-thumbnail d-none img-preview cursor-pointer">
 
-                                    <button class="btn c-btn" id="aadhaar_redaction_copy"><i
-                                            class="ri-file-copy-line"></i> Copy Json</button>
-                                    <button class="btn c-btn2 ml-4" id="aadhaar_redaction_download"><i
-                                            class="ri-download-2-line"></i> Download</button>
-                                    <img src="" id="preview_img"
-                                        class="img-thumbnail d-none img-preview cursor-pointer">
 
-
-                                    <div class="right-bottom-part">
-                                        <a href="#" class="api-link">API Documentation <i
-                                                class="ri-arrow-right-line"></i></a>
-                                        <div class="inf-bar">
-                                            <div class="info-icon">
-                                                <i class="ri-information-line"></i>
-                                            </div>
-                                            <div class="info-text">
-                                                <h2>Data Privacy</h2>
-                                                <p>bluBeetle does not store your private data, the input data will
-                                                    deleted
-                                                    upon usage of the API. Read more</p>
-                                            </div>
+                                <div class="right-bottom-part">
+                                    <a href="#" class="api-link">API Documentation <i
+                                            class="ri-arrow-right-line"></i></a>
+                                    <div class="inf-bar">
+                                        <div class="info-icon">
+                                            <i class="ri-information-line"></i>
                                         </div>
-                                        <p class="dash-box-heading-blue pt-4">More about this API </p>
-                                        <p>{{about_api_details['long_api_description']}}</p>
+                                        <div class="info-text">
+                                            <h6 class="sub-heading">Data Privacy</h6>
+                                            <p>bluBeetle does not store your private data, the input data will
+                                                deleted
+                                                upon usage of the API. Read more</p>
+                                        </div>
                                     </div>
+                                    <p class="sub-heading mt-4 mb-3">More about this API </p>
+                                    <p>{{about_api_details['long_api_description']}}</p>
                                 </div>
                             </div>
+
                         </div>
-
-
                     </div>
                 </div>
+
+
             </div>
+        </div>
         </div>
     </section>
 

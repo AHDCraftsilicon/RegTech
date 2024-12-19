@@ -53,18 +53,40 @@ def Bank_Statment_main():
         if check_user_in_db != None:
 
             if encrypted_token and ip_address:
-                token = decrypt_token(encrypted_token)
+                # Check User Api Status
+                if check_user_in_db['api_status'] == "Enable":
+                    token = decrypt_token(encrypted_token)
 
+                    page_name = "Bank Statement"
 
+                    user_type = "Test Credits"
 
-                user_name = check_user_in_db["Company_Name"]
-                test_credits = [{"Test_Credit": check_user_in_db["total_test_credits"],
-                                 "Used_Credits":check_user_in_db["used_test_credits"]}]
+                    if check_user_in_db['user_flag'] == "0":
+                        user_type = "Live Credits"
+
+                    user_name = check_user_in_db["Company_Name"]
+                    page_info = [{"Test_Credit": check_user_in_db["total_test_credits"],
+                                "Used_Credits":check_user_in_db["used_test_credits"] ,
+                                "user_type" : user_type ,
+                                "page_name":page_name,
+                                "user_name": user_name
+                                }]
+
+                    about_api_details = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3b9ce184651154149a")})
+
+                    return render_template("bank_statment_modal.html",
+                                        page_info=page_info , 
+                                        about_api_details = {"long_api_description": about_api_details['long_api_description'],
+                                                            "credits_per_use": about_api_details['credits_per_use']
+                                                            },
+                                        user_details={"user_name": user_name,
+                                                      "Email_Id":check_user_in_db['Email_Id'],
+                                                    "user_type" :user_type},)
+                
+                else:
+                    return redirect("/dashboard")
             
-
-                return render_template("bank_statment_modal.html",
-                                    test_credit=test_credits ,
-                                     user_name=user_name )
+        return redirect("/")
     
     return redirect("/")
 
@@ -78,19 +100,17 @@ def generate_random_id():
 def Bank_Statment_test_api():
 
     if request.method == "POST":
-        try:
+        # try:
             encrypted_token = session.get('QtSld')
             ip_address = session.get('KLpi')
             if session.get('bkjid') != "":
 
                 check_user_in_db = User_Authentication_db.find_one({"_id":ObjectId(session.get('bkjid'))})
                 if check_user_in_db != None:
-                    if check_user_in_db["total_test_credits"] >= check_user_in_db["used_test_credits"]:
+                    if int(check_user_in_db["used_test_credits"]) > 0:
 
-                        completed_on_ = datetime.now()
-                        completed_on = datetime.now(pytz.timezone('Asia/Kolkata'))
-                        completed_on = completed_on.strftime('%Y-%m-%dT%H:%M:%S%z')
-                        completed_on = completed_on[:-2] + ':' + completed_on[-2:]
+                        # Api Start Time
+                        start_time = datetime.utcnow()
 
 
                         pdf_file = request.files["PDF_File"]
@@ -106,55 +126,68 @@ def Bank_Statment_test_api():
                             if request.form["BankName"] == "ICICIBANK":
                                 icici_response = icic_bank_statement_main(pdf_store_file)
 
+                                # Api End Time
+                                end_time = datetime.utcnow()
+                                duration = (end_time - start_time).total_seconds() * 1000
 
-                                created_on = datetime.now(pytz.timezone('Asia/Kolkata'))
-                                created_on = created_on.strftime('%Y-%m-%dT%H:%M:%S%z')
-                                created_on = created_on[:-2] + ':' + created_on[-2:]
-                                
+                                # Request Id
+                                request_id = generate_random_id()
 
-                                duration = datetime.now()- completed_on_ 
-                                duration_seconds = duration.total_seconds()
+                                # name of api
+                                about_api_details = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3b9ce184651154149a")})
 
                                 os.remove(pdf_store_file)
 
-                                store_response = {"status_code": 200,
-                                                    "status": "Success",
-                                                    "response": icici_response,
-                                                    "created_on" : created_on,
-                                                    "completed_on":completed_on,
-                                                    "request_id":generate_random_id(),
-                                                    "System_Generated_Unique_id" : System_Generated_Unique_id
-                                                    }
+                                json_msg = {"data":{
+                                    "status_code": 200,
+                                    "status": "Success",
+                                    "response": icici_response,
+                                    "System_Generated_Unique_id" : System_Generated_Unique_id,
+                                    "basic_response":{ "request_id" : request_id,
+                                                "request_on" : start_time,
+                                                "response_on":end_time,
+                                                "api_name":about_api_details['api'],
+                                                "duration":round(duration, 2),
+                                                }
+                                    }}
+
+                                # store_response = {"status_code": 200,
+                                #                     "status": "Success",
+                                #                     "response": icici_response,
+                                #                     "created_on" : created_on,
+                                #                     "completed_on":completed_on,
+                                #                     "request_id":generate_random_id(),
+                                #                     "System_Generated_Unique_id" : System_Generated_Unique_id
+                                #                     }
                                 
 
-                                # DataBase Log
+                                # # DataBase Log
                                 User_test_Api_history_db.insert_one({
                                             "user_id":check_user_in_db["_id"],
                                             "User_Unique_id":"Api Call From Dashboard",
                                             "api_name":"Bank_Statement",
-                                            "api_start_time":completed_on_,
+                                            "api_start_time":start_time,
                                             "api_end_time":datetime.now(),
                                             "api_status": "Success",
                                             "response_duration":str(duration),
-                                            "response_time":duration_seconds,
+                                            "response_time":end_time,
                                             "request_data":{},
-                                            "response_data" :str(store_response),
+                                            "response_data" :str(icici_response),
                                             "creadted_on":datetime.now(),
                                             "System_Generated_Unique_id" : System_Generated_Unique_id,
                                             })
                                 
                                 # Check Api Using Credits
-                                api_use_credit_info = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3b9ce184651154149a")})
+                                # api_use_credit_info = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3b9ce184651154149a")})
                                     
-                                if check_user_in_db["unlimited_test_credits"] == False:
-                                    # Credit 
-                                    User_Authentication_db.update_one({"_id":check_user_in_db["_id"]},{"$set":{
-                                        "used_test_credits": check_user_in_db["used_test_credits"] + api_use_credit_info["credits_per_use"]
-                                    }})
+                                # if check_user_in_db["unlimited_test_credits"] == False:
+                                #     # Credit 
+                                #     User_Authentication_db.update_one({"_id":check_user_in_db["_id"]},{"$set":{
+                                #         "used_test_credits": check_user_in_db["used_test_credits"] + api_use_credit_info["credits_per_use"]
+                                #     }})
 
 
-                                return jsonify({"data":{"json_data": store_response,
-                                                        "result_in_seconds":duration_seconds}})
+                                return jsonify(json_msg)
                             
                             else:
                                 return jsonify({"data":{
@@ -174,8 +207,8 @@ def Bank_Statment_test_api():
         
             return jsonify({"data":{"json_data":"Something went wrong!"}})
         
-        except:
-            return redirect("/")
+        # except:
+        #     return redirect("/")
         
 
     return jsonify({"msg":"method Not allowed!"})
@@ -220,14 +253,14 @@ def Bank_statement_analysis_report_page():
                 # satement_details = json.loads(satement_details)
 
                 data_dict = ast.literal_eval(satement_details)
-                print(data_dict['status_code'])
-
+                print(data_dict)
 
                 return render_template("bank_statement_analysis_report.html",
                                     satement_details = data_dict,
                                     page_info=page_info,
                                     user_details={"user_name": user_name,
-                                                    "user_type" :user_type}
+                                                      "Email_Id":check_user_in_db['Email_Id'],
+                                                    "user_type" :user_type},
                                     )
             
             else:

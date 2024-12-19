@@ -38,21 +38,384 @@
 
             <div class="contain-main-part">
                 <div class="c-contain-padding">
-                    <div class="username_part">
+                    <!-- <div class="username_part">
                         <div class="username-text">
                             <h2>Prod User View</h2>
                         </div>
-                    </div>
-
-
-                    <div class="c-box mt-3">
-                        <div class="c-box-padding">
-                            <div class="container">
-
+                    </div> -->
+                    <div class="section-box py-2 d-flex align-items-center justify-content-between">
+                        <h4 class="main-heading">Prod User Dashboard</h4>
+                        <div class="credits-details">
+                            <div class="credits-icon mr-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="18" viewBox="0 0 21 18"
+                                    fill="none">
+                                    <path
+                                        d="M10.3516 18L0.351562 6L3.35156 0H17.3516L20.3516 6L10.3516 18ZM7.97656 5H12.7266L11.2266 2H9.47656L7.97656 5ZM9.35156 13.675V7H3.80156L9.35156 13.675ZM11.3516 13.675L16.9016 7H11.3516V13.675ZM14.9516 5H17.6016L16.1016 2H13.4516L14.9516 5ZM3.10156 5H5.75156L7.25156 2H4.60156L3.10156 5Z"
+                                        fill="white"></path>
+                                </svg>
                             </div>
                         </div>
                     </div>
 
+                    <!-- User Info -->
+                    <div class="row">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="header-title mt-0 mb-3">Basic Information</h5>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Company Name :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['Company_Name']}}</span></p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Mobile No :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['Mobile_No']}}</span></p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Email Id :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['Email_Id']}}</span></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="text-muted"><strong>User Type :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['user_type']}}</span></p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>User Flag :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['user_flag']}}</span></p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Api Status :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['api_status']}}</span></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="text-muted"><strong>User Status :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['user_status']}}</span></p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Used Credits :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['used_test_credits']}}</span></p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Unlimited Credits Status :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['unlimited_test_credits']}}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <h5 class="header-title mt-0 mb-3">Advanced Information</h5>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Bussiness Name :</strong> <span
+                                                    class="ms-2">{{advance_user_details['bussiness_name']}}</span></p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>PAN No :</strong> <span
+                                                    class="ms-2">{{advance_user_details['PAN_number']}}</span></p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>TAN No :</strong> <span
+                                                    class="ms-2">{{advance_user_details['TAN_number']}}</span></p>
+                                        </div>
+                                    </div>
+
+                                    <h5 class="header-title mt-0 mb-3">Contact Information</h5>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Name :</strong> <span
+                                                    class="ms-2">{{advance_user_details['name_of_contact_person']}}</span>
+                                            </p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Designation :</strong> <span
+                                                    class="ms-2">{{advance_user_details['designation_of_contact_person']}}</span>
+                                            </p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Email ID :</strong> <span
+                                                    class="ms-2">{{advance_user_details['email_id']}}</span></p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Contact Number :</strong> <span
+                                                    class="ms-2">{{advance_user_details['contact_number']}}</span></p>
+                                        </div>
+                                    </div>
+
+                                    <h5 class="header-title mt-0 mb-3">Address</h5>
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Register Address :</strong>
+                                            <address class="ms-2">
+                                                {{advance_user_details['register_address'][0]['register_address1']}}
+                                                <br>
+                                                {{advance_user_details['register_address'][0]['register_address2']}}<br>
+                                                {{advance_user_details['register_address'][0]['register_address3']}}<br>
+                                                {{advance_user_details['register_address'][0]['register_country']}}
+                                                {{advance_user_details['register_address'][0]['register_state']}}
+                                                {{advance_user_details['register_address'][0]['register_city']}}
+                                                {{advance_user_details['register_address'][0]['register_pincode']}}
+                                            </address>
+                                            </p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Correspondence Address :</strong>
+                                            <address class="ms-2">
+                                                {{advance_user_details['correspondence_address'][0]['correspond_address1']}}
+                                                <br>
+                                                {{advance_user_details['correspondence_address'][0]['correspond_address2']}}<br>
+                                                {{advance_user_details['correspondence_address'][0]['correspond_address3']}}<br>
+                                                {{advance_user_details['correspondence_address'][0]['correspond_country']}}
+                                                {{advance_user_details['correspondence_address'][0]['correspond_state']}}
+                                                {{advance_user_details['correspondence_address'][0]['correspond_city']}}
+                                                {{advance_user_details['correspondence_address'][0]['correspond_pincode']}}
+                                            </address>
+                                            </p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Same as above :</strong>
+
+                                                {% if advance_user_details['same_to_registered_address'] == True %}
+                                                <span
+                                                    class="badge bg-success text-light float-end">{{advance_user_details['same_to_registered_address']}}</span>
+                                                {% else %}
+                                                <span
+                                                    class="badge bg-warning text-light float-end">{{advance_user_details['same_to_registered_address']}}</span>
+                                                {% endif %}
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Api Retails & Credit Req -->
+                    <div class="row mt-3">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="header-title mb-3">Api Retails</h4>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-centered mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Api Name</th>
+                                                    <th>Api</th>
+                                                    <th>Price</th>
+                                                    <th>Credit</th>
+                                                    <th>Charge</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for i in advance_user_details['api_retails'] %}
+                                                <tr>
+                                                    <td>{{i['api_name']}}</td>
+                                                    <td>{{i['name_of_api']}}</td>
+                                                    <td>{{i['api_pricing']}}</td>
+                                                    <td>{{i['credits_per_use']}}</td>
+                                                    <td>{{i['api_pricing']|int * i['credits_per_use']|int}}</td>
+                                                    {% if i['api_status'] == 'Enable' %}
+                                                    <td><span
+                                                            class="badge bg-success text-light">{{i['api_status']}}</span>
+                                                    </td>
+                                                    {% else %}
+                                                    <td><span
+                                                            class="badge bg-danger text-light">{{i['api_status']}}</span>
+                                                    </td>
+                                                    {% endif %}
+                                                </tr>
+                                                {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div>
+                                        <h4>Credit Request</h4>
+                                        <table class="table table-hover text-center">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Request Date</th>
+                                                    <th scope="col">Granted Status</th>
+                                                    <th scope="col">Granted Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for i in granted_credit_details %}
+                                                <tr>
+                                                    <th>{{i['created_on']}}</th>
+                                                    <td>{{i['granted_credits']}}</td>
+                                                    <td>{{i['granted_date']}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="pl-3">Primary Flags</h4>
+                                    <div class="row align-items-baseline">
+                                        <div class="col">
+                                            {% if usr_basic_details['tester_flag'] == True %}
+                                            <p>Tester Flag : <span class="badge badge-danger">
+                                                    {{usr_basic_details['tester_flag']}}
+                                                </span>
+                                            </p>
+                                            {% else %}
+                                            <p>Tester Flag : <span class="badge badge-success">
+                                                    {{usr_basic_details['tester_flag']}}
+                                                </span>
+                                            </p>
+                                            {% endif %}
+
+                                            {% if usr_basic_details['user_status'] == 'Disable' %}
+                                            <p>User Status : <span class="badge badge-danger">
+                                                    {{usr_basic_details['user_status']}}
+                                                </span>
+                                            </p>
+                                            {% else %}
+                                            <p>User Status : <span class="badge badge-success">
+                                                    {{usr_basic_details['user_status']}}
+                                                </span>
+                                            </p>
+                                            {% endif %}
+
+                                            {% if usr_basic_details['api_status'] == 'Disable' %}
+                                            <p>Api Status : <span class="badge badge-danger">
+                                                    {{usr_basic_details['api_status']}}
+                                                </span>
+                                            </p>
+                                            {% else %}
+                                            <p>Api Status : <span class="badge badge-success">
+                                                    {{usr_basic_details['api_status']}}
+                                                </span>
+                                            </p>
+                                            {% endif %}
+                                        </div>
+                                        <div class="col me-1">
+                                            <button type="button" class="btn btn-light" id="edit_flags"
+                                                value="{{objid}}">
+                                                <i class="mdi mdi-account-edit me-1"></i> Edit Flags
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Consumed Api -->
+                    <div class="d-flex justify-content-between mt-3">
+                        <div>
+                            <h4 class="main-heading mt-3">Analytics</h4>
+                        </div>
+                        <div class="d-flex">
+                            <div class="input-group">
+                                <input type="text" name="dash-daterange" class="form-control form-control-light">
+                                <span class="input-group-text bg-primary border-primary text-white">
+                                    <i class="mdi mdi-calendar-range font-13"></i>
+                                </span>
+                            </div>
+                            <a href="javascript: void(0);" class="btn btn-primary ml-2">
+                                <i class="mdi mdi-autorenew"></i>
+                            </a>
+                            <a href="javascript: void(0);" class="btn btn-primary ml-2">
+                                Apply
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-4 mt-3">
+                            <div class="chart-container">
+                                <h4 class="mt-3 pl-3">Consumed APIs</h4>
+                                <canvas id="myPieChart" width="400" height="400"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-xl-5 col-lg-5 mt-3">
+                            <div class="card">
+                                <h4 class="mt-3 pl-3">Consumed APIs Overview</h4>
+                                <div class="card-body">
+                                    <table class="table table-hover text-center">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Api Name</th>
+                                                <th scope="col">Api Count</th>
+                                                <th scope="col">Consume</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for i in api_and_count %}
+                                            <tr>
+                                                <th>{{i['api_name']}}</th>
+                                                <td>{{i['api_count']}}</td>
+                                                <td>{{i['api_count'] | int * i['credit_per_use'] |int *
+                                                    i['api_pricing']| int}}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-3 col-lg-3 mt-3">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5>Active Apis</h5>
+                                            <h3>{{total_apis}}</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5>Prior Month APIs</h5>
+                                            <h3>{{prior_month_count}}</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5>Failed APIs</h5>
+                                            <h3>{{fail_apis_count}}</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5>Monthly Billing</h5>
+                                            <h3>{{total_monthly_billing}}</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -60,8 +423,87 @@
     </div>
 
 
+    <!-- Verify Credential-->
+    <div class="modal fade" id="confirm_pass" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="exampleModalLabel">Confirmation Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Enter Password</label>
+                        <input class="form-control" id="verify_pass" type="text">
+                    </div>
+                    <div class="mb-3 text-center">
+                        <button class="btn btn-primary" id="subm_pass">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flags -->
+    <div class="modal fade" id="flag_auth" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="exampleModalLabel">Update Flags</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Tester Flag</label>
+                        <select class="form-select" id="tester_flag">
+                            {% for option in tester_flag_options %}
+                            <option value="{{ option.value }}" {% if option.value==usr_basic_details['tester_flag']
+                                %}selected{% endif %}>
+                                {{ option.label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">User Status</label>
+                        <select class="form-select" id="user_status">
+                            {% for option in api_flag_option %}
+                            <option value="{{ option.value }}" {% if option.value==usr_basic_details['user_status']
+                                %}selected{% endif %}>
+                                {{ option.label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Api Flag</label>
+                        <select class="form-select" id="api_flag">
+                            {% for option in api_flag_option %}
+                            <option value="{{ option.value }}" {% if option.value==usr_basic_details['api_status']
+                                %}selected{% endif %}>
+                                {{ option.label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3 text-center">
+                        <button class="btn btn-primary" id="set_flags">Submit</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Page Javascript -->
-    {% include 'prod_user_js.html' %}
+    {% include 'prod_user_view_js.html' %}
 
 </body>
 

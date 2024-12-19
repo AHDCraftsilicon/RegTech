@@ -155,7 +155,7 @@ def email_verification():
                                                           "flag":0,
                                                           }})
                     
-                    url_for_token_verify = "https://regtech.bluBeetle.ai/verify?token=" + "HceTgeR."+ verify_token
+                    url_for_token_verify = "http://192.168.10.121//verify?token=" + "HceTgeR."+ verify_token
                     user_mail_verify = user_to_sent_mail(database_document['Email_Id'],url_for_token_verify,database_document['Company_Name'])
 
                     if user_mail_verify["data"] == "SuccessFully Mail Sent!":

@@ -1,28 +1,42 @@
 <script nonce="{{ g.nonce }}">
 
-    $('#aadhaar_input').on('change', (event) => {
-        var output = document.getElementById('aadhaar_img');
+    $('#pan_input').on('change', (event) => {
+
+        // empty output
+        $("#json_view").text("")
+        $("#tabluar_responce").text("")
+
+        var output = document.getElementById('pan_img');
+        $("#close_input").removeClass("d-none")
         output.src = URL.createObjectURL(event.target.files[0]);
         output.onload = function () {
             URL.revokeObjectURL(output.src) // free memory
         }
     });
 
-
-    $("#sample_aadhaar_ocr").click(function () {
-        var output = document.getElementById('aadhaar_img');
-        output.src = "../../../../static/images/aadhaar_ocr.jpg"
+    $("#close_input").click(function () {
+        $("#pan_input").val("")
+        document.getElementById('pan_img').src = "../../../../static/images/placeholder-img.svg"
+        $("#close_input").addClass("d-none")
     })
 
-    $("#aadhaar_ocr_run").click(function () {
-        const fileInput = document.getElementById('aadhaar_input');
+
+    $("#run_api").click(function () {
+
+        // empty output
+        $("#json_view").text("")
+        $("#tabluar_responce").text("")
+
+        const fileInput = document.getElementById('pan_input');
         const file = fileInput.files[0];
-
-
         if (file != undefined) {
+            $("#run_api").html(`
+                    <span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+                    Loading...
+                `)
             $(".c-loader").removeClass('d-none')
             const formdata = new FormData();
-            formdata.append("aadhaar_img", file);
+            formdata.append("pan_img", file);
 
             const requestOptions = {
                 method: "POST",
@@ -33,19 +47,148 @@
             fetch("/pan/test-api", requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
+                    $("#run_api").text("Run Api")
 
-                    if (result.data.json_data != undefined) {
+                    if (result['data']['status_code'] == 200) {
                         $(".c-loader").addClass('d-none')
-                        var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
-                        $("#aadhaar_ocr_json").text(formatteddata)
+                        abc = {
+                            "data": {
+                                "response": result['data']['response'],
+                                "request_id": result['data']['basic_response']['request_id'],
+                                "request_on": result['data']['basic_response']['request_on'],
+                                "response_on": result['data']['basic_response']['response_on'],
+                                "api_name": result['data']['basic_response']['api_name'],
+                                "duration": result['data']['basic_response']['duration'],
+                            }
+                        }
+
+                        // Json preview
+                        var formatteddata = JSON.stringify(abc, null, '\t')
+                        document.getElementById('json_view').innerHTML = formatteddata
+
+                         // Tabular view
+                         $("#tabluar_responce").html(`<table class="table ">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Field</th>
+                                                    <th scope="col">Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">PAN No</th>
+                                                    <td>`+ result['data']['response']['PAN_no'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">DOB</th>
+                                                    <td>`+ result['data']['response']['DOB'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Father Name</th>
+                                                    <td>`+ result['data']['response']['Father_name'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Name</th>
+                                                    <td>`+ result['data']['response']['Name'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">request_id</th>
+                                                    <td>`+ request_id + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">api_name</th>
+                                                    <td>`+ api_name + `</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>`)
+
+
+                        //    Result in second
                         $('#eta').removeClass('d-none')
-                        document.getElementById("aadhaar_ocr_seconds").innerHTML = result.data.result_in_seconds
+                        document.getElementById("pan_ocr_seconds").innerHTML = result['data']['basic_response']['duration']
+                        // Api Status Show
+                        $("#api_status").removeClass('d-none')
+                        $("#status_code").addClass("success")
+                        document.getElementById('status_code').innerHTML = result['data']['status_code']
+                        // Used Credits set
+                        $("#uds_crdts").text(result['data']['basic_response']['test_credits'])
+
+
                     }
                     else {
                         $(".c-loader").addClass('d-none')
-                        var formatteddata = JSON.stringify(result, null, '\t')
-                        $("#aadhaar_ocr_json").text(formatteddata)
-                        $('#eta').removeClass('d-none')
+                        request_id = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            request_id = result['data']['basic_response']['request_id']
+                        }
+
+                        request_on = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            request_on = result['data']['basic_response']['request_on']
+                        }
+
+                        response_on = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            response_on = result['data']['basic_response']['response_on']
+                        }
+
+                        api_name = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            api_name = result['data']['basic_response']['api_name']
+                        }
+
+                        duration = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            duration = result['data']['basic_response']['duration']
+                        }
+
+                        abc = {
+                            "data": {
+                                "response": result['data']['response'],
+                                "request_id": request_id,
+                                "request_on": request_on,
+                                "response_on": response_on,
+                                "api_name": api_name,
+                                "duration": duration,
+                            }
+                        }
+
+                        // Json preview
+                        var formatteddata = JSON.stringify(abc, null, '\t')
+                        document.getElementById('json_view').innerHTML = formatteddata
+
+                        // Tabular view
+                        $("#tabluar_responce").html(`<table class="table ">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Field</th>
+                                                    <th scope="col">Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">MSG</th>
+                                                    <td>`+ result['data']['response'] + `</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>`)
+                                        
+                        //    Result in second
+                        if (result['data']['basic_response'] != undefined) {
+                            $('#eta').removeClass('d-none')
+                            document.getElementById("pan_ocr_seconds").innerHTML = result['data']['basic_response']['duration']
+                        }
+
+                        // Api Status Show
+                        $("#api_status").removeClass('d-none')
+                        $("#status_code").addClass("text-danger")
+                        if (result['data']['status_code'] != undefined) {
+                            document.getElementById('status_code').innerHTML = result['data']['status_code']
+                        }
+                        // Used Credits set
+                        if (result['data']['basic_response'] != undefined) {
+                            $("#uds_crdts").text(result['data']['basic_response']['test_credits'])
+                        }
                     }
                 })
                 .catch((error) => {
@@ -60,14 +203,14 @@
 
 
     $("#full_screen_view").click(function () {
-        enableFullScreen("aadhaar_ocr_json");
+        enableFullScreen("json_view");
     });
 
-    $("#aadhaar_ocr_copy").click(function () {
-        copyToClipboard('#aadhaar_ocr_json')
+    $("#copy_json").click(function () {
+        copyToClipboard('#json_view')
     });
 
-    $("#aadhaar_ocr_download").click(function () {
-        Json_Download('aadhaar_ocr_json')
+    $("#json_download").click(function () {
+        Json_Download('json_view')
     });
 </script>

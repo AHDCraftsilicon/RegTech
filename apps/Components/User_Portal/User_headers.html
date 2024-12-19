@@ -1,15 +1,23 @@
+
+
 <div class="row">
-    <div class="col-12 c-heading-common">
-        <h1 class="main-heading">{{page_info[0]['page_name']}}</h1>
-        <div class="testing-credit">
-            <div class="plus_credits" data-toggle="modal" data-target="#creditsMailModal">
-                <i class="ri-add-fill"></i>
+    <div class="col-12">
+        <div class="section-box py-2 d-flex align-items-center justify-content-between">
+            <h4 class="main-heading mb-0">{{page_info[0]['page_name']}}</h4>
+            <div class="credits-details">
+                <div class="credits-icon mr-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="18" viewBox="0 0 21 18" fill="none">
+                        <path
+                            d="M10.3516 18L0.351562 6L3.35156 0H17.3516L20.3516 6L10.3516 18ZM7.97656 5H12.7266L11.2266 2H9.47656L7.97656 5ZM9.35156 13.675V7H3.80156L9.35156 13.675ZM11.3516 13.675L16.9016 7H11.3516V13.675ZM14.9516 5H17.6016L16.1016 2H13.4516L14.9516 5ZM3.10156 5H5.75156L7.25156 2H4.60156L3.10156 5Z"
+                            fill="white" />
+                    </svg>
+                </div>
+                <div class="d-flex align-items-baseline">
+                    <h6 class="credits-text mr-2" id="uds_crdts">{{page_info[0]['Used_Credits']}}</h6>
+                    <span class="mr-3">Credits</span>
+                </div>
+                <div class="add-credit plus_credits" data-toggle="modal" data-target="#creditsMailModal">+</div>
             </div>
-            <!-- {{page_info[0]['user_type']}} -->
-            <p class="testing-credit-text">Test Credits</p>
-            <p class="testing-credit-digit"><i class="ri-task-line"></i>
-                <span id="uds_crdts"> {{page_info[0]['Used_Credits']}} </span>
-            </p>
         </div>
     </div>
 </div>

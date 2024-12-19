@@ -1,0 +1,266 @@
+<script nonce="{{ g.nonce }}">
+
+    const myList = JSON.parse('{{ api_count_list | tojson | safe }}');
+
+    pie_chart_labels = []
+    pie_chart_values = []
+    for (x = 0; x < myList.length; x++) {
+        pie_chart_labels.push(myList[x]['api_name'])
+        pie_chart_values.push(myList[x]['count'])
+    }
+
+
+    // Generate random colors
+    function getRandomColors(count) {
+        const colors = [];
+        for (let i = 0; i < count; i++) {
+            const randomColor = `rgba(${Math.floor(Math.random() * 255)}, 
+                                           ${Math.floor(Math.random() * 255)}, 
+                                           ${Math.floor(Math.random() * 255)}, 
+                                           0.7)`; // Semi-transparent color
+            colors.push(randomColor);
+        }
+        return colors;
+    }
+
+    // Get the context of the canvas
+    const ctx = document.getElementById('myPieChart').getContext('2d');
+
+    if (pie_chart_labels.length != 0 && pie_chart_values != 0) {
+        // Get auto-generated colors
+        const backgroundColors = getRandomColors(myList.length);
+
+        // Create the Pie Chart
+        const myPieChart = new Chart(ctx, {
+            type: 'pie', // Specify the chart type
+            data: {
+                labels: pie_chart_labels, // Labels for segments
+                datasets: [{
+                    data: pie_chart_values, // Data values for the pie chart
+                    backgroundColor: backgroundColors,
+                    borderColor: backgroundColors.map(color => color.replace('0.7', '1')),
+                    borderWidth: 1 // Width of segment borders
+                }]
+            },
+            options: {
+                responsive: true, // Make it responsive
+                plugins: {
+                    legend: {
+                        display: true, // Show the legend
+                        position: 'top'
+                    }
+                }
+            }
+        });
+
+    }
+    else {
+        ctx.font = '20px Arial';
+        ctx.fillText('No Data Found!', 70, 70); // (x, y) coordinates
+    }
+
+
+    var confirm_pass = new bootstrap.Modal(document.getElementById('confirm_pass'));
+
+    const socket = io.connect();
+
+
+    $('#edit_flags').on('click', function () {
+        var flags_val = $('#edit_flags').val();
+        confirm_pass.show()
+    });
+
+    var flag_auth = new bootstrap.Modal(document.getElementById('flag_auth'));
+
+    $('#subm_pass').on('click', function () {
+        $("#subm_pass").html("Loading...")
+        if ($("#verify_pass").val() != "") {
+            socket.emit('validate_pass', { data: $("#verify_pass").val() });
+
+            socket.on('verify_identity', (data) => {
+                $("#subm_pass").html("")
+                if (data['data']['status'] == 200) {
+                    confirm_pass.hide()
+                    flag_auth.show()
+                }
+                else {
+                    alert(data['data']['msg'])
+                }
+
+            })
+        }
+        else {
+            alert("Please Enter Password!")
+        }
+    })
+
+    // Flags Set
+    $('#set_flags').on('click', function () {
+        socket.emit('flag_setter', {
+            data: {
+                "tester_flag": $("#tester_flag").val(),
+                "user_status": $("#user_status").val(),
+                "api_flag": $("#api_flag").val(),
+                "user_objid": "{{objid}}"
+            }
+        });
+
+        socket.on('configure_flag', (data) => {
+            if (data['data']['status'] == 200) {
+                location.reload();
+            }
+        })
+    })
+
+
+    // Usage Logs Table
+    var table = $('#test_api_consume_table').DataTable({
+        'processing': true,
+        'serverSide': true,
+        'serverMethod': 'post',
+        "autoWidth": false,
+        'ajax': {
+            'url': '/BBRgt/Consumed-as-test_usr-api-details/{{objid}}'
+        },
+        'lengthMenu': [[10, 20, 50, 100, 500], [10, 20, 50, 100, 500]],
+        searching: true,
+        sort: true,
+        "aaSorting": [[5, "desc"]],
+        'columns': [
+            { data: "request_id" },
+            { data: 'request_on' },
+            { data: 'response_on' },
+            { data: "http_status" },
+            { data: "api_name" },
+            { data: "created_on" },
+        ],
+
+        orderCellsTop: true,
+        fixedHeader: true,
+        columnDefs: [
+            { orderable: true, className: 'line_texts', targets: [5] },
+            { orderable: false, className: 'line_texts', targets: [0, 1, 2, 3, 4] },
+        ],
+
+        createdRow: function (row, data, dataIndex) {
+            $(row).addClass('centerele');
+        },
+
+        initComplete: function () {
+            var api = this.api();
+
+            // For each column
+
+
+            $('#name_of_api').on('change', function () {
+                var regexr = '{search}';
+                api
+                    .column(4)
+                    .search(
+                        this.value != ''
+                            ? regexr.replace('{search}', this.value)
+                            : '',
+                        this.value != '',
+                        this.value == ''
+                    )
+                    .draw();
+            })
+
+
+            $('input[name="created_on"]').on('apply.daterangepicker', function () {
+                var regexr = '{search}';
+                api
+                    .column(5)
+                    .search(
+                        this.value != ''
+                            ? regexr.replace('{search}', $(this)[0].value)
+                            : '',
+                        this.value != '',
+                        this.value == '',
+
+                    )
+                    .draw();
+            });
+
+
+            api
+                .columns()
+                .eq(0)
+                .each(function (colIdx) {
+                    // Set the header cell to contain the input element
+                    var cell = $('.filters th').eq(
+                        $(api.column(colIdx).header()).index()
+                    );
+
+                    $(
+                        'input',
+                        $('.filters th').eq($(api.column(colIdx).header()).index())
+                    )
+                        .off('keyup change')
+                        .on('change', function (e) {
+                            // Get the search value
+                            $(this).attr('title', $(this).val());
+                            var regexr = '{search}'; //$(this).parents('th').find('select').val();
+
+                            var cursorPosition = this.selectionStart;
+                            // Search the column for that value
+                            api
+                                .column(colIdx)
+                                .search(
+                                    this.value != ''
+                                        ? regexr.replace('{search}', this.value).replace(/\\/g, "")
+                                        : '',
+                                    this.value != '',
+                                    this.value == ''
+                                )
+                                .draw();
+                        })
+                        .on('keyup', function (e) {
+                            e.stopPropagation();
+                            $(this).trigger('change');
+                            $(this)
+                                .focus()[0]
+                            // .setSelectionRange(cursorPosition, cursorPosition);
+                        });
+                });
+
+        },
+
+
+    });
+
+
+    // Created Date
+    $(function () {
+
+        $('input[name="created_on"]').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear'
+            },
+            "showWeekNumbers": true,
+            "showISOWeekNumbers": true,
+            "alwaysShowCalendars": true,
+            ranges: {
+                'Today': [moment(), moment()],
+                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        });
+
+
+        $('input[name="created_on"]').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
+        });
+
+        $('input[name="created_on"]').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+        });
+
+    });
+
+
+</script>

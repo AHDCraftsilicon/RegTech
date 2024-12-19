@@ -48,7 +48,7 @@ UUID_PATTERN = re.compile(
 @jwt_required()
 def Aadhaar_Redaction_Api_route():
     if request.method == 'POST':
-        # try:
+        try:
             data = request.get_json()
 
             # Json IS Empty Or Not
@@ -411,12 +411,12 @@ def Aadhaar_Redaction_Api_route():
                         "response":"Error! Please Validate the UniqueID format!"
                     }}), 400
 
-        # except:
-        #     return jsonify({"data":{
-        #                             "status_code": 400,
-        #                             "status": "Error",
-        #                             "response":"Something went wrong!"
-        #                         }}), 400    
+        except:
+            return jsonify({"data":{
+                                    "status_code": 400,
+                                    "status": "Error",
+                                    "response":"Something went wrong!"
+                                }}), 400    
 
     return jsonify({"data":{
                             "status_code": 405,

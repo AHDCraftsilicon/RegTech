@@ -729,6 +729,8 @@ def icic_bank_statement_main(pdf_file):
     formate_json["Salary Slip Info"] = []
     formate_json["Salary Slip Info - Details"] = []
     formate_json["Salary Slip Info - Summary"] = []
+    credit_tran = total_credit_amount / total_Count_credit_transc
+    debit_tran = total_debit_amount / total_Count_debit_transc
     formate_json["Scoring Details"] = [
             # {
             #     "Description": "Monthly Average Inflow",
@@ -739,22 +741,22 @@ def icic_bank_statement_main(pdf_file):
             #     "Value": "NA"
             # },
             {
-                "Average_Credit_Transactions": total_credit_amount / total_Count_credit_transc
+                "Average_Credit_Transactions": round(credit_tran , 2)
             },
             {
-                "Average Debit Transactions": total_debit_amount / total_Count_debit_transc
+                "Average_Debit_Transactions": round(debit_tran,2)
             },
             {
-                "Total Credit Amount": total_credit_amount
+                "Total_Credit_Amount": total_credit_amount
             },
             {
-                "Total Debit Amount": total_debit_amount
+                "Total_Debit_Amount": total_debit_amount
             },
             {
-                "Total Count of Credit Transactions": total_Count_credit_transc
+                "Total_Count_of_Credit_Transactions": total_Count_credit_transc
             },
             {
-                "Total Count of Debit Transactions": total_Count_debit_transc
+                "Total_Count_of_Debit_Transactions": total_Count_debit_transc
             },
             # {
             #     "Description": "Monthly Average Surplus",
@@ -765,22 +767,22 @@ def icic_bank_statement_main(pdf_file):
             #     "Value": "NA"
             # },
             {
-                "Maximum Balance": max_balance
+                "Maximum_Balance": max_balance
             },
             {
-                "Minimum Balance": min_balance
+                "Minimum_Balance": min_balance
             },
             {
-                "Maximum Credit": max_credit
+                "Maximum_Credit": max_credit
             },
             {
-                "Minimum Credit": min_credit
+                "Minimum_Credit": min_credit
             },
             {
-                "Maximum Debit": max_debit
+                "Maximum_Debit": max_debit
             },
             {
-                "Minimum Debit": min_debit
+                "Minimum_Debit": min_debit
             },
             # {
             #     "Description": "Month end balance in last 90 days",

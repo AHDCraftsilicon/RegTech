@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Test User Details - bluBeetle.ai</title>
+
+    {% set Admin_Portal_urls = Admin_Portal_urls() %}
+    {% if Admin_Portal_urls %}
+    {{ Admin_Portal_urls | safe }}
+    {% endif %}
+
+    <div class="c-content">
+        <div class="c-content-main-part">
+            <div id="toastContainer" class="toast-container">
+            </div>
+        </div>
+    </div>
+
+</head>
+
+<body>
+    <div class="main">
+        <!-- Common Topbar -->
+        {% set Admin_Portal_topbar = Admin_Portal_topbar(name) %}
+        {% if Admin_Portal_topbar %}
+        {{ Admin_Portal_topbar | safe }}
+        {% endif %}
+
+        <!-- Main Contant -->
+        <div class="main-section">
+            <!-- SideBar -->
+            {% set Admin_Portal_sidebar = Admin_Portal_sidebar() %}
+            {% if Admin_Portal_sidebar %}
+            {{ Admin_Portal_sidebar | safe }}
+            {% endif %}
+
+            <div class="contain-main-part">
+                <div class="c-contain-padding">
+                    <div class="username_part">
+                        <div class="username-text">
+                            <h2>Test User View</h2>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="header-title mt-0 mb-3">Basic Information</h4>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Company Name :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['Company_Name']}}</span></p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Mobile No :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['Mobile_No']}}</span></p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Email Id :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['Email_Id']}}</span></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="text-muted"><strong>User Type :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['user_type']}}</span></p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>User Flag :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['user_flag']}}</span></p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Api Status :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['api_status']}}</span></p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <p class="text-muted"><strong>User Status :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['user_status']}}</span></p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Used Credits :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['used_test_credits']}}</span></p>
+                                        </div>
+                                        <div class="col">
+                                            <p class="text-muted"><strong>Unlimited Credits Status :</strong> <span
+                                                    class="ms-2">{{usr_basic_details['unlimited_test_credits']}}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xl-5 col-lg-6 mt-3">
+                            <div class="chart-container">
+                                <h4 class="mt-3 pl-3">Consumed APIs</h4>
+                                <canvas id="myPieChart" width="400" height="400"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-7 col-lg-6 mt-3">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="pl-3">Primary Flags</h4>
+                                            <div class="row align-items-baseline">
+                                                <div class="col">
+                                                    {% if usr_basic_details['tester_flag'] == True %}
+                                                    <p>Tester Flag : <span class="badge badge-danger">
+                                                            {{usr_basic_details['tester_flag']}}
+                                                        </span>
+                                                    </p>
+                                                    {% else %}
+                                                    <p>Tester Flag : <span class="badge badge-success">
+                                                            {{usr_basic_details['tester_flag']}}
+                                                        </span>
+                                                    </p>
+                                                    {% endif %}
+
+                                                    {% if usr_basic_details['user_status'] == 'Disable' %}
+                                                    <p>User Status : <span class="badge badge-danger">
+                                                            {{usr_basic_details['user_status']}}
+                                                        </span>
+                                                    </p>
+                                                    {% else %}
+                                                    <p>User Status : <span class="badge badge-success">
+                                                            {{usr_basic_details['user_status']}}
+                                                        </span>
+                                                    </p>
+                                                    {% endif %}
+
+                                                    {% if usr_basic_details['api_status'] == 'Disable' %}
+                                                    <p>Api Status : <span class="badge badge-danger">
+                                                            {{usr_basic_details['api_status']}}
+                                                        </span>
+                                                    </p>
+                                                    {% else %}
+                                                    <p>Api Status : <span class="badge badge-success">
+                                                            {{usr_basic_details['api_status']}}
+                                                        </span>
+                                                    </p>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="col me-1">
+                                                    <button type="button" class="btn btn-light" id="edit_flags"
+                                                        value="{{objid}}">
+                                                        <i class="mdi mdi-account-edit me-1"></i> Edit Flags
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div>Total Api Count</div>
+                                            <h3>{{total_apis}}</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div>
+                                                <h4>Credit Request</h4>
+                                                <table class="table table-hover text-center">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">Request Date</th>
+                                                            <th scope="col">Granted Status</th>
+                                                            <th scope="col">Granted Date</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for i in granted_credit_details %}
+                                                        <tr>
+                                                            <th>{{i['created_on']}}</th>
+                                                            <td>{{i['granted_credits']}}</td>
+                                                            <td>{{i['granted_date']}}</td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4>Usage Logs</h4>
+                                    <div class="table-responsive">
+                                        <table class="table text-center" id="test_api_consume_table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center" scope="col">Request ID</th>
+                                                    <th class="text-center" scope="col">Request Time</th>
+                                                    <th class="text-center" scope="col">Response Time</th>
+                                                    <th class="text-center" scope="col">HTTP Status</th>
+                                                    <th class="text-center" scope="col">API</th>
+                                                    <th class="text-center" scope="col">Created On</th>
+                                                </tr>
+                                                <tr class="filters">
+                                                    <th class="text-wrap">
+                                                        <input type="text" class="form-control">
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        &#8203;
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        &#8203;
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        &#8203;
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        <select class="form-select" id="name_of_api">
+                                                            <option value="" selected>Select</option>
+                                                            {% for item in list_of_api %}
+                                                            <option value="{{ item['objid'] }}">
+                                                                {{item['api_name']}}
+                                                            </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </th>
+                                                    <th class="text-wrap">
+                                                        <input type="text" class="form-control" name="created_on">
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Verify Credential-->
+    <div class="modal fade" id="confirm_pass" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="exampleModalLabel">Confirmation Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Enter Password</label>
+                        <input class="form-control" id="verify_pass" type="text">
+                    </div>
+                    <div class="mb-3 text-center">
+                        <button class="btn btn-primary" id="subm_pass">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flags -->
+    <div class="modal fade" id="flag_auth" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-center" id="exampleModalLabel">Update Flags</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Tester Flag</label>
+                        <select class="form-select" id="tester_flag">
+                            {% for option in tester_flag_options %}
+                            <option value="{{ option.value }}" {% if option.value==usr_basic_details['tester_flag']
+                                %}selected{% endif %}>
+                                {{ option.label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">User Status</label>
+                        <select class="form-select" id="user_status">
+                            {% for option in api_flag_option %}
+                            <option value="{{ option.value }}" {% if option.value==usr_basic_details['user_status']
+                                %}selected{% endif %}>
+                                {{ option.label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Api Flag</label>
+                        <select class="form-select" id="api_flag">
+                            {% for option in api_flag_option %}
+                            <option value="{{ option.value }}" {% if option.value==usr_basic_details['api_status']
+                                %}selected{% endif %}>
+                                {{ option.label }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3 text-center">
+                        <button class="btn btn-primary" id="set_flags">Submit</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Page Javascript -->
+    {% include 'test_user_view_js.html' %}
+
+</body>
+
+</html>

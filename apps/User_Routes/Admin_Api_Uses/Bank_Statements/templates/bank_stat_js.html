@@ -1,50 +1,167 @@
 <script nonce="{{ g.nonce }}">
 
-
     $('#bank_Stat_input').on('change', (event) => {
+
+        // empty output
+        $("#json_view").text("")
+        $("#tabluar_responce").text("")
+
         const file_name = event.target.files[0].name;
         $("#pdf_name").text(file_name)
+
+        $("#pdf_upload").removeClass("d-none")
     });
 
-    $("#bank_statement_run").click(function () {
-        $(".c-loader").removeClass('d-none')
+    $("#close_input").click(function () {
+        $("#bank_Stat_input").val("")
+        $("#pdf_upload").addClass("d-none")
+
+        // empty output
+        $("#json_view").text("")
+        $("#tabluar_responce").text("")
+    })
+
+
+    $("#run_api").click(function () {
+
+        // empty output
+        $("#json_view").text("")
+        $("#tabluar_responce").text("")
 
         const formdata = new FormData();
 
         const fileInput = document.getElementById('bank_Stat_input');
         const file = fileInput.files[0];
 
-        
+        if (file != undefined) {
 
-        formdata.append("BankName", "ICICIBANK");
-        formdata.append("PDF_File", file);
+            $("#run_api").html(`
+                    <span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+                    Loading...
+                `)
+            $(".c-loader").removeClass('d-none')
 
-        const requestOptions = {
-            method: "POST",
-            body: formdata,
-            redirect: "follow"
-        };
+            formdata.append("BankName", "ICICIBANK");
+            formdata.append("PDF_File", file);
 
-        fetch("/bank/test-api", requestOptions)
-            .then((response) => response.json())
-            .then((result) => {
-                $(".c-loader").addClass('d-none')
-                var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
-                $("#system_id_store").val(result.data.json_data["System_Generated_Unique_id"])
-                $("#bank_statment_json").text(formatteddata)
-                $('#eta').show()
-                document.getElementById("bank_statments_seconds").innerHTML = result.data.result_in_seconds
-            })
-            .catch((error) => console.error(error));
+            const requestOptions = {
+                method: "POST",
+                body: formdata,
+                redirect: "follow"
+            };
+
+            fetch("/bank/test-api", requestOptions)
+                .then((response) => response.json())
+                .then((result) => {
+
+                    $("#run_api").text("Run Api")
+
+                    if (result['data']['status_code'] == 200) {
+                        $(".c-loader").addClass('d-none')
+
+                        request_id = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            request_id = result['data']['basic_response']['request_id']
+                        }
+
+                        request_on = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            request_on = result['data']['basic_response']['request_on']
+                        }
+
+                        response_on = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            response_on = result['data']['basic_response']['response_on']
+                        }
+
+                        api_name = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            api_name = result['data']['basic_response']['api_name']
+                        }
+
+                        duration = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            duration = result['data']['basic_response']['duration']
+                        }
+
+                        abc = {
+                            "data": {
+                                "response": result['data']['response'],
+                                "request_id": request_id,
+                                "request_on": request_on,
+                                "response_on": response_on,
+                                "api_name": api_name,
+                                "duration": duration,
+                            }
+                        }
+                        //  Json preview
+                        var formatteddata = JSON.stringify(abc, null, '\t')
+                        document.getElementById('json_view').innerHTML = formatteddata
+
+
+                        // Dashboard View icon Set value
+                        $("#Statement_analysis").val("/bank/statement-Analysis-report?_id=" + result['data']['System_Generated_Unique_id'])
+
+
+                        // Tabular view
+                        $("#tabluar_responce").html(`<table class="table ">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Field</th>
+                                                    <th scope="col">Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">request_id</th>
+                                                    <td>`+ request_id + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">api_name</th>
+                                                    <td>`+ api_name + `</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>`)
+
+                        // Result in second
+                        if (result['data']['basic_response'] != undefined) {
+                            $('#eta').removeClass('d-none')
+                            document.getElementById("show_second").innerHTML = result['data']['basic_response']['duration']
+                        }
+
+                        // Api Status Show
+                        $("#api_status").removeClass('d-none')
+                        $("#status_code").addClass("success")
+                        document.getElementById('status_code').innerHTML = result['data']['status_code']
+                        // Used Credits set
+                        if (result['data']['basic_response'] != undefined) {
+                            $("#uds_crdts").text(result['data']['basic_response']['test_credits'])
+                        }
+                    }
+                })
+                .catch((error) => console.error(error));
+        }
+        else {
+            alert("Please Choose File!")
+        }
     })
 
     $("#full_screen_view").click(function () {
-        enableFullScreen("bank_statment_json");
+        enableFullScreen("json_view");
     });
 
+    $("#copy_json").click(function () {
+        copyToClipboard('#json_view')
+    });
+
+    $("#json_download").click(function () {
+        Json_Download('json_view')
+    });
+
+
     $("#Statement_analysis").click(function () {
-        console.log($("#system_id_store").val());
-        
-        window.open("/bank/statement-Analysis-report?_id=" + "ea6bd4b3-5bec-4bdc-bbd9-53929883dd83", '_blank');
+        console.log($("#Statement_analysis").val());
+
+        // window.open("/bank/statement-Analysis-report?_id=" + "ace59fcd-cd0d-4bef-926d-8134290aa081", '_blank');
     });
 </script>

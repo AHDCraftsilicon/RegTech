@@ -1,28 +1,40 @@
 <script nonce="{{ g.nonce }}">
 
     $('#aadhaar_input').on('change', (event) => {
+
+        // empty output
+        $("#json_view").text("")
+        $("#tabluar_responce").text("")
+
         var output = document.getElementById('aadhaar_img');
+        $("#close_input").removeClass("d-none")
         output.src = URL.createObjectURL(event.target.files[0]);
         output.onload = function () {
             URL.revokeObjectURL(output.src) // free memory
         }
     });
 
-
-    $("#sample_aadhaar_ocr").click(function () {
-        var output = document.getElementById('aadhaar_img');
-        output.src = "../../../../static/images/aadhaar_ocr.jpg"
+    $("#close_input").click(function () {
+        $("#redaction_input").val()
+        document.getElementById('aadhaar_img').src = "../../../../static/images/placeholder-img.svg"
+        $("#close_input").addClass("d-none")
     })
 
-    $("#aadhaar_ocr_run").click(function () {
-        $("#aadhaar_ocr_run").text("Loading....")
+    $("#run_api").click(function () {
+
+        // empty output
+        $("#json_view").text("")
+        $("#tabluar_responce").text("")
+
         const fileInput = document.getElementById('aadhaar_input');
         const file = fileInput.files[0];
 
 
         if (file != undefined) {
-            console.log("jhsgjsagdjgsa");
-
+            $("#run_api").html(`
+                    <span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+                    Loading...
+                `)
             $(".c-loader").removeClass('d-none')
             const formdata = new FormData();
             formdata.append("aadhaar_img", file);
@@ -36,7 +48,7 @@
             fetch("/aadhaar/test-api", requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
-                    $("#aadhaar_ocr_run").text("Run Api")
+                    $("#run_api").text("Run Api")
 
                     if (result['data']['status_code'] == 200) {
                         $(".c-loader").addClass('d-none')
@@ -50,9 +62,62 @@
                                 "duration": result['data']['basic_response']['duration'],
                             }
                         }
-                        // Aadhaar Json preview
+                        // Json preview
                         var formatteddata = JSON.stringify(abc, null, '\t')
-                        document.getElementById('aadhaar_ocr_json').innerHTML = formatteddata
+                        document.getElementById('json_view').innerHTML = formatteddata
+
+                        // Tabular view
+                        $("#tabluar_responce").html(`<table class="table ">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Field</th>
+                                                    <th scope="col">Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">Aadhar ID</th>
+                                                    <td>`+ result['data']['response']['AadharID'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Address</th>
+                                                    <td>`+ result['data']['response']['Address'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">DOB</th>
+                                                    <td>`+ result['data']['response']['DOB'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Father Name</th>
+                                                    <td>`+ result['data']['response']['Father_name'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Gender</th>
+                                                    <td>`+ result['data']['response']['Gender'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Husband name</th>
+                                                    <td>`+ result['data']['response']['Husband_name'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Name</th>
+                                                    <td>`+ result['data']['response']['Name'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">VID</th>
+                                                    <td>`+ result['data']['response']['VID'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">request_id</th>
+                                                    <td>`+ request_id + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">api_name</th>
+                                                    <td>`+ api_name + `</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>`)
+
                         //    Result in second
                         $('#eta').removeClass('d-none')
                         document.getElementById("aadhaar_ocr_seconds").innerHTML = result['data']['basic_response']['duration']
@@ -100,11 +165,28 @@
                                 "duration": duration,
                             }
                         }
-                        // Aadhaar Json preview
+                        //  Json preview
                         var formatteddata = JSON.stringify(abc, null, '\t')
-                        document.getElementById('aadhaar_ocr_json').innerHTML = formatteddata
+                        document.getElementById('json_view').innerHTML = formatteddata
+
+                        // Tabular view
+                        $("#tabluar_responce").html(`<table class="table ">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Field</th>
+                                                    <th scope="col">Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">MSG</th>
+                                                    <td>`+ result['data']['response'] + `</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>`)
+
                         //    Result in second
-                        if(result['data']['basic_response'] != undefined){
+                        if (result['data']['basic_response'] != undefined) {
                             $('#eta').removeClass('d-none')
                             document.getElementById("aadhaar_ocr_seconds").innerHTML = result['data']['basic_response']['duration']
                         }
@@ -135,14 +217,14 @@
 
 
     $("#full_screen_view").click(function () {
-        enableFullScreen("aadhaar_ocr_json");
+        enableFullScreen("json_view");
     });
 
-    $("#aadhaar_ocr_copy").click(function () {
-        copyToClipboard('#aadhaar_ocr_json')
+    $("#copy_json").click(function () {
+        copyToClipboard('#json_view')
     });
 
-    $("#aadhaar_ocr_download").click(function () {
-        Json_Download('aadhaar_ocr_json')
+    $("#json_download").click(function () {
+        Json_Download('json_view')
     });
 </script>

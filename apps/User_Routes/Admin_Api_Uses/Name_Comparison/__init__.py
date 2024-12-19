@@ -71,7 +71,8 @@ def Name_compare_main():
                                                                 "credits_per_use": about_api_details['credits_per_use']
                                                                 },
                                             user_details={"user_name": user_name,
-                                                        "user_type" :user_type})
+                                                      "Email_Id":check_user_in_db['Email_Id'],
+                                                    "user_type" :user_type},)
                 else:
                     return redirect("/dashboard")
                 

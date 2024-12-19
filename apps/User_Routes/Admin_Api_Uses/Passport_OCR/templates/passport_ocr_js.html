@@ -1,24 +1,39 @@
 <script nonce="{{ g.nonce }}">
 
     $('#passport_input').on('change', (event) => {
+        // empty output
+        $("#json_view").text("")
+        $("#tabluar_responce").text("")
+
         var output = document.getElementById('passport_img');
+        $("#close_input").removeClass("d-none")
         output.src = URL.createObjectURL(event.target.files[0]);
         output.onload = function () {
             URL.revokeObjectURL(output.src) // free memory
         }
     });
 
-
-    $("#sample_passport_ocr").click(function () {
-        var output = document.getElementById('passport_img');
-        output.src = "../../../../static/images/Passport_OCR.jpg"
+    $("#close_input").click(function () {
+        $("#redaction_input").val("")
+        document.getElementById('passport_img').src = "../../../../static/images/placeholder-img.svg"
+        $("#close_input").addClass("d-none")
     })
 
+    $("#run_api").click(function () {
 
-    $("#passport_ocr_run").click(function () {
+        // empty output
+        $("#json_view").text("")
+        $("#tabluar_responce").text("")
+
         const fileInput = document.getElementById('passport_input');
         const file = fileInput.files[0];
         if (file != undefined) {
+            $("#run_api").html(`
+                    <span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+                    Loading...
+                `)
+
+            $(".c-loader").removeClass('d-none')
             const formdata = new FormData();
             formdata.append("passport_img", file);
 
@@ -31,12 +46,202 @@
             fetch("/Passport/test-api", requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
-                    console.log(result);
-                    
-                    var formatteddata = JSON.stringify(result.data.json_data, null, '\t')
-                    $("#passport_ocr_json").text(formatteddata)
-                    $('#eta').removeClass('d-none')
-                    document.getElementById("passport_ocr_seconds").innerHTML = result.data.result_in_seconds
+
+                    $("#run_api").text("Run Api")
+
+                    if (result['data']['status_code'] == 200) {
+                        $(".c-loader").addClass('d-none')
+
+                        request_id = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            request_id = result['data']['basic_response']['request_id']
+                        }
+
+                        request_on = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            request_on = result['data']['basic_response']['request_on']
+                        }
+
+                        response_on = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            response_on = result['data']['basic_response']['response_on']
+                        }
+
+                        api_name = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            api_name = result['data']['basic_response']['api_name']
+                        }
+
+                        duration = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            duration = result['data']['basic_response']['duration']
+                        }
+
+
+                        abc = {
+                            "data": {
+                                "response": result['data']['response'],
+                                "request_id": request_id,
+                                "request_on": request_on,
+                                "response_on": response_on,
+                                "api_name": api_name,
+                                "duration": duration,
+                            }
+                        }
+                        // Json preview
+                        let formattedData = JSON.stringify(abc, null, '\t');
+                        formattedData = formattedData.replace(/\\n/g, '<br>');
+                        console.log(formattedData);
+
+                        document.getElementById('json_view').innerHTML = formattedData
+
+                        // Tabular view
+                        $("#tabluar_responce").html(`<table class="table ">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Field</th>
+                                                    <th scope="col">Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">Personal Number</th>
+                                                    <td>`+ result['data']['response']['personal_number'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Raw Text</th>
+                                                    <td>`+ result['data']['response']['raw_text'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Name</th>
+                                                    <td>`+ result['data']['response']['name'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Number</th>
+                                                    <td>`+ result['data']['response']['number'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Surname</th>
+                                                    <td>`+ result['data']['response']['surname'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Country</th>
+                                                    <td>`+ result['data']['response']['country'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Valid Score</th>
+                                                    <td>`+ result['data']['response']['valid_score'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Sex</th>
+                                                    <td>`+ result['data']['response']['sex'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">MRZ Type</th>
+                                                    <td>`+ result['data']['response']['mrz_type'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">request_id</th>
+                                                    <td>`+ request_id + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">api_name</th>
+                                                    <td>`+ api_name + `</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>`)
+
+
+                        //    Result in second
+                        if (result['data']['basic_response'] != undefined) {
+                            $('#eta').removeClass('d-none')
+                            document.getElementById("show_second").innerHTML = result['data']['basic_response']['duration']
+                        }
+                        // Api Status Show
+                        $("#api_status").removeClass('d-none')
+                        $("#status_code").addClass("success")
+                        document.getElementById('status_code').innerHTML = result['data']['status_code']
+                        // Used Credits set
+                        if (result['data']['basic_response'] != undefined) {
+                            $("#uds_crdts").text(result['data']['basic_response']['test_credits'])
+                        }
+                    }
+                    else {
+                        $(".c-loader").addClass('d-none')
+                        request_id = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            request_id = result['data']['basic_response']['request_id']
+                        }
+
+                        request_on = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            request_on = result['data']['basic_response']['request_on']
+                        }
+
+                        response_on = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            response_on = result['data']['basic_response']['response_on']
+                        }
+
+                        api_name = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            api_name = result['data']['basic_response']['api_name']
+                        }
+
+                        duration = ""
+                        if (result['data']['basic_response'] != undefined) {
+                            duration = result['data']['basic_response']['duration']
+                        }
+
+                        abc = {
+                            "data": {
+                                "response": result['data']['response'],
+                                "request_id": request_id,
+                                "request_on": request_on,
+                                "response_on": response_on,
+                                "api_name": api_name,
+                                "duration": duration,
+                            }
+                        }
+                        // Json preview
+                        var formatteddata = JSON.stringify(abc, null, '\t')
+                        document.getElementById('json_view').innerHTML = formatteddata
+
+                        // Tabular view
+                        $("#tabluar_responce").html(`<table class="table ">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Field</th>
+                                                    <th scope="col">Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">MSG</th>
+                                                    <td>`+ result['data']['response'] + `</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>`)
+
+                        // Hide Masked image
+                        $(".img-preview").addClass("d-none")
+                        // Api Status Show
+                        $("#api_status").removeClass('d-none')
+                        //    Result in second
+                        if (result['data']['basic_response'] != undefined) {
+                            $('#eta').removeClass('d-none')
+                            document.getElementById("show_second").innerHTML = result['data']['basic_response']['duration']
+                        }
+
+                        $("#status_code").addClass("text-danger")
+                        document.getElementById('status_code').innerHTML = result['data']['status_code']
+                        // Used Credits set
+                        if (result['data']['basic_response'] != undefined) {
+                            $("#uds_crdts").text(result['data']['basic_response']['test_credits'])
+                        }
+                    }
+
+
                 })
                 .catch((error) => console.error(error));
         }
@@ -47,15 +252,15 @@
 
 
     $("#full_screen_view").click(function () {
-        enableFullScreen("passport_ocr_json");
+        enableFullScreen("json_view");
     });
 
-    $("#passport_ocr_copy").click(function () {
-        copyToClipboard('#passport_ocr_json')
+    $("#copy_json").click(function () {
+        copyToClipboard('#json_view')
     });
 
-    $("#passport_ocr_download").click(function () {
-        Json_Download('passport_ocr_json')
+    $("#json_download").click(function () {
+        Json_Download('json_view')
     });
 
 

@@ -48,18 +48,44 @@ def ITR_Analysis_main():
 
         check_user_in_db = User_Authentication_db.find_one({"_id":ObjectId(session.get('bkjid'))})
 
+        # User Check in DB
         if check_user_in_db != None:
 
             if encrypted_token and ip_address:
-                token = decrypt_token(encrypted_token)
+                # Check User Api Status
+                if check_user_in_db['api_status'] == "Enable":
+                    token = decrypt_token(encrypted_token)
 
-                user_name = check_user_in_db["Company_Name"]
-                test_credits = [{"Test_Credit": check_user_in_db["total_test_credits"],
-                                 "Used_Credits":check_user_in_db["used_test_credits"]}]
+                    page_name = "ITR Analysis"
+
+                    user_type = "Test Credits"
+
+                    if check_user_in_db['user_flag'] == "0":
+                        user_type = "Live Credits"
+
+                    user_name = check_user_in_db["Company_Name"]
+                    page_info = [{"Test_Credit": check_user_in_db["total_test_credits"],
+                                "Used_Credits":check_user_in_db["used_test_credits"] ,
+                                "user_type" : user_type ,
+                                "page_name":page_name,
+                                "user_name": user_name
+                                }]
+
+                    about_api_details = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3b9ce184651154149b")})
+
+                    return render_template("ITR_Analysis_modal.html",
+                                        page_info=page_info , 
+                                        about_api_details = {"long_api_description": about_api_details['long_api_description'],
+                                                            "credits_per_use": about_api_details['credits_per_use']
+                                                            },
+                                        user_details={"user_name": user_name,
+                                                      "Email_Id":check_user_in_db['Email_Id'],
+                                                    "user_type" :user_type},)
                 
-                return render_template("ITR_Analysis_modal.html",
-                                    test_credit=test_credits ,
-                                     user_name=user_name)
+                else:
+                    return redirect("/dashboard")
+            
+        return redirect("/")
     
     return redirect("/")
 
@@ -74,10 +100,8 @@ def generate_random_id():
 def Bank_Statment_test_api():
     if request.method == "POST":
 
-        completed_on_ = datetime.now()
-        completed_on = datetime.now(pytz.timezone('Asia/Kolkata'))
-        completed_on = completed_on.strftime('%Y-%m-%dT%H:%M:%S%z')
-        completed_on = completed_on[:-2] + ':' + completed_on[-2:]
+        # Api Start Time
+        start_time = datetime.utcnow()
 
 
         pdf_file = request.files["ITR_pdf"]
@@ -91,26 +115,37 @@ def Bank_Statment_test_api():
             if request.form["ITR_Type"] == "ITR-1":
                 ITR1_Response = itr1_read_main(pdf_store_file)
 
+            # Api End Time
+            end_time = datetime.utcnow()
+            duration = (end_time - start_time).total_seconds() * 1000
 
-            created_on = datetime.now(pytz.timezone('Asia/Kolkata'))
-            created_on = created_on.strftime('%Y-%m-%dT%H:%M:%S%z')
-            created_on = created_on[:-2] + ':' + created_on[-2:]
+            # Request Id
+            request_id = generate_random_id()
+
+            # name of api
+            about_api_details = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3b9ce184651154149b")})
+
+            json_msg = {"data":{
+                            "status_code": 200,
+                            "status": "Success",
+                            "response": ITR1_Response,
+                            "basic_response":{ "request_id" : request_id,
+                                        "request_on" : start_time,
+                                        "response_on":end_time,
+                                        "api_name":about_api_details['api'],
+                                        "duration":round(duration, 2),
+                                        }
+                            }}
+
+            # store_response = {"response": 200,
+            #                     "status": "Success",
+            #                     "responseValue":ITR1_Response,
+            #                     "created_on" : created_on,
+            #                     "completed_on":completed_on,
+            #                     "request_id":generate_random_id(),
+            #                     }
 
 
-            duration = datetime.now()- completed_on_ 
-            duration_seconds = duration.total_seconds()
-
-            store_response = {"response": 200,
-                                "status": "Success",
-                                "responseValue":ITR1_Response,
-                                "created_on" : created_on,
-                                "completed_on":completed_on,
-                                "request_id":generate_random_id(),
-                                }
-
-
-            return jsonify({"data":
-                            {"json_data": store_response,
-                            "result_in_seconds":duration_seconds}})
+            return jsonify(json_msg)
     
     return jsonify({"msg":"method Not allowed!"})

@@ -47,7 +47,7 @@
 
                     <div class="c-box mt-3">
                         <div class="c-box-padding">
-                            <div class="container">
+                            <div class="container-fluid">
                                 <ul class="nav nav-tabs" role="tablist">
                                     <li class="nav-item">
                                         <a class="nav-link active" id="nav-tabs-1" data-toggle="tab" href="#tabs-1"
@@ -542,6 +542,17 @@
                                                                 value="{{i['api_pricing']}}" class="form-control">
                                                         </div>
                                                     </div>
+                                                    <div class="col-2">
+                                                        <div class="form-group">
+                                                            <label class="d-flex">Status </label>
+                                                            <select class="form-select" name="api_status">
+                                                                <option value="Enable" {% if i['api_status']=="Enable"
+                                                                    %}selected{% endif %}>Enable</option>
+                                                                <option value="Disable" {% if i['api_status']=="Disable"
+                                                                    %}selected{% endif %}>Disable</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                     <div class="col-1 text-center ml-1 add-btn-top">
                                                         <div class="btn btn-primary add-btn">+</div>
                                                     </div>
@@ -568,6 +579,15 @@
                                                             <label class="d-flex">Pricing </label>
                                                             <input type="number" name="api_pricing"
                                                                 class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <div class="form-group">
+                                                            <label class="d-flex">Status </label>
+                                                            <select class="form-select" name="api_status">
+                                                                <option value="Enable">Enable</option>
+                                                                <option value="Disable">Disable</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-1 text-center ml-1 add-btn-top">
@@ -603,7 +623,7 @@
     {% for message in messages %}
 
     <!-- Verify Message -->
-    {% if message == "Production Details Update Successfully!" %}
+    {% if message == "Production Details Update Successfully!" or message == "Production Details Add Successfully!" %}
 
     <script nonce="{{ g.nonce }}">
         NotifyMessage({ message: "{{message}}", type: "bg-success" });

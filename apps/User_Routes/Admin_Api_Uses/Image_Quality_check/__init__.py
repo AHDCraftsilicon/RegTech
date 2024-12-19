@@ -81,7 +81,8 @@ def Image_quality_check_main():
                                                             "credits_per_use": about_api_details['credits_per_use']
                                                             },
                                         user_details={"user_name": user_name,
-                                                    "user_type" :user_type})
+                                                      "Email_Id":check_user_in_db['Email_Id'],
+                                                    "user_type" :user_type},)
                 else:
                     return redirect("/dashboard")
     
@@ -185,6 +186,7 @@ def quality_check_module(image_base64):
             {
                 "score" : resolution,
                 "type" : "Resolution",
+                "flag" : True,
             },
             {
                 "score" : f"{variance_of_laplacian:.2f}",
@@ -208,12 +210,9 @@ def quality_check_module(image_base64):
             },
             {
                 "score" : f"{confidence_score:.2f}",
-                "type" : "Confidence Score",
-            },
-            {
-                "score" : "Fail",
                 "type" : "Overall Quality",
-            }
+                "flag" : "Fail"
+            },
         ]
     else:
         # return { 
@@ -235,6 +234,7 @@ def quality_check_module(image_base64):
             {
                 "score" : resolution,
                 "type" : "Resolution",
+                "flag" : True,
             },
             {
                 "score" : f"{variance_of_laplacian:.2f}",
@@ -258,27 +258,9 @@ def quality_check_module(image_base64):
             },
             {
                 "score" : f"{confidence_score:.2f}",
-                "type" : "Confidence Score",
-            },
-            {
-                "score" : "Pass",
                 "type" : "Overall Quality",
-            }
-        ]
-
-
-# Image Extensions
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg','jfif'}
-ALLOWED_MIME_TYPES = {'image/jpeg', 'image/png'}
-
-def allowed_file(file):
-    # Check the file extension
-    filename = file.filename
-    if not '.' in filename:
-        return False
-    ext = filename.rsplit('.', 1)[1].lower()
-    # Check if extension and MIME type are valid
-    return ext in ALLOWED_EXTENSIONS and file.mimetype in ALLOWED_MIME_TYPES
+                "flag" : "Pass",
+            }        ]
 
 
 
@@ -286,7 +268,7 @@ def allowed_file(file):
 @Image_Quality_check_bp.route("/checks/test-api",methods=["POST"])
 def Image_Quality_api_test():
     if request.method == "POST":
-        # try:
+        try:
             encrypted_token = session.get('QtSld')
             ip_address = session.get('KLpi')
             if session.get('bkjid') != "":
@@ -424,12 +406,12 @@ def Image_Quality_api_test():
                         
                     else:
                         return redirect("/dashboard")
-        # except:
-        #     return jsonify({"data":{
-        #                             "status_code": 400,
-        #                             "status": "Error",
-        #                             "response":"Something went wrong!"
-        #                         }}), 400
+        except:
+            return jsonify({"data":{
+                                    "status_code": 400,
+                                    "status": "Error",
+                                    "response":"Something went wrong!"
+                                }}), 400
         
     return jsonify({"data":{
                             "status_code": 405,

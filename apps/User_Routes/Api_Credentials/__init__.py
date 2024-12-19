@@ -2,15 +2,16 @@ from flask import Blueprint, render_template,request,session,redirect
 from flask_jwt_extended import JWTManager, verify_jwt_in_request, get_jwt,create_access_token,set_access_cookies
 from datetime import timedelta
 from bson import ObjectId
-import random
-import pytz
-
+from flask_socketio import SocketIO, emit
 
 # DataBase
 from data_base_string import *
 
 # Token
 from token_generation import *
+
+# Headers Verification
+from Headers_Verify import *
 
 # Blueprint
 User_Admin_Api_Credentials_bp = Blueprint("User_Admin_Api_Credentials_bp",
@@ -24,6 +25,62 @@ User_Admin_Api_Credentials_bp = Blueprint("User_Admin_Api_Credentials_bp",
 User_Testing_Credits_db = Regtch_services_UAT["User_Testing_Credits"]
 User_Authentication_db = Regtch_services_UAT["User_Authentication"]
 
+
+# Validate Client ID
+def is_valid_uuid_client_id(custom_uuid: str) -> bool:
+    try:
+        # Split the custom UUID into part1 and part2
+        part1, part2 = custom_uuid.split('/')
+
+        # Check if part1 is a 12-character hexadecimal string
+        if not re.fullmatch(r"[a-fA-F0-9]{12}", part1):
+            return False
+
+        # Check if part2 is a valid UUID
+        uuid.UUID(part2)  # This will raise ValueError if part2 is not valid
+
+        return True
+    except (ValueError, AttributeError):
+        return False
+    
+# Validate Secret Key
+def is_valid_standard_uuid_secret_key(standard_uuid: str) -> bool:
+    try:
+        # Validate if the string is a proper UUID
+        uuid.UUID(standard_uuid)  # This will raise ValueError if not valid
+        return True
+    except ValueError:
+        return False
+
+def api_Cred_socketio(socketios):
+    
+    # Get user objid and return response user flag
+    @socketios.on('generate-trigger',namespace='/')
+    def check_user_flag(data):
+        if(data['data'] == "Trigger"):
+            client_id =  generate_random_client_id()
+            secret_key = generate_random_client_secret_key()
+            emit("generate_suffle",{"data":{"status":200,
+                                  "client_id" : client_id,
+                                  "secret_key" : secret_key,
+                                  }})
+            
+    # Change Client ID & Secret Key
+    @socketios.on('save-credentials',namespace='/')
+    def save_crential(data):
+        if data['data']['client-id'] != "" and data['data']['client-secret'] != "":
+            client_id =  is_valid_uuid_client_id(data['data']['client-id'])
+            secret_key = is_valid_standard_uuid_secret_key(data['data']['client-secret'])
+            if client_id == True and secret_key == True:
+                User_Authentication_db.update_one({"_id":ObjectId(data['data']['objid'])},
+                                                  {"$set":{"client_id": data['data']['client-id'],
+                                                           "client_secret_key": data['data']['client-secret'],
+                                                           "credential_changing_date": datetime.now(),
+                                                            }}
+                                                  )
+                emit("change-msg",{"data":{"status":200}})
+            else:
+                emit("change-msg",{"data":{"status":400}})
 
 @User_Admin_Api_Credentials_bp.route("/credentials")
 def Api_Credentials_main():
@@ -47,6 +104,7 @@ def Api_Credentials_main():
                 if check_user_in_db['user_flag'] == "0":
                     user_type = "Live Credits"
 
+                objid = str(check_user_in_db['_id'])
 
                 user_name = check_user_in_db["Company_Name"]
                 page_info = [{"Test_Credit": check_user_in_db["total_test_credits"],
@@ -66,7 +124,10 @@ def Api_Credentials_main():
                                         sccess_id_key=sccess_id_key,
                                         page_info=page_info,
                                         user_details={"user_name": user_name,
-                                                        "user_type" :user_type})
+                                                      "Email_Id":check_user_in_db['Email_Id'],
+                                                    "user_type" :user_type},
+                                        objid = objid
+                                        )
                         
                 
             return redirect("/")

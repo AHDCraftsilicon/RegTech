@@ -5,9 +5,10 @@
 
 
 
-    $("#translate_run").click(function () {
+    $("#run_api").click(function () {
 
-        $("#translate_run").text("Loading....")
+        $("#translate_lang").val("")
+
 
         if ($('#translate_textarea').val() == "") {
             NotifyMessage({ message: "Enter Text!", type: "bg-danger" });
@@ -15,7 +16,10 @@
         }
         else {
             if ($('#FromLanguage').val() != "" && $('#ToLanguage').val() != "") {
-
+                $("#run_api").html(`
+                    <span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+                    Loading...
+                `)
                 $(".c-loader").removeClass('d-none')
 
                 $("#translate_lang").val("")
@@ -34,7 +38,7 @@
                 fetch("/translate/test-api", requestOptions)
                     .then((response) => response.json())
                     .then((result) => {
-                        $("#translate_run").text("Run Api")
+                        $("#run_api").text("Run Api")
 
                         if (result['data']['status_code'] == 200) {
 
@@ -81,7 +85,7 @@
                             }
                             // Lang Trans Json preview
                             var formatteddata = JSON.stringify(abc, null, '\t')
-                            document.getElementById('lang_translate_json_temp').innerHTML = formatteddata
+                            document.getElementById('json_view').innerHTML = formatteddata
                             //    Result in second
                             if (result['data']['basic_response'] != undefined) {
                                 $('#eta').removeClass('d-none')
@@ -136,7 +140,7 @@
                             }
                             // Lang Trans Json preview
                             var formatteddata = JSON.stringify(abc, null, '\t')
-                            document.getElementById('lang_translate_json_temp').innerHTML = formatteddata
+                            document.getElementById('json_view').innerHTML = formatteddata
                             // Translate Textarea
                             if (result['data']['response'] != undefined) {
                                 $("#translate_lang").val(result['data']['response'])
@@ -167,12 +171,12 @@
     })
 
 
-    $("#lan_trans_copy").click(function () {
-        copyToClipboard('#lang_translate_json_temp')
+    $("#copy_json").click(function () {
+        copyToClipboard('#json_view')
     });
 
-    $("#lan_trans_download").click(function () {
-        Json_Download('lang_translate_json_temp')
+    $("#json_download").click(function () {
+        Json_Download('json_view')
     });
 
 </script>

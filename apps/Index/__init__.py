@@ -24,7 +24,7 @@ def index_main_page():
 @Index_Page_bp.route("/aadhaar-redaction-api")
 def aadhaar_redaction():
 
-    return render_template("aadhaar_redaction.html")
+    return render_template("aadhaar_redaction_page.html")
 
 @Index_Page_bp.route("/ocr-api")
 def ocr_Details():

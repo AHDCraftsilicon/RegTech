@@ -14,22 +14,22 @@
 
 <body>
 
-    <!-- Topbar -->
-    {% set User_portal_topbar = User_portal_topbar(user_details) %}
-    {% if User_portal_topbar %}
-    {{ User_portal_topbar | safe }}
+    <!-- Side-Bar -->
+    {% set User_portal_sidebar = User_portal_sidebar() %}
+    {% if User_portal_sidebar %}
+    {{ User_portal_sidebar | safe }}
     {% endif %}
 
-    <section class="main-part">
-        <!-- Side-Bar -->
-        {% set User_portal_sidebar = User_portal_sidebar() %}
-        {% if User_portal_sidebar %}
-        {{ User_portal_sidebar | safe }}
+    <section class="home-section">
+        <!-- Topbar -->
+        {% set User_portal_topbar = User_portal_topbar(user_details) %}
+        {% if User_portal_topbar %}
+        {{ User_portal_topbar | safe }}
         {% endif %}
 
         <!-- Page Contante -->
-        <div class="page-content">
-            <div class="c-page-padding">
+        <div class="main">
+            <div>
 
                 <!-- Route Headers -->
                 {% set User_portal_headers = User_portal_headers(page_info) %}
@@ -38,67 +38,31 @@
                 {% endif %}
 
 
-                <div class="row">
-                    {% for i in api_list %}
-
-                    {% if i["view_permission"] == true %}
-                    <a class="col-lg-4 col-md-6 col-sm-12 col-12" href='{{i["page_url"]}}'>
-                        <div class="dash-box">
-                            <div class="dash-box-padding">
-                                <div class="dash-icon">
+                <div class="mb-7">
+                    <div class="row">
+                        {% for i in api_list %}
+                        {% if i["view_permission"] == true %}
+                        <a href='{{i["page_url"]}}' class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 d-flex">
+                            <div class="product-detail-box">
+                                <div class="card-detail-section-1 card-section">
                                     {{i["api_logo"] | safe }}
                                 </div>
-                                <div class="dash-contain">
-                                    <p class="dash-box-heading">{{i["api_name"]}}</p>
-                                    <div class="dash-box-normal-font" id="api-description-{{ i['objid'] }}">
-                                        {{i["sort_api_description"]}}</div>
-                                </div>
-                                <div class="dash-arrow">
-                                    <i class="ri-arrow-right-s-line"></i>
+                                <div class="pricing-box-content">
+                                    <h5 class="mb-0">{{i["api_name"]}}</h5>
+                                    <p id="api-description-{{ i['objid'] }}">{{i["sort_api_description"]}}</p>
                                 </div>
                             </div>
-                        </div>
-                    </a>
-                    {% endif %}
-                    {% endfor %}
-
+                        </a>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
                 </div>
-
                 <!-- Chat Bot -->
-                <div id="chat-bot">
+                {% set User_chatbot = User_chatbot() %}
+                {% if User_chatbot %}
+                {{ User_chatbot | safe }}
+                {% endif %}
 
-                    <div class="messenger br10">
-                        <!-- <div class="timestamp">04:45 AM</div> -->
-                        <div class="chatBot-Header">
-                            <div class="chatBot-User-Profile">
-                                <img src="../../../static/images/Chat-Profile.svg" alt="" srcset="">
-                            </div>
-                            <span class="ChatBot-heading-name">Customer Support</span>
-                        </div>
-                        <div class="chatroom">
-                            <div class="form-group">
-                                <label id="" class="c-label ChatBot-Label">Subject</label>
-                                <input class="form-control c-form-control" type="text" id="" name="" />
-                            </div>
-                            <div class="form-group">
-                                <label id="" class="c-label ChatBot-Label">Remark</label>
-                                <textarea class="form-control c-form-control" name="" id="" cols="28"
-                                    rows="5"></textarea>
-                            </div>
-                            <div class="text-right">
-                                <button class="chat-submit-btn" type="button">Send Message <i
-                                        class="ri-send-plane-2-line"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ChatBot-iCon">
-                        <div class="user">
-
-                        </div>
-                        <img class="Chatbot-icon-img" src="../../../static/images/ChatBot-iCon.svg" alt="" srcset="">
-                        <span class="ml-3">Customer Support</span>
-                    </div>
-                </div>
 
             </div>
         </div>
@@ -111,6 +75,8 @@
     {% endif %}
 
     <script nonce="{{ g.nonce }}">
+
+
         function redactAadhaar(text) {
             const redactedText = text
 

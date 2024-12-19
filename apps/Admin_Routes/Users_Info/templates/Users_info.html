@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - bluBeetle.ai</title>
+    <title>User List - bluBeetle.ai</title>
 
     {% set Admin_Portal_urls = Admin_Portal_urls() %}
     {% if Admin_Portal_urls %}
@@ -65,7 +65,8 @@
                                                         <select class="form-select select2" id="user_name">
                                                             <option value="" selected>Select</option>
                                                             {% for item in user_list %}
-                                                            <option value="{{item['objid']}}">{{item['Company_Name']}}</option>
+                                                            <option value="{{item['objid']}}">{{item['Company_Name']}}
+                                                            </option>
                                                             {% endfor %}
 
                                                         </select>
@@ -84,7 +85,8 @@
                                                         </select>
                                                     </th>
                                                     <th class="text-wrap">
-                                                        <input type="text" name="created_on" class="form-control">
+                                                        <input type="text" name="created_on" id="created_on"
+                                                            class="form-control">
                                                     </th>
                                                     <th class="text-wrap">
                                                         &#8203;

@@ -3,7 +3,9 @@
 from flask import request,jsonify
 import bleach
 import random
-
+import uuid
+import urllib.parse
+import re
 
 # DataBase
 from data_base_string import *
@@ -54,6 +56,14 @@ def clean(value, strip=False):
     return bleach.clean(value, strip=strip)
 
 
+URL_PATTERN = r"(https?|wss?):\/\/(?:[-\w.]|(?:%[\da-fA-F]{2}))+"
+
+def validate_no_urls(input_string):
+    # Check if the input contains any URLs
+    if re.search(URL_PATTERN, input_string):
+        return None  # Invalid input
+    return input_string
+
 def check_html_injection(data, keys_to_check):
     for key in keys_to_check:
         if key in data:
@@ -84,13 +94,26 @@ def check_html_injection(data, keys_to_check):
                 }), 400
             
             # Sanitize the value
-            sanitized_value = clean(data[key], strip=True)
+            decoded_name = urllib.parse.unquote(data[key])
+
+            validated_name = validate_no_urls(decoded_name)
+
+            if not validated_name:
+                return jsonify({
+                    "data": {
+                        "status_code": 400,
+                        "status": "Error",
+                        "response": "The input contains disallowed HTML tags or attributes or URLs! Please remove any unsafe HTML!"
+                    }
+                }), 400
+
+            sanitized_value = clean(decoded_name, strip=True)
             if data[key] != sanitized_value:
                 return jsonify({
                     "data": {
                         "status_code": 400,
                         "status": "Error",
-                        "response": "The input contains disallowed HTML tags or attributes! Please remove any unsafe HTML!"
+                        "response": "The input contains disallowed HTML tags or attributes or URLs! Please remove any unsafe HTML!"
                     }
                 }), 400
         else:
@@ -115,3 +138,19 @@ def generate_random_id():
         generate_random_id()
     
     return request_id
+
+
+def generate_random_client_id():
+    part1 = uuid.uuid4().hex[:12]  # Generates 12 hex characters
+    part2 = str(uuid.uuid4())      # Generates a UUID string
+    return f"{part1}/{part2}"
+
+def generate_random_client_secret_key():
+    return str(uuid.uuid4())
+
+
+# PDF File Extention
+ALLOWED_EXTENSIONSS = {'pdf'}
+
+def allowed_pdf_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONSS

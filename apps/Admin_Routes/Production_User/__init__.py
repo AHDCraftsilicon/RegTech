@@ -162,7 +162,7 @@ def Admin_production_user():
     data = {"iTotalDisplayRecords": total_data,
             'aaData': dictinory,
             "iTotalRecords": total_data/int(request.form['length']),
-                }
+            }
     
     return jsonify(data)
 

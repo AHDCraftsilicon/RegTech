@@ -81,7 +81,8 @@ def Aadhaar_Redaction_main():
                                                             "credits_per_use": about_api_details['credits_per_use']
                                                             },
                                         user_details={"user_name": user_name,
-                                                    "user_type" :user_type})
+                                                      "Email_Id":check_user_in_db['Email_Id'],
+                                                    "user_type" :user_type},)
                 else:
                     return redirect("/dashboard")
         
@@ -89,20 +90,6 @@ def Aadhaar_Redaction_main():
     
     return redirect("/")
 
-
-
-# Image Extensions
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg','jfif'}
-ALLOWED_MIME_TYPES = {'image/jpeg', 'image/png'}
-
-def allowed_file(file):
-    # Check the file extension
-    filename = file.filename
-    if not '.' in filename:
-        return False
-    ext = filename.rsplit('.', 1)[1].lower()
-    # Check if extension and MIME type are valid
-    return ext in ALLOWED_EXTENSIONS and file.mimetype in ALLOWED_MIME_TYPES
 
 
 # Testing Apis
@@ -263,7 +250,11 @@ def Aadhaar_redaction_api_test():
                     else:
                         return redirect("/dashboard")
                     
-            
+                return jsonify({"data":{
+                                    "status_code": 400,
+                                    "status": "Error",
+                                    "response":"Something went wrong!"
+                                }}), 400
             return jsonify({"data":{
                                     "status_code": 400,
                                     "status": "Error",

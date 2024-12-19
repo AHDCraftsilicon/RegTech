@@ -22,7 +22,7 @@ def passport_main(image_path):
             passport_json_data['personal_number'] = passport_data['personal_number']
 
         if passport_data['raw_text'] != "":
-            passport_json_data['raw_text'] = passport_data['raw_text']
+            passport_json_data['raw_text'] = str(passport_data['raw_text'])
 
         if passport_data['names'] != "":
             passport_json_data['name'] = passport_data['names']

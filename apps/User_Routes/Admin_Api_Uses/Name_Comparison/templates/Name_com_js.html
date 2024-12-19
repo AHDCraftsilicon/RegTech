@@ -4,39 +4,46 @@
     $("#sample_name_comp").click(function () {
         $("#name1").val("Monika Jain")
         $("#name2").val("Jain Monika")
-        $("#name_match_run").removeClass("disabled")
-        $("#name_match_run").removeAttr("disabled")
+        $("#run_api").removeClass("disabled")
+        $("#run_api").removeAttr("disabled")
     })
 
 
     $("#name1").on('change keyup copy paste cut', function () {
         if (this.value != "") {
-            $("#name_match_run").removeClass("disabled")
-            $("#name_match_run").removeAttr("disabled")
+            $("#run_api").removeClass("disabled")
+            $("#run_api").removeAttr("disabled")
         }
         else {
-            $("#name_match_run").addClass("disabled")
-            $('#name_match_run').prop("disabled", true);
+            $("#run_api").addClass("disabled")
+            $('#run_api').prop("disabled", true);
         }
     });
 
     $("#name2").on('change keyup copy paste cut', function () {
         if (this.value != "") {
-            $("#name_match_run").removeClass("disabled")
-            $("#name_match_run").removeAttr("disabled")
+            $("#run_api").removeClass("disabled")
+            $("#run_api").removeAttr("disabled")
         }
         else {
-            $("#name_match_run").addClass("disabled")
-            $('#name_match_run').prop("disabled", true);
+            $("#run_api").addClass("disabled")
+            $('#run_api').prop("disabled", true);
         }
     });
 
 
-    $("#name_match_run").click(function () {
+    $("#run_api").click(function () {
 
-        $("#name_match_run").text("Loading....")
+        // empty output
+        $("#json_view").text("")
+        $("#tabluar_responce").text("")
+
 
         if ($("#name1").val() != "" && $("#name2").val() != "") {
+            $("#run_api").html(`
+                    <span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+                    Loading...
+                `)
 
             $(".c-loader").removeClass('d-none')
 
@@ -53,7 +60,7 @@
             fetch("/name/test-api", requestOptions)
                 .then((response) => response.json())
                 .then((result) => {
-                    $("#name_match_run").text("Run Api")
+                    $("#run_api").text("Run Api")
 
                     if (result['data']['status_code'] == 200) {
                         $(".c-loader").addClass('d-none')
@@ -93,9 +100,39 @@
                                 "duration": duration,
                             }
                         }
-                        // Name Com Json preview
+                        // Json preview
                         var formatteddata = JSON.stringify(abc, null, '\t')
-                        document.getElementById('name_comp_json').innerHTML = formatteddata
+                        document.getElementById('json_view').innerHTML = formatteddata
+
+                        // Tabular view
+                        $("#tabluar_responce").html(`<table class="table ">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Field</th>
+                                                    <th scope="col">Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">match_flag</th>
+                                                    <td>`+ result['data']['response']['match_flag'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">match_percentage</th>
+                                                    <td>`+ result['data']['response']['match_percentage'] + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">request_id</th>
+                                                    <td>`+ request_id + `</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">api_name</th>
+                                                    <td>`+ api_name + `</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>`)
+
+
                         //    Result in second
                         if (result['data']['basic_response'] != undefined) {
                             $('#eta').removeClass('d-none')
@@ -150,7 +187,7 @@
                         }
                         // Name Com Json preview
                         var formatteddata = JSON.stringify(abc, null, '\t')
-                        document.getElementById('name_comp_json').innerHTML = formatteddata
+                        document.getElementById('json_view').innerHTML = formatteddata
                         //    Result in second
                         if (result['data']['basic_response'] != undefined) {
                             $('#eta').removeClass('d-none')
@@ -177,15 +214,15 @@
 
 
     $("#full_screen_view").click(function () {
-        enableFullScreen("name_comp_json");
+        enableFullScreen("json_view");
     });
 
-    $("#name_comp_copy").click(function () {
-        copyToClipboard('#name_comp_json')
+    $("#copy_json").click(function () {
+        copyToClipboard('#json_view')
     });
 
-    $("#name_comp_download").click(function () {
-        Json_Download('name_comp_json')
+    $("#json_download").click(function () {
+        Json_Download('json_view')
     });
 
 

@@ -26,8 +26,10 @@ from apps.User_Routes.Admin_Api_Uses.Image_Quality_check import Image_Quality_ch
 from apps.User_Routes.Admin_Api_Uses.Langu_Trans import Language_translate_bp
 from apps.User_Routes.Admin_Api_Uses.Bank_Statements import Bank_Statments_bp
 from apps.User_Routes.Admin_Api_Uses.ITR_Analysis import ITR_analysis_bp
+from apps.User_Routes.Admin_Api_Uses.Document_validation import Document_validation_bp
+
 # User Api Credentials
-from apps.User_Routes.Api_Credentials import User_Admin_Api_Credentials_bp
+from apps.User_Routes.Api_Credentials import User_Admin_Api_Credentials_bp , api_Cred_socketio
 # User Api Support
 from apps.User_Routes.support import User_Support_bp
 # User Api Usage_Insights
@@ -36,6 +38,7 @@ from apps.User_Routes.Usage_Insights import User_Api_Usage_bp
 from apps.User_Routes.Credits_pricing import Credits_Pricing_bp
 # USer Api Documentation
 from apps.User_Routes.Api_Documentation import User_api_Documentation_bp
+
 
 # Error Routes
 from apps.Error_pages import Error_page_bp
@@ -52,6 +55,8 @@ from apps.Admin_Routes.Api_Information import Admin_Api_informations_bp
 from apps.Admin_Routes.Credits.Default_credits import Default_credits_bp
 # Production User
 from apps.Admin_Routes.Production_User import Production_User_bp
+# Credit Request
+from apps.Admin_Routes.Credit_request import Credit_request_bp , credit_req_socket
 
 
 # Token For access api
@@ -125,7 +130,7 @@ def crete_app():
     app.config['SESSION_PERMANENT'] = True
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=60)
     app.config['SESSION_COOKIE_NAME'] = 'k_'
-    CORS(app)
+    CORS(app, resources={r"/*": {"origins": "https://regtech.blubeetle.ai/"}} )
     # , resources={r"/*": {"origins": "https://regtech.blubeetle.ai/"}} 
 
     # JWT Secret key
@@ -142,7 +147,10 @@ def crete_app():
     socketios.init_app(app)
 
     init_socketio(socketios)
-    
+    # Credit Req Socket
+    credit_req_socket(socketios)
+    # user credentials
+    api_Cred_socketio(socketios)   
     
 
     
@@ -189,11 +197,17 @@ def crete_app():
     def User_portal_sidebar():
         with app.open_resource('Components/User_Portal/User_portal_Sidebar.html') as f:
             return f.read().decode('utf-8')
+    
         
     # User Portal Headers
     def User_portal_headers(page_info):
         with app.open_resource('Components/User_Portal/User_headers.html') as f:
             return render_template_string(f.read().decode('utf-8'),page_info=page_info)
+        
+    # ChatBot
+    def User_chatbot():
+        with app.open_resource('Components/User_Portal/chatbot.html') as f:
+            return render_template_string(f.read().decode('utf-8'))
         
     # Credits Portal
     def User_portal_credits_modal(page_info):
@@ -238,6 +252,7 @@ def crete_app():
     app.register_blueprint(Language_translate_bp)
     app.register_blueprint(Bank_Statments_bp)
     app.register_blueprint(ITR_analysis_bp)
+    app.register_blueprint(Document_validation_bp)
     # Api Credentials
     app.register_blueprint(User_Admin_Api_Credentials_bp)
     app.register_blueprint(User_Support_bp)
@@ -259,6 +274,8 @@ def crete_app():
     app.register_blueprint(Default_credits_bp)
     # Production User
     app.register_blueprint(Production_User_bp)
+    # Credit Request
+    app.register_blueprint(Credit_request_bp)
 
     
 
@@ -309,6 +326,7 @@ def crete_app():
     app.jinja_env.globals['User_portal_topbar'] = User_portal_topbar
     app.jinja_env.globals['User_portal_sidebar'] = User_portal_sidebar
     app.jinja_env.globals['User_portal_headers'] = User_portal_headers
+    app.jinja_env.globals['User_chatbot'] = User_chatbot
     app.jinja_env.globals['User_portal_credits_modal'] = User_portal_credits_modal
 
     # Admin Portal URLs
@@ -328,7 +346,9 @@ def crete_app():
     @app.after_request
     def set_x_frame_options(response):
         if request.method == 'POST':
+            # print("*** ", request.headers)
             response.headers['X-Frame-Options'] = 'DENY'  # or 'SAMEORIGIN'
+            response.headers['Access-Control-Allow-Origin'] = '*'
         return response
 
     @app.before_request
@@ -355,9 +375,13 @@ def crete_app():
         response.headers['X-XSS-Protection'] = '1; mode=block'
 
          # access-control
-        response.headers['Access-Control-Allow-Origin'] = '*'
+         # Access-Control headers
+        if request.headers.get("Origin") in ['https://regtech.blubeetle.ai/', 'http://192.168.10.121/', 'http://127.0.0.1:8000/']:
+            response.headers['Access-Control-Allow-Origin'] = request.headers['Origin']
+            response.headers['Vary'] = 'Origin'
+        # response.headers['Access-Control-Allow-Origin'] = '*'
         response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
-        response.headers['Access-Control-Allow-Headers'] = 'origin'
+        response.headers['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Authorization'
         response.headers['Age'] = '3600'
         response.headers['Cache-Control'] = 'public, max-age=3600'
         

@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template,request,session
+from flask import Blueprint, render_template,request,session , make_response
 from flask_jwt_extended import JWTManager, jwt_required,get_jwt
 from datetime import timedelta
 from bleach import clean
@@ -59,24 +59,32 @@ def ITR_analyser_Api_route():
                 pdf_file = request.files["PDF_File"]
                 filename_ipdf = str(time.time()).replace(".", "")
 
-                # Check Unique Id
+                print(request.headers)
 
-                uuid_to_check = request.form['UniqueID']
-                # Check if the UUID matches the pattern
-                if UUID_PATTERN.match(str(uuid_to_check)):
-                    if pdf_file.filename != "":
+                # Check Unique Id
+                if pdf_file and allowed_pdf_file(pdf_file.filename):
+                    uuid_to_check = request.form['UniqueID']
+                    # Check if the UUID matches the pattern
+                    if UUID_PATTERN.match(str(uuid_to_check)):
+                        if pdf_file.filename != "":
+                            return jsonify({"data":{
+                                            "status_code": 200,
+                                            "status": "Success",
+                                            "response":{"ITR_statement":"ITR-1"}
+                                        }})
+                        
+                    else:
                         return jsonify({"data":{
-                                        "status_code": 200,
-                                        "status": "Success",
-                                        "response":{"ITR_statement":"ITR-1"}
-                                    }})
+                                "status_code": 400,
+                                "status": "Error",
+                                "response":"Error! Please Validate the UniqueID format!"
+                            }}), 400
                     
-                else:
-                    return jsonify({"data":{
-                            "status_code": 400,
-                            "status": "Error",
-                            "response":"Error! Please Validate the UniqueID format!"
-                        }}), 400
+                else:    
+                    return jsonify({"data" : {"status_code": 400,
+                                        "status": "Error",
+                                        "response":"Invalid file format. Only PDF are allowed!"
+                                        }}) , 400
 
         except:
             return jsonify({"data":{

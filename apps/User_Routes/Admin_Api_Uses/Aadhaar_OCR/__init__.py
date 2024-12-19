@@ -75,7 +75,8 @@ def Aadhaar_OCR_main():
                                                             "credits_per_use": about_api_details['credits_per_use']
                                                             },
                                         user_details={"user_name": user_name,
-                                                    "user_type" :user_type})
+                                                      "Email_Id":check_user_in_db['Email_Id'],
+                                                    "user_type" :user_type},)
                 
                 else:
                     return redirect("/dashboard")
@@ -83,20 +84,6 @@ def Aadhaar_OCR_main():
         return redirect("/")
     
     return redirect("/")
-
-
-# Image Extensions
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg','jfif'}
-ALLOWED_MIME_TYPES = {'image/jpeg', 'image/png'}
-
-def allowed_file(file):
-    # Check the file extension
-    filename = file.filename
-    if not '.' in filename:
-        return False
-    ext = filename.rsplit('.', 1)[1].lower()
-    # Check if extension and MIME type are valid
-    return ext in ALLOWED_EXTENSIONS and file.mimetype in ALLOWED_MIME_TYPES
 
 
 # Random request id generate

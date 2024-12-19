@@ -7514,7 +7514,7 @@ button.bg-secondary:hover {
 }
 
 .bg-success {
-    background-color: #28a745 !important
+    background-color: #2b6639 !important
 }
 
 a.bg-success:focus,
@@ -7536,7 +7536,7 @@ button.bg-info:hover {
 }
 
 .bg-warning {
-    background-color: #ffc107 !important
+    background-color: #FFAA00 !important
 }
 
 a.bg-warning:focus,
@@ -11630,5 +11630,8 @@ a.text-dark:hover {
 .text-unset {
     text-transform: unset !important;
 }
+
+
+
 
 /*# sourceMappingURL=bootstrap.min.css.map */

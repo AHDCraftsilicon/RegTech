@@ -13,103 +13,77 @@
 </head>
 
 <body>
-    <!-- Topbar -->
-    {% set User_portal_topbar = User_portal_topbar(user_details) %}
-    {% if User_portal_topbar %}
-    {{ User_portal_topbar | safe }}
+
+    <!-- Side-Bar -->
+    {% set User_portal_sidebar = User_portal_sidebar() %}
+    {% if User_portal_sidebar %}
+    {{ User_portal_sidebar | safe }}
     {% endif %}
 
-    <section class="main-part">
-        <!-- Side-Bar -->
-        {% set User_portal_sidebar = User_portal_sidebar() %}
-        {% if User_portal_sidebar %}
-        {{ User_portal_sidebar | safe }}
+    <section class="home-section">
+
+        <!-- Topbar -->
+        {% set User_portal_topbar = User_portal_topbar(user_details) %}
+        {% if User_portal_topbar %}
+        {{ User_portal_topbar | safe }}
         {% endif %}
 
-        <!-- Page Content -->
-        <div class="page-content">
-            <div class="c-page-padding">
-                <div>
-                    <!-- Route Headers -->
-                    {% set User_portal_headers = User_portal_headers(page_info) %}
-                    {% if User_portal_headers %}
-                    {{ User_portal_headers | safe }}
-                    {% endif %}
-                    <div class="cc-box-padding">
-                        <div class="row">
-                            {% for i in api_info %}
-                            <div class="col-lg-3 col-md-4 col-sm-6 col-12 d-flex">
-                                <div class="product-box text-center">
-                                    <div class="product-image">
-                                        {{i['api_logo'] | safe}}
-                                    </div>
-                                    <div class="product-category">
-                                        <div class="category-icon">
-                                            <img src="../../../static/images/Value-icon.svg" alt="" srcset="">
-                                            <span class="category-value">{{i['credits_per_use']}}</span>
-                                        </div>
-                                        <span>/ Credit</span>
-                                    </div>
-                                    <div class="product-body">
-                                        <div class="product-title">
-                                            <h5>{{i['api_name']}}</h5>
-                                        </div>
-                                        <div class="product-details">
-                                            <p>{{i['sort_api_description']}}</p>
-                                        </div>
-                                    </div>
+        <div class="main">
+
+            <!-- Route Headers -->
+            {% set User_portal_headers = User_portal_headers(page_info) %}
+            {% if User_portal_headers %}
+            {{ User_portal_headers | safe }}
+            {% endif %}
+
+
+            <div class="mb-7">
+                <div class="row">
+                    {% for i in api_info %}
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-12 d-flex">
+                        <div class="product-pricing-box">
+                            <div class="card-section-1 card-section">
+                                {{i['api_logo'] | safe}}
+                            </div>
+                            <div class="pricing-box-value">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="18" viewBox="0 0 21 18"
+                                    fill="none">
+                                    <path
+                                        d="M10.3516 18L0.351562 6L3.35156 0H17.3516L20.3516 6L10.3516 18ZM7.97656 5H12.7266L11.2266 2H9.47656L7.97656 5ZM9.35156 13.675V7H3.80156L9.35156 13.675ZM11.3516 13.675L16.9016 7H11.3516V13.675ZM14.9516 5H17.6016L16.1016 2H13.4516L14.9516 5ZM3.10156 5H5.75156L7.25156 2H4.60156L3.10156 5Z"
+                                        fill="white" />
+                                </svg>
+                                <div class="d-flex align-items-baseline">
+                                    <h6 class="mb-0 mr-1">{{i['credits_per_use']}}</h6>
+                                    <span>/ Credit</span>
                                 </div>
                             </div>
-                            {% endfor %}
+                            <div class="pricing-box-content">
+                                <h5 class="mb-0">{{i['api_name']}}</h5>
+                                <p>{{i['sort_api_description']}}</p>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Chat Bot -->
-                    <div id="chat-bot">
-
-                        <div class="messenger br10">
-                            <!-- <div class="timestamp">04:45 AM</div> -->
-                            <div class="chatBot-Header">
-                                <div class="chatBot-User-Profile">
-                                    <img src="../../../static/images/Chat-Profile.svg" alt="" srcset="">
-                                </div>
-                                <span class="ChatBot-heading-name">Customer Support</span>
-                            </div>
-                            <div class="chatroom">
-                                <div class="form-group">
-                                    <label id="" class="c-label ChatBot-Label">Subject</label>
-                                    <input class="form-control c-form-control" type="text" id="" name="" />
-                                </div>
-                                <div class="form-group">
-                                    <label id="" class="c-label ChatBot-Label">Remark</label>
-                                    <textarea class="form-control c-form-control" name="" id="" cols="28"
-                                        rows="5"></textarea>
-                                </div>
-                                <div class="text-right">
-                                    <button class="chat-submit-btn" type="button">Send Message <i
-                                            class="ri-send-plane-2-line"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ChatBot-iCon">
-                            <div class="user">
-
-                            </div>
-                            <img class="Chatbot-icon-img" src="../../../static/images/ChatBot-iCon.svg" alt=""
-                                srcset="">
-                            <span class="ml-3">Customer Support</span>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
+
+            <!-- Chat Bot -->
+            {% set User_chatbot = User_chatbot() %}
+            {% if User_chatbot %}
+            {{ User_chatbot | safe }}
+            {% endif %}
         </div>
     </section>
+
+
 
     <!-- Credit Pop-up -->
     {% set User_portal_credits_modal = User_portal_credits_modal(page_info) %}
     {% if User_portal_credits_modal %}
     {{ User_portal_credits_modal | safe }}
     {% endif %}
+
+
 
 
 </body>

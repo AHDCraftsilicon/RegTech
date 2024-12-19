@@ -4,7 +4,7 @@ from datetime import timedelta
 from bson import ObjectId
 import random
 import pytz
-import uuid
+import requests
 
 
 # Passport OCR Module
@@ -25,13 +25,12 @@ Passport_OCR_bp = Blueprint("Passport_OCR_bp",
 
 User_Testing_Credits_db = Regtch_services_UAT["User_Testing_Credits"]
 User_Authentication_db = Regtch_services_UAT["User_Authentication"]
-User_test_Api_history_db = Regtch_services_UAT['User_test_Api_history']
 Api_Informations_db = Regtch_services_UAT["Api_Informations"]
-
+Prod_user_api_history_db = Regtch_services_UAT['Prod_user_api_history']
+Test_user_api_history_db = Regtch_services_UAT['Test_user_api_history']
 
 @Passport_OCR_bp.route("/ocr")
 def passport_OCR_main():
-
     encrypted_token = session.get('QtSld')
     ip_address = session.get('KLpi')
 
@@ -41,18 +40,41 @@ def passport_OCR_main():
         
         if check_user_in_db != None:
             if encrypted_token and ip_address:
-                token = decrypt_token(encrypted_token)
+                # Check User Api Status
+                if check_user_in_db['api_status'] == "Enable":
+                    token = decrypt_token(encrypted_token)
 
-                about_api_details = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3b9ce1846511541494")})
-                
-                user_name = check_user_in_db["Company_Name"]
-                test_credits = [{"Test_Credit": check_user_in_db["total_test_credits"],
-                                    "Used_Credits":check_user_in_db["used_test_credits"]}]
+                    page_name = "Passport OCR"
 
-                return render_template("passport_ocr_modal.html",
-                                    test_credit=test_credits ,
-                                    user_name=user_name,
-                                    about_api_details = about_api_details['long_api_description'])
+                    user_type = "Test Credits"
+
+                    if check_user_in_db['user_flag'] == "0":
+                        user_type = "Live Credits"
+
+                    user_name = check_user_in_db["Company_Name"]
+                    page_info = [{"Test_Credit": check_user_in_db["total_test_credits"],
+                                "Used_Credits":check_user_in_db["used_test_credits"] ,
+                                "user_type" : user_type ,
+                                "page_name":page_name,
+                                "user_name": user_name
+                                }]
+
+                    about_api_details = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3b9ce1846511541494")})
+
+                    return render_template("passport_ocr_modal.html",
+                                        page_info=page_info , 
+                                        about_api_details = {"long_api_description": about_api_details['long_api_description'],
+                                                            "credits_per_use": about_api_details['credits_per_use']
+                                                            },
+                                        user_details={"user_name": user_name,
+                                                      "Email_Id":check_user_in_db['Email_Id'],
+                                                    "user_type" :user_type},)
+                else:
+                    return redirect("/dashboard")
+
+            else:
+                return redirect("/error")
+
         return redirect("/")
     
     return redirect("/")
@@ -77,76 +99,142 @@ def Passport_api_test():
                 check_user_in_db = User_Authentication_db.find_one({"_id":ObjectId(session.get('bkjid'))})
                 
                 if check_user_in_db != None:
-                    if check_user_in_db["total_test_credits"] > check_user_in_db["used_test_credits"]:
-                        completed_on_ = datetime.now()
-                        completed_on = datetime.now(pytz.timezone('Asia/Kolkata'))
-                        completed_on = completed_on.strftime('%Y-%m-%dT%H:%M:%S%z')
-                        completed_on = completed_on[:-2] + ':' + completed_on[-2:]
-                        
-
-                        passport_img = request.files['passport_img']
-                        # Convert image to Base64
-                        img_bytes = passport_img.read()  # Read the image file as bytes
-                        img_base64 = base64.b64encode(img_bytes).decode('utf-8')
-                        img_decoded = base64.b64decode(img_base64)
-
-                        passport_ocr = passport_main(img_decoded)      
-
-                        created_on = datetime.now(pytz.timezone('Asia/Kolkata'))
-                        created_on = created_on.strftime('%Y-%m-%dT%H:%M:%S%z')
-                        created_on = created_on[:-2] + ':' + created_on[-2:]
-
-
-                        duration = datetime.now()- completed_on_ 
-                        duration_seconds = duration.total_seconds()
-
-                        store_response = { "status_code": 200,
-                                            "status": "Success",
-                                            "response":passport_ocr['response'],
-                                            "created_on" : created_on,
-                                            "completed_on":completed_on,
-                                            "request_id":generate_random_id(),
-                                            }
-                        
-                        # DataBase Log
-                        # User_test_Api_history_db.insert_one({
-                        #             "user_id":check_user_in_db["_id"],
-                        #             "User_Unique_id":"Api Call From Dashboard",
-                        #             "api_name":"Passport_OCR",
-                        #             "api_start_time":completed_on_,
-                        #             "api_end_time":datetime.now(),
-                        #             "api_status": "Success",
-                        #             "response_duration":str(duration),
-                        #             "response_time":duration_seconds,
-                        #             "request_data":str({}),
-                        #             "response_data" :str(store_response),
-                        #             "creadted_on":datetime.now(),
-                        #             "System_Generated_Unique_id" : str(uuid.uuid4()),
-                        #             })
-                        
-                        # # Check Api Using Credits
-                        # api_use_credit_info = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3a9ce1846511541492")})
+                    # Check User Api Status
+                    if check_user_in_db['api_status'] == "Enable":
+                        # Check Credit Limit
+                        if int(check_user_in_db["used_test_credits"]) > 0:
                             
-                        # if check_user_in_db["unlimited_test_credits"] == False:
-                        #     # Credit 
-                        #     User_Authentication_db.update_one({"_id":check_user_in_db["_id"]},{"$set":{
-                        #         "used_test_credits": check_user_in_db["used_test_credits"] + api_use_credit_info["credits_per_use"]
-                        #     }})
+                            # Api Start Time
+                            start_time = datetime.utcnow()
 
+                            passport_img = request.files['passport_img']
+                            if passport_img.filename == '':
+                                return jsonify({"data":{
+                                        "status_code": 400,
+                                        "status": "Error",
+                                        "response":"Please select file!"
+                                    }}), 400
+                            
+                            if passport_img and allowed_file(passport_img):
 
+                                img_bytes = passport_img.read()  # Read the image file as bytes
+                                img_base64 = base64.b64encode(img_bytes).decode('utf-8')
+                                img_decoded = base64.b64decode(img_base64)
+                            
+                                passport_ocr = passport_main(img_decoded)
 
-                        return jsonify({"data":
-                                        {"json_data": store_response,
-                                        "result_in_seconds":duration_seconds}})
-                    
-                    return jsonify({"data":{"json_data":"Something went wrong!"}})
+                                # Api End Time
+                                end_time = datetime.utcnow()
+                                duration = (end_time - start_time).total_seconds() * 1000
+
+                                # Client Ip address
+                                response = requests.get('https://ifconfig.me')
+                                
+                                # Request Id
+                                request_id = generate_random_id()
+
+                                # name of api
+                                about_api_details = Api_Informations_db.find_one({"_id":ObjectId("66ed0f3b9ce1846511541494")})
+
+                                if passport_ocr['status_code'] == 200:
+                                    http_status = 200
+
+                                    json_msg = {"data":{
+                                        "status_code": 200,
+                                        "status": "Success",
+                                        "response": passport_ocr['response'],
+                                        "basic_response":{ "request_id" : request_id,
+                                                    "request_on" : start_time,
+                                                    "response_on":end_time,
+                                                    "api_name":about_api_details['api'],
+                                                    "duration":round(duration, 2),
+                                                    }
+                                        }}
+                                else:
+                                    http_status = 400
+
+                                    json_msg = {"data":{
+                                        "status_code": 400,
+                                        "status": "Error",
+                                        "response": "Please upload a high-quality and readable image. The current image is not clear enough for processing!",
+                                        "basic_response":{ "request_id" : request_id,
+                                                    "request_on" : start_time,
+                                                    "response_on":end_time,
+                                                    "api_name":about_api_details['api'],
+                                                    "duration":round(duration, 2),
+                                                    }
+                                        }}
+                                    
+                                # Log store in db
+                                Test_user_api_history_db.insert_one({
+                                        # aadhaar redaction objid
+                                        "api_name": about_api_details['_id'],
+                                        # Enviroment Set
+                                        'env':'Test',
+                                        # ip address
+                                        "ip_address":response.text.strip(),
+                                        # user id
+                                        "user_id":check_user_in_db['_id'],
+                                        # Api call Status
+                                        'api_call_status' : "Dashboard_status",
+                                        # Request id
+                                        "request_id" : request_id,
+                                        # Unique id
+                                        "unique_id":"Dashboard",
+                                        # Request time
+                                        "request_on" : start_time,
+                                        # Response time
+                                        "response_on":end_time,
+                                        # Time Duration of api taken time
+                                        "time_duration":round(duration, 2),
+                                        # http status
+                                        'http_status':http_status,
+                                        # date store
+                                        'created_on':datetime.now(),
+                                        # this perameter only for OCR
+                                        'which_type_of_ocr' : 'passport_ocr'})
+
+                                # user Cut credits
+                                if check_user_in_db['tester_flag'] == False:
+                                    if int(check_user_in_db['used_test_credits']) >=  int(about_api_details['credits_per_use']):
+                                        # Reduce total credit to used credits
+                                        update_total_credit = int(check_user_in_db['used_test_credits']) - int(about_api_details['credits_per_use'])
+                                        User_Authentication_db.update_one({"_id":check_user_in_db["_id"]},{"$set":{
+                                                        "used_test_credits":update_total_credit}})
+                                        
+                                        json_msg['data']['basic_response'] ['test_credits'] = update_total_credit
+
+                                    else:
+                                        return jsonify({"data":{
+                                                        "status_code": 402,
+                                                        "status": "Error",
+                                                        "response":"Not sufficient credit to use this API. Please contact our support team to purchase more credits!"
+                                                    }}), 402
+                                
+                                return jsonify(json_msg)
                 
-                return jsonify({"data":{"json_data":"Something went wrong!"}})
+                return jsonify({"data":{
+                                    "status_code": 400,
+                                    "status": "Error",
+                                    "response":"Something went wrong!"
+                                }}), 400
             
-            return jsonify({"data":{"json_data":"Something went wrong!"}})
+            return jsonify({"data":{
+                                    "status_code": 400,
+                                    "status": "Error",
+                                    "response":"Something went wrong!"
+                                }}), 400
                     
         
-    #     except:
-    #         return redirect("/")
-    
-    # return jsonify({"data":{"json_data":"Something went wrong!"}})
+    # except:
+        #     return jsonify({"data":{
+        #                             "status_code": 400,
+        #                             "status": "Error",
+        #                             "response":"Something went wrong!"
+        #                         }}), 400
+        
+    return jsonify({"data":{
+                            "status_code": 405,
+                            "status": "Error",
+                            "response":"Request method not allowed. Please use the correct HTTP method."
+                        }}), 405

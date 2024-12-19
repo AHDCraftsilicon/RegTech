@@ -1,0 +1,224 @@
+<script nonce="{{ g.nonce }}">
+
+    var table = $('#basic-datatable').DataTable({
+        'processing': true,
+        'serverSide': true,
+        'serverMethod': 'post',
+        "autoWidth": false,
+        'ajax': {
+            'url': '/BBRgt/credit-request/data-table'
+        },
+        'lengthMenu': [[10, 20, 50, 100, 500], [10, 20, 50, 100, 500]],
+        searching: true,
+        sort: true,
+        // "aaSorting": [[5, "desc"]],
+        'columns': [
+            {
+                data: null,
+                'render': function (data, type, row) {
+                    var details = row.usr_comp_name;
+                    return details;
+                }
+            },
+            { data: "usr_email" },
+            {
+                data: 'granted_credits',
+                'render': function (granted_credits) {
+                    if (granted_credits == false) {
+                        return `<span class="badge bg-warning text-light">Pending</span>`;
+                    }
+                    else {
+                        return `<span class="badge bg-success text-light">Success</span>`;
+                    }
+                }
+            },
+            {
+                data: "created_on",
+                'render': function (created_date) {
+                    if (!created_date) {
+                        return 'N/A';
+                    } else {
+                        return `<div>` + created_date + `</div>`;
+                    }
+                }
+            },
+            {
+
+                data: null,
+                'sortable': false,
+                'searchable': false,
+                'render': function (data, type, row) {
+                    if (data.granted_credits == false) {
+                        return `<button class="btn btn-success edit_btn" value="` + data.objid + `"  data-toggle="modal"
+                                            data-target="#edit_modal"><i class="ri-apps-2-add-line"></i></buton>`;
+                    }
+                    else{
+                        return ``
+                    }
+                }
+            },
+        ],
+
+        orderCellsTop: true,
+        fixedHeader: true,
+        columnDefs: [
+            // { orderable: true, className: 'line_texts', targets: [5, 6] },
+            { orderable: false, className: 'text-center', targets: [0, 1, 2, 3, 4] },
+        ],
+
+        createdRow: function (row, data, dataIndex) {
+            $(row).addClass('text-center');
+        },
+
+        initComplete: function () {
+            var api = this.api();
+            // For each column
+
+            $('#user_name').on('change', function () {
+                var regexr = '{search}';
+                api
+                    .column(0)
+                    .search(
+                        this.value != ''
+                            ? regexr.replace('{search}', this.value)
+                            : '',
+                        this.value != '',
+                        this.value == ''
+                    )
+                    .draw();
+            })
+
+            $('#service').on('change', function () {
+                var regexr = '{search}';
+                api
+                    .column(1)
+                    .search(
+                        this.value != ''
+                            ? regexr.replace('{search}', this.value)
+                            : '',
+                        this.value != '',
+                        this.value == ''
+                    )
+                    .draw();
+            })
+
+
+            // $('input[name="request_date"]').on('apply.daterangepicker', function () {
+            //     var regexr = '{search}';
+            //     api
+            //         .column(4)
+            //         .search(
+            //             this.value != ''
+            //                 ? regexr.replace('{search}', $(this)[0].value)
+            //                 : '',
+            //             this.value != '',
+            //             this.value == '',
+
+            //         )
+            //         .draw();
+            // });
+
+            api
+                .columns()
+                .eq(0)
+                .each(function (colIdx) {
+                    // Set the header cell to contain the input element
+                    var cell = $('.filters th').eq(
+                        $(api.column(colIdx).header()).index()
+                    );
+
+                    $(
+                        'input',
+                        $('.filters th').eq($(api.column(colIdx).header()).index())
+                    )
+                        .off('keyup change')
+                        .on('change', function (e) {
+                            // Get the search value
+                            $(this).attr('title', $(this).val());
+                            var regexr = '{search}'; //$(this).parents('th').find('select').val();
+
+                            var cursorPosition = this.selectionStart;
+                            // Search the column for that value
+                            api
+                                .column(colIdx)
+                                .search(
+                                    this.value != ''
+                                        ? regexr.replace('{search}', this.value).replace(/\\/g, "")
+                                        : '',
+                                    this.value != '',
+                                    this.value == ''
+                                )
+                                .draw();
+                        })
+                        .on('keyup', function (e) {
+                            e.stopPropagation();
+                            $(this).trigger('change');
+                            $(this)
+                                .focus()[0]
+                            // .setSelectionRange(cursorPosition, cursorPosition);
+                        });
+                });
+
+        },
+
+
+    });
+
+    const socket = io.connect();
+
+    var myModal = new bootstrap.Modal(document.getElementById('more_credit_conformation'));
+
+    // Confirmation for credit req
+    $(document).on("click", ".edit_btn", function () {
+        if (this.value != "") {
+            objid = this.value
+            $("#add_more_credits").val(objid)
+            socket.emit('basic_details', { data: this.value });
+
+            socket.on('basic_flag', (data) => {
+                user_type = "Test User"
+
+                if (data['data']['user_flag'] == 0) {
+                    user_type = "Prod User"
+                    $("#user_type").addClass("bg-success")
+                }
+                else {
+                    $("#user_type").addClass("bg-info")
+                }
+
+                $("#user_names").text(data['data']['Company_Name'])
+                $("#user_email").html(data['data']['Email_Id'])
+                $("#user_mobile_no").html(data['data']['Mobile_No'])
+                $("#user_type").html(user_type)
+
+
+                myModal.show();
+
+            })
+        }
+    })
+
+    // Confirmation modal close
+    $(document).on("click", ".modal_close", function () {
+        myModal.hide()
+    })
+
+    // add credit 
+    $("#add_more_credits").click(function () {
+        let inputValue = $("#add_more_credits").val();
+        console.log(inputValue);
+
+        socket.emit('credits_add', { data: inputValue });
+
+        // success msg
+        socket.on('success_msg', (data) => {
+            console.log(data);
+            $('#basic-datatable').DataTable().ajax.reload();
+
+        })
+
+        myModal.hide()
+
+
+    })
+</script>

@@ -59,7 +59,8 @@ def Api_support_main():
                 return render_template('support.html',
                                         page_info=page_info,
                                         user_details={"user_name": user_name,
-                                                        "user_type" :user_type})
+                                                      "Email_Id":check_user_in_db['Email_Id'],
+                                                    "user_type" :user_type},)
                         
                 
             return redirect("/")

@@ -12,8 +12,6 @@ from werkzeug.utils import secure_filename
 # tessract path
 from tesseract_path import *
 
-tessdata_dir = "/home/RegtechLive/"
-
 invalid_keywords = ['INCOMETAXDEPARTMENT','TAX','INCOME','DEPARTMENT','election','elector',
                     'commission','identity','elecr']
 
@@ -142,7 +140,7 @@ def Simple_way_Quality_Mask(base64_image):
     masked_image_cv = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)
 
 
-    bounding_boxes = pytesseract.image_to_boxes(pil_image ,config= r'--tessdata-dir ' + tessdata_dir + r' -c tessedit_create_boxfile=1').split(" 0\n")
+    bounding_boxes = pytesseract.image_to_boxes(pil_image ,config='-c tessedit_create_boxfile=1').split(" 0\n")
 
     possible_UIDs = Regex_Search(bounding_boxes)
 
@@ -215,7 +213,7 @@ def Extract_and_Mask_UIDs(base64_image, counts, SR=False, sr_image_path=None, SR
         scaled_image_pil = Image.fromarray(cv2.cvtColor(scaled_image, cv2.COLOR_BGR2RGB))
     
         # Step 3: Extract bounding boxes using Tesseract
-        bounding_boxes = pytesseract.image_to_boxes(scaled_image_pil,config= r'--tessdata-dir ' + tessdata_dir + r' -c tessedit_create_boxfile=1').split(" 0\n")
+        bounding_boxes = pytesseract.image_to_boxes(scaled_image_pil, config='-c tessedit_create_boxfile=1').split(" 0\n")
     
         # Step 4: Find possible UIDs using regex
         possible_UIDs = Regex_Search(bounding_boxes)
@@ -297,7 +295,7 @@ def Extract_Law_Quality_Mask_UIDS(base64_image, counts):
         img2 = cv2.resize(rotated_image, (rotated_image.shape[1] * 2, rotated_image.shape[0] * 2), interpolation=cv2.INTER_LANCZOS4)
 
         # Extract bounding boxes using Tesseract
-        bounding_boxes = pytesseract.image_to_boxes(img2,lang='eng',config= r'--tessdata-dir ' + tessdata_dir + r' -c tessedit_create_boxfile=1').split(" 0\n")
+        bounding_boxes = pytesseract.image_to_boxes(img2,lang='eng',config='-c tessedit_create_boxfile=1').split(" 0\n")
         possible_UIDs = Regex_Search(bounding_boxes)
 
         if isinstance(possible_UIDs, str):  # This checks if it's the error message, not a list of UIDs
@@ -305,7 +303,7 @@ def Extract_Law_Quality_Mask_UIDS(base64_image, counts):
 
         # If no UIDs found, retry without custom config
         if len(possible_UIDs) == 0:
-            bounding_boxes = pytesseract.image_to_boxes(img2,config= r'--tessdata-dir ' + tessdata_dir + r' -c tessedit_create_boxfile=1').split(" 0\n")
+            bounding_boxes = pytesseract.image_to_boxes(img2,config='-c tessedit_create_boxfile=1').split(" 0\n")
             possible_UIDs = Regex_Search(bounding_boxes)
 
             if isinstance(possible_UIDs, str):  # This checks if it's the error message, not a list of UIDs

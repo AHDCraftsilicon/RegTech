@@ -60,7 +60,7 @@ UUID_PATTERN = re.compile(
 @jwt_required()
 def Ocr_Api_route():
     if request.method == 'POST':
-        # try:
+        try:
             data = request.get_json()
          
 
@@ -581,6 +581,12 @@ def Ocr_Api_route():
                         "status": "Error",
                         "response":"Error! Please Validate the UniqueID format!"
                     }}), 400
+            
+        except:
+            return jsonify({"data" : {"status_code": 400,
+                                    "status": "Error",
+                                    "response":"Invalid or missing form data. Please ensure that the request contains valid data!"
+                                    }}) , 400
             
     return jsonify({"data":{
                             "status_code": 405,

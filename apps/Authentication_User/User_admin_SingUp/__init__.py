@@ -7,12 +7,14 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
-import uuid
 from bson import ObjectId
 
 
 # DataBase
 from data_base_string import *
+
+# Headers Verify
+from Headers_Verify import *
 
 
 # Blueprint
@@ -121,8 +123,6 @@ def user_to_sent_mail(receiver_emailid , token_url,Reciver_name):
     msg["Subject"] = subject
     
 
-
-
     try:
         # Connect to Gmail SMTP server
         server = smtplib.SMTP(smtp_server, smtp_port)
@@ -137,13 +137,7 @@ def user_to_sent_mail(receiver_emailid , token_url,Reciver_name):
         return {"data":"Error Email ID Is Wrong!"}
 
 
-def generate_random_client_id():
-    part1 = uuid.uuid4().hex[:12]  # Generates 12 hex characters
-    part2 = str(uuid.uuid4())      # Generates a UUID string
-    return f"{part1}/{part2}"
 
-def generate_random_client_secret_key():
-    return str(uuid.uuid4())
 
 @User_Admin_SignUp_bp.route("/user/new",methods=["GET","POST"])
 def User_Admin_Signup_Main():
@@ -166,7 +160,7 @@ def User_Signup_api():
                                 
                     verify_token = generate_token()
 
-                    url_for_token_verify = "https://regtech.blubeetle.ai/verify?token=" + "HceTgeR."+ verify_token
+                    url_for_token_verify = "http://192.168.10.121/verify?token=" + "HceTgeR."+ verify_token
 
                     user_mail_verify = user_to_sent_mail(request.form["Email_Id"],url_for_token_verify,request.form['Company_Name'])
 
@@ -187,7 +181,7 @@ def User_Signup_api():
                             "verify_token_create_date":datetime.now(),
                             # api access purpose 
                             "client_id" : generate_random_client_id(),
-                            "client_secret_key" : generate_random_client_secret_key(),\
+                            "client_secret_key" : generate_random_client_secret_key(),
                             # by default set credit in our authority
                             "total_test_credits":test_credit['total_credit'],
                             # first set default credit and after reduce credits 

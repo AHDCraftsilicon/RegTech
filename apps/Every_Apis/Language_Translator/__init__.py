@@ -244,7 +244,6 @@ def Language_Translator_Api_route():
 
                                             return jsonify(json_msg)
                                     
-                                            
                                                 
                                         
                                     else:
@@ -337,33 +336,33 @@ def Language_Translator_Api_route():
                                             }}
                                         
                                     # Log store in db
-                                        Prod_user_api_history_db.insert_one({
-                                                # aadhaar redaction objid
-                                                "api_name": about_api_details['_id'],
-                                                # Enviroment Set
-                                                'env':'Test',
-                                                # ip address
-                                                "ip_address":response.text.strip(),
-                                                # user id
-                                                "user_id":check_user_id_in_db['_id'],
-                                                # Api call Status
-                                                'api_call_status' : "Api_status",
-                                                # Request id
-                                                "request_id" : request_id,
-                                                # Unique id
-                                                "unique_id":data["UniqueID"],
-                                                # Request time
-                                                "request_on" : start_time,
-                                                # Response time
-                                                "response_on":end_time,
-                                                # Time Duration of api taken time
-                                                "time_duration":round(duration, 2),
-                                                # http status
-                                                'http_status':http_status,
-                                                # date store
-                                                'created_on':datetime.now()})
+                                    Prod_user_api_history_db.insert_one({
+                                            # aadhaar redaction objid
+                                            "api_name": about_api_details['_id'],
+                                            # Enviroment Set
+                                            'env':'Test',
+                                            # ip address
+                                            "ip_address":response.text.strip(),
+                                            # user id
+                                            "user_id":check_user_id_in_db['_id'],
+                                            # Api call Status
+                                            'api_call_status' : "Api_status",
+                                            # Request id
+                                            "request_id" : request_id,
+                                            # Unique id
+                                            "unique_id":data["UniqueID"],
+                                            # Request time
+                                            "request_on" : start_time,
+                                            # Response time
+                                            "response_on":end_time,
+                                            # Time Duration of api taken time
+                                            "time_duration":round(duration, 2),
+                                            # http status
+                                            'http_status':http_status,
+                                            # date store
+                                            'created_on':datetime.now()})
 
-                                        return jsonify(json_msg)
+                                    return jsonify(json_msg)
                                 
                                 else:
                                     return jsonify({"data":{

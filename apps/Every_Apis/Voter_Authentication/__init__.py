@@ -10,7 +10,7 @@ import cv2
 import numpy as np
 import base64,os
 import pytesseract
-import time , json
+import time
 
 # tessract path
 from tesseract_path import *
@@ -47,10 +47,8 @@ UUID_PATTERN = re.compile(
 @jwt_required()
 def Voter_Authentication_Api_route():
     if request.method == 'POST':
-        # try:
+        try:
             data = request.get_json()
-            check_user = get_jwt()
-            jwt_store_details = json.loads(check_user['sub'])
 
             # Json IS Empty Or Not
             if data == {}:
@@ -91,7 +89,7 @@ def Voter_Authentication_Api_route():
                 
                 check_user = get_jwt()
 
-                check_user_id_in_db = Authentication_db.find_one({"_id":ObjectId(jwt_store_details['client_id'])})
+                check_user_id_in_db = Authentication_db.find_one({"_id":ObjectId(check_user['sub']['client_id'])})
 
                 if check_user_id_in_db != None:
                     if check_user_id_in_db["total_test_credits"] > check_user_id_in_db["used_test_credits"]:
@@ -137,12 +135,12 @@ def Voter_Authentication_Api_route():
                                     "status": "Success",
                                     "response":{"msg":"Linked!"}
                                 }})
-        # except:
-        #     return jsonify({"data":{
-        #                 "status_code": 400,
-        #                 "status": "Error",
-        #                 "response":"Something went wrong!"
-        #             }}), 400
+        except:
+            return jsonify({"data":{
+                        "status_code": 400,
+                        "status": "Error",
+                        "response":"Something went wrong!"
+                    }}), 400
 
     else:
         return jsonify({"data":{

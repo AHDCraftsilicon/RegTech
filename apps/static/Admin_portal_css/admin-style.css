@@ -28,7 +28,8 @@
 
 body {
     overflow: auto;
-    font-family: "Inter", sans-serif;
+    /* font-family: "Inter", sans-serif; */
+    font-family: "Poppins", sans-serif;
     background-color: var(--bg-color);
     color: var(--txt-default);
 }
@@ -1023,4 +1024,33 @@ div.dt-container .dt-paging .dt-paging-button:hover {
 
 .add-btn-top {
     margin-top: 2rem !important;
+}
+
+/* Test User */
+.chart-container {
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: 4px;
+}
+
+canvas#myPieChart {
+    width: 300px !important;
+    height: 300px !important;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+
+.section-box {
+    padding: 10px 0px 10px 10px;
+    background: #FFF;
+    border-radius: 8px 0 0 8px;
+    margin-bottom: 10px;
+}
+
+.main-heading {
+    font-weight: 600;
+    font-size: 20px;
+    margin: 0;
+    letter-spacing: 1px;
 }

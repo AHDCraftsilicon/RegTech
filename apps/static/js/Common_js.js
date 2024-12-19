@@ -125,15 +125,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    const currentPath = window.location.pathname;
+    const currentPath = window.location.pathname;    
 
     // Select all sidebar links
-    const menuLinks = document.querySelectorAll('#side-main-menu .c-menu a');
+    const menuLinks = document.querySelectorAll('.nav-list li a');    
 
     // Loop through each link
     menuLinks.forEach(link => {
         // Check if link's href matches the current path
-        if (link.getAttribute('href') === currentPath) {
+        if (link.getAttribute('href') === currentPath) {            
             // Add 'active' class to the parent <li> element
             link.parentElement.classList.add('active');
         }
