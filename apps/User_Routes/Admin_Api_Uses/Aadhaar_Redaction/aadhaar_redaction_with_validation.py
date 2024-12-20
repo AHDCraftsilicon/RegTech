@@ -13,7 +13,8 @@ from werkzeug.utils import secure_filename
 from tesseract_path import *
 
 
-tessdata_dir = "/home/RegtechLive/"
+# tessdata_dir = "/home/RegtechLive/"
+tessdata_dir = ""
 
 invalid_keywords = ['INCOMETAXDEPARTMENT','TAX','INCOME','DEPARTMENT','election','elector',
                     'commission','identity','elecr']
